@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="1in"
+   height="1in"
+   viewBox="0 0 25.4 25.4"
+   version="1.1"
+   id="svg2379"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   sodipodi:docname="logo-final.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview2381"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="1.8116734"
+     inkscape:cx="191.53562"
+     inkscape:cy="229.62196"
+     inkscape:window-width="1908"
+     inkscape:window-height="2075"
+     inkscape:window-x="1924"
+     inkscape:window-y="40"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1"
+     width="1mm"
+     units="in" />
+  <defs
+     id="defs2376">
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter15009"
+       x="-0.00049702713"
+       y="-0.0005088819"
+       width="1.0009941"
+       height="1.0010178">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.0057116357"
+         id="feGaussianBlur15011"
+         result="result1" />
+      <feBlend
+         mode="normal"
+         in2="result1"
+         id="feBlend57657" />
+    </filter>
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g2790"
+       transform="translate(0.028748,-0.14786181)">
+      <rect
+         style="display:inline;fill:#192586;fill-opacity:1;stroke:#ff9d22;stroke-width:0;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:fill markers stroke"
+         id="rect28244"
+         width="25.4"
+         height="25.4"
+         x="-0.028748116"
+         y="0.14786169"
+         ry="2.6083906"
+         rx="2.5513027"
+         inkscape:export-filename="/home/vikasssidana/Documents/Business/Logo/final.png"
+         inkscape:export-xdpi="1000"
+         inkscape:export-ydpi="1000" />
+      <ellipse
+         style="display:inline;fill:#ffffff;fill-opacity:1;stroke:#ff9d22;stroke-width:0.23091;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:fill markers stroke"
+         id="path28271"
+         cx="12.67903"
+         cy="12.847858"
+         rx="10.390908"
+         ry="10.390907"
+         inkscape:export-filename="/home/vikasssidana/Documents/Business/Logo/final.png"
+         inkscape:export-xdpi="1000"
+         inkscape:export-ydpi="1000" />
+      <ellipse
+         style="display:inline;mix-blend-mode:normal;fill:#ffff00;fill-opacity:1;stroke:#ff7722;stroke-width:0;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke;filter:url(#filter15009)"
+         id="ellipse61486"
+         transform="matrix(5.6426116e-4,-0.04903521,0.04729115,5.4483987e-4,1.0859645,7.4909926)"
+         inkscape:export-filename="/home/vikasssidana/Documents/Business/Logo/final.png"
+         inkscape:export-xdpi="1000"
+         inkscape:export-ydpi="1000"
+         inkscape:transform-center-x="0.52055252"
+         inkscape:transform-center-y="0.075558109"
+         ry="13.469162"
+         rx="13.79042"
+         cy="117.40971"
+         cx="11.297151" />
+      <ellipse
+         style="display:inline;mix-blend-mode:normal;fill:#00ff00;fill-opacity:1;stroke:#ff7722;stroke-width:0;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke;filter:url(#filter15009)"
+         id="ellipse62506"
+         transform="matrix(5.6426116e-4,-0.04903521,0.04729115,5.4483987e-4,3.0869445,7.4909926)"
+         inkscape:export-filename="/home/vikasssidana/Documents/Business/Logo/final.png"
+         inkscape:export-xdpi="1000"
+         inkscape:export-ydpi="1000"
+         inkscape:transform-center-x="0.5205553"
+         inkscape:transform-center-y="0.075558745"
+         ry="13.469162"
+         rx="13.79042"
+         cy="117.40971"
+         cx="11.297151" />
+      <ellipse
+         style="display:inline;mix-blend-mode:normal;fill:#ff7722;fill-opacity:1;stroke:#ff9d22;stroke-width:0;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke;filter:url(#filter15009)"
+         id="ellipse62655"
+         transform="matrix(5.6426116e-4,-0.04903521,0.04729115,5.4483987e-4,7.0889345,7.4909926)"
+         inkscape:export-filename="/home/vikasssidana/Documents/Business/Logo/final.png"
+         inkscape:export-xdpi="1000"
+         inkscape:export-ydpi="1000"
+         inkscape:transform-center-x="0.52055428"
+         inkscape:transform-center-y="0.075558163"
+         ry="13.469162"
+         rx="13.79042"
+         cy="117.40971"
+         cx="11.297151" />
+      <ellipse
+         style="display:inline;mix-blend-mode:normal;fill:#0000ff;fill-opacity:1;stroke:#ff7722;stroke-width:0;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke;filter:url(#filter15009)"
+         id="ellipse88757"
+         transform="matrix(5.6426116e-4,-0.04903521,0.04729115,5.4483987e-4,5.0879245,7.4909926)"
+         inkscape:export-filename="/home/vikasssidana/Documents/Business/Logo/final.png"
+         inkscape:export-xdpi="1000"
+         inkscape:export-ydpi="1000"
+         inkscape:transform-center-x="0.52055464"
+         inkscape:transform-center-y="0.075557823"
+         ry="13.469162"
+         rx="13.79042"
+         cy="117.40971"
+         cx="11.297151" />
+      <path
+         d="m 6.0495445,8.6116226 c 0.78265,-6.6e-4 1.56531,-0.001 2.37168,-0.002 0.019,0.95827 0.0381,1.9165504 0.0576,2.9038804 0.15271,-0.11285 0.30544,-0.22568 0.46279,-0.34194 0.17829,-0.0937 0.17829,-0.0937 0.33624,-0.16037 0.0529,-0.0227 0.10573,-0.0454 0.16021,-0.0688 0.31729,-0.12682 0.5894295,-0.12564 0.9280295,-0.12759 0.0556,-10e-4 0.1111,-0.002 0.16834,-0.003 0.58037,-0.004 1.05436,0.12629 1.47933,0.53195 0.38551,0.40079 0.38551,0.40079 0.39854,0.73729 -0.0399,0.14657 -0.0824,0.27944 -0.13741,0.42002 -0.40124,1.04603 -0.33936,2.41618 0.11181,3.43052 0.0825,0.17937 0.16717,0.35753 0.25665,0.53364 5e-5,0.24428 -2e-5,0.48854 -2.1e-4,0.74022 -0.80175,4e-4 -1.60349,0.001 -2.42953,0.002 -0.002,-0.28721 -0.004,-0.57442 -0.006,-0.87033 -0.002,-0.18242 -0.004,-0.36484 -0.006,-0.54726 -0.003,-0.28926 -0.006,-0.57852 -0.008,-0.8678 -0.002,-0.23334 -0.004,-0.46666 -0.007,-0.69998 -9.8e-4,-0.0888 -0.002,-0.17765 -0.002,-0.26648 -4.6e-4,-0.12485 -0.002,-0.24964 -0.004,-0.37447 -6.1e-4,-0.071 -10e-4,-0.14185 -0.002,-0.21495 -0.0318,-0.27804 -0.10301,-0.5134 -0.3158595,-0.7101 -0.28576,-0.10156 -0.57591,-0.11413 -0.86768,-0.0226 -0.26665,0.13142 -0.42434,0.31592 -0.51703,0.5893 -0.0355,0.30343 -0.0351,0.60591 -0.0352,0.91084 -7.6e-4,0.0888 -0.002,0.17759 -0.003,0.26638 -0.002,0.23261 -0.004,0.46521 -0.005,0.69783 -0.001,0.27969 -0.005,0.55936 -0.007,0.83904 -0.004,0.42391 -0.006,0.84778 -0.008,1.27171 -0.78265,6.6e-4 -1.56531,10e-4 -2.37168,0.002 2e-4,-2.83729 3e-4,-5.67458 6.5e-4,-8.5978504 z"
+         fill="#402978"
+         id="path9854"
+         style="display:inline;fill:#192586;fill-opacity:1;stroke-width:0.0573907"
+         inkscape:export-filename="/home/vikasssidana/Documents/Business/Logo/final.png"
+         inkscape:export-xdpi="1000"
+         inkscape:export-ydpi="1000" />
+      <path
+         d="m 16.43359,10.686273 c 0.0699,-10e-4 0.13974,-0.002 0.2117,-0.003 0.62524,-0.005 1.21528,0.04 1.78915,0.29755 0.0394,0.0174 0.0788,0.0348 0.11933,0.0528 0.63918,0.29232 1.04872,0.68265 1.32882,1.3295 0.11642,0.33678 0.11292,0.55 0.11487,0.93238 -0.76355,0.005 -1.5271,0.009 -2.31379,0.0137 -0.0582,-0.18755 -0.11649,-0.37511 -0.1765,-0.56835 -0.15488,-0.18556 -0.29528,-0.31062 -0.52268,-0.39549 -0.15374,-0.0131 -0.29847,-0.0199 -0.45202,-0.0186 -0.0415,3e-4 -0.083,5.3e-4 -0.12577,9.3e-4 -0.38798,0.0112 -0.58719,0.0842 -0.85573,0.36067 -0.21485,0.38323 -0.20163,0.76093 -0.19991,1.18626 -0.002,0.0957 -0.002,0.0957 -0.003,0.19341 8.5e-4,0.44992 0.0403,0.94069 0.35666,1.29313 0.30394,0.2527 0.74566,0.22213 1.12191,0.20135 0.28524,-0.0273 0.49707,-0.10552 0.69387,-0.31639 0.17547,-0.25932 0.18203,-0.41614 0.22753,-0.74158 0.74446,-0.005 1.48893,-0.009 2.25595,-0.0134 0.004,0.74166 -0.12667,1.28244 -0.66278,1.81957 -0.82086,0.72595 -1.77579,0.89177 -2.84814,0.89523 -0.0678,10e-4 -0.1356,0.003 -0.20549,0.004 -0.9578,0.006 -1.875306,-0.25064 -2.579496,-0.91632 -0.57965,-0.66389 -0.78258,-1.42406 -0.78196,-2.28366 6e-5,-0.0576 -1.7e-4,-0.11521 10e-6,-0.17454 0.01,-0.87997 0.20856,-1.59731 0.81515,-2.26805 0.8042,-0.67076 1.652626,-0.87404 2.692516,-0.88074 z"
+         fill="#222061"
+         id="path9856"
+         style="display:inline;fill:#192586;fill-opacity:1;stroke-width:0.0573907"
+         inkscape:export-filename="/home/vikasssidana/Documents/Business/Logo/final.png"
+         inkscape:export-xdpi="1000"
+         inkscape:export-ydpi="1000" />
+    </g>
+  </g>
+</svg>

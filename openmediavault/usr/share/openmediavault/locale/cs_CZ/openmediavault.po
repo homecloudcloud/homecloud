@@ -1,0 +1,4044 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the openmediavault package.
+# 
+# Translators:
+# Jan Štourač <wormsik666@gmail.com>, 2014-2015
+# Pavel Borecki <pavel.borecki@gmail.com>, 2014-2021
+msgid ""
+msgstr ""
+"Project-Id-Version: openmediavault\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-02-13 20:50+0100\n"
+"PO-Revision-Date: 2012-03-17 01:48+0000\n"
+"Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>, 2014-2021\n"
+"Language-Team: Czech (Czech Republic) (http://app.transifex.com/openmediavault/openmediavault/language/cs_CZ/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: cs_CZ\n"
+"Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
+
+msgid "%d days"
+msgstr "%d dnů"
+
+msgid "%d hours"
+msgstr "%d hodin"
+
+msgid "%d minutes"
+msgstr "%d minut"
+
+msgid "%d months"
+msgstr "%d měsíců"
+
+msgid "%d years"
+msgstr "%d let"
+
+msgid "%s [%s, %s (%d%%) used, %s available]"
+msgstr "%s [%s, %s (%d%%) využito, %s k dispozici]"
+
+msgid "%s [%s]"
+msgstr ""
+
+msgid "%s [on %s, %s]"
+msgstr "%s [na %s, %s]"
+
+msgid "%s ago"
+msgstr "před %s"
+
+msgid "1 - Minimum power usage with standby (spindown)"
+msgstr "1 – nejnižší spotřeba energie s pohotovostním režimem (zastavení otáčení ploten)"
+
+msgid "1 GiB"
+msgstr ""
+
+msgid "1 MiB"
+msgstr ""
+
+msgid "1 day"
+msgstr "1 den"
+
+msgid "1 min"
+msgstr "1 min"
+
+msgid "1 minute"
+msgstr "1 munuta"
+
+msgid "1 month"
+msgstr "1 měsíc"
+
+msgid "1 week"
+msgstr "1 týden"
+
+msgid "1 year"
+msgstr "1 rok"
+
+msgid "10 MiB"
+msgstr ""
+
+msgid "10 minutes"
+msgstr "10 minut"
+
+msgid "10 years"
+msgstr "10 let"
+
+msgid "100 MiB"
+msgstr ""
+
+msgid "120 minutes"
+msgstr "120 minut"
+
+msgid "127 - Intermediate power usage with standby"
+msgstr "127 – střední spotřeba energie s pohotovostním režimem"
+
+msgid "128 - Minimum power usage without standby (no spindown)"
+msgstr "128 – nejnižší spotřeba energie bez přechodu do pohotovostního režimu (bez zastavení otáčení ploten)"
+
+msgid "15 min"
+msgstr "15 min"
+
+msgid "15 minutes"
+msgstr "15 minut"
+
+msgid "15 years"
+msgstr "15 let"
+
+msgid "180 minutes"
+msgstr "180 minut"
+
+msgid "192 - Intermediate power usage without standby"
+msgstr "192 – střední spotřeba energie bez přechodu do pohotovostního režimu"
+
+msgid "2 GiB"
+msgstr ""
+
+msgid "2 MiB"
+msgstr ""
+
+msgid "2 days"
+msgstr "2 dny"
+
+msgid "2 minutes"
+msgstr "2 minuty"
+
+msgid "2 weeks"
+msgstr "2 týdny"
+
+msgid "2 years"
+msgstr "2 roky"
+
+msgid "20 minutes"
+msgstr "20 minut"
+
+msgid "20 years"
+msgstr "20 let"
+
+msgid "240 minutes"
+msgstr "240 minut"
+
+msgid "25 MiB"
+msgstr ""
+
+msgid "25 years"
+msgstr "25 let"
+
+msgid "250 MiB"
+msgstr ""
+
+msgid "254 - Maximum performance, maximum power usage"
+msgstr "254 – nejvyšší výkon, ale také nejvyšší spotřeba energie"
+
+msgid "255 - Disabled"
+msgstr "255 – správa napájení vypnutá"
+
+msgid "3 days"
+msgstr "3 dny"
+
+msgid "3 minutes"
+msgstr "3 minuty"
+
+msgid "3 months"
+msgstr "3 měsíce"
+
+msgid "3 weeks"
+msgstr "3 týdny"
+
+msgid "3 years"
+msgstr "3 roky"
+
+msgid "30 minutes"
+msgstr "30 minut"
+
+msgid "300 minutes"
+msgstr "300 minut"
+
+msgid "330 minutes"
+msgstr "330 minut"
+
+msgid "4 GiB"
+msgstr ""
+
+msgid "4 days"
+msgstr "4 dny"
+
+msgid "4 minutes"
+msgstr "4 minuty"
+
+msgid "4 years"
+msgstr "4 roky"
+
+msgid "5 MiB"
+msgstr ""
+
+msgid "5 days"
+msgstr "5 dní"
+
+msgid "5 min"
+msgstr "5 min"
+
+msgid "5 minutes"
+msgstr "5 minut"
+
+msgid "5 years"
+msgstr "5 let"
+
+msgid "50 MiB"
+msgstr ""
+
+msgid "500 MiB"
+msgstr ""
+
+msgid "6 days"
+msgstr "6 dní"
+
+msgid "6 months"
+msgstr "6 měsíců"
+
+msgid "60 minutes"
+msgstr "60 minut"
+
+msgid "64 - Intermediate power usage with standby"
+msgstr "64 – střední spotřeba energie s pohotovostním režimem"
+
+msgid "75 MiB"
+msgstr ""
+
+msgid "750 MiB"
+msgstr ""
+
+msgid "9 months"
+msgstr "9 měsíců"
+
+msgid ""
+"A reboot is needed to fully apply the changes introduced by package "
+"installation or upgrade."
+msgstr ""
+
+msgid "A running background task was detected."
+msgstr ""
+
+msgid "A scheduled task to create a snapshot has been created."
+msgstr ""
+
+msgid "A secure shell (SSH) server."
+msgstr ""
+
+msgid "ACL"
+msgstr "ACL"
+
+msgid "About"
+msgstr "O systému"
+
+msgid "Absolute Path"
+msgstr "Úplný popis umístění"
+
+msgid "Abstract"
+msgstr "Abstrakt"
+
+msgid "Access control list"
+msgstr "Seznam pro řízení přístupu"
+
+msgid "Act as a WINS server."
+msgstr "Vystupovat jako jmenný server WINS."
+
+msgid ""
+"Acting as a WINS server and using a WINS server are mutually exclusive."
+msgstr ""
+
+msgid "Action"
+msgstr "Akce"
+
+msgid ""
+"Activate S.M.A.R.T. monitoring for this device. Note that only monitored "
+"devices are listed in the scheduled tasks. Monitoring cannot be switched off"
+" as long as there are scheduled tasks for this device."
+msgstr ""
+
+msgid "Add"
+msgstr "Přidat"
+
+msgid "Address"
+msgstr "Adresa"
+
+msgid "Administrator: read/write, Users: no access, Others: no access"
+msgstr "Správce: čtení/zápis, Uživatelé: žádný přístup, Ostatní: žádný přístup"
+
+msgid "Administrator: read/write, Users: read-only, Others: no access"
+msgstr "Správce: čtení/zápis, Uživatelé: pouze pro čtení, Ostatní: žádný přístup"
+
+msgid "Administrator: read/write, Users: read-only, Others: read-only"
+msgstr "Správce: čtení/zápis, Uživatelé: pouze pro čtení, Ostatní: pouze pro čtení"
+
+msgid "Administrator: read/write, Users: read/write, Others: no access"
+msgstr "Správce: čtení/zápis, Uživatelé: čtení/zápis, Ostatní: žádný přístup"
+
+msgid "Administrator: read/write, Users: read/write, Others: read-only"
+msgstr "Správce: čtení/zápis, Uživatelé: čtení/zápis, Ostatní: pouze pro čtení"
+
+msgid "Advanced Acoustic Management"
+msgstr "Pokročilá správa hlučnosti"
+
+msgid "Advanced Power Management"
+msgstr "Pokročilá správa napájení"
+
+msgid "Advanced settings"
+msgstr "Pokročilá nastavení"
+
+msgid "Afghanistan"
+msgstr "Afghánistán"
+
+msgid "Aland Islands"
+msgstr "Alandy"
+
+msgid "Albania"
+msgstr "Albánie"
+
+msgid "Algeria"
+msgstr "Alžírsko"
+
+msgid "All"
+msgstr "Vše"
+
+msgid "All Snapshots"
+msgstr ""
+
+msgid "All packages will be upgraded. Do you want to proceed?"
+msgstr ""
+
+msgid ""
+"Allow clients to attempt to store OS/2 state extended attributes on a share."
+msgstr "Na sdílení umožnit klientům pokoušet se uložit rozšířené atributy jako v systému OS/2."
+
+msgid ""
+"Allow this server to advertise itself as a time server to Windows clients."
+msgstr "Povolit tomuto serveru propagovat se Windows klientům jako časový server."
+
+msgid "Allowed clients"
+msgstr "Klienti, kterým umožnit přístup"
+
+msgid "American Samoa"
+msgstr "Americká Samoa"
+
+msgid ""
+"An attempt to send the test email has been made. Please check your mailbox. "
+"If the email does not arrive, check any spam folders and also check there "
+"are no Postfix related errors in the system log."
+msgstr "Byl učiněn pokus o zaslání testovacího e-mailu. Podívejte se do své pošty. Pokud e-mail nedorazil, podívejte se do složky pro nevyžádanou poštu (spam) a také se podívejte, zda v záznamu událostí v systému nejsou nějaké chyby, týkající se Postfix."
+
+msgid ""
+"An email message with the command output (if any produced) is send to the "
+"administrator."
+msgstr "Výstup z příkazu (pokud nějaký vznikl) je e-mailem odeslán správci systému."
+
+msgid ""
+"An email message with the command output (if any produced) is send to the "
+"user who performs the job."
+msgstr "Výstup z příkazu (pokud nějaký vznikl) je e-mailem odeslán uživateli, který úlohu provádí."
+
+msgid "Andorra"
+msgstr "Andorra"
+
+msgid "Angola"
+msgstr "Angola"
+
+msgid "Anguilla"
+msgstr "Anguilla"
+
+msgid "Antarctica"
+msgstr "Antarktida"
+
+msgid "Antigua and Barbuda"
+msgstr "Antigua a Barbuda"
+
+msgid "Applied the configuration changes."
+msgstr "Uplatněny změny v nastavení."
+
+msgid "Apply"
+msgstr "Potvrdit"
+
+msgid "Apply permissions to files and subfolders."
+msgstr "Použít přístupová oprávnění na soubory a podsložky."
+
+msgid "April"
+msgstr "duben"
+
+msgid "Architecture"
+msgstr ""
+
+msgid "Archive mode"
+msgstr "Archivní režim"
+
+msgid "Argentina"
+msgstr "Argentina"
+
+msgid "Armenia"
+msgstr "Arménie"
+
+msgid "Aruba"
+msgstr "Aruba"
+
+msgid "Asynchronous I/O"
+msgstr "Asynchronní vstup/výstup"
+
+msgid "At least four devices are required."
+msgstr "Je zapotřebí přinejmenším čtyřech zařízení."
+
+msgid "At least one device is required."
+msgstr ""
+
+msgid "At least one network interface is required."
+msgstr "Je zapotřebí alespoň jedno síťové rozhraní."
+
+msgid "At least two devices are required."
+msgstr "Je zapotřebí přinejmenším dvou zařízení."
+
+msgid "At reboot"
+msgstr "Při restartu"
+
+msgid "Attach"
+msgstr ""
+
+msgid "Attributes"
+msgstr "Atributy"
+
+msgid "Audit file operations"
+msgstr "Prověřovat operace se soubory"
+
+msgid "August"
+msgstr "srpen"
+
+msgid "Australia"
+msgstr "Austrálie"
+
+msgid "Austria"
+msgstr "Rakousko"
+
+msgid "Authenticate users"
+msgstr "Ověřit uživatele"
+
+msgid "Authentication"
+msgstr "Ověřování"
+
+msgid "Authentication required"
+msgstr "Vyžaduje přihlášení"
+
+msgid "Auto"
+msgstr "Automatické"
+
+msgid "Auto logout"
+msgstr "Automatické odhlášení"
+
+msgid "Available"
+msgstr "K dispozici"
+
+msgid "Azerbaijan"
+msgstr "Ázerbájdžán"
+
+msgid "Back"
+msgstr "Zpět"
+
+msgid "Background task"
+msgstr ""
+
+msgid "Bad"
+msgstr "Chybné"
+
+msgid "Bahamas"
+msgstr "Bahamy"
+
+msgid "Bahrain"
+msgstr "Bahrajn"
+
+msgid "Bangladesh"
+msgstr "Bangladéš"
+
+msgid "Barbados"
+msgstr "Barbados"
+
+msgid "Base path"
+msgstr "Základ popisu umístění"
+
+msgid "Belarus"
+msgstr "Bělorusko"
+
+msgid "Belgium"
+msgstr "Belgie"
+
+msgid "Belize"
+msgstr "Belize"
+
+msgid "Benin"
+msgstr "Benin"
+
+msgid "Bermuda"
+msgstr "Bermudy"
+
+msgid "Bhutan"
+msgstr "Bhútán"
+
+msgid "Block layer cache [%s, %s]"
+msgstr "Mezipaměť blokové vrstvy [%s, %s]"
+
+msgid "Bolivia"
+msgstr "Bolívie"
+
+msgid "Bond"
+msgstr "Spřažení"
+
+msgid "Boot"
+msgstr "Zavedení systému"
+
+msgid "Bosnia and Herzegovina"
+msgstr "Bosna a Hercegovina"
+
+msgid "Botswana"
+msgstr "Botswana"
+
+msgid "Bouvet Island"
+msgstr "Bouvetův ostrov"
+
+msgid "Brazil"
+msgstr "Brazílie"
+
+msgid "Bridge"
+msgstr "Síťový most"
+
+msgid "British Antarctic Territory"
+msgstr "Britské antarktické území"
+
+msgid "British Indian Ocean Territory"
+msgstr "Britské indickooceánské území"
+
+msgid "British Virgin Islands"
+msgstr "Britské Panenské ostrovy"
+
+msgid "Browse directory"
+msgstr "Procházet složku"
+
+msgid "Browseable"
+msgstr "Možné procházet"
+
+msgid "Brunei"
+msgstr "Brunej"
+
+msgid "Bulgaria"
+msgstr "Bulharsko"
+
+msgid "Burkina Faso"
+msgstr "Burkina Faso"
+
+msgid "Burundi"
+msgstr "Burundi"
+
+msgid "CPU"
+msgstr "Procesor"
+
+msgid "CPU Usage"
+msgstr "Spotřeba výpočet. výkonu"
+
+msgid "CPU Utilization"
+msgstr ""
+
+msgid "CPU usage"
+msgstr "Spotřeba výpočet. výkonu"
+
+msgid "Cambodia"
+msgstr "Kambodža"
+
+msgid "Cameroon"
+msgstr "Kamerun"
+
+msgid "Canada"
+msgstr "Kanada"
+
+msgid "Cancel"
+msgstr "Storno"
+
+msgid "Canton and Enderbury Islands"
+msgstr "Canton a Enderbury"
+
+msgid "Capacity"
+msgstr "Kapacita"
+
+msgid "Cape Verde"
+msgstr "Kapverdy"
+
+msgid "Cayman Islands"
+msgstr "Kajmanské ostrovy"
+
+msgid "Central African Republic"
+msgstr "Středoafrická republika"
+
+msgid "Certain date"
+msgstr "Určité datum"
+
+msgid "Certificate"
+msgstr "Certifikát"
+
+msgid "Certificate management."
+msgstr ""
+
+msgid "Certificates"
+msgstr "Certifikáty"
+
+msgid "Chad"
+msgstr "Čad"
+
+msgid "Change Password"
+msgstr "Změnit heslo"
+
+msgid "Changelog"
+msgstr "Soupis změn"
+
+msgid "Check for new plugins"
+msgstr "Zjistit nové zásuvné moduly"
+
+msgid "Check for new updates"
+msgstr "Zkontrolovat dostupnost nových aktualizací"
+
+msgid "Check interval"
+msgstr "Interval kontrol"
+
+msgid "Checking for new plugins ..."
+msgstr "Zjišťování nových zásuvných modulů…"
+
+msgid "Chile"
+msgstr "Chile"
+
+msgid "China"
+msgstr "Čína"
+
+msgid "Choose"
+msgstr "Zvolit"
+
+msgid "Christmas Island"
+msgstr "Vánoční ostrov"
+
+msgid "City"
+msgstr "Město"
+
+msgid "Cleaning up recycle bin on the share."
+msgstr "Čistí se koš na sdílení."
+
+msgid "Clear"
+msgstr "Vyčistit"
+
+msgid "Client"
+msgstr "Klient"
+
+msgid "Client NetBIOS name"
+msgstr "NetBIOS název klienta"
+
+msgid "Client address"
+msgstr "Adresa klienta"
+
+msgid "Clients allowed to mount the file system, e.g. 192.168.178.0/24."
+msgstr "Klienti s oprávněním k připojení souborového systému, např. 192.168.178.0/24."
+
+msgid "Close"
+msgstr "Zavřít"
+
+msgid "Close the session on inactivity after the specified time."
+msgstr ""
+
+msgid "Cocos (Keeling) Islands"
+msgstr "Kokosové (Keelingovy) ostrovy"
+
+msgid "Colombia"
+msgstr "Kolumbie"
+
+msgid "Command"
+msgstr "Příkaz"
+
+msgid "Comment"
+msgstr "Komentář"
+
+msgid "Common Name"
+msgstr "Adresa stroje"
+
+msgid "Community-maintained updates"
+msgstr "Aktualizace spravované komunitou"
+
+msgid "Comoros"
+msgstr "Komory"
+
+msgid "Compress"
+msgstr "Komprimovat"
+
+msgid "Compress file data during the transfer."
+msgstr "Komprimovat data souboru během přenosu."
+
+msgid "Compression"
+msgstr "Komprese"
+
+msgid ""
+"Compression is worth using if your connection is slow. The efficiency of the"
+" compression depends on the type of the file, and varies widely. Useful for "
+"internet transfer only."
+msgstr "Komprese má význam v případě pomalého připojení. Účinnost komprese je velmi proměnlivá dle typu přenášených dat. Užitečná je tedy pouze v případě přístupu přes Internet."
+
+msgid "Confirm"
+msgstr ""
+
+msgid "Confirm password"
+msgstr "Zopakování hesla"
+
+msgid "Confirmation"
+msgstr "Potvrzení"
+
+msgid "Congo (Brazzaville)"
+msgstr "Kongo (Brazzaville)"
+
+msgid "Congo (Kinshasa)"
+msgstr "Demokratická republika Kongo (Kinhasa)"
+
+msgid "Connect even if the network is not broadcasting its SSID name."
+msgstr ""
+
+msgid "Connect to hidden network"
+msgstr ""
+
+msgid "Connections"
+msgstr "Spojení"
+
+msgid "Control and monitor storage systems using S.M.A.R.T."
+msgstr ""
+
+msgid "Conveyance self-test"
+msgstr "Kontrola případného poškození při přepravě"
+
+msgid "Cook Islands"
+msgstr "Cookovy ostrovy"
+
+msgid "Copied SSH certificate to {{ hostname }}."
+msgstr "Zkopírován SSH certifikát na {{ hostname }}."
+
+msgid "Copy"
+msgstr "Zkopírovat"
+
+msgid "Copy permissions"
+msgstr ""
+
+msgid "Copy public SSH key"
+msgstr "Zkopírovat veřejnou část SSH klíče"
+
+msgid "Copy to clipboard"
+msgstr "Zkopírovat do schránky"
+
+msgid "Costa Rica"
+msgstr "Kostarika"
+
+msgid "Country"
+msgstr "Země"
+
+msgid "Create"
+msgstr "Vytvořit"
+
+msgid "Create and mount a file system."
+msgstr ""
+
+msgid "Create file system"
+msgstr "Vytvořit souborový systém"
+
+msgid "Create | Import"
+msgstr "Vytvořit | naimportovat"
+
+msgid "Created NFS share."
+msgstr "Vytvořeno NFS sdílení."
+
+msgid "Created Rsync server module \"{{ name }}\"."
+msgstr "Vytvořen modul Rsync serveru „{{ name }}“."
+
+msgid "Created Rsync task."
+msgstr "Vytvořena Rsync úloha."
+
+msgid "Created SMB/CIFS share."
+msgstr "Vytvořeno SMB/CIFS sdílení."
+
+msgid "Created SSH certificate."
+msgstr "Vytvořen SSH certifikát."
+
+msgid "Created SSL certificate."
+msgstr "Vytvořit SSL certifikát."
+
+msgid "Created VLAN network connection."
+msgstr "Vytvořeno VLAN síťové připojení."
+
+msgid "Created bond network connection."
+msgstr "Vytvořeno spřažené připojení do sítě."
+
+msgid "Created bridge network connection."
+msgstr "Vytvořeno připojení síťového mostu."
+
+msgid "Created firewall rule."
+msgstr "Vytvořeno pravidlo brány firewall."
+
+msgid "Created group \"{{ name }}\"."
+msgstr "Vytvořena skupina „{{ name }}“."
+
+msgid "Created scheduled task."
+msgstr "Vytvořena naplánovaná úloha."
+
+msgid "Created user \"{{ name }}\"."
+msgstr "Vytvořen uživatel „{{ name }}“."
+
+msgid "Created wired network connection."
+msgstr "Vytvořeno připojení k drátové síti."
+
+msgid "Created wireless network connection."
+msgstr "Vytvořeno připojení k bezdrátové síti."
+
+msgid "Creation Time"
+msgstr ""
+
+msgid "Croatia"
+msgstr "Chorvatsko"
+
+msgid "Cuba"
+msgstr "Kuba"
+
+msgid "Currently logged in users"
+msgstr "Aktuálně přihlášení uživatelé"
+
+msgid "Cyprus"
+msgstr "Kypr"
+
+msgid "Czech Republic"
+msgstr "Česká republika"
+
+msgid "DHCP"
+msgstr "Automaticky (DHCP)"
+
+msgid "DNS servers"
+msgstr "DNS servery"
+
+msgid "Daemon"
+msgstr "Proces služby"
+
+msgid "Daily"
+msgstr "Denně"
+
+msgid "Dark mode"
+msgstr ""
+
+msgid "Dashboard"
+msgstr "Přehled"
+
+msgid "Date & Time"
+msgstr "Datum a čas"
+
+msgid "Day of month"
+msgstr "Den v měsíci"
+
+msgid "Day of week"
+msgstr "Den v týdnu"
+
+msgid "Debug"
+msgstr "Ladění"
+
+msgid "December"
+msgstr "prosinec"
+
+msgid "Delete"
+msgstr "Smazat"
+
+msgid "Delete files on the receiving side that don't exist on sender."
+msgstr "V cíli smazat ty soubory, které neexistují na straně zdroje."
+
+msgid "Denmark"
+msgstr "Dánsko"
+
+msgid "Description"
+msgstr "Popis"
+
+msgid "Destination"
+msgstr "Cíl"
+
+msgid ""
+"Destination address can be either a network IP address (with /mask), a IP "
+"range or a plain IP address. A \"!\" argument before the address "
+"specification inverts the sense of the address."
+msgstr "Cílová adresa může být zapsána jako adresa podsítě (s /maskou), rozsah IP adres nebo jednotlivá IP adresa. Vykřičník před adresou znamená opak významu."
+
+msgid "Destination port"
+msgstr "Cílový port"
+
+msgid "Destination server"
+msgstr "Cílový server"
+
+msgid "Destination shared folder"
+msgstr "Cílová sdílená složka"
+
+msgid "Details"
+msgstr "Podrobnosti"
+
+msgid "Device"
+msgstr "Zařízení"
+
+msgid "Device Information"
+msgstr "Informace o zařízení"
+
+msgid "Device Mapper %s [%s, %s]"
+msgstr "Mapovač zařízení %s [%s, %s]"
+
+msgid "Device Symlinks"
+msgstr "Symbolické odkazy na zařízení"
+
+msgid "Device has a few bad sectors."
+msgstr "Na záznamovém médiu zařízení se vyskytuje několik vadných sektorů."
+
+msgid "Device has many bad sectors."
+msgstr "Na záznamovém médiu zařízení se vyskytuje velké množství vadných sektorů."
+
+msgid "Device is being used outside design parameters."
+msgstr "Zařízení je provozováno za horších podmínek, než na které je zkonstruované."
+
+msgid "Device was used outside of design parameters in the past."
+msgstr "Zařízení bylo v minulosti provozováno za horších podmínek, než na které je zkonstruované."
+
+msgid "Device(s)"
+msgstr "Zařízení"
+
+msgid "Devices"
+msgstr "Zařízení"
+
+msgid "Diagnostics"
+msgstr "Diagnostika"
+
+msgid "Difference"
+msgstr "Rozdíl"
+
+msgid "Direction"
+msgstr "Směr"
+
+msgid "Disabled"
+msgstr "Vypnuto"
+
+msgid "Disallow account modification"
+msgstr "Neumožnit úpravu účtu"
+
+msgid "Disallow the user to modify their own account."
+msgstr ""
+
+msgid "Disk Temperatures"
+msgstr ""
+
+msgid "Disk Usage"
+msgstr "Využití disku"
+
+msgid "Disks"
+msgstr "Jednotky datových úložišť"
+
+msgid "Dismiss"
+msgstr ""
+
+msgid "Dismiss all"
+msgstr ""
+
+msgid "Displays information about the file systems in a grid."
+msgstr ""
+
+msgid "Displays information about the file systems in a table."
+msgstr ""
+
+msgid "Displays information about the network interfaces in a grid."
+msgstr ""
+
+msgid "Displays information about the network interfaces in a table."
+msgstr ""
+
+msgid "Displays information about the services in a grid."
+msgstr ""
+
+msgid "Displays information about the services in a table."
+msgstr ""
+
+msgid "Displays the S.M.A.R.T. status of all monitored disk devices."
+msgstr ""
+
+msgid "Displays the system time."
+msgstr ""
+
+msgid "Displays the system uptime."
+msgstr ""
+
+msgid "Displays the temperature of all disk devices."
+msgstr ""
+
+msgid "Displays various system information."
+msgstr ""
+
+msgid "Djibouti"
+msgstr "Džibutsko"
+
+msgid "Do you really want to apply the configuration changes?"
+msgstr "Opravdu chcete změny v nastavení potvrdit?"
+
+msgid "Do you really want to copy the permissions from the shared folder?"
+msgstr ""
+
+msgid ""
+"Do you really want to delete the selected item(s) <strong>{{ items | "
+"join(\", \") }}</strong>?"
+msgstr "Opravdu chcete označené položky <strong>{{ items | join(\", \") }}</strong> smazat?"
+
+msgid "Do you really want to delete the selected item(s)?"
+msgstr "Opravdu chcete označené položky smazat?"
+
+msgid "Do you really want to install the plugin?"
+msgstr "Opravdu chcete zásuvný modul nainstalovat?"
+
+msgid "Do you really want to logout?"
+msgstr "Opravdu se chcete odhlásit?"
+
+msgid "Do you really want to put the system into standby?"
+msgstr "Opravdu chcete systém uvést do pohotovostního režimu?"
+
+msgid "Do you really want to reboot the system?"
+msgstr "Opravdu chcete systém restartovat?"
+
+msgid "Do you really want to reset the UI settings to their default values?"
+msgstr "Opravdu chcete obnovit výchozí stav webového rozhraní?"
+
+msgid ""
+"Do you really want to resize the file system? You have to do that after a "
+"RAID has been grown for example."
+msgstr "Opravdu chcete změnit velikost souborového systému? Toto je třeba např. po zvětšení RAID pole."
+
+msgid "Do you really want to shutdown the system?"
+msgstr "Opravdu chcete tento systém vypnout?"
+
+msgid "Do you really want to undo the configuration changes?"
+msgstr "Opravdu chcete změny v nastavení vzít zpět?"
+
+msgid "Do you really want to uninstall the plugin?"
+msgstr "Opravdu chcete zásuvný modul odinstalovat?"
+
+msgid ""
+"Do you really want to unmount this file system? Please make sure that the "
+"file system is not used by any service before unmounting. Note, the file "
+"system will not be deleted by this action."
+msgstr "Opravdu chcete tento souborový systém odpojit? Ještě před tím ověřte, že není používán žádnou službou. Poznamenejme, že souborový systém touto akcí nebude smazán."
+
+msgid ""
+"Do you really want to wipe the device {{ canonicaldevicefile }}? All data "
+"will be lost."
+msgstr "Opravdu chcete vymazat obsah zařízení {{ canonicaldevicefile }}? Veškerá data budou ztracena!"
+
+msgid "Documentation"
+msgstr "Dokumentace"
+
+msgid "Domain name"
+msgstr "Název domény"
+
+msgid "Domains used when resolving host names."
+msgstr "Domény které použít při překládání názvů strojů."
+
+msgid "Dominica"
+msgstr "Dominika"
+
+msgid "Dominican Republic"
+msgstr "Dominikánská republika"
+
+msgid "Down"
+msgstr "Vypnout"
+
+msgid "Down delay"
+msgstr "Prodleva vypnutí"
+
+msgid "Download"
+msgstr "Stáhnout"
+
+msgid "Dronning Maud Land"
+msgstr "Země královny Maud"
+
+msgid "Each line represents a group."
+msgstr "Každý řádek představuje skupinu."
+
+msgid ""
+"Each line represents a user. Note, the password must be entered in plain "
+"text."
+msgstr "Každý řádek představuje uživatele. Heslo je třeba zadat v přímo čitelné podobě."
+
+msgid "East Timor"
+msgstr "Východní Timor"
+
+msgid "Ecuador"
+msgstr "Ekvádor"
+
+msgid "Edit"
+msgstr "Upravit"
+
+msgid "Egypt"
+msgstr "Egypt"
+
+msgid "El Salvador"
+msgstr "Salvador"
+
+msgid "Email"
+msgstr "E-mail"
+
+msgid "Empty now"
+msgstr "Vyprázdnit nyní"
+
+msgid "Enable NetBIOS"
+msgstr ""
+
+msgid "Enable Time Machine support for this share."
+msgstr "Zapnout pro toto sdílení podporu pro Apple Time Machine."
+
+msgid "Enable WINS server"
+msgstr "Zapnout WINS server"
+
+msgid "Enable automatic snapshot clean up."
+msgstr ""
+
+msgid "Enable keyboard-interactive authentication."
+msgstr "Umožnit přihlašování pomocí klávesnice."
+
+msgid "Enable public key authentication."
+msgstr "Zapnout ověřování se veřejným klíčem."
+
+msgid "Enable recycle bin"
+msgstr "Používat Koš"
+
+msgid "Enable remote logging of syslog to the specified host."
+msgstr ""
+
+msgid ""
+"Enable this option to keep partially transferred files, otherwise they will "
+"be deleted if the transfer is interrupted."
+msgstr "Zapnutím této volby budou zachovávány i jen částečně přenesené soubory, které by jinak byly v případě přerušení přenosu smazány."
+
+msgid "Enable user home directories."
+msgstr "Umožnit uživatelům používání domovských složek."
+
+msgid "Enable write-cache"
+msgstr "Zapnout mezipaměť zápisu"
+
+msgid "Enabled"
+msgstr "Poskytováno"
+
+msgid "Enabled widgets"
+msgstr "Zapnuté widgety"
+
+msgid "Encryption mode"
+msgstr "Režim šifrování"
+
+msgid ""
+"Enforce transport encryption for this share. Clients that do not support "
+"encryption will be denied access to the share."
+msgstr ""
+
+msgid "Equatorial Guinea"
+msgstr "Rovníková Guinea"
+
+msgid "Eritrea"
+msgstr "Eritrea"
+
+msgid "Error"
+msgstr "Chyba"
+
+msgid "Estonia"
+msgstr "Estonsko"
+
+msgid "Ethernet"
+msgstr "Ethernet"
+
+msgid "Ethiopia"
+msgstr "Etiopie"
+
+msgid "Events"
+msgstr ""
+
+msgid "Every N day of month"
+msgstr "Každý Ntý den v měsíci"
+
+msgid "Every N hour"
+msgstr "Každou Ntou hodinu"
+
+msgid "Every N minute"
+msgstr "Každých N minut"
+
+msgid "Everyone: read/write"
+msgstr "Kdokoliv: čtení/zápis"
+
+msgid "Execute only"
+msgstr "Pouze spouštět"
+
+msgid "Extended Information"
+msgstr "Další informace"
+
+msgid "Extended attributes"
+msgstr "Rozšířené atributy"
+
+msgid "Extra options"
+msgstr "Rozšířené předvolby"
+
+msgid "FTP-Proxy"
+msgstr "FTP proxy"
+
+msgid "Failed"
+msgstr ""
+
+msgid "Failed to copy data to the clipboard."
+msgstr "Nepodařilo se zkopírovat data do schránky."
+
+msgid "Failed to start session."
+msgstr ""
+
+msgid "Failed to write session data."
+msgstr ""
+
+msgid "Falkland Islands"
+msgstr "Falklandy"
+
+msgid "Family"
+msgstr "Generace"
+
+msgid "Faroe Islands"
+msgstr "Faerské ostrovy"
+
+msgid "Fatal error"
+msgstr "Fatální chyba"
+
+msgid "February"
+msgstr "únor"
+
+msgid "Fiji"
+msgstr "Fidži"
+
+msgid "File Systems"
+msgstr "Souborové systémy"
+
+msgid "File access control lists"
+msgstr ""
+
+msgid "File owner and group"
+msgstr ""
+
+msgid "File path"
+msgstr "Popis umístění souboru"
+
+msgid "File system"
+msgstr "Souborový systém"
+
+msgid "File systems"
+msgstr "Souborové systémy"
+
+msgid "Filename"
+msgstr "Název souboru"
+
+msgid ""
+"Files in the recycle bin will be deleted automatically after the specified "
+"number of days. Set to 0 for manual deletion."
+msgstr "Soubory v Koši budou po zadaném počtu dnů automaticky smazány. Pokud chcete raději mazat ručně, zadejte 0 (nula)."
+
+msgid ""
+"Files that are larger than the specified number will not be put into the "
+"recycle bin."
+msgstr ""
+
+msgid "Fingerprint (SHA-1)"
+msgstr ""
+
+msgid "Fingerprint (SHA-256)"
+msgstr ""
+
+msgid "Finland"
+msgstr "Finsko"
+
+msgid "Firewall"
+msgstr "Brána firewall"
+
+msgid "Firmware version"
+msgstr "Verze firmware"
+
+msgid "Flags"
+msgstr "Příznaky"
+
+msgid "Force SSL/TLS"
+msgstr "Vynucovat SSL/TLS"
+
+msgid "Force a specific MAC address on this interface."
+msgstr ""
+
+msgid "Force secure connection only."
+msgstr "Požadovat výhradně zabezpečené spojení."
+
+msgid "Forum"
+msgstr "Diskuzní fórum"
+
+msgid "Framework for Multicast DNS Service Discovery."
+msgstr ""
+
+msgid "France"
+msgstr "Francie"
+
+msgid "Free"
+msgstr "Volné"
+
+msgid "French Guiana"
+msgstr "Francouzská Guyana"
+
+msgid "French Polynesia"
+msgstr "Francouzská Polynésie"
+
+msgid "French Southern Territories"
+msgstr "Francouzská jižní území"
+
+msgid "French Southern and Antarctic Territories"
+msgstr "Francouzská jižní a antarktická území"
+
+msgid "Friday"
+msgstr "pátek"
+
+msgid "Full"
+msgstr "Plný"
+
+msgid "GID"
+msgstr "identif. skupiny (GID)"
+
+msgid "Gabon"
+msgstr "Gabon"
+
+msgid "Gambia"
+msgstr "Gambie"
+
+msgid "Gateway"
+msgstr "Brána"
+
+msgid "General"
+msgstr "Obecné"
+
+msgid "Georgia"
+msgstr "Gruzie"
+
+msgid "Germany"
+msgstr "Německo"
+
+msgid "Ghana"
+msgstr "Ghana"
+
+msgid "Gibraltar"
+msgstr "Gibraltar"
+
+msgid "Go to the notification sidebar to attach to it."
+msgstr ""
+
+msgid "Good"
+msgstr "Dobré"
+
+msgid "Greece"
+msgstr "Řecko"
+
+msgid "Greenland"
+msgstr "Grónsko"
+
+msgid "Grenada"
+msgstr "Grenada"
+
+msgid "Group"
+msgstr "Skupina"
+
+msgid "Groups"
+msgstr "Skupiny"
+
+msgid "Grow"
+msgstr "Zvětšit"
+
+msgid "Guadeloupe"
+msgstr "Guadeloupe"
+
+msgid "Guam"
+msgstr "Guam"
+
+msgid "Guatemala"
+msgstr "Guatemala"
+
+msgid "Guests allowed"
+msgstr "Přístup hostům umožněn"
+
+msgid "Guests only"
+msgstr "Pouze hosté"
+
+msgid "Guinea"
+msgstr "Guinea"
+
+msgid "Guinea-Bissau"
+msgstr "Guinea-Bissau"
+
+msgid "Guyana"
+msgstr "Guyana"
+
+msgid "HTTP-Proxy"
+msgstr "HTTP proxy"
+
+msgid "HTTPS-Proxy"
+msgstr "HTTPS proxy"
+
+msgid "Haiti"
+msgstr "Haiti"
+
+msgid "Hardware Address"
+msgstr ""
+
+msgid "Heard Island and McDonald Islands"
+msgstr "Heardův ostrov a McDonaldovy ostrovy"
+
+msgid "Help"
+msgstr "Nápověda"
+
+msgid "Hibernate"
+msgstr ""
+
+msgid "Hide"
+msgstr "Skrýt"
+
+msgid "Hide dot files"
+msgstr "Skrýt soubory s názvy začínajícími tečkou"
+
+msgid "High-performance mail transport agent."
+msgstr ""
+
+msgid "Home"
+msgstr "Domů"
+
+msgid "Home directories"
+msgstr "Domovské složky"
+
+msgid "Homepage"
+msgstr "Domovská stránka"
+
+msgid "Honduras"
+msgstr "Honduras"
+
+msgid "Hong Kong S.A.R., China"
+msgstr "Hongkong, Čína"
+
+msgid "Host"
+msgstr "Stroj"
+
+msgid "Hostname"
+msgstr "Název stroje"
+
+msgid "Hosts allow"
+msgstr "Zvané systémy"
+
+msgid "Hosts deny"
+msgstr "Odmítané systémy"
+
+msgid "Hour"
+msgstr "Hodina"
+
+msgid "Hourly"
+msgstr "Každou hodinu"
+
+msgid "Hungary"
+msgstr "Maďarsko"
+
+msgid "Hybrid sleep"
+msgstr ""
+
+msgid "ID"
+msgstr "Identif."
+
+msgid ""
+"IP addresses in CIDR notation or host names of clients that are allowed to "
+"access the NTP server."
+msgstr "IP adresy (v CIDR zápisu) nebo názvy strojů klientů, kterým je dovoleno přistupovat k NTP serveru."
+
+msgid "IP addresses of domain name servers used to resolve host names."
+msgstr "IP adresy jmenných (DNS) serverů, sloužících pro překládání názvů strojů."
+
+msgid "IPv4"
+msgstr "IPv4"
+
+msgid "IPv6"
+msgstr "IPv6"
+
+msgid "Iceland"
+msgstr "Island"
+
+msgid "Identify"
+msgstr "Rozpoznat"
+
+msgid "Identify As"
+msgstr "Identifikovat jako"
+
+msgid "Identify network interface"
+msgstr "Rozpoznat síťové rozhraní"
+
+msgid "Idle"
+msgstr "Nečinnost"
+
+msgid ""
+"If 'Guests allowed' is selected and no login credential is provided, then "
+"access as guest. Always access as guest when 'Guests only' is selecting; in "
+"this case no password is required to connect to the share."
+msgstr "Pokud je zvoleno „Přístup hostům umožněn“ a při přístupu nejsou poskytnuty přihlašovací údaje, pak přistupovat jako host. Vždy přistupovat jako host, když je zvoleno „Pouze hosté“ – v takovém případě pro přístup ke sdílení není vyžadováno žádné heslo."
+
+msgid ""
+"If a device is not listed here, it is usually because the device already "
+"contains a file system or partitions. With the former, the file system can "
+"be mounted <a href='#/storage/filesystems/mount'>here<a>. For the latter, "
+"please <a href='#/storage/disks'>wipe<a> the device as partitions are not "
+"supported."
+msgstr ""
+
+msgid ""
+"If set then the client will be prompted to supply a user name and password "
+"to connect to the module."
+msgstr "Pokud je nastaveno, bude pro připojení k tomuto modulu po klientovi požadováno zadání uživatelského jména a hesla."
+
+msgid ""
+"If this option is set, the daemon will chroot to the shared folder path "
+"before starting the file transfer with the client. Then it is not possible "
+"to map users and groups by name and the daemon is not being able to follow "
+"symbolic links that are either absolute or outside of the new root path."
+msgstr "Pokud je tato volba zapnutá, proces služby se před zahájením přenosu souborů mezi ním a klientem přepne do vyhrazeného prostředí (chroot), tvořeného sdílenou složkou. Tím je ovšem znemožněno mapovat uživatele či skupiny pomocí jejich názvů a také následování symbolických odkazů, které jsou absolutní nebo vedou mimo tuto novou kořenovou složku."
+
+msgid "If this option is set, then any attempted downloads will fail."
+msgstr "Pokud je tato volba zapnutá, pak veškeré pokusy o stahování skončí nezdarem."
+
+msgid "If this option is set, then any attempted uploads will fail."
+msgstr "Pokud je tato volba zapnutá, pak veškeré pokusy o nahrávání skončí nezdarem."
+
+msgid ""
+"If this parameter is set, Samba attempts to first read DOS attributes "
+"(SYSTEM, HIDDEN, ARCHIVE or READ-ONLY) from a file system extended "
+"attribute, before mapping DOS attributes to UNIX permission bits. When set, "
+"DOS attributes will be stored onto an extended attribute in the UNIX file "
+"system, associated with the file or directory."
+msgstr "Pokud je tento parametr nastaven, Samba se nejprve pokusí z rozšířených atributů načíst atributy systému DOS (SYSTEM – systémové, HIDDEN – skryté, ARCHIVE – archivovat nebo READ-ONLY – pouze pro čtení) ještě před mapováním DOS atributů na unixová přístupová oprávnění. Pokud jsou přítomné, DOS atributy budou uložené do rozšířených atributů unixového souborového systému, příslušejících danému souboru či složce."
+
+msgid ""
+"If this parameter is set, then users may not create or modify files in the "
+"share."
+msgstr "Pokud je tento parametr nastaven, pak uživatelé nebudou na sdílení moci vytvářet nové či upravovat stávající soubory."
+
+msgid "Import"
+msgstr "Importovat"
+
+msgid "Imported SSH certificate."
+msgstr "Naimportován SSH certifikát."
+
+msgid "Imported SSL certificate."
+msgstr "Naimportován SSL certifikát."
+
+msgid "Imported groups."
+msgstr "Importované skupiny."
+
+msgid "Imported users."
+msgstr "Uživatelé naimportováni."
+
+msgid "India"
+msgstr "Indie"
+
+msgid "Indicates whether updates are available."
+msgstr ""
+
+msgid "Indonesia"
+msgstr "Indonésie"
+
+msgid "Information"
+msgstr "Informace"
+
+msgid "Inherit ACLs"
+msgstr "Převzít ACL seznamy"
+
+msgid "Inherit permissions"
+msgstr "Převzít oprávnění"
+
+msgid "Initializing"
+msgstr "Inicializace"
+
+msgid "Install"
+msgstr "Nainstalovat"
+
+msgid "Install plugin"
+msgstr "Nainstalovat zásuvný modul"
+
+msgid "Install updates"
+msgstr "Nainstalovat aktualizace"
+
+msgid "Install updates from"
+msgstr "Instalovat aktualizace z"
+
+msgid "Installed"
+msgstr "Nainstalováno"
+
+msgid ""
+"Installs the public SSH key on a remote system as an authorized key. Make "
+"sure password authentication is enabled on that remote system."
+msgstr "Nainstaluje veřejnou část SSH klíče mezi ty oprávněné na protější stroj. Aby toto bylo možné provést, zajistěte, aby na protějším stroji bylo zapnuté ověřování i pomocí hesla."
+
+msgid "Interfaces"
+msgstr "Síťová rozhraní"
+
+msgid "Invalid IP address."
+msgstr "Neplatná IP adresa."
+
+msgid "Invalid NetBIOS name."
+msgstr ""
+
+msgid "Invalid SSH public key (OpenSSH format)."
+msgstr "Neplatný SSH veřejný klíč (formát OpenSSH)."
+
+msgid "Invalid SSH public key (OpenSSH or RFC 4716 format)"
+msgstr "Neplatná veřejná část SSH klíče (ve formátu OpenSSH nebo  dle normy RFC 4716)"
+
+msgid "Invalid SSH public key (RFC 4716 format)."
+msgstr "Neplatná veřejná část SSH klíče (formát dle normy RFC 4716)."
+
+msgid "Invalid User-Agent."
+msgstr "Neplatný User-Agent."
+
+msgid "Invalid domain name."
+msgstr "Neplatný název domény."
+
+msgid "Invalid group name."
+msgstr "Neplatný název skupiny."
+
+msgid "Invalid host name."
+msgstr "Neplatný název stroje."
+
+msgid "Invalid user name."
+msgstr "Neplatné uživatelské jméno."
+
+msgid "Invalid user."
+msgstr "Neplatný uživatel."
+
+msgid "Iran"
+msgstr "Írán"
+
+msgid "Iraq"
+msgstr "Irák"
+
+msgid "Ireland"
+msgstr "Irsko"
+
+msgid "Israel"
+msgstr "Izrael"
+
+msgid ""
+"It may take a while to detect the new devices, thus it might be necessary to"
+" reload the table several times. Do you want to proceed?"
+msgstr "Zjišťování nových zařízení může chvíli trvat, proto může být nezbytné tabulku několikrát znovu načíst. Chcete pokračovat?"
+
+msgid "Italy"
+msgstr "Itálie"
+
+msgid "Ivory Coast"
+msgstr "Pobřeží slonoviny"
+
+msgid "Jamaica"
+msgstr "Jamajka"
+
+msgid "January"
+msgstr "leden"
+
+msgid "Japan"
+msgstr "Japonsko"
+
+msgid "Johnston Island"
+msgstr "Johnstonův atol"
+
+msgid "Jordan"
+msgstr "Jordán"
+
+msgid "July"
+msgstr "červenec"
+
+msgid "June"
+msgstr "červen"
+
+msgid "Kazakhstan"
+msgstr "Kazachstán"
+
+msgid "Keep partially transferred files"
+msgstr "Zachovat i jen částečně přenesené soubory"
+
+msgid "Kenya"
+msgstr "Keňa"
+
+msgid "Kernel"
+msgstr "Jádro systému"
+
+msgid "Key size"
+msgstr "Délka klíče"
+
+msgid "Kiribati"
+msgstr "Kiribati"
+
+msgid "Kuwait"
+msgstr "Kuvajt"
+
+msgid "Kyrgyzstan"
+msgstr "Kyrgyzstán"
+
+msgid "LBA of first error"
+msgstr "Logická adresa bloku (LBA) první chyby"
+
+msgid "LVM logical volume %s [%s, %s]"
+msgstr "LVM logický svazek %s [%s, %s]"
+
+msgid "Label"
+msgstr "Popisek"
+
+msgid "Language"
+msgstr "Jazyk"
+
+msgid "Laos"
+msgstr "Laos"
+
+msgid "Latvia"
+msgstr "Lotyšsko"
+
+msgid "Lebanon"
+msgstr "Libanon"
+
+msgid ""
+"Length of time in seconds to blink one or more LEDs on the specific ethernet"
+" port."
+msgstr "Na kolik sekund rozblikat jednu nebo více kontrolek na určeném ethernetovém rozhraní."
+
+msgid "Lesotho"
+msgstr "Lesotho"
+
+msgid "Liberia"
+msgstr "Libérie"
+
+msgid "Libya"
+msgstr "Libye"
+
+msgid "Liechtenstein"
+msgstr "Lichtenštejnsko"
+
+msgid "Lifetime"
+msgstr "Doba provozu"
+
+msgid "Limit custom"
+msgstr ""
+
+msgid "Limit daily"
+msgstr ""
+
+msgid "Limit hourly"
+msgstr ""
+
+msgid "Limit monthly"
+msgstr ""
+
+msgid "Limit weekly"
+msgstr ""
+
+msgid "Limit yearly"
+msgstr ""
+
+msgid "Link"
+msgstr "Přip. / odpoj."
+
+msgid "List module"
+msgstr "Vypsat modul"
+
+msgid "Lithuania"
+msgstr "Litva"
+
+msgid "Load Average"
+msgstr "Průměr. vytíženost systému"
+
+msgid "Load average"
+msgstr "Průměr. vytíženost systému"
+
+msgid "Loading ..."
+msgstr "Načítání…"
+
+msgid "Local"
+msgstr "Místní"
+
+msgid "Location"
+msgstr "Umístění"
+
+msgid "Log in"
+msgstr "Přihlásit se"
+
+msgid "Log level"
+msgstr "Úroveň podrobnosti záznamu událostí"
+
+msgid "Logout"
+msgstr "Odhlásit"
+
+msgid "Logs"
+msgstr "Záznamy událostí v systému"
+
+msgid "Long self-test"
+msgstr "Podrobná kontrola"
+
+msgid "Loop device [%s, %s]"
+msgstr "Zařízení smyčky (loop)  [%s, %s]"
+
+msgid "Luxembourg"
+msgstr "Lucembursko"
+
+msgid "MAC"
+msgstr "MAC"
+
+msgid "MAC address"
+msgstr "MAC adresa"
+
+msgid "MII monitoring frequency"
+msgstr "Četnost hlídání rozhraní MII"
+
+msgid "MTU"
+msgstr "MTU"
+
+msgid "Macao S.A.R., China"
+msgstr "Macao, Čína"
+
+msgid "Macedonia"
+msgstr "Makedonie"
+
+msgid "Madagascar"
+msgstr "Madagaskar"
+
+msgid "Maintainer"
+msgstr "Správce software"
+
+msgid "Make sure that the guest user <em>nobody</em> can access the files."
+msgstr ""
+
+msgid "Malawi"
+msgstr "Malawi"
+
+msgid "Malaysia"
+msgstr "Malajsie"
+
+msgid "Maldives"
+msgstr "Maledivy"
+
+msgid "Mali"
+msgstr "Mali"
+
+msgid "Malta"
+msgstr "Malta"
+
+msgid "Management of CPUfreq settings."
+msgstr ""
+
+msgid "Management of scheduled tasks."
+msgstr ""
+
+msgid "Management of the file systems to be mounted."
+msgstr ""
+
+msgid "March"
+msgstr "březen"
+
+msgid "Marshall Islands"
+msgstr "Marshallovy ostrovy"
+
+msgid "Martinique"
+msgstr "Martinik"
+
+msgid ""
+"Match if the destination port is one of the given ports, e.g. 21 or !443 or "
+"1024-65535."
+msgstr "Pravidlo vyhovuje, pokud cílový port patří do uvedeného seznamu. Např. 21 nebo !443 nebo 1024-65535."
+
+msgid ""
+"Match if the source port is one of the given ports, e.g. 21 or !443 or "
+"1024-65535."
+msgstr "Pravidlo vyhovuje, pokud zdrojový port patří do uvedeného seznamu. Např. 21 nebo !443 nebo 1024-65535."
+
+msgid "Mauritania"
+msgstr "Mauritánie"
+
+msgid "Mauritius"
+msgstr "Mauricius"
+
+msgid "Max. connections"
+msgstr "Nejvýše připojení"
+
+msgid "Maximum"
+msgstr "Maximum"
+
+msgid "Maximum file size"
+msgstr "Nejvyšší umožněná velikost souboru"
+
+msgid "Maximum performance, maximum acoustic output"
+msgstr "Nejvyšší výkon, ale také nejvyšší hlučnost"
+
+msgid "May"
+msgstr "květen"
+
+msgid "Mayotte"
+msgstr "Mayotte"
+
+msgid "Members"
+msgstr "Členové"
+
+msgid "Memory"
+msgstr ""
+
+msgid "Memory Usage"
+msgstr "Využití kapacit oper. paměti"
+
+msgid "Memory usage"
+msgstr "Využití kapacit oper. paměti"
+
+msgid "Message"
+msgstr "Zpráva"
+
+msgid "Messages"
+msgstr "Zprávy"
+
+msgid "Method"
+msgstr "Způsob nastavení"
+
+msgid "Metric"
+msgstr ""
+
+msgid "Metropolitan France"
+msgstr "Metropolitní Francie"
+
+msgid "Mexico"
+msgstr "Mexiko"
+
+msgid "Micronesia"
+msgstr "Mikronésie"
+
+msgid "Midway Islands"
+msgstr "Ostrovy Midway"
+
+msgid "Minimum"
+msgstr "Nejméně"
+
+msgid "Minimum performance, minimum acoustic output"
+msgstr "Nejnižší hlučnost, ale také nejnižší výkon"
+
+msgid "Minimum protocol version"
+msgstr ""
+
+msgid "Minute"
+msgstr "Minuta"
+
+msgid "Missing"
+msgstr "Chybějící"
+
+msgid "Mode"
+msgstr "Režim"
+
+msgid "Model"
+msgstr "Model"
+
+msgid "Modules"
+msgstr "Moduly"
+
+msgid "Moldova"
+msgstr "Moldavsko"
+
+msgid "Monaco"
+msgstr "Monako"
+
+msgid "Monday"
+msgstr "pondělí"
+
+msgid "Mongolia"
+msgstr "Mongolsko"
+
+msgid "Monitored"
+msgstr "Dohledováno"
+
+msgid "Monitoring"
+msgstr "Pořizování statistik"
+
+msgid "Monitoring enabled"
+msgstr "Dohledování zapnuto"
+
+msgid "Month"
+msgstr "Měsíc"
+
+msgid "Monthly"
+msgstr "Měsíčně"
+
+msgid "Montserrat"
+msgstr "Montserrat"
+
+msgid "Morocco"
+msgstr "Maroko"
+
+msgid "Mount"
+msgstr "Připojit (mount)"
+
+msgid "Mount Options"
+msgstr ""
+
+msgid "Mount Point"
+msgstr "Přípojný bod"
+
+msgid "Mount an existing file system."
+msgstr ""
+
+msgid "Mounted"
+msgstr "Připojeno"
+
+msgid "Mozambique"
+msgstr "Mosambik"
+
+msgid "Myanmar"
+msgstr "Barma"
+
+msgid "NFS"
+msgstr "NFS"
+
+msgid "Name"
+msgstr "Název"
+
+msgid "Namibia"
+msgstr "Namibie"
+
+msgid "Nauru"
+msgstr "Nauru"
+
+msgid "Nepal"
+msgstr "Nepál"
+
+msgid "Netherlands"
+msgstr "Nizozemsko"
+
+msgid "Netherlands Antilles"
+msgstr "Nizozemské Antily"
+
+msgid "Netmask"
+msgstr "Maska sítě"
+
+msgid "Network"
+msgstr "Síť"
+
+msgid "Network Interfaces"
+msgstr "Síťová rozhraní"
+
+msgid "Neutral Zone"
+msgstr "Neutrální zóna"
+
+msgid "Never"
+msgstr "Nikdy"
+
+msgid "New Caledonia"
+msgstr "Nová Kaledonie"
+
+msgid "New Zealand"
+msgstr "Nový Zéland"
+
+msgid "New package updates are available for installation."
+msgstr ""
+
+msgid "New password"
+msgstr "Nové heslo"
+
+msgid "Nicaragua"
+msgstr "Nikaragua"
+
+msgid "Niger"
+msgstr "Niger"
+
+msgid "Nigeria"
+msgstr "Nigérie"
+
+msgid "Niue"
+msgstr "Niue"
+
+msgid "No"
+msgstr "Ne"
+
+msgid "No access"
+msgstr "Žádný přístup"
+
+msgid "No connections"
+msgstr "Žádná spojení"
+
+msgid "No data to display."
+msgstr "Chybí data – není co zobrazovat."
+
+msgid "No monitored devices."
+msgstr ""
+
+msgid "No users connected"
+msgstr "Žádní připojení uživatelé"
+
+msgid "None"
+msgstr "Žádná"
+
+msgid "Norfolk Island"
+msgstr "Norfolk"
+
+msgid "Normal"
+msgstr "Bežné"
+
+msgid "North Korea"
+msgstr "Severní Korea"
+
+msgid "North Vietnam"
+msgstr "Vietnamská demokratická republika"
+
+msgid "Northern Mariana Islands"
+msgstr "Severní Mariany"
+
+msgid "Norway"
+msgstr "Norsko"
+
+msgid "Not ICMP"
+msgstr "Mimo ICMP"
+
+msgid "Not ICMPv6"
+msgstr "Mimo ICMPv6"
+
+msgid "Not TCP"
+msgstr "Mimo TCP"
+
+msgid "Not UDP"
+msgstr "Mimo UDP"
+
+msgid "Not mounted"
+msgstr "Nepřipojeno"
+
+msgid "Not running"
+msgstr "Nespuštěné"
+
+msgid ""
+"Note that SMB1 is deprecated and should only be used in mandatory cases."
+msgstr ""
+
+msgid "Nothing"
+msgstr "Nic"
+
+msgid "Notification"
+msgstr "Upozornění"
+
+msgid "Notifications"
+msgstr "Upozorňování"
+
+msgid "November"
+msgstr "listopad"
+
+msgid "Num"
+msgstr "Číslo"
+
+msgid "OK"
+msgstr "OK"
+
+msgid ""
+"Obsolete cached data found. Page will be reloaded. If the problem persists, "
+"press Ctrl-Shift-R or Ctrl-F5 to force a hard reload of the page."
+msgstr ""
+
+msgid "October"
+msgstr "říjen"
+
+msgid "Offline immediate test"
+msgstr "Spustit průběžnou samokontrolu disku"
+
+msgid "Old-age"
+msgstr "V minulosti"
+
+msgid "Oman"
+msgstr "Omán"
+
+msgid "Online"
+msgstr "Připraveno"
+
+msgid "Operation"
+msgstr "Operace"
+
+msgid "Options"
+msgstr "Možnosti"
+
+msgid "Organization Name"
+msgstr "Název organizace"
+
+msgid "Organization Unit"
+msgstr "Organizační jednotka (oddělení)"
+
+msgid "Others"
+msgstr "Ostatní"
+
+msgid "Outgoing SMTP mail server address, e.g. smtp.mycorp.com."
+msgstr "Adresa odchozího SMTP serveru, např. smtp.example.com."
+
+msgid "Outlying Oceania"
+msgstr "Menší odlehlé ostrovy USA"
+
+msgid "Owner"
+msgstr "Vlastník"
+
+msgid "Pacific Islands Trust Territory"
+msgstr "Poručenské území Tichomořské ostrovy"
+
+msgid "Package Information"
+msgstr "Informace o balíčku"
+
+msgid "Package management."
+msgstr ""
+
+msgid "Pakistan"
+msgstr "Pákistán"
+
+msgid "Palau"
+msgstr "Palau"
+
+msgid "Palestinian Territory"
+msgstr "Palestinské teritorium"
+
+msgid "Panama"
+msgstr "Panama"
+
+msgid "Panama Canal Zone"
+msgstr "Panamské průplavové pásmo"
+
+msgid "Papua New Guinea"
+msgstr "Papua-Nová Guinea"
+
+msgid "Paraguay"
+msgstr "Paraguay"
+
+msgid "Parent Device"
+msgstr "Nadřazené zařízení"
+
+msgid "Parent UUID"
+msgstr ""
+
+msgid "Parent device"
+msgstr "Nadřazené zařízení"
+
+msgid "Password"
+msgstr "Heslo"
+
+msgid "Password authentication"
+msgstr "Ověřování heslem"
+
+msgid "Password does not match."
+msgstr "Zadání hesla se neshodují."
+
+msgid "Password doesn't match."
+msgstr "Zadání hesla se neshodují"
+
+msgid "Paste a RSA or ECC certificate in X.509 PEM format here."
+msgstr "Sem vložte obsah RSA nebo ECC certifikátu ve formátu X.509 PEM."
+
+msgid "Paste a RSA or ECC private key in X.509 PEM format here."
+msgstr "Sem vložte obsah RSA nebo ECC soukromého klíče ve formátu X.509 PEM."
+
+msgid "Pending configuration changes"
+msgstr ""
+
+msgid "People's Democratic Republic of Yemen"
+msgstr "Jemenská lidová demokratická republika"
+
+msgid "Perform a trial run with no changes made"
+msgstr "Vyzkoušet bez provedení změn"
+
+msgid "Performance Statistics"
+msgstr "Statistiky ohledně výkonnosti"
+
+msgid "Period of validity"
+msgstr "Období platnosti"
+
+msgid "Permission"
+msgstr ""
+
+msgid "Permissions"
+msgstr "Oprávnění"
+
+msgid "Permissions of group."
+msgstr "Oprávnění skupiny."
+
+msgid "Permissions of others (e.g. anonymous FTP users)."
+msgstr "Oprávnění ostatních (např. anonymní uživatelé FTP)."
+
+msgid "Permissions of owner."
+msgstr "Oprávnění vlastníka."
+
+msgid "Permit root login"
+msgstr "Umožnit přihlašování správce systému (root)"
+
+msgid "Permit to do SSH tunneling."
+msgstr "Umožnit vytváření SSH tunelů."
+
+msgid "Peru"
+msgstr "Peru"
+
+msgid "Philippines"
+msgstr "Filipíny"
+
+msgid "Pitcairn"
+msgstr "Pitcairnovy ostrovy"
+
+msgid ""
+"Please check the <a href=\"http://www.samba.org/ftp/rsync/rsync.html\" "
+"target=\"_blank\">manual page</a> for more details."
+msgstr "Podrobnosti naleznete v <a href=\"http://www.samba.org/ftp/rsync/rsync.html\" target=\"_blank\">manuálové stránce</a> (v angličtině)."
+
+msgid ""
+"Please check the <a href=\"http://www.samba.org/ftp/rsync/rsyncd.conf.html\""
+" target=\"_blank\">manual page</a> for more details."
+msgstr "Podrobnosti naleznete v <a href=\"http://www.samba.org/ftp/rsync/rsyncd.conf.html\" target=\"_blank\">manuálové stránce</a> (v angličtině)."
+
+msgid ""
+"Please check the <a href=\"https://man.openbsd.org/sshd_config.5\" "
+"target=\"_blank\">manual page</a> for more details."
+msgstr "Další podrobnosti naleznete v <a href=\"https://man.openbsd.org/sshd_config.5\" target=\"_blank\">manuálové stránce</a>."
+
+msgid ""
+"Please check the <a "
+"href='http://www.samba.org/samba/docs/man/manpages-3/smb.conf.5.html' "
+"target='_blank'>manual page</a> for more details."
+msgstr "Podrobnosti naleznete v <a href='http://www.samba.org/samba/docs/man/manpages-3/smb.conf.5.html' target='_blank'>manuálové stránce</a> (v angličtině)."
+
+msgid ""
+"Please check the <a href='https://manpages.debian.org/nfs-kernel-"
+"server/exports.5.html' target='_blank'>manual page</a> for more details."
+msgstr ""
+
+msgid "Please choose the method to wipe the device."
+msgstr "Zvolte způsob kompletního smazání zařízení."
+
+msgid "Please wait ..."
+msgstr "Čekejte prosím…"
+
+msgid "Please wait, deleting selected item(s) ..."
+msgstr "Vyčkejte, mazání označení položek"
+
+msgid "Please wait, identifying network device ..."
+msgstr "Vyčkejte, identifikuje se síťové zařízení"
+
+msgid "Please wait, installing public SSH key on remote system ..."
+msgstr "Vyčkejte, instaluje se veřejný SSH klíč na vzdálený systém"
+
+msgid "Please wait, processing selected item(s) ..."
+msgstr "Vyčkejte, zpracovávají se vybrané položky"
+
+msgid "Please wait, reverting configuration changes ..."
+msgstr "Vyčkejte, změny v nastavení se berou zpět"
+
+msgid "Please wait, sending a test email ..."
+msgstr "Vyčkejte, odesílá se testovací e-mail"
+
+msgid "Please wait, the configuration changes are being applied ..."
+msgstr "Vyčkejte nastavené změny jsou uplatňovány"
+
+msgid "Please wait, the data is being loaded ..."
+msgstr "Vyčkejte, data jsou načítána"
+
+msgid "Please wait, the statistic graphs will be regenerated ..."
+msgstr "Vyčkejte, statistické grafy budou znovu vytvořeny"
+
+msgid "Please wait, unmounting the file system ..."
+msgstr "Vyčkejte, odpojuje se souborový systém"
+
+msgid "Please wait, updating access control lists ..."
+msgstr "Vyčkejte, aktualizují se seznamy řízení přístupu"
+
+msgid "Please wait, updating the permissions ..."
+msgstr ""
+
+msgid "Plugins"
+msgstr "Zásuvné moduly"
+
+msgid "Poland"
+msgstr "Polsko"
+
+msgid "Port"
+msgstr "Port"
+
+msgid "Portugal"
+msgstr "Portugalsko"
+
+msgid "Power"
+msgstr "Napájení"
+
+msgid "Power Management"
+msgstr "Správa napájení"
+
+msgid "Power Off"
+msgstr ""
+
+msgid "Power button"
+msgstr "Tlačítko napájení"
+
+msgid "Power cycle count"
+msgstr ""
+
+msgid "Power mode"
+msgstr "Režim napájení"
+
+msgid "Powered on"
+msgstr ""
+
+msgid "Pre-release updates"
+msgstr "Ještě nevydané aktualizace"
+
+msgid "Prefail"
+msgstr "Blížící se selhání"
+
+msgid "Prefix address"
+msgstr ""
+
+msgid "Prefix length"
+msgstr "Délka předpony"
+
+msgid "Preserve ACLs"
+msgstr "Zachovat ACL seznamy"
+
+msgid "Preserve extended attributes"
+msgstr "Zachovat rozšířené atributy"
+
+msgid "Preserve group"
+msgstr "Zachovat skupinu"
+
+msgid "Preserve modification times"
+msgstr "Zachovat časy úprav"
+
+msgid "Preserve owner"
+msgstr "Zachovat vlastníka"
+
+msgid "Preserve permissions"
+msgstr "Zachovat oprávnění"
+
+msgid ""
+"Prevent a disk from being spun-up when it is periodically "
+"polled.<ul><li>Never - Poll (check) the device regardless of its power mode."
+" This may cause a disk which is spun-down to be spun-up when it is "
+"checked.</li><li>Sleep - Check the device unless it is in SLEEP "
+"mode.</li><li>Standby - Check the device unless it is in SLEEP or STANDBY "
+"mode. In these modes most disks are not spinning, so if you want to prevent "
+"a disk from spinning up each poll, this is probably what you "
+"want.</li><li>Idle - Check the device unless it is in SLEEP, STANDBY or IDLE"
+" mode. In the IDLE state, most disks are still spinning, so this is probably"
+" not what you want.</li></ul>"
+msgstr "Zamezit roztáčení zastavených disků jen kvůli pravidelnému dotazování v případě:<ul><li>Nikdy – Dotázat zařízení bez ohledu na stav napájení, ve kterém se nachází. Může způsobovat zbytečné roztáčení stojích disků.</li><li>Spánku – Dotázat se zařízení jen pokud se nenachází v režimu SPÁNKU.</li><li>Pohotovosti – Dotázat se zařízení jen pokud se nenachází v režimu SPÁNKU či POHOTOVOSTI.<br/>(V těchto režimech bývá většina disků zastavena, takže když chcete zabránit zbytečnému roztáčení disků, je tato volba nejspíš nejvhodnější.)</li><li>Nečinnosti – Zkontrolovat zařízení pouze pokud se nenachází v režimu SPÁNKU, POHOTOVOSTI či NEČINNOSTI.<br/>(Ve stavu NEČINNOSTI se ale většina disků stejně točí, takže toto nejspíš není to, co potřebujete.)</li></ul>"
+
+msgid "Primary"
+msgstr "Hlavní"
+
+msgid "Primary email"
+msgstr "Hlavní e-mail"
+
+msgid "Private key"
+msgstr "Soukromá část klíče"
+
+msgid "Process monitoring"
+msgstr "Sledování procesů"
+
+msgid "Processes"
+msgstr "Procesy"
+
+msgid "Processor"
+msgstr "Procesor"
+
+msgid "Profile"
+msgstr "Profil"
+
+msgid "Protocol"
+msgstr "Protokol"
+
+msgid "Proxy"
+msgstr "Proxy"
+
+msgid "Public"
+msgstr "Veřejné"
+
+msgid "Public key"
+msgstr "Veřejná část klíče"
+
+msgid "Public key authentication"
+msgstr "Ověřování kryptografií s veřejným klíčem"
+
+msgid "Puerto Rico"
+msgstr "Portoriko"
+
+msgid "Pull"
+msgstr "Táhnout"
+
+msgid "Push"
+msgstr "Tlačit"
+
+msgid "Qatar"
+msgstr "Katar"
+
+msgid "Quick"
+msgstr "Rychlé"
+
+msgid "Quota"
+msgstr "Kvóta"
+
+msgid "RSync server"
+msgstr "RSync server"
+
+msgid "Raw value"
+msgstr "Hodnota před zpracováním"
+
+msgid "Read only"
+msgstr "Pouze pro čtení"
+
+msgid "Read-only"
+msgstr "Pouze pro čtení"
+
+msgid "Read/Execute"
+msgstr "Čtení/spouštění"
+
+msgid "Read/Write"
+msgstr "Čtení/zápis"
+
+msgid "Read/Write/Execute"
+msgstr "Čtení/zápis/spouštění"
+
+msgid "Reboot"
+msgstr "Restartovat"
+
+msgid "Recipient"
+msgstr "Příjemce"
+
+msgid "Recurse into directories"
+msgstr "Včetně vnořených složek"
+
+msgid "Recursive"
+msgstr "Rekurzivní"
+
+msgid "Referenced"
+msgstr "Odkazované"
+
+msgid "Relative Path"
+msgstr "Vztažený popis umístění"
+
+msgid "Relative path"
+msgstr "Vztažený popis umístění"
+
+msgid "Reload"
+msgstr "Znovu načíst"
+
+msgid "Remaining"
+msgstr "Zbývající"
+
+msgid "Remote"
+msgstr "Protějšek"
+
+msgid "Replace"
+msgstr "Nahradit"
+
+msgid "Replace all existing permissions."
+msgstr "Nahradit všechna existující oprávnění."
+
+msgid "Report"
+msgstr "Zpráva"
+
+msgid ""
+"Report if the temperature had changed by at least N degrees Celsius since "
+"last report."
+msgstr "Hlásit, pokud se teplota od minulého hlášení změní přinejmenším o zadaný počet stupňů Celsia."
+
+msgid ""
+"Report if the temperature is greater than or equal to N degrees Celsius."
+msgstr "Hlásit, pokud je teplota vyšší nebo rovna N stupňům Celsia."
+
+msgid "Repository"
+msgstr "Repozitář"
+
+msgid "Reset UI to defaults"
+msgstr "Resetovat stav webového rozhraní"
+
+msgid "Result"
+msgstr "Výsledek"
+
+msgid "Retention period"
+msgstr ""
+
+msgid "Retention time"
+msgstr "Doba udržování"
+
+msgid "Reunion"
+msgstr "Opětovné spojení"
+
+msgid "Reverted the configuration changes."
+msgstr "Vráceny zpět změny v nastavení."
+
+msgid "Romania"
+msgstr "Rumunsko"
+
+msgid "Row No."
+msgstr ""
+
+msgid "Rsync"
+msgstr "Rsync"
+
+msgid "Rsync - Jobs"
+msgstr "Rsync – úlohy"
+
+msgid "Rsync - Server"
+msgstr "Rsync – server"
+
+msgid "Rules"
+msgstr "Pravidla"
+
+msgid "Run"
+msgstr "Spustit"
+
+msgid "Run rsync task"
+msgstr "Spustit rsync úlohu"
+
+msgid "Run scheduled task"
+msgstr "Spustit naplánovanou úlohu"
+
+msgid "Running"
+msgstr "Spuštěné"
+
+msgid "Russia"
+msgstr "Rusko"
+
+msgid "Rwanda"
+msgstr "Rwanda"
+
+msgid "S.M.A.R.T."
+msgstr "Diagnostika (S.M.A.R.T.)"
+
+msgid "S.M.A.R.T. Status"
+msgstr ""
+
+msgid "S.M.A.R.T. monitoring must be activated for the selected device."
+msgstr "Je třeba, aby zvolené zařízení mělo zapnuté S.M.A.R.T. dohledování."
+
+msgid "SMB/CIFS"
+msgstr "SMB/CIFS"
+
+msgid "SMB/CIFS - Audit"
+msgstr "SMB/CIFS – audit"
+
+msgid "SMB/CIFS file, print, and login server for Unix."
+msgstr ""
+
+msgid "SMTP port"
+msgstr "SMTP port"
+
+msgid "SMTP server"
+msgstr "SMTP server"
+
+msgid "SSH"
+msgstr "SSH"
+
+msgid "SSH certificate"
+msgstr "SSH certifikát"
+
+msgid "SSH port"
+msgstr "Port pro SSH"
+
+msgid "SSH public key"
+msgstr "Veřejná část SSH klíče"
+
+msgid "SSH public keys"
+msgstr "SSH veřejné klíče"
+
+msgid "SSID"
+msgstr "SSID"
+
+msgid "SSL"
+msgstr "SSL"
+
+msgid "SSL/TLS"
+msgstr "SSL/TLS"
+
+msgid "SSL/TLS enabled"
+msgstr "SSL/TLS zapnuto"
+
+msgid "STARTTLS"
+msgstr "STARTTLS"
+
+msgid "Saint Helena"
+msgstr "Svatá Helena"
+
+msgid "Saint Kitts and Nevis"
+msgstr "Svatý Kryštof a Nevis"
+
+msgid "Saint Lucia"
+msgstr "Svatá Lucie"
+
+msgid "Saint Pierre and Miquelon"
+msgstr "Saint-Pierre a Miquelon"
+
+msgid "Saint Vincent and the Grenadines"
+msgstr "Svatý Vincenc a Grenadiny"
+
+msgid "Samoa"
+msgstr "Samoa"
+
+msgid "San Marino"
+msgstr "San Marino"
+
+msgid "Sao Tome and Principe"
+msgstr "Svatý Tomáš a Princův ostrov"
+
+msgid "Saturday"
+msgstr "sobota"
+
+msgid "Saudi Arabia"
+msgstr "Saudská Arábie"
+
+msgid "Save"
+msgstr "Uložit"
+
+msgid "Scan for new devices"
+msgstr "Hledat nová zařízení"
+
+msgid "Scanning for new devices ..."
+msgstr "Hledání nových zařízení…"
+
+msgid "Scheduled Tasks"
+msgstr "Naplánované úlohy"
+
+msgid "Scheduling"
+msgstr "Naplánování"
+
+msgid "Search domains"
+msgstr "Prohledávat domény"
+
+msgid "Secondary email"
+msgstr "Náhradní e-mail"
+
+msgid "Seconds"
+msgstr "Sekundy"
+
+msgid "Section"
+msgstr "Sekce"
+
+msgid "Secure"
+msgstr "Zabezpečené"
+
+msgid "Secure connection"
+msgstr "Zabezpečené spojení"
+
+msgid "Select a country ..."
+msgstr "Vyberte zemi…"
+
+msgid "Select a device ..."
+msgstr "Vyberte zařízení…"
+
+msgid "Select a file system ..."
+msgstr "Vyberte souborový systém…"
+
+msgid "Select a group ..."
+msgstr "Vyberte skupinu"
+
+msgid "Select a shared folder ..."
+msgstr "Vyberte sdílenou složku…"
+
+msgid "Select a shell ..."
+msgstr "Vyberte shell…"
+
+msgid "Select a system log ..."
+msgstr "Vyberte záznam událostí v systému…"
+
+msgid "Select all"
+msgstr ""
+
+msgid "Select an authentication mode ..."
+msgstr "Vyberte režim ověřování…"
+
+msgid "Select an user ..."
+msgstr "Vyberte uživatele"
+
+msgid "Select devices ..."
+msgstr "Vyberte zařízení…"
+
+msgid "Select groups ..."
+msgstr "Vybrat skupiny"
+
+msgid "Select interface devices ..."
+msgstr "Vyberte zařízení rozhraní"
+
+msgid "Select members ..."
+msgstr "Vybrat členy"
+
+msgid "Select permissions ..."
+msgstr "Vyberte přístupová oprávnění…"
+
+msgid "Select slave devices ..."
+msgstr "Vyberte podřízené zařízení"
+
+msgid "Select the device that will be used to create the file system."
+msgstr "Vyberte zařízení, na kterém daný souborový systém vytvořit."
+
+msgid "Select the devices that will be used to create the file system."
+msgstr ""
+
+msgid "Self-Test Logs"
+msgstr "Protokoly ze samotestů"
+
+msgid ""
+"Send a notification when the used file system capacity exceeds the specified"
+" threshold."
+msgstr "Odeslat upozornění když využitá kapacita souborového systému přesáhne zadaný práh."
+
+msgid "Send command output via email"
+msgstr "Odeslat výstup příkazu v e-mailové zprávě"
+
+msgid "Sender email"
+msgstr "Adresa odesílatele"
+
+msgid "Senegal"
+msgstr "Senegal"
+
+msgid "September"
+msgstr "září"
+
+msgid "Serbia And Montenegro"
+msgstr "Srbsko a Černá Hora"
+
+msgid "Serial Number"
+msgstr "Sériové číslo"
+
+msgid "Serial number"
+msgstr "Sériové číslo"
+
+msgid "Server"
+msgstr "Server"
+
+msgid "Service"
+msgstr "Služba"
+
+msgid "Service disabled"
+msgstr "Poskytování služby je vypnuto"
+
+msgid "Services"
+msgstr "Služby"
+
+msgid "Session expired."
+msgstr "Platnost relace skončila."
+
+msgid "Session not authenticated."
+msgstr "Relace nebyla ověřena."
+
+msgid ""
+"Set the destination permissions to be the same as the source permissions."
+msgstr "Nastavit oprávnění v cíli tak, aby byla stejná jako na zdroji."
+
+msgid ""
+"Set the group of the destination file to be the same as the source file."
+msgstr "Nastavit skupinu cílového souboru tak, aby byla stejná, jako na zdrojovém souboru."
+
+msgid ""
+"Set the owner of the destination file to be the same as the source file, but"
+" only if the receiving rsync is being run as the super-user."
+msgstr "Nastavit vlastníka cílového souboru tak, aby byla stejná jako na zdrojovém souboru, ale pouze pokud je přijímající rsync spuštěn pod účtem s právy správy."
+
+msgid "Sets the interval between disk checks to N seconds."
+msgstr "Stav disků zkontrolovat každých N sekund."
+
+msgid "Settings"
+msgstr "Nastavení"
+
+msgid "Seychelles"
+msgstr "Seychely"
+
+msgid "Share"
+msgstr ""
+
+msgid "Shared Folders"
+msgstr "Sdílené složky"
+
+msgid "Shared folder"
+msgstr "Sdílená složka"
+
+msgid "Shared folder name"
+msgstr "Název sdílené složky"
+
+msgid "Shared folder path"
+msgstr "Popis umístění sdílené složky"
+
+msgid "Shared folder permissions"
+msgstr ""
+
+msgid "Shared folder permissions have been copied."
+msgstr ""
+
+msgid "Shares"
+msgstr "Sdílení"
+
+msgid "Shell"
+msgstr "Shell"
+
+msgid "Short self-test"
+msgstr "Zběžná kontrola"
+
+msgid "Show changelog"
+msgstr "Zobrazit soupis změn"
+
+msgid "Show details"
+msgstr "Zobrazit podobnosti"
+
+msgid "Show/Hide columns"
+msgstr "Zobrazit/skrýt sloupce"
+
+msgid "Show/Hide navigation"
+msgstr ""
+
+msgid "Shutdown"
+msgstr "Vypnout"
+
+msgid "Sierra Leone"
+msgstr "Sierra Leone"
+
+msgid "Singapore"
+msgstr "Singapur"
+
+msgid "Size"
+msgstr "Velikost"
+
+msgid "Slaves"
+msgstr "Podřízená rozhraní"
+
+msgid "Sleep"
+msgstr "Spánek"
+
+msgid "Slovakia"
+msgstr "Slovensko"
+
+msgid "Slovenia"
+msgstr "Slovinsko"
+
+msgid "Snapshots"
+msgstr ""
+
+msgid "Software Failure.   Press left mouse button to continue."
+msgstr "Selhání software.   Pokračujte kliknutím levým tlačítkem myši."
+
+msgid "Solomon Islands"
+msgstr "Šalamounovy ostrovy"
+
+msgid "Somalia"
+msgstr "Somálsko"
+
+msgid "Source"
+msgstr "Zdroj"
+
+msgid ""
+"Source address can be either a network IP address (with /mask), a IP range "
+"or a plain IP address. A \"!\" argument before the address specification "
+"inverts the sense of the address."
+msgstr "Zdrojová adresa může být zapsána jako adresa podsítě (s /maskou), rozsah IP adres nebo jedna IP adresa. Vykřičník před adresou znamená převrácení významu."
+
+msgid "Source port"
+msgstr "Zdrojový port"
+
+msgid "Source server"
+msgstr "Zdrojový server"
+
+msgid "Source shared folder"
+msgstr "Zdrojová sdílená složka"
+
+msgid "South Africa"
+msgstr "Jižní afrika"
+
+msgid "South Georgia and the South Sandwich Islands"
+msgstr "Jižní Georgie a Jižní Sandwichovy ostrovy"
+
+msgid "South Korea"
+msgstr "Jižní Korea"
+
+msgid "Spain"
+msgstr "Španělsko"
+
+msgid "Specifies the MII link monitoring frequency in milliseconds."
+msgstr "Určuje četnost hlídání rozhraní MII (v milisekundách)."
+
+msgid "Specifies the interface devices."
+msgstr "Určuje zařízení daného rozhraní."
+
+msgid "Specifies the slave devices."
+msgstr "Určuje podřízená zařízení."
+
+msgid ""
+"Specifies the time, in milliseconds, to wait before disabling a slave after "
+"a link failure has been detected."
+msgstr "Určuje prodlevu (v milisekundách) ukončení používání rozhraní poté, co na něm vypadlo spojení."
+
+msgid ""
+"Specifies the time, in milliseconds, to wait before enabling a slave after a"
+" link recovery has been detected."
+msgstr "Určuje prodlevu (v milisekundách) zahájení opětovného používání rozhraní poté, co na něm bylo obnoveno spojení."
+
+msgid "Specifies the type of key to create."
+msgstr ""
+
+msgid "Specifies whether it is allowed to login as superuser."
+msgstr "Určuje zda je umožněno přihlašovat se jako správce systému (root)."
+
+msgid ""
+"Specifies whether the system performance statistics are collected "
+"periodically."
+msgstr "Určuje zda pravidelně shromažďovat statistiky ohledně výkonnosti systému."
+
+msgid ""
+"Specifies whether to monitor the system status and select the most "
+"appropriate CPU level."
+msgstr "Určuje zda sledovat stav systému a na základě toho vybírat nejvhodnější režim chodu procesoru."
+
+msgid "Specifies which slave is the primary device."
+msgstr "Určuje, které ze zpřažených zařízení je hlavní."
+
+msgid "Speed"
+msgstr "Rychlost"
+
+msgid "Spindown time"
+msgstr "Prodleva zastavení rotace"
+
+msgid "Sri Lanka"
+msgstr "Srí Lanka"
+
+msgid "Standby"
+msgstr "Pohotovostní režim"
+
+msgid "Standby mode"
+msgstr ""
+
+msgid "Start"
+msgstr "Spustit"
+
+msgid "State"
+msgstr "Stav"
+
+msgid "State/Province"
+msgstr "Stát/provincie"
+
+msgid "Static"
+msgstr "Ruční (statické)"
+
+msgid "Statistics collection and monitoring daemon."
+msgstr ""
+
+msgid "Status"
+msgstr "Stav"
+
+msgid "Stop"
+msgstr "Zastavit"
+
+msgid "Storage"
+msgstr "Úložiště"
+
+msgid "Store DOS attributes"
+msgstr "Uchovat (systému) DOS atributy"
+
+msgid "Success"
+msgstr "Úspěch"
+
+msgid "Sudan"
+msgstr "Súdán"
+
+msgid "Summary"
+msgstr "Souhrn"
+
+msgid "Sunday"
+msgstr "neděle"
+
+msgid "Support name resolution and network discovery for legacy systems."
+msgstr ""
+
+msgid "Suppress non-error messages"
+msgstr "Hlásit pouze chyby, ostatní potlačit"
+
+msgid "Suriname"
+msgstr "Surinam"
+
+msgid "Suspend"
+msgstr ""
+
+msgid "Svalbard and Jan Mayen"
+msgstr "Špicberky a Jan Mayen"
+
+msgid "Swaziland"
+msgstr "Svazijsko"
+
+msgid "Sweden"
+msgstr "Švédsko"
+
+msgid "Switzerland"
+msgstr "Švýcarsko"
+
+msgid "Syria"
+msgstr "Sýrie"
+
+msgid "Syslog"
+msgstr "Syslog"
+
+msgid "System"
+msgstr "Systém"
+
+msgid "System Information"
+msgstr "Informace o systému"
+
+msgid "System Logs"
+msgstr "Události v systému"
+
+msgid "System Time"
+msgstr "Systémový čas"
+
+msgid "System account"
+msgstr "Systémový účet"
+
+msgid "System clock synchronization client and server."
+msgstr ""
+
+msgid ""
+"System monitoring is disabled. To enable it, please go to the <a "
+"href='#/system/monitoring'>settings page</a>."
+msgstr ""
+
+msgid "System restart required"
+msgstr ""
+
+msgid "System time"
+msgstr "Systémový čas"
+
+msgid "TCP"
+msgstr ""
+
+msgid "TCP forwarding"
+msgstr "Přeposílání TCP"
+
+msgid "Tags"
+msgstr ""
+
+msgid "Taiwan"
+msgstr "Taiwan"
+
+msgid "Tajikistan"
+msgstr "Tádžikistán"
+
+msgid ""
+"Take caution when setting this polling interval to more than sixty minutes. "
+"The poll times may fail to coincide with any of the scheduled test that have"
+" been specified. In this case the scheduled test will be run following the "
+"next device polling."
+msgstr ""
+
+msgid "Tanzania"
+msgstr "Tanzanie"
+
+msgid "Tasks"
+msgstr "Úlohy"
+
+msgid "Temperature"
+msgstr "Teplota"
+
+msgid "Temperature monitoring"
+msgstr "Sledování teploty"
+
+msgid "Test"
+msgstr "Vyzkoušet"
+
+msgid "Thailand"
+msgstr "Thajsko"
+
+msgid "The NFS versions provided by the service."
+msgstr ""
+
+msgid "The NT description field."
+msgstr "Kolonka NT popisu."
+
+msgid "The RSA key length."
+msgstr "Délka RSA klíče."
+
+msgid "The SSH certificate used for authentication."
+msgstr "SSH certifikát použitý pro ověřování."
+
+msgid "The SSH public key in OpenSSH or RFC 4716 format."
+msgstr "Veřejná část SSH klíče ve formátu OpenSSH nebo RFC 4716."
+
+msgid "The action to be done when pressing the power button."
+msgstr "Akce, která bude provedena při stisku tlačítka napájení."
+
+msgid ""
+"The dashboard has not yet been configured. To personalize it, please go to "
+"the <a href='#/dashboard/settings'>settings page</a>."
+msgstr ""
+
+msgid "The data has been copied to the clipboard."
+msgstr "Data byla zkopírována do schránky."
+
+msgid "The default SMTP mail server port, e.g. 25, 465 or 587."
+msgstr ""
+
+msgid ""
+"The destination remote server, e.g. [USER@]HOST:DEST, [USER@]HOST::DEST or "
+"rsync://[USER@]HOST[:PORT]/DEST."
+msgstr "Cílový vzdálený server, např. [UZIVATEL@]STROJ:CIL, [USIVATEL@]STROJ::CIL nebo rsync://[UZIVATEL@]STROJ[:PORT]/CIL."
+
+msgid "The field should only contain * or a comma separated list of values."
+msgstr ""
+
+msgid "The file mode of the shared folder path."
+msgstr "Přístupová práva k umístění sdílené složky."
+
+msgid "The file system on which the shared folder is to be created."
+msgstr "Souborový systém na kterém má být sdílená složka vytvořena."
+
+msgid "The file system to mount."
+msgstr "Souborový systém, který připojit."
+
+msgid "The following modules will be updated:"
+msgstr ""
+
+msgid "The hostname is a label that identifies the system to the network."
+msgstr "Název pod kterým stroj vystupuje na síti."
+
+msgid "The hostname of the remote system."
+msgstr "Název protějšího stroje."
+
+msgid ""
+"The information about available software is out-of-date. Do you want to "
+"reload this information?"
+msgstr "Informace o tom, jaký software je v repozitářích k dispozici, je zastaralá. Chcete ji načíst znovu?"
+
+msgid "The location of the files to share."
+msgstr "Umístění souborů pro sdílení."
+
+msgid ""
+"The location of the files to share. The share will be accessible at "
+"/export/<name>."
+msgstr "Umístění souborů, které mají být sdíleny. Sdílení bude dostupné na /export/<nazev>."
+
+msgid "The location of the user home directories."
+msgstr "Umístění domovských složek uživatelů."
+
+msgid ""
+"The maximum transmission unit in bytes to set for the device. Set to 0 to "
+"use the default value."
+msgstr "Největší umožněná velikost (v bajtech) přenosové jednotky (MTU) pro zařízení. Pro výchozí hodnotu použijte 0 (nula)."
+
+msgid "The name of the share."
+msgstr "Název sdílení."
+
+msgid "The number of custom snapshots to keep."
+msgstr ""
+
+msgid "The number of daily snapshots to keep."
+msgstr ""
+
+msgid "The number of days the certificate is valid for."
+msgstr "Počet dnů platnosti certifikátu."
+
+msgid "The number of hourly snapshots to keep."
+msgstr ""
+
+msgid "The number of monthly snapshots to keep."
+msgstr ""
+
+msgid "The number of weekly snapshots to keep."
+msgstr ""
+
+msgid "The number of yearly snapshots to keep."
+msgstr ""
+
+msgid ""
+"The password that is used for access via rsync daemon. Note, this is not "
+"used for remote shell transport such as SSH."
+msgstr "Heslo pro přístup prostřednictvím služby rsync. Ale jen této – neslouží pro vzdálený přístup k rozhraní příkazového řádku, jakým je např. SSH."
+
+msgid ""
+"The permissions on new files and directories are normally governed by create"
+" mask and directory mask but the inherit permissions parameter overrides "
+"this. This can be particularly useful on systems with many users to allow a "
+"single share to be used flexibly by each user."
+msgstr "Oprávnění pro nově vytvářené soubory a složky jsou běžně řízeny maskou pro vytváření a maskou složky, ale parametr pro přebírání oprávnění toto přebíjí. Užitečné zejména na systémech, sloužících mnoha uživatelům, kdy je třeba, aby sdílení mohla být pružně používána každým z uživatelů."
+
+msgid "The port on which SSH is running on the remote system."
+msgstr "Port na kterém je na protějším stroji spuštěné SSH."
+
+msgid "The private key in PEM format."
+msgstr ""
+
+msgid ""
+"The protocol is not supported in conjunction with a source/destination port."
+msgstr "Tento protokol není podporován ve spojení se zdrojovým/cílovým portem."
+
+msgid "The public key in OpenSSH format."
+msgstr ""
+
+msgid ""
+"The relative path of the folder to share. The specified folder will be "
+"created if it does not exist."
+msgstr "Relativní popis umístění složky, která má být sdílena. Pokud uvedená složka ještě neexistuje, bude automaticky vytvořena."
+
+msgid ""
+"The repository will be checked for new, removed or upgraded software "
+"packages."
+msgstr "Budou zjištěny balíčky software, které jsou v repozitáři nové, aktualizované, nebo byly odebrány."
+
+msgid "The requested page was not found."
+msgstr "Požadovaná stránka nebyla nalezena."
+
+msgid ""
+"The retention period (in seconds) before a snapshot can be deleted. This "
+"ensures that a snapshot that has just been created cannot be deleted again "
+"immediately."
+msgstr ""
+
+msgid "The server is unavailable to handle this request right now."
+msgstr "Server v tuto chvíli není dostupný pro vyřízení tohoto požadavku."
+
+msgid "The shared folder from which the permissions are copied."
+msgstr ""
+
+msgid "The shared folder {{ _selected[0].name }} was successfully created."
+msgstr ""
+
+msgid ""
+"The snapshot '{{ _response.name }}' has been created for the shared folder "
+"'{{ _response.sharedfolder }}'."
+msgstr ""
+
+msgid ""
+"The source remote server, e.g. [USER@]HOST:SRC, [USER@]HOST::SRC or "
+"rsync://[USER@]HOST[:PORT]/SRC."
+msgstr "Zdrojový vzdálený server, např. [UZIVATEL@]STROJ:ZDROJ, [UZIVATEL@]STROJ::ZDROJ nebo rsync://[UZIVATEL@]STROJ[:PORT]/ZDROJ."
+
+msgid "The system will reboot now. This may take some time ..."
+msgstr "Systém nyní bude restartován. Chvíli to potrvá…"
+
+msgid "The users that are allowed to access this module."
+msgstr "Uživatelé, kterým je umožněn přístup k tomuto modulu."
+
+msgid "The value does not match the pattern /{{ pattern }}/."
+msgstr "Hodnota se neshoduje se vzorem /{{ pattern }}/."
+
+msgid ""
+"The value must be on of the slave network interfaces {{ slaves | join(\", "
+"\") }}."
+msgstr "Je třeba, aby hodnota byla jedno z podřízených síťových rozhraní {{ slaves | join(\", \") }}."
+
+msgid "The value must be on of the slave network interfaces."
+msgstr "Je třeba, aby hodnota byla jedno z podřízených síťových rozhraní."
+
+msgid "The workgroup the server will appear to be in when queried by clients."
+msgstr "Pracovní skupina, které se server bude jevit členem, když bude dotazován klienty."
+
+msgid "There are no notifications."
+msgstr "Nejsou zde žádná upozornění."
+
+msgid ""
+"These settings are used by the services to configure the access rights for "
+"the group \"{{ _routeParams.name }}\". Please note that these settings have "
+"no effect on file system permissions."
+msgstr "Tato nastavení jsou používána službami pro nastavení přístupových práv pro skupinu „{{ _routeParams.name }}“. Nezapomeňte, že tato nastavení se netýkají práv na souborovém systému."
+
+msgid ""
+"These settings are used by the services to configure the access rights for "
+"the user \"{{ _routeParams.name }}\". Please note that these settings have "
+"no effect on file system permissions."
+msgstr "Tato nastavení jsou používána službami pro nastavení přístupových práv pro uživatele „{{ _routeParams.name }}“. Nezapomeňte, že tato nastavení se netýkají práv na souborovém systému."
+
+msgid ""
+"These settings are used by the services to configure the user and group "
+"access rights. Please note that these settings have no effect on file system"
+" permissions."
+msgstr "Tato nastavení jsou používána službami pro nastavení přístupových práv uživatele a skupiny. Nezapomeňte, že tato nastavení se netýkají práv na souborovém systému."
+
+msgid ""
+"This controls whether this share is seen in the list of available shares in "
+"a net view and in the browse list."
+msgstr "Určuje zda bude toto sdílení viditelné v seznamu těch dostupných v síťovém pohledu a také v seznamu k procházení."
+
+msgid ""
+"This field contains invalid characters, e.g. a blank or \"/[]:+|<>=;,*? "
+"character."
+msgstr "Tato kolonka obsahuje neplatné znaky, např. mezeru nebo znak \"/[]:+|<>=;,*?"
+
+msgid ""
+"This field contains invalid characters, only alphanumeric characters and "
+"underscore are allowed."
+msgstr "Tato kolonka obsahuje neplatné znaky – povoleny jsou pouze písmena (bez diakritiky), číslice a podtržítka."
+
+msgid ""
+"This field is automatically filled with the subject of the certificate if "
+"left blank."
+msgstr ""
+
+msgid "This field is required."
+msgstr "Tuto kolonku je třeba vyplnit."
+
+msgid "This field must have the format <hh:mm:ss>."
+msgstr "Je třeba, aby kolonka byla ve formátu <hh:mm:ss>."
+
+msgid "This field should be a IP network address in CIDR notation."
+msgstr "Kolonka by měla obsahovat IP adresu sítě v CIDR zápisu."
+
+msgid "This field should be a MAC address, e.g. 00:80:41:ae:fd:7e."
+msgstr ""
+
+msgid "This field should be a domain name or an IP address."
+msgstr "Tato kolonka by měla obsahovat doménový název nebo IP adresu."
+
+msgid "This field should be a host name or an IP address in CIDR notation."
+msgstr "Obsahem této kolonky by měl být název stroje nebo IP adresa (v CIDR zápisu)."
+
+msgid "This field should be a list of IP addresses separated by <,> or <;>."
+msgstr "Tato kolonka by měla obsahovat seznam IP adres, oddělených znaky <,> (čárka) nebo <;> (středník)"
+
+msgid ""
+"This field should be a list of domain names or IP addresses separated by <,>"
+" or <;>."
+msgstr "Tato kolonka by měla obsahovat pouze seznam doménových názvů nebo IP adres, oddělených znaky <,> (čárka) nebo <;> (středník)."
+
+msgid "This field should be a list of domain names or IP addresses."
+msgstr "Obsahem této kolonky by měl být seznam doménových názvů nebo IP adres."
+
+msgid ""
+"This field should be a list of host names or IP addresses in CIDR notation "
+"separated by <,> or <;>."
+msgstr "Tato kolonka by měla obsahovat pouze názvy strojů nebo jejich IP adresy (v CIDR zápisu), oddělené znaky <,> (čárka) nebo <;> (středník)."
+
+msgid ""
+"This field should be a netmask within the range 128.0.0.0 - 255.255.255.252."
+msgstr "Tato kolonka by měla obsahovat masku sítě z rozsahu 128.0.0 - 255.255.255.252"
+
+msgid "This field should be a network port in the range of 1 to 65535."
+msgstr ""
+
+msgid ""
+"This field should be a port or port range (e.g. 21 or !443 or 1024-65535)."
+msgstr "Tato kolonka by měla obsahovat číslo portu nebo jejich rozsah (např. 21 nebo !443 nebo 1024-65535)."
+
+msgid "This field should be an IP address."
+msgstr "Tato kolonka by měla obsahovat IP adresu."
+
+msgid "This field should be an IPv4 address."
+msgstr "Tato kolonka by měla obsahovat IPv4 adresu."
+
+msgid "This field should be an IPv6 address."
+msgstr "Tato kolonka by měla obsahovat IPv6 adresu."
+
+msgid "This field should be an email address."
+msgstr "Tato kolonka by měla obsahovat e-mailovou adresu."
+
+msgid "This field should contain a decimal value."
+msgstr ""
+
+msgid "This field should contain a number with a binary prefix."
+msgstr ""
+
+msgid "This field should contain a numeric value."
+msgstr ""
+
+msgid "This function is effective only if the hard drive supports it."
+msgstr "Tato funkce je k něčemu pouze v případě, že ji pevný disk podporuje."
+
+msgid ""
+"This is a text field that is seen next to a share when a client queries the "
+"server."
+msgstr "Toto je textové pole, zobrazované vedle sdílení v okamžiku, kdy se klient dotazuje serveru."
+
+msgid ""
+"This option determines if this module should be listed when the client asks "
+"for a listing of available modules."
+msgstr "Tato volba určuje, zda se tento modul objeví klientovi ve výpisu dostupných modulů."
+
+msgid ""
+"This option is a comma, space, or tab delimited set of host which are NOT "
+"permitted to access this module. Where the lists conflict, the allow list "
+"takes precedence. In the event that it is necessary to deny all by default, "
+"use the keyword ALL (or the netmask 0.0.0.0/0) and then explicitly specify "
+"to the hosts allow parameter those hosts that should be permitted access. "
+"Leave this field empty to use default settings."
+msgstr "Tato volba je čárkou, mezerou či tabulátorem oddělovaný seznam strojů, ze kterých NENÍ umožněn přístup k tomuto modulu. V případě, že je stroj uvedený zároveň i v seznamu zvaných, pak je přístup z něj přesto umožněn. V případě, že je třeba všechny jako výchozí odepřít, použijte klíčové slovo ALL (případně síťovou masku 0.0.0.0/0) a poté výslovně uveďte do zvaných systémů ty, ze kterých by přístup měl být umožněn. Pro výchozí nastavení ponechte nevyplněné."
+
+msgid ""
+"This option is a comma, space, or tab delimited set of host which are NOT "
+"permitted to access this share. Where the lists conflict, the allow list "
+"takes precedence. In the event that it is necessary to deny all by default, "
+"use the keyword ALL (or the netmask 0.0.0.0/0) and then explicitly specify "
+"to the hosts allow parameter those hosts that should be permitted access. "
+"Leave this field empty to use default settings."
+msgstr "Tato volba je čárkou, mezerou či tabulátorem oddělovaný seznam strojů, ze kterých NENÍ umožněn přístup k tomuto sdílení. V případě, že je stroj uvedený zároveň i v seznamu zvaných, pak je přístup z něj přesto umožněn. V případě, že je třeba všechny jako výchozí odepřít, použijte klíčové slovo ALL (případně síťovou masku 0.0.0.0/0) a poté výslovně uveďte do zvaných systémů ty, ze kterých by přístup měl být umožněn. Pro výchozí nastavení ponechte nevyplněné."
+
+msgid ""
+"This option is a comma, space, or tab delimited set of hosts which are "
+"permitted to access this module. You can specify the hosts by name or IP "
+"number. Leave this field empty to use default settings."
+msgstr "Tato volba je čárkou, mezerou či tabulátorem oddělovaný seznam strojů, ze kterých je umožněn přístup k tomuto modulu. Stroje mohou být uvedeny dle jejich názvu nebo IP adresy. Pokud není nic vyplněno, jsou použita výchozí nastavení."
+
+msgid ""
+"This option is a comma, space, or tab delimited set of hosts which are "
+"permitted to access this share. You can specify the hosts by name or IP "
+"number. Leave this field empty to use default settings."
+msgstr "Tato volba je čárkou, mezerou či tabulátorem oddělovaný seznam strojů, ze kterých je umožněn přístup k tomuto sdílení. Stroje mohou být uvedeny dle jejich názvu nebo IP adresy. Pokud není nic vyplněno, jsou použita výchozí nastavení."
+
+msgid ""
+"This option specifies the group name that file transfers to and from that "
+"module should take place."
+msgstr "Tato předvolba určuje skupinu, kterou se budou dít přenosy souboru do a z modulu."
+
+msgid ""
+"This option specifies the maximum number of simultaneous connections. 0 "
+"means no limit."
+msgstr "Tato předvolba stanovuje horní hranici počtu souběžných spojení. 0 (nula) znamená neomezeně."
+
+msgid ""
+"This option specifies the user name that file transfers to and from that "
+"module should take place."
+msgstr "Tato volba určuje uživatelské jméno, kterým se budou dít přenosy souborů do a z modulu."
+
+msgid ""
+"This parameter can be used to ensure that if default acls exist on parent "
+"directories, they are always honored when creating a new file or "
+"subdirectory in these parent directories."
+msgstr "Tímto parametrem lze zajistit, že pokud na nadřazených složkách existují výchozí acl seznamy, budou u zde nově vytvářených souborů či podsložek vždy respektovány."
+
+msgid ""
+"This parameter controls whether files starting with a dot appear as hidden "
+"files"
+msgstr "Tento parametr řídí zda skrývat soubory, jejichž názvy začínají tečkou"
+
+msgid ""
+"This setting controls the minimum protocol version that the server will "
+"allow the client to use."
+msgstr ""
+
+msgid "This specifies what to do if the packet matches."
+msgstr "Toto určuje co dělat případě, že paket vyhoví pravidlu."
+
+msgid "This will create a recycle bin for each user home directory."
+msgstr ""
+
+msgid "This will create a recycle bin for the share."
+msgstr ""
+
+msgid "Threshold"
+msgstr "Práh"
+
+msgid "Thursday"
+msgstr "čtvrtek"
+
+msgid "Time Machine support"
+msgstr "Podpora pro Time Machine"
+
+msgid "Time of execution"
+msgstr "Kdy spouštět"
+
+msgid "Time server"
+msgstr "Časový server"
+
+msgid "Time servers"
+msgstr "Časové servery"
+
+msgid "Time zone"
+msgstr "Časové pásmo"
+
+msgid "Tip"
+msgstr ""
+
+msgid "Togo"
+msgstr "Togo"
+
+msgid "Tokelau"
+msgstr "Tokelau"
+
+msgid "Tonga"
+msgstr "Tonga"
+
+msgid "Total"
+msgstr "Celkem"
+
+msgid ""
+"Transfer modification times along with the files and update them on the "
+"remote system."
+msgstr "Přenést společně se soubory časy okamžiku úprav a aktualizovat je na protějšku."
+
+msgid "Transmit Hash Policy"
+msgstr ""
+
+msgid "Transport encryption"
+msgstr ""
+
+msgid "Trial run"
+msgstr "Vyzkoušet nanečisto"
+
+msgid "Trinidad and Tobago"
+msgstr "Trinidad a Tobago"
+
+msgid "Tuesday"
+msgstr "úterý"
+
+msgid "Tunisia"
+msgstr "Tunisko"
+
+msgid "Turkey"
+msgstr "Turecko"
+
+msgid "Turkmenistan"
+msgstr "Turkmenistán"
+
+msgid "Turks and Caicos Islands"
+msgstr "Turks a Caicos"
+
+msgid "Tuvalu"
+msgstr "Tuvalu"
+
+msgid "Type"
+msgstr "Typ"
+
+msgid "U.S. Miscellaneous Pacific Islands"
+msgstr "Menší odlehlé ostrovy Spojených států amerických"
+
+msgid "U.S. Virgin Islands"
+msgstr "Americké Panenské ostrovy"
+
+msgid "UDP"
+msgstr ""
+
+msgid "UID"
+msgstr "Identif. uživatele (UID)"
+
+msgid "UNKNOWN"
+msgstr "NEZNÁMÉ"
+
+msgid "UUID"
+msgstr ""
+
+msgid "Uganda"
+msgstr "Uganda"
+
+msgid "Ukraine"
+msgstr "Ukrajina"
+
+msgid "Undo"
+msgstr "Zpět"
+
+msgid "Uninstall"
+msgstr "Odinstalovat"
+
+msgid "Uninstall plugin"
+msgstr "Odinstalovat zásuvný modul"
+
+msgid "Union of Soviet Socialist Republics"
+msgstr "Sovětský svaz"
+
+msgid "Unit"
+msgstr "Jednotka"
+
+msgid "United Arab Emirates"
+msgstr "Spojené arabské emiráty"
+
+msgid "United Kingdom"
+msgstr "Spojené království"
+
+msgid "United States"
+msgstr "Spojené státy americké"
+
+msgid "United States Minor Outlying Islands"
+msgstr "Menší odlehlé ostrovy Spojených států amerických"
+
+msgid "Unknown"
+msgstr "Neznámé"
+
+msgid "Unmount"
+msgstr "Odpojit (umount)"
+
+msgid "Unrestricted"
+msgstr ""
+
+msgid "Up"
+msgstr "Zapnuto"
+
+msgid "Up delay"
+msgstr "Prodleva zapnutí"
+
+msgid "Update Management"
+msgstr "Správa aktualizací"
+
+msgid "Update the destination ACLs to be the same as the source ACLs."
+msgstr "Aktualizovat ACL seznamy v cíli tak, aby byly stejné jako na zdroji."
+
+msgid ""
+"Update the destination extended attributes to be the same as the local ones."
+msgstr "Aktualizovat rozšířené atributy v cíli tak, aby byly stejné jako ty místní."
+
+msgid "Updated NFS settings."
+msgstr "Zaktualizována nastavení NFS."
+
+msgid "Updated NFS share."
+msgstr "Zaktualizováno NFS sdílení."
+
+msgid "Updated Rsync Server settings."
+msgstr "Zaktualizována nastavení Rsync serveru."
+
+msgid "Updated Rsync server module \"{{ name }}\"."
+msgstr "Zaktualizován modul Rsync serveru „{{ name }}“."
+
+msgid "Updated Rsync task."
+msgstr "Zaktualizována Rsync úloha."
+
+msgid "Updated SMB/CIFS settings."
+msgstr "Zaktualizována nastavení SMB/CIFS."
+
+msgid "Updated SMB/CIFS share."
+msgstr "Aktualizováno SMB/CIFS sdílení."
+
+msgid "Updated SSH certificate."
+msgstr "Aktualizován SSH certifikát."
+
+msgid "Updated SSH settings."
+msgstr "Zaktualizována nastavení SSH."
+
+msgid "Updated VLAN network connection \"{{ devicename }}\"."
+msgstr "Zaktualizováno VLAN sítové připojení „{{ devicename }}“."
+
+msgid "Updated access control list of shared folder."
+msgstr "Zaktualizován seznam řízení přístupu sdílené složky."
+
+msgid "Updated bond network connection \"{{ devicename }}\"."
+msgstr "Zaktualizováno spřažené sítové připojení \"{{ devicename }}\"."
+
+msgid "Updated bridge network connection \"{{ devicename }}\"."
+msgstr "Zaktualizováno připojení síťového mostu „{{ devicename }}."
+
+msgid "Updated dashboard settings."
+msgstr "Zaktualizována nastavení přehledu."
+
+msgid "Updated date & time settings."
+msgstr "Zaktualizována nastavení data a času."
+
+msgid "Updated file system settings."
+msgstr ""
+
+msgid "Updated firewall rule."
+msgstr "Zaktualizováno pravidlo brány firewall."
+
+msgid "Updated firewall rules."
+msgstr "Zaktualizována pravidla brány firewall."
+
+msgid "Updated group \"{{ name }}\"."
+msgstr "Zaktualizována skupina „{{ name }}“."
+
+msgid "Updated monitoring settings."
+msgstr "Zaktualizována nastavení dohledování."
+
+msgid "Updated network settings."
+msgstr "Zaktualizována nastavení sítě."
+
+msgid "Updated notification event settings."
+msgstr ""
+
+msgid "Updated notification settings."
+msgstr "Zaktualizována nastavení upozorňování."
+
+msgid "Updated password."
+msgstr "Heslo zaktualizováno."
+
+msgid "Updated permissions of group \"{{ name }}\"."
+msgstr ""
+
+msgid "Updated permissions of shared folder."
+msgstr ""
+
+msgid "Updated permissions of user \"{{ name }}\"."
+msgstr ""
+
+msgid "Updated power management settings."
+msgstr "Nastavení správy napájení zaktualizována."
+
+msgid "Updated proxy settings."
+msgstr "Zaktualizována nastavení proxy."
+
+msgid "Updated quota."
+msgstr "Kvóta zaktualizována."
+
+msgid "Updated remote system-logs settings."
+msgstr ""
+
+msgid "Updated scheduled task."
+msgstr "Zaktualizována naplánovaná úloha."
+
+msgid "Updated settings."
+msgstr "Zaktualizována nastavení."
+
+msgid "Updated shared folder."
+msgstr ""
+
+msgid "Updated update management settings."
+msgstr "Aktualizována nastavení správ aktualizací."
+
+msgid "Updated user \"{{ name }}\"."
+msgstr "Aktualizován uživatel „{{ name }}“."
+
+msgid "Updated user profile."
+msgstr "Aktualizován uživatelský profil."
+
+msgid "Updated wired network connection \"{{ devicename }}\"."
+msgstr "Zaktualizováno drátové sítové připojení „{{ devicename }}."
+
+msgid "Updated wireless network connection \"{{ devicename }}\"."
+msgstr "Zaktualizováno připojení k bezdrátové síti „{{ devicename }}."
+
+msgid "Updated workbench settings."
+msgstr "Zaktualizována nastavení workbench."
+
+msgid "Updates"
+msgstr "Aktualizace"
+
+msgid "Updates Available"
+msgstr ""
+
+msgid "Updates available"
+msgstr "Jsou k dispozici aktualizace"
+
+msgid "Upgrade system"
+msgstr "Přejít na novější verzi systému"
+
+msgid "Uptime"
+msgstr "Aktuálně zapnuto po dobu"
+
+msgid "Uruguay"
+msgstr "Uruguay"
+
+msgid "Usage Warning Threshold"
+msgstr "Práh pro vyvolání varování ohledně využití"
+
+msgid "Use NTP server"
+msgstr "Používat NTP server"
+
+msgid "Use chroot"
+msgstr "Použít vyhrazené prostředí (chroot)"
+
+msgid "Use global settings"
+msgstr "Použít globální nastavení"
+
+msgid "Use sendfile"
+msgstr "Použít volání sendfile"
+
+msgid ""
+"Use the more efficient sendfile system call for files that are exclusively "
+"oplocked. This may make more efficient use of the system CPU's and cause "
+"Samba to be faster. Samba automatically turns this off for clients that use "
+"protocol levels lower than NT LM 0.12 and when it detects a client is "
+"Windows 9x."
+msgstr "Použít efektivnější systémové volání sendfile pro soubory, které jsou výhradně oplock zamčeny. Toto může zlepšit efektivitu využívání procesoru a zrychlit službu Samba. Samba toto ovšem automaticky vypne pro klienty, kteří používají verzi protokolu nižší než NT LM 0.12 a když zjistí, že klientem je systém Windows 9x."
+
+msgid "Use the specified WINS server."
+msgstr "Použít uvedený WINS server."
+
+msgid "Used"
+msgstr "Využito"
+
+msgid "Used capacity"
+msgstr "Využitá kapacita"
+
+msgid "User"
+msgstr "Uživatel"
+
+msgid "User Management"
+msgstr "Správa uživatelských účtů"
+
+msgid "User Settings"
+msgstr ""
+
+msgid "User home directory"
+msgstr "Domovská složka uživatele"
+
+msgid "User name"
+msgstr "Uživatelské jméno"
+
+msgid "User/Group permissions"
+msgstr "Oprávnění uživatele/skupiny"
+
+msgid "Users"
+msgstr "Uživatelé"
+
+msgid ""
+"Users must be assigned to the <em>_ssh</em> group to be able to log in via "
+"SSH."
+msgstr ""
+
+msgid "Utilization"
+msgstr ""
+
+msgid "Uzbekistan"
+msgstr "Uzbekistán"
+
+msgid "VLAN"
+msgstr "Virt. síť (VLAN)"
+
+msgid "VLAN id"
+msgstr "identifikátor VLAN"
+
+msgid "Valid from"
+msgstr ""
+
+msgid "Valid to"
+msgstr "Platné do"
+
+msgid "Value"
+msgstr "Hodnota"
+
+msgid "Vanuatu"
+msgstr "Vanuatu"
+
+msgid "Vatican"
+msgstr "Vatikán"
+
+msgid "Vendor"
+msgstr "Výrobce"
+
+msgid "Venezuela"
+msgstr "Venezuela"
+
+msgid "Version"
+msgstr " Verze"
+
+msgid "Versions"
+msgstr ""
+
+msgid "Vietnam"
+msgstr "Vietnam"
+
+msgid "VirtIO device"
+msgstr "VirtIO zařízení"
+
+msgid "WINS server"
+msgstr "Server služby WINS"
+
+msgid "WOL"
+msgstr "WoL"
+
+msgid "WWN"
+msgstr ""
+
+msgid "Wake Island"
+msgstr "Wake Island"
+
+msgid "Wake-on-LAN"
+msgstr "Probouzení po síti (Wake-on-LAN)"
+
+msgid "Wallis and Futuna"
+msgstr "Wallis a Futuna"
+
+msgid "Warning"
+msgstr "Varování"
+
+msgid "Web control panel"
+msgstr "Webový ovládací panel"
+
+msgid "Wednesday"
+msgstr "středa"
+
+msgid "Weekly"
+msgstr "Týdně"
+
+msgid "Welcome to openmediavault"
+msgstr ""
+
+msgid "Western Sahara"
+msgstr "Západní Sahara"
+
+msgid "Wi-Fi"
+msgstr "Wi-Fi"
+
+msgid "Wipe"
+msgstr "Kompletně smazat"
+
+msgid "Wiping device"
+msgstr "Kompletně se maže zařízení"
+
+msgid "Workbench"
+msgstr "Pracovní stůl"
+
+msgid "Workgroup"
+msgstr "Pracovní skupina"
+
+msgid "Worst"
+msgstr "Nejhorší"
+
+msgid "Write only"
+msgstr "Pouze pro zápis"
+
+msgid "Write-only"
+msgstr "Pouze pro zápis"
+
+msgid "Write/Execute"
+msgstr "Zápis/spouštění"
+
+msgid "Xen virtual disk device"
+msgstr "Úložné zařízení poskytované virtualizací Xen"
+
+msgid "Yearly"
+msgstr "Každoročně"
+
+msgid "Yemen"
+msgstr "Jemen"
+
+msgid "Yes"
+msgstr "Ano"
+
+msgid ""
+"You have made changes that have not yet been saved. Do you want to discard "
+"them?"
+msgstr ""
+
+msgid "You must apply these changes in order for them to take effect."
+msgstr ""
+
+msgid "Your profile"
+msgstr "Váš profil"
+
+msgid "Zambia"
+msgstr "Zambie"
+
+msgid "Zimbabwe"
+msgstr "Zimbabwe"
+
+msgid "a day"
+msgstr "den"
+
+msgid "a few seconds"
+msgstr "pár sekund"
+
+msgid "a minute"
+msgstr "minuta"
+
+msgid "a month"
+msgstr "měsíc"
+
+msgid "a year"
+msgstr "rok"
+
+msgid "an hour"
+msgstr "hodina"
+
+msgid "in %s"
+msgstr "v %s"
+
+msgid "n/a"
+msgstr "neaplikovatelné"
+
+msgid "selected"
+msgstr "vybrán"
+
+msgid "total"
+msgstr "celkem"

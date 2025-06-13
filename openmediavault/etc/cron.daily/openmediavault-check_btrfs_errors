@@ -1,0 +1,56 @@
+#!/usr/bin/env dash
+#
+# This file is part of OpenMediaVault.
+#
+# @license   http://www.gnu.org/licenses/gpl.html GPL Version 3
+# @author    Volker Theile <volker.theile@openmediavault.org>
+# @copyright Copyright (c) 2009-2024 Volker Theile
+#
+# OpenMediaVault is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# any later version.
+#
+# OpenMediaVault is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with OpenMediaVault. If not, see <http://www.gnu.org/licenses/>.
+MAILTO=""
+
+export LANG=C
+
+. /etc/default/openmediavault
+. /usr/share/openmediavault/scripts/helper-functions
+
+OMV_BTRFS_ERROR_CHECK_ENABLED=${OMV_BTRFS_ERROR_CHECK_ENABLED:-"yes"}
+OMV_BTRFS_ERROR_CHECK_CMD_ARGS=${OMV_BTRFS_ERROR_CHECK_CMD_ARGS:-"--check --reset"}
+
+# Exit immediately if Btrfs error checking is disabled.
+! omv_checkyesno "${OMV_BTRFS_ERROR_CHECK_ENABLED}" && exit 0
+
+omv_syslog_info "Performing an error check on Btrfs file systems."
+# Ignore subvolumes.
+# Deduplicate UUID to prevent unnecessary work.
+findmnt --list --all --canonicalize --notruncate --nofsroot --uniq --noheadings --output TARGET,UUID --types btrfs |
+  awk '!a[$NF]++' |
+  while read -r target uuid
+do
+  omv_syslog_info "Checking file system mounted at ${target} [UUID=${uuid}] for errors ..."
+
+  stats=$(btrfs device stats ${OMV_BTRFS_ERROR_CHECK_CMD_ARGS} "${target}")
+  if [ $? -ne 0 ]; then
+    omv_syslog_warning "Errors were detected on the file system mounted at ${target} [UUID=${uuid}]."
+    # Ignore the file system notification settings because of the
+    # importance of this message.
+    (
+      echo "Errors were detected on the Btrfs file system with UUID ${uuid}.";
+      echo ""
+      echo "${stats}"
+    ) | mail -E -s "Errors were detected on the file system mounted at ${target} [UUID=${uuid}]" root
+  else
+    omv_syslog_info "No errors found on file system mounted at ${target} [UUID=${uuid}]."
+  fi
+done

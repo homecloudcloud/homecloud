@@ -1,0 +1,8 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "startconfiguration.apps.notes"
+  position: 70
+  text: _("Notes")
+  icon: "mdi:note-multiple-outline"
+  url: "/startconfiguration/apps/notes"

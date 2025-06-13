@@ -1,0 +1,8 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "startconfiguration.apps.drive.restore"
+  position: 80
+  text: _("Restore")
+  icon: "mdi:backup-restore"
+  url: "/startconfiguration/apps/drive/restore"

@@ -1,0 +1,8 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "startconfiguration.apps.drive.access"
+  position: 80
+  text: _("Access")
+  icon: connection
+  url: "/startconfiguration/apps/drive/access"

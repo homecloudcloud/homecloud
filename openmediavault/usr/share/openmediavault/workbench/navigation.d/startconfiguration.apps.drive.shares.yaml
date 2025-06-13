@@ -1,0 +1,8 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "startconfiguration.apps.drive.shares"
+  position: 80
+  text: _("Shares")
+  icon: share
+  url: "/startconfiguration/apps/drive/shares"

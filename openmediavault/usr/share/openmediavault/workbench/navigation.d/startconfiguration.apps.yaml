@@ -1,0 +1,8 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "startconfiguration.apps"
+  position: 20
+  text: _("Apps")
+  icon: "mdi:apps"
+  url: "/startconfiguration/apps"

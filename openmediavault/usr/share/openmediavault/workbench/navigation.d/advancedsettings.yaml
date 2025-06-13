@@ -1,0 +1,11 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "advancedsettings"
+  position: 20
+  text: _("Advanced Settings")
+  icon: apps
+  url: "/advancedsettings"
+  permissions:
+    role:
+    - admin

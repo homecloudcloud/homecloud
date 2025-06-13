@@ -1,0 +1,33 @@
+@use 'scss/defaults/variables' as dv;
+
+.mat-card {
+  margin: dv.$omv-margin;
+  padding: unset;
+
+  .mat-card-header,
+  .mat-card-title-group {
+    padding: dv.$omv-padding;
+  }
+
+  .mat-card-header {
+    padding-bottom: unset;
+  }
+
+  .mat-card-content {
+    margin-bottom: unset;
+
+    :host ::ng-deep &:not(.has-card-header) {
+      background-color: transparent;
+
+      .mat-toolbar {
+        border-top-left-radius: dv.$omv-radius;
+        border-top-right-radius: dv.$omv-radius;
+      }
+    }
+  }
+
+  .mat-card-actions {
+    margin: unset;
+    padding: dv.$omv-padding;
+  }
+}

@@ -1,0 +1,89 @@
+@import '../../../assets/colors.scss';
+
+omv-setupwizard-page {
+    
+    omv-top-bar-wizard .omv-top-bar{
+        background:transparent!important;
+        position: absolute;
+        left:80vw;
+    }
+    omv-logo-header{
+        position:fixed;
+        height:20vh;
+        top:0;
+        left:0;
+        z-index:100;
+      }
+    #mainContent{
+
+        .mat-card{
+            margin-top:20vh!important;
+
+            omv-form-paragraph{
+                justify-content: center;
+            }
+            .omv-form-paragraph{
+                font-size:var(--mat-font-size-subheading-2);
+                font-weight:var(--mat-font-weight-subheading-2);
+            }
+    
+        }
+        /*img{
+            max-width: 100%;
+            height: auto;
+            touch-action: manipulation;
+            overflow: visible;
+            -webkit-overflow-scrolling: touch;
+            
+        }
+        */
+        omv-intuition-form omv-form-paragraph:nth-of-type(3) .omv-form-paragraph
+        {
+            content: url('^./assets/images/homecloud_with_cable_edited.jpg');
+            background-size: cover;
+            background-position: center;
+            width: 60%;
+            height: auto;
+        }
+        @media screen and (max-width: 768px) {
+            omv-intuition-form omv-form-paragraph:nth-of-type(3) .omv-form-paragraph
+            {
+              
+                width: 100%!important;
+            
+            }
+        }
+        omv-intuition-form omv-form-paragraph:nth-of-type(3) .omv-form-paragraph
+        {
+            content: url('^./assets/images/homecloud_with_cable_edited.jpg');
+            background-size: cover;
+            background-position: center;
+            width: 60%;
+            height: auto;
+        }
+
+
+    } 
+    
+
+    #navButtons{
+
+        .mat-card{
+            background-color:$blue!important;
+        }
+        mat-card-content{
+            display:none!important;
+        }
+        @media screen and (max-width: 600px) {
+            .mat-card-actions{
+              flex-direction:column-reverse!important;
+              align-items:center!important;
+              justify-content:center!important;
+              row-gap:20px;
+            }
+        }
+    } 
+
+     
+}
+

@@ -1,0 +1,8 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "startconfiguration.apps.notes.backup"
+  position: 70
+  text: _("Backup")
+  icon: "mdi:content-copy"
+  url: "/startconfiguration/apps/notes/backup"

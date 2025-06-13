@@ -1,0 +1,26 @@
+<mat-form-field class="omv-flex-1"
+                [formGroup]="formGroup">
+  <mat-label>{{ config.label }}</mat-label>
+  <mat-select [formControlName]="config.name"
+              [placeholder]="config.placeholder | transloco"
+              [required]="config.validators?.required">
+    <mat-option *ngFor="let option of config.store.data"
+                [value]="option[config.valueField]">
+      {{option[config.textField]}}
+    </mat-option>
+  </mat-select>
+  <mat-icon *ngIf="config.hasCreateButton"
+            matSuffix
+            matTooltip="{{ 'Create' | transloco }}"
+            svgIcon="mdi:plus-circle-outline"
+            (click)="onCreate()">
+  </mat-icon>
+  <mat-error *ngIf="formGroup.invalid">
+    <span *ngIf="formGroup.hasError('required', config.name)">
+      This field is required.
+    </span>
+  </mat-error>
+  <mat-hint *ngIf="config.hint?.length > 0"
+            [innerHTML]="config.hint | sanitizeHtml">
+  </mat-hint>
+</mat-form-field>

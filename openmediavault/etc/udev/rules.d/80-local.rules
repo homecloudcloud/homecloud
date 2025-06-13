@@ -1,0 +1,41 @@
+# /etc/udev/rules.d/99-usb-storage.rules
+
+# For USB storage devices with partitions (sd* devices only)
+ACTION=="add", \
+SUBSYSTEM=="block", \
+ENV{DEVTYPE}=="partition", \
+ENV{ID_BUS}=="usb", \
+ENV{ID_TYPE}=="disk", \
+KERNEL=="sd[a-z]*", \
+ENV{ID_FS_UUID}!="", \
+RUN+="/sbin/usb_add.sh $env{ID_FS_UUID} >> /tmp/udev.log 2>> /tmp/udev.log"
+
+# For USB storage devices without partitions (sd* devices only)
+ACTION=="add", \
+SUBSYSTEM=="block", \
+ENV{DEVTYPE}=="disk", \
+ENV{ID_BUS}=="usb", \
+ENV{ID_TYPE}=="disk", \
+KERNEL=="sd[a-z]", \
+ENV{ID_FS_UUID}!="", \
+RUN+="/sbin/usb_add.sh $env{ID_FS_UUID} >> /tmp/udev.log 2>> /tmp/udev.log"
+
+
+ACTION=="remove", \
+SUBSYSTEM=="block", \
+ENV{DEVTYPE}=="partition", \
+ENV{ID_BUS}=="usb", \
+ENV{ID_TYPE}=="disk", \
+KERNEL=="sd[a-z]*", \
+RUN+="/sbin/usb_remove.sh >> /tmp/udev.log 2>> /tmp/udev.log"
+
+
+ACTION=="remove", \
+SUBSYSTEM=="block", \
+ENV{DEVTYPE}=="disk", \
+ENV{ID_BUS}=="usb", \
+ENV{ID_TYPE}=="disk", \
+KERNEL=="sd[a-z]", \
+ENV{ID_FS_UUID}!="", \
+RUN+="/sbin/usb_remove.sh $env{ID_FS_UUID} >> /tmp/udev.log 2>> /tmp/udev.log"
+

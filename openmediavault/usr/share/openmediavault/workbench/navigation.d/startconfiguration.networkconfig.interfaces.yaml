@@ -1,0 +1,8 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "startconfiguration.networkconfig.interfaces"
+  position: 30
+  text: _("Interfaces")
+  icon: "mdi:expansion-card"
+  url: "/startconfiguration/networkconfig/interfaces"

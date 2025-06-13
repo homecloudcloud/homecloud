@@ -1,0 +1,8 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "startconfiguration.apps.photos.access"
+  position: 70
+  text: _("Access")
+  icon: connection
+  url: "/startconfiguration/apps/photos/access"

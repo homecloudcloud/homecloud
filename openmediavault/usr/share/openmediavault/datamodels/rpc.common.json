@@ -1,0 +1,150 @@
+[{
+	"type": "rpc",
+	"id": "rpc.common.objectuuid",
+	"description": "Identify an configuration object by its UUID",
+	"params": {
+		"type": "object",
+		"properties": {
+			"uuid": {
+				"type": "string",
+				"format": "uuidv4",
+				"required": true
+			}
+		}
+	}
+},{
+	"type": "rpc",
+	"id": "rpc.common.devicefile",
+	"description": "Identify an configuration object by a devicefile",
+	"params": {
+		"type": "object",
+		"properties": {
+			"devicefile": {
+				"type": "string",
+				"format": "devicefile",
+				"required": true
+			}
+		}
+	}
+},{
+	"type": "rpc",
+	"id": "rpc.common.getlist",
+	"params": {
+		"type": "object",
+		"properties": {
+			"start": {
+				"type": "integer",
+				"required": true
+			},
+			"limit": {
+				"type": [ "integer", "null" ],
+				"required": true
+			},
+			"sortfield": {
+				"type": [ "string", "null" ]
+			},
+			"sortdir": {
+				"type": [ "string", "null" ],
+				"enum": [ "asc", "ASC", "desc", "DESC" ]
+			},
+			"search": {
+				"type": [ "string", "integer", "null" ]
+			}
+		}
+	}
+},
+{
+    "type": "rpc",
+    "id": "rpc.common.savelicenseflags",
+    "params": {
+        "type": "object",
+        "properties": {
+            "licenseData": {
+                "type": "object",
+                "properties": {
+                    "licenseVersion": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "user": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "accepted": {
+                        "type": "boolean",
+                        "required": true
+                    },
+                    "accepted-date": {
+                        "type": "number",
+                        "required": true
+                    },
+					"comment": {
+						"type": "string",
+						"required": true
+					}
+                }
+            }
+
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.common.readlicenseflags",
+    "params": {
+        "type": "object",
+        "properties": {
+            "username": {
+                "type": "string",
+                "required": true
+            }
+
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.common.saveSetUpFlags",
+    "params": {
+        "type": "object",
+        "properties": {
+            "flagName": {
+                "type": "string",
+                "required": true
+            },
+						
+		    "flagValue": {
+				"type": "boolean",
+				"required": true
+			}
+		}
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.common.readSetUpFlags",
+    "params": {
+        "type": "object",
+        "properties": {
+            "flagName": {
+                "type": "string",
+                "required": true
+            }
+
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.common.saveLastCompletedStep",
+    "params": {
+        "type": "object",
+        "properties": {
+            "lastCompletedStepName": {
+                "type": "string",
+                "required": true
+            }
+		}
+    }
+}
+]

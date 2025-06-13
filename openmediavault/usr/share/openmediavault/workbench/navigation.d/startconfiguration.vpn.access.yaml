@@ -1,0 +1,8 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "startconfiguration.vpn.access"
+  position: 50
+  text: _("Access")
+  icon: connection
+  url: "/startconfiguration/vpn/access"

@@ -1,0 +1,8 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "startconfiguration.apps.paperless.restart"
+  position: 70
+  text: _("Status")
+  icon: "mdi:list-status"
+  url: "/startconfiguration/apps/paperless/restart"

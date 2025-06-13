@@ -1,0 +1,48 @@
+//Home cloud changes new component
+@use 'sass:color';
+@use 'scss/defaults/colors' as dc;
+@use 'scss/defaults/variables' as dv;
+@use 'scss/theme';
+@import '../../../../assets/colors.scss';
+
+:host {
+  .background {
+    background-color: dc.$omv-color-corporate-light;
+    object-fit: cover;
+  }
+
+  
+  .topbar {
+    position:fixed;
+    height:18vh!important; //Home cloud changes
+    background-color: hsla(
+      color.hue(dc.$omv-color-corporate-default),
+      color.saturation(dc.$omv-color-corporate-default),
+      color.lightness(dc.$omv-color-corporate-default),
+      100%
+    );
+    backdrop-filter: blur(4px);
+
+    .logo {
+      content: url('^./assets/images/logo.svg');   //Home cloud changes
+      width: auto;
+      height: auto;
+    }
+    
+    .title{
+      margin-left:10px!important;
+      font-size:1.5em!important;
+      font-weight:bold!important;
+      color:$blue!important;
+      font-family:sans-serif!important;
+      
+    }  
+    
+  }
+  
+
+}
+
+
+
+

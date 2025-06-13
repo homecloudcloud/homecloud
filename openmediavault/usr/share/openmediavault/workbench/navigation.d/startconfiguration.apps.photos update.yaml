@@ -1,0 +1,8 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "startconfiguration.apps.photos.update"
+  position: 70
+  text: _("Update")
+  icon: "mdi:update"
+  url: "/startconfiguration/apps/photos/update"

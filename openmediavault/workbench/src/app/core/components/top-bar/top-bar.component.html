@@ -1,0 +1,98 @@
+<mat-toolbar class="omv-top-bar"
+             color="primary">
+  <button mat-icon-button
+          matTooltip="{{ 'Show/Hide navigation' | transloco }}"
+          (click)="onToggleNavigation($event)">
+    <mat-icon svgIcon="{{ icon.menu }}"></mat-icon>
+  </button>
+  <span class="omv-flex-1"></span>
+  <span class="hostname">{{ hostname }}</span>
+  <mat-divider *ngIf="hostname"
+               vertical="true">
+  </mat-divider>
+  <button *ngIf="permissions?.role.includes(roles.admin)"
+          mat-icon-button
+          matTooltip="{{ 'Notifications' | transloco }}"
+          (click)="onToggleNotification($event)">
+    <mat-icon svgIcon="{{ icon.bell }}"
+              [matBadge]="numNotifications"
+              [matBadgeHidden]="!numNotifications"
+              matBadgeColor="accent"
+              matBadgeOverlap="true"
+              matBadgeSize="small">
+    </mat-icon>
+  </button>
+  <button mat-icon-button
+          matTooltip="{{ 'User Settings' | transloco }}"
+          [matMenuTriggerFor]="settingsMenu">
+    <mat-icon svgIcon="{{ icon.user }}"></mat-icon>
+  </button>
+  <button *ngIf="permissions?.role.includes(roles.admin)"
+          mat-icon-button
+          matTooltip="{{ 'Power' | transloco }}"
+          [matMenuTriggerFor]="powerMenu">
+    <mat-icon svgIcon="{{ icon.power }}"></mat-icon>
+  </button>
+
+  <mat-menu #settingsMenu="matMenu">
+    <ng-template matMenuContent>
+      <button mat-menu-item
+              disabled>
+        <mat-icon svgIcon="{{ icon.user }}"></mat-icon>
+        <span [innerHTML]="loggedInAs | transloco | sanitizeHtml"></span>
+      </button>
+      <button *ngIf="permissions?.role.includes(roles.user)"
+              mat-menu-item
+              routerLink="/usermgmt/profile">
+        <mat-icon svgIcon="mdi:account-details"></mat-icon>
+        <span>{{ 'Your profile' | transloco }}</span>
+      </button>
+      <button mat-menu-item
+              routerLink="/usermgmt/change-password">
+        <mat-icon svgIcon="{{ icon.password }}"></mat-icon>
+        <span>{{ 'Change Password' | transloco }}</span>
+      </button>
+      <button mat-menu-item
+              (click)="onLogout()">
+        <mat-icon svgIcon="{{ icon.logout }}"></mat-icon>
+        <span>{{ 'Logout' | transloco }}</span>
+      </button>
+      <mat-divider></mat-divider>
+      <button mat-menu-item
+              [ngClass]="{'active': darkModeEnabled}"
+              (click)="onToggleDarkMode()">
+        <mat-icon svgIcon="mdi:weather-night"></mat-icon>
+        <mat-slide-toggle [checked]="darkModeEnabled">{{ 'Dark mode' | transloco }}</mat-slide-toggle>
+      </button>
+     
+    </ng-template>
+  </mat-menu>
+
+  <mat-menu #powerMenu="matMenu">
+    <ng-template matMenuContent>
+      <button mat-menu-item
+              (click)="onReboot()">
+        <mat-icon svgIcon="{{ icon.reboot }}"></mat-icon>
+        <span>{{ 'Restart' | transloco }}</span>
+      </button>
+      <button mat-menu-item
+              (click)="onShutdown()">
+        <mat-icon svgIcon="{{ icon.shutdown }}"></mat-icon>
+        <span>{{ 'Shutdown' | transloco }}</span>
+      </button>
+    </ng-template>
+  </mat-menu>
+
+  <mat-menu #localeMenu="matMenu">
+    <ng-template matMenuContent>
+      <button *ngFor="let locale of locales | keyvalue"
+              mat-menu-item
+              [ngClass]="{'active': locale.key === currentLocale}"
+              [disabled]="locale.key === currentLocale"
+              (click)="onLocale(locale.key)">
+        <span>{{ locale.value }}</span>
+      </button>
+    </ng-template>
+  </mat-menu>
+
+</mat-toolbar>

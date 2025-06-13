@@ -1,0 +1,77 @@
+@import '../../../../../../assets/colors.scss';
+
+omv-setupwizard-joplin-access-page{
+  omv-top-bar-wizard .omv-top-bar{
+    background:transparent!important;
+    position: absolute;
+    left:80vw;
+}
+  omv-logo-header{
+    position:fixed;
+    height:20vh;
+    top:0;
+    left:0;
+    z-index:100;
+  }
+
+  #joplin-access-form1{
+    .mat-card{
+      margin-top:12rem;
+    }
+  }
+  
+  
+
+  .omv-form-container omv-form-text-input .mat-form-field input{
+    background-color:$lightblue !important;
+  }
+
+.omv-form-paragraph {
+    font-size: var(--mat-font-size-subheading-2) !important;
+  }
+
+  .joplin-btn {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    background-color:$lightblue;
+    color: white;
+    font-weight: bold;
+    padding: 15px 30px;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid $lightblue;
+    border-radius: 10px;
+    display: flex;
+    width: 14rem;
+    height: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+
+  .disabled-btn{
+    pointer-events:none;
+    background-color:$grey;
+  }
+  .redpaperlessstatus{
+    background-color: $lightred !important;
+    width:100px !important;
+  }
+  .greenpaperlessstatus{
+    background-color: $lightgreen !important;
+    width:100px !important;
+  }
+
+  #navButtons{
+    .mat-card{
+        background-color:$blue!important;
+    }
+    mat-card-content{
+        display:none!important;
+    }
+    .mat-card-actions{
+        justify-content:flex-end!important;          
+    } 
+  } 
+
+}

@@ -1,0 +1,11 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "startconfiguration.networkconfig"
+  position: 20
+  text: _("Network")
+  icon: network
+  url: "/startconfiguration/networkconfig"
+  permissions:
+    role:
+    - admin

@@ -1,0 +1,9 @@
+@use 'scss/defaults/colors' as dc;
+
+.mat-flat-button {
+  color: dc.$omv-color-white;
+}
+
+:host ::ng-deep > button * {
+  pointer-events: none;
+}

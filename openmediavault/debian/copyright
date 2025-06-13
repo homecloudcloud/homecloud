@@ -1,0 +1,16 @@
+Format: http://dep.debian.net/deps/dep5
+Upstream-Contact: Volker Theile <volker.theile@openmediavault.org>
+Source: http://www.openmediavault.org
+
+Files: *
+Copyright: 2009-2024 Volker Theile <volker.theile@openmediavault.org>
+License: GPL-3
+
+Files: /workbench/src/assets/images/harddisk_on_circuit.jpg
+Source: https://www.bing.com/create
+
+Files: /workbench/src/assets/images/server.jpg
+Source: https://www.bing.com/create
+
+Files: /workbench/src/assets/images/desert_scape.jpg
+Source: https://www.bing.com/create

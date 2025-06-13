@@ -1,0 +1,57 @@
+@import '../../../../../../assets/colors.scss';
+
+.omv-form-paragraph {
+    font-size: var(--mat-font-size-subheading-2) !important;
+  }
+
+  .paperless-btn {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    background-color:$lightblue;
+    color: white;
+    font-weight: bold;
+    padding: 15px 30px;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid $lightblue;
+    border-radius: 10px;
+    display: flex;
+    width: 16rem;
+    height: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+
+.disabled-btn{
+  pointer-events:none;
+  background-color:$grey;
+}
+.redpaperlessstatus{
+  background-color: $lightred !important;
+  width:100px !important;
+}
+.greenpaperlessstatus{
+  background-color: $lightgreen !important;
+  width:100px !important;
+}
+omv-paperless-access-page .omv-form-container omv-form-text-input .mat-form-field input{
+  background-color: $lightblue !important;
+}
+.hidden{
+  display: none!important;
+} 
+#paperless-access-form1 .omv-form-container{
+  display:flex;
+  flex-direction: column!important;
+}
+omv-paperless-access-page .plainLink{
+  font-weight:bold;
+}
+omv-paperless-access-page .plainLink:hover,omv-photos-config-page .plainLink:focus{
+  background-color:$lightblue;
+  color:white;
+  padding:10px;
+  text-decoration: none;
+  font-weight:bold;
+}

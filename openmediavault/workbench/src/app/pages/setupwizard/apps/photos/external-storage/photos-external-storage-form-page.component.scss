@@ -1,0 +1,54 @@
+@import '../../../../../../assets/colors.scss';
+
+.omv-form-paragraph {
+    font-size: var(--mat-font-size-subheading-2) !important;
+  }
+  #photos-external-storage-form1 omv-intuition-form .omv-form-container .omv-form-container-item:nth-of-type(1) omv-form-paragraph .omv-form-paragraph  
+  {
+    content: url('^./assets/images/immich-external-disk-1.png');
+    background-size: cover;
+    background-position: center;
+    width: 50%;
+    height: 50%;
+  }
+  #photos-external-storage-form1 omv-intuition-form .omv-form-container .omv-form-container-item:nth-of-type(10) omv-form-paragraph .omv-form-paragraph  
+  {
+    content: url('^./assets/images/immich-external-disk-5.png');
+    background-size: cover;
+    background-position: center;
+    width: 50%;
+    height: 50%;
+  }
+  
+
+  .immich-btn {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    background-color:$lightblue;
+    color: white;
+    font-weight: bold;
+    padding: 15px 30px;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid $lightblue;
+    border-radius: 10px;
+    display: flex;
+    width: 14rem;
+    height: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+
+.disabled-btn{
+  pointer-events:none;
+  background-color:$grey;
+}
+.redimmichstatus{
+  background-color: $lightred !important;
+  width:100px !important;
+}
+.greenimmichstatus{
+  background-color: $lightgreen !important;
+  width:100px !important;
+}

@@ -1,0 +1,209 @@
+@import '../../../../../assets/colors.scss';
+
+omv-tailscale-setupwizard-config-page{ 
+
+  omv-top-bar-wizard .omv-top-bar{
+    background:transparent!important;
+    position: absolute;
+    left:80vw;
+}
+
+  omv-logo-header{
+    position:fixed;
+    height:20vh;
+    top:0;
+    left:0;
+    z-index:100;
+  }
+  #mainContent{
+      
+    .mat-card{
+        margin-top:20vh!important;
+  
+    }
+    .omv-form-container{
+      border: 1px solid $lightblue !important;
+    }
+
+   
+    .omv-form-paragraph {
+      font-size: var(--mat-font-size-subheading-2) !important;
+    }
+    omv-intuition-form .omv-form-container .omv-form-container-item:nth-of-type(5) .omv-form-paragraph
+    {
+      content: url('^./assets/images/vpn-config.jpg');
+      background-size: cover;
+      background-position: center;
+      width: 60%;
+      height: auto;
+    }
+    omv-intuition-form .omv-form-container .omv-form-container-item:nth-of-type(12) .omv-form-paragraph
+    {
+      content: url('^./assets/images/vpn-exitnode.jpg');
+      background-size: cover;
+      background-position: center;
+      width: 60%;
+      height: auto;
+    }
+    omv-intuition-form .omv-form-container .omv-form-container-item:nth-of-type(13) .omv-form-paragraph
+    {
+      content: url('^./assets/images/vpn-exitnode2.jpg');                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+      background-size: cover;
+      background-position: center;
+      width: 60%;
+      height: auto;
+    }
+
+    @media screen and (max-width: 768px) {
+      .omv-form-container-item .omv-form-paragraph{
+        width:100%!important;
+      }
+    }
+    omv-intuition-form .omv-form-container{
+      flex-direction:column;
+    
+    }
+    .hidden{
+      display:none !important;
+    }
+    
+    .greenstatus{
+      background-color:$lightgreen !important;
+      width:30px !important;
+    }
+    .redstatus{
+      background-color:$lightred !important;
+      width:50px !important;
+    }
+    
+    omv-intuition-form .omv-form-container .omv-form-container-item{
+      width:100%;
+    }
+    
+    .omv-form-divider
+    {
+    
+      display: flex !important;
+      justify-content: center!important;
+      align-items: center!important;
+      width: 15rem !important;
+      cursor: pointer !important;
+      font-size: var(--mat-font-size-subheading-2) !important;
+      font-weight: var(--mat-font-weight-subheading-2) !important;
+      
+    }
+    omv-form-divider{
+      height: 80px !important;
+    }
+    
+    .omv-form-divider .title{
+      background-color: white!important;
+      color:$lightblue!important;
+      
+      /*background-color:$lightblue;
+      color: white;
+      */
+      padding: 15px 30px;
+      border: 1px solid $lightblue;
+      border-radius: 10px;
+      font-weight: var(--mat-font-size-subheading-2) !important;
+      font-size: var(--mat-font-size-subheading-2) !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+  }
+  
+  .omv-form-divider .title:after {
+      content: '^';  /* Caret symbol */
+      float: right;
+      font-weight: 500;
+      font-size: 25px;
+      margin-left: 8px;
+      transition: transform .3s ease;
+      width: 20px;
+      height: 20px;
+      min-width: 20px;
+      min-height: 20px;
+      display: flex;
+      border: 1px solid $lightblue;
+      justify-content: center; 
+      background-color: $lightblue;
+      color: white;
+    
+      /*background-color: white;
+      color: $lightblue;
+      */
+      border-radius: 10px;
+  }
+    .reconfigure .omv-form-divider .title:before {
+        content: 'Reconfigure ';  
+        float: left;
+        margin-left: 8px;
+        
+    }
+    .configure .omv-form-divider .title:before {
+        content: 'Configure ';  
+        float: left;
+        margin-left: 8px;
+        
+    }
+    
+  
+     /* For expanded state */
+        
+     .omv-form-divider.expanded .title:after {
+      transform: rotate(180deg);
+      background-color: white!important;
+      color: $lightblue!important;
+
+    }
+    
+    .omv-form-divider .title {
+      cursor: pointer;
+    }
+    
+    .omv-form-divider.expanded .title {
+      background-color: $lightblue!important;
+      color: white!important;
+      border: 1px solid white!important;
+      border-radius: 10px!important;
+    }
+    .plainLink{
+      font-weight:bold;
+    }
+    .plainLink:hover,.plainLink:focus{
+      background-color:$lightblue;
+      color:white;
+      padding:10px;
+      text-decoration: none;
+      font-weight:bold;
+    }
+    
+  }
+  #navButtons{
+    .mat-card{
+        background-color:$blue!important;
+    }
+    mat-card-content{
+        display:none!important;
+    }
+    .mat-card-actions{
+        justify-content:space-between!important;
+        flex-direction:row-reverse!important;
+    } 
+    @media screen and (max-width: 600px) {
+      .mat-card-actions{
+        flex-direction:column-reverse!important;
+        align-items:center!important;
+        justify-content:center!important;
+        row-gap:20px;
+      }
+    }
+    
+  } 
+
+  
+
+}
+

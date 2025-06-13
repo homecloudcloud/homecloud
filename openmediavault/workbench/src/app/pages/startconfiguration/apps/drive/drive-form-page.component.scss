@@ -1,0 +1,68 @@
+@import '../../../../../assets/colors.scss';
+
+.omv-form-paragraph {
+  font-size: var(--mat-font-size-subheading-2) !important;
+}
+#drive-main-form1 omv-form-paragraph:nth-of-type(3) .omv-form-paragraph
+{
+  content: url('^./assets/images/Drive.png')!important;
+  background-size: cover !important;
+  background-position: center !important;
+  width: 55% !important;
+  height: 20% !important;
+}
+
+#drive-main-form1 omv-form-paragraph:nth-of-type(5) .omv-form-paragraph
+{
+  content: url('^./assets/images/Drive-USB.png')!important;
+  background-size: cover !important;
+  background-position: center !important;
+  width: 55% !important;
+  height: 20% !important;
+}
+
+@media only screen and (max-width: 767px){
+
+#drive-main-form1 omv-form-paragraph:nth-of-type(3) .omv-form-paragraph
+{
+  
+  width: 100% !important;
+  height: 20% !important;
+}
+
+#drive-main-form1 omv-form-paragraph:nth-of-type(5) .omv-form-paragraph
+{
+ 
+  width: 100% !important;
+  height: 20% !important;
+}
+
+}
+
+#password-manager-main-form1 a.plainLink{
+  font-weight:bold;
+}
+#paperless-main-form1 a.plainLink:hover,#paperless-main-form1 a.plainLink:focus{
+  background-color:$lightblue;
+  color:white;
+  padding:10px;
+  text-decoration: none;
+  font-weight:bold;
+}
+
+#paperless-main-form3 .mat-form-field input{
+  background-color: $lightgreen;
+  width:50px !important;
+}
+.red{
+  background-color:$lightred !important;
+  
+}
+.white{
+  color: white !important;
+}
+.hidden{
+  display: none !important;
+}
+
+

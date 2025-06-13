@@ -1,0 +1,11 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "about"
+  position: 10
+  text: _("About")
+  icon: apps
+  url: "/about"
+  permissions:
+    role:
+    - admin

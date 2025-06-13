@@ -1,0 +1,7 @@
+version: "1.0"
+type: route
+data:
+  #url: "/storage/filesystems/ext4/create"
+  url: "/startconfiguration/usb-disks/filesystems/ext4/create"
+  title: _("Create")
+  component: omv-storage-filesystem-generic-create-form-page

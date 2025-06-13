@@ -1,0 +1,44 @@
+@import '../../../../assets/colors.scss';
+
+omv-setupwizard-complete-page {
+    omv-top-bar-wizard .omv-top-bar{
+        background:transparent!important;
+        position: absolute;
+        left:80vw;
+    }
+
+    omv-complete-logo-header{
+        position:fixed;
+        height:20vh;
+        top:0;
+        left:0;
+        z-index:100;
+      }
+    #mainContent{
+        display: flex;
+        justify-content: center;
+
+        .mat-card{
+            margin-top:40vh!important;
+
+            omv-form-paragraph{
+                justify-content: center;
+            }
+    
+        }
+        .mat-card-actions{
+            display: flex;
+            justify-content: center;
+            
+        }   
+       
+        
+
+    } 
+    
+
+   
+
+     
+}
+

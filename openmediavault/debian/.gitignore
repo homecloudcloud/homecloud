@@ -1,0 +1,8 @@
+/openmediavault/
+/openmediavault-installer/
+/files
+/*.debhelper.log
+/*.debhelper
+/*.substvars
+/*-stamp
+/doxygen/

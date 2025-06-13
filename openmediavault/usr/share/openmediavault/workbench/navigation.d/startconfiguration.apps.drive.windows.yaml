@@ -1,0 +1,8 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "startconfiguration.apps.drive.windows"
+  position: 80
+  text: _("Windows")
+  icon: network
+  url: "/startconfiguration/apps/drive/windows"

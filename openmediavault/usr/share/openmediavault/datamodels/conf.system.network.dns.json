@@ -1,0 +1,25 @@
+{
+	"type": "config",
+	"id": "conf.system.network.dns",
+	"title": "DNS settings",
+	"queryinfo": {
+		"xpath": "//system/network/dns",
+		"iterable": false
+	},
+	"properties": {
+		"hostname": {
+			"type": "string",
+			"format": "hostname"
+		},
+		"domainname": {
+			"type": "string",
+			"oneOf": [{
+				"type": "string",
+				"format": "domainname"
+			},{
+				"type": "string",
+				"maxLength": 0
+			}]
+		}
+	}
+}

@@ -1,0 +1,8 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "startconfiguration.apps.notes.restore"
+  position: 70
+  text: _("Restore")
+  icon: "mdi:backup-restore"
+  url: "/startconfiguration/apps/notes/restore"

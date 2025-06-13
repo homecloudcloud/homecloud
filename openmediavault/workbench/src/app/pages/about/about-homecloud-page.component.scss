@@ -1,0 +1,33 @@
+//Home cloud changes new component
+@import '../../../assets/colors.scss';
+
+
+omv-about-page {
+
+  
+   
+    #mainContent {
+
+      .mat-card{
+        margin-top:20vh!important;
+
+        omv-form-paragraph{
+            display: flex;
+            justify-content: center;
+        }
+        .omv-form-paragraph:nth-of-type(1){
+          font-weight:bold;
+        }
+
+        omv-form-text-input{
+          display:flex;
+          justify-content: center;
+
+        }
+      
+       
+      }
+    }
+ 
+   
+}

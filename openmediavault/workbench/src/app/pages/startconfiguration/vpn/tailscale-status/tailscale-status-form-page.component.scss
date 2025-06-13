@@ -1,0 +1,21 @@
+@import '../../../../../assets/colors.scss';
+
+.hidden{
+    display:none!important;
+  }
+  #data-message-form omv-form-paragraph:nth-of-type(1) .omv-form-paragraph{
+    font-size:var(--mat-font-size-subheading-2) !important;
+    font-weight:var(--mat-font-weight-subheading-2) !important;
+  }
+  .greenstatus{
+    background-color:$lightgreen !important;
+    width:30px !important;
+  }
+  .redstatus{
+    background-color:$lightred !important;
+    width:50px !important;
+  }
+  #data-table-form .datatable-header{
+    background-color:$lightblue !important;
+    
+  }

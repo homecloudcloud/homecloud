@@ -1,0 +1,11 @@
+version: '1.0'
+type: navigation-item
+data:
+  path: startconfiguration
+  position: 10
+  text: _("Start Configuration")
+  icon: "mdi:play"
+  url: /startconfiguration
+  permissions:
+    role:
+      - admin

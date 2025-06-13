@@ -1,0 +1,594 @@
+[{
+    "type": "rpc",
+    "id": "rpc.homecloud.getTailscaleStatus",
+    "params": {
+        "type": "object",
+        "properties": {
+            "status": {
+				"type": "string",
+				"required": true
+			},
+            "user": {
+				"type": "string",
+				"required": true
+			},
+            "hostname": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.getImmichServiceStatus",
+    "params": {
+        "type": "object",
+        "properties": {
+            "status": {
+				"type": "string",
+				"required": true
+			},
+            "hostname": {
+				"type": "string",
+				"required": true
+			},
+            "api_endpoint": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.get_backup_size_immich",
+    "params": {
+        "type": "object",
+        "properties": {
+            "total_gb": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.immich_backup_execute",
+    "params": {
+        "type": "object",
+        "properties": {
+            "mount_path": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.immich_reset_admin_password",
+    "params": {
+        "type": "object",
+        "properties": {
+            "email": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.immich_check_version",
+    "params": {
+        "type": "object",
+        "properties": {
+            "status": {
+				"type": "string",
+				"required": true
+			},
+            "available_version": {
+				"type": "string",
+				"required": true
+			},
+            "deployed_version": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.immich_update_version",
+    "params": {
+        "type": "object",
+        "properties": {
+            "version": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.immich_get_latest_version",
+    "params": {
+        "type": "object",
+        "properties": {
+            "version": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.immich_remove",
+    "params": {
+        "type": "object",
+        "properties": {
+            "status": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.getVaultwardenServiceStatus",
+    "params": {
+        "type": "object",
+        "properties": {
+            "status": {
+				"type": "string",
+				"required": true
+			},
+            "hostname": {
+				"type": "string",
+				"required": true
+			},
+            "api_endpoint": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.vaultwarden_get_latest_version",
+    "params": {
+        "type": "object",
+        "properties": {
+            "version": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.vaultwarden_update_version",
+    "params": {
+        "type": "object",
+        "properties": {
+            "version": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.vaultwarden_check_version",
+    "params": {
+        "type": "object",
+        "properties": {
+            "status": {
+				"type": "string",
+				"required": true
+			},
+            "available_version": {
+				"type": "string",
+				"required": true
+			},
+            "deployed_version": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.vaultwarden_backup_execute",
+    "params": {
+        "type": "object",
+        "properties": {
+            "mount_path": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.vaultwarden_remove",
+    "params": {
+        "type": "object",
+        "properties": {
+            "status": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.getPaperlessServiceStatus",
+    "params": {
+        "type": "object",
+        "properties": {
+            "status": {
+				"type": "string",
+				"required": true
+			},
+            "hostname": {
+				"type": "string",
+				"required": true
+			},
+            "api_endpoint": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.paperless_get_latest_version",
+    "params": {
+        "type": "object",
+        "properties": {
+            "version": {
+                "type": "string",
+                "required": true
+            }
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.paperless_check_version",
+    "params": {
+        "type": "object",
+        "properties": {
+            "status": {
+				"type": "string",
+				"required": true
+			},
+            "available_version": {
+				"type": "string",
+				"required": true
+			},
+            "deployed_version": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.paperless_update_version",
+    "params": {
+        "type": "object",
+        "properties": {
+            "version": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.paperless_reset_password",
+    "params": {
+        "type": "object",
+        "properties": {
+            "user": {
+				"type": "string",
+				"required": true
+			},
+            "password": {
+				"type": "string",
+				"required": true
+			}
+
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.paperless_backup_execute",
+    "params": {
+        "type": "object",
+        "properties": {
+            "mount_path": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.get_backup_size_paperless",
+    "params": {
+        "type": "object",
+        "properties": {
+            "total_gb": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.joplin_update_version",
+    "params": {
+        "type": "object",
+        "properties": {
+            "version": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.joplin_backup_execute",
+    "params": {
+        "type": "object",
+        "properties": {
+            "mount_path": {
+                "type": "string",
+                "required": true
+            }
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.jellyfin_update_version",
+    "params": {
+        "type": "object",
+        "properties": {
+            "version": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.restore_find_backups",
+    "params": {
+        "type": "object",
+        "properties": {
+            "app": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.immich_restore_execute",
+    "params": {
+        "type": "object",
+        "properties": {
+            "mount_path": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.vaultwarden_restore_execute",
+    "params": {
+        "type": "object",
+        "properties": {
+            "mount_path": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.joplin_restore_execute",
+    "params": {
+        "type": "object",
+        "properties": {
+            "mount_path": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.paperless_restore_execute",
+    "params": {
+        "type": "object",
+        "properties": {
+            "mount_path": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.drive_backup_execute",
+    "params": {
+        "type": "object",
+        "properties": {
+            "mount_path": {
+                "type": "string",
+                "required": true
+            }
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.drive_restore_execute",
+    "params": {
+        "type": "object",
+        "properties": {
+            "mount_path": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.createTailscaleFunnel",
+    "params": {
+        "type": "object",
+        "properties": {
+            "source_port": {
+				"type": "integer",
+                "minimum": 0,
+				"required": true
+			},
+            "destination_port": {
+				"type": "integer",
+                "minimum": 0,
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.getFunnelStatus",
+    "params": {
+        "type": "object",
+        "properties": {
+            "appname": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.disableTailscaleFunnel",
+    "params": {
+        "type": "object",
+        "properties": {
+            "source_port": {
+				"type": "integer",
+                "minimum": 0,
+				"required": true
+			},
+            "destination_port": {
+				"type": "integer",
+                "minimum": 0,
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.appAutoUpdates",
+    "params": {
+        "type": "object",
+        "properties": {
+            "appname": {
+				"type": "string",
+				"required": true
+			},
+            "action": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.generateAccessToken",
+    "params": {
+        "type": "object",
+        "properties": {
+            "clientid": {
+                "type": "string",
+                "required": true
+            },
+            "clientsecret": {
+                "type": "string",
+                "required": true
+            },
+            "tailnetname": {
+                "type": "string",
+                "required": true
+            }
+        }
+    }
+},
+{
+	"type": "rpc",
+	"id": "rpc.homecloud.ejectdisk",
+	"params": {
+		"type": "object",
+		"properties": {
+			"devicefile": {
+				"type": "string",
+				"format": "devicefile",
+				"required": true
+			}
+		}
+	}
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.removeBackup",
+    "params": {
+        "type": "object",
+        "properties": {
+            "mount_path": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+}
+]

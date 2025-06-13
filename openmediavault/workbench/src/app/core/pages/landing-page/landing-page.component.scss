@@ -1,0 +1,50 @@
+//Home cloud changes new component
+@import '../../../../assets/colors.scss';
+
+
+omv-landing-page {
+
+    omv-top-bar-wizard .omv-top-bar{
+        background:transparent!important;
+        position: absolute;
+        left:80vw;
+    }
+    omv-logo-header{
+        position:fixed;
+        height:20vh;
+        top:0;
+        left:0;
+        z-index:100;
+    }
+   
+    #mainContent {
+
+      .mat-card{
+        margin-top:20vh!important;
+
+        omv-form-paragraph{
+            display: flex;
+            justify-content: center;
+        }
+        .omv-form-paragraph:nth-of-type(1){
+          font-weight:bold;
+        }
+
+        omv-form-text-input{
+          display:flex;
+          justify-content: center;
+
+        }
+      
+       
+      }
+    }
+ 
+    #navButtons{
+      .mat-card-actions{
+        display:flex;
+        justify-content: center;
+      }
+    }
+  
+}

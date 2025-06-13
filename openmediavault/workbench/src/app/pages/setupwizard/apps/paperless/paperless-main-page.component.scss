@@ -1,0 +1,102 @@
+@import '../../../../../assets/colors.scss';
+omv-setupwizard-paperless-main-page{
+  omv-top-bar-wizard .omv-top-bar{
+    background:transparent!important;
+    position: absolute;
+    left:80vw;  
+}
+  .omv-top-bar{
+    background:transparent!important;
+    position: absolute;
+    left:80vw;
+    
+    .mat-icon-button,.hostname,.mat-divider{
+      display: none!important;
+    }
+    .mat-icon-button:nth-of-type(3){
+        display: block!important;
+       
+    }
+}
+  omv-logo-header{
+    position:fixed;
+    height:20vh;
+    top:0;
+    left:0;
+    z-index:100;
+  }
+
+  #paperless-main-form1{
+    .mat-card{
+      margin-top:12rem;
+    }
+  }
+  #paperless-main-form2{
+    .mat-card{
+      position:relative;
+      z-index:1;
+    }
+  }
+  .omv-form-paragraph {
+    font-size: var(--mat-font-size-subheading-2) !important;
+  }
+  #paperless-main-form1 omv-intuition-form omv-form-paragraph:nth-of-type(2) .omv-form-paragraph
+  {
+    content: url('^./assets/images/paperless-1.png')!important;
+    background-size: cover !important;
+    background-position: center !important;
+    width: 70% !important;
+    height: 50% !important;
+  }
+  
+  #password-manager-main-form1 a.plainLink{
+    font-weight:bold;
+  }
+  #paperless-main-form1 a.plainLink:hover,#paperless-main-form1 a.plainLink:focus{
+    background-color:$lightblue;
+    color:white;
+    padding:10px;
+    text-decoration: none;
+    font-weight:bold;
+  }
+  
+  #paperless-main-form3 .mat-form-field input{
+    background-color: $lightgreen;
+    width:50px !important;
+  }
+  .red{
+    background-color:$lightred !important;
+    
+  }
+  .white{
+    color: white !important;
+  }
+  .hidden{
+    display: none !important;
+  }
+  #navButtons{
+    .mat-card{
+        background-color:$blue!important;
+    }
+    mat-card-content{
+        display:none!important;
+    }
+    .mat-card-actions{
+        justify-content:space-between!important;
+        flex-direction:row-reverse!important;
+    } 
+    @media screen and (max-width: 600px) {
+      .mat-card-actions{
+        flex-direction:column-reverse!important;
+        align-items:center!important;
+        justify-content:center!important;
+        row-gap:20px;
+      }
+    }
+    
+  }
+}
+
+
+
+

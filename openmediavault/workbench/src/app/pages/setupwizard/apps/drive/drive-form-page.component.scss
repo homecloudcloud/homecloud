@@ -1,0 +1,115 @@
+@import '../../../../../assets/colors.scss';
+
+omv-setupwizard-drive-main-page{
+
+  omv-top-bar-wizard .omv-top-bar{
+    background:transparent!important;
+    position: absolute;
+    left:80vw;
+}
+  omv-logo-header{
+    position:fixed;
+    height:20vh;
+    top:0;
+    left:0;
+    z-index:100;
+  }
+
+  #mainContent{
+      
+    .mat-card{
+        margin-top:20vh!important;
+  
+    }
+
+    .omv-form-paragraph {
+      font-size: var(--mat-font-size-subheading-2) !important;
+    }
+    omv-form-paragraph:nth-of-type(3) .omv-form-paragraph
+    {
+      content: url('^./assets/images/Drive.png')!important;
+      background-size: cover !important;
+      background-position: center !important;
+      width: 55% !important;
+      height: 20% !important;
+    }
+    
+    omv-form-paragraph:nth-of-type(5) .omv-form-paragraph
+    {
+      content: url('^./assets/images/Drive-USB.png')!important;
+      background-size: cover !important;
+      background-position: center !important;
+      width: 55% !important;
+      height: 20% !important;
+    }
+    
+    @media only screen and (max-width: 767px){
+    
+    omv-form-paragraph:nth-of-type(3) .omv-form-paragraph
+    {
+      
+      width: 100% !important;
+      height: 20% !important;
+    }
+    
+    omv-form-paragraph:nth-of-type(5) .omv-form-paragraph
+    {
+    
+      width: 100% !important;
+      height: 20% !important;
+    }
+    
+    }
+    
+    a.plainLink{
+      font-weight:bold;
+    }
+    a.plainLink:hover,a.plainLink:focus{
+      background-color:$lightblue;
+      color:white;
+      padding:10px;
+      text-decoration: none;
+      font-weight:bold;
+    }
+    
+    .mat-form-field input{
+      background-color: $lightgreen;
+      width:50px !important;
+    }
+    .red{
+      background-color:$lightred !important;
+      
+    }
+    .white{
+      color: white !important;
+    }
+    .hidden{
+      display: none !important;
+    }
+  
+  }
+  #navButtons{
+    .mat-card{
+        background-color:$blue!important;
+    }
+    mat-card-content{
+        display:none!important;
+    }
+    .mat-card-actions{
+        justify-content:space-between!important;
+        flex-direction:row-reverse!important;
+    } 
+    @media screen and (max-width: 600px) {
+      .mat-card-actions{
+        flex-direction:column-reverse!important;
+        align-items:center!important;
+        justify-content:center!important;
+        row-gap:20px;
+      }
+    }
+    
+  } 
+
+}
+
+

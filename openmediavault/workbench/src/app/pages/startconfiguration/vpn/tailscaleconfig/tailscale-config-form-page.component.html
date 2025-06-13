@@ -1,0 +1,15 @@
+<div class="tailscale-status">
+    <mat-card>
+      <mat-card-content>
+        <div class="status-container">
+          <span class="status-label">Tailscale Status:</span>
+          <span class="status-value" [ngClass]="{'running': tailscaleStatus === 'running'}">
+            {{ isLoading ? 'Checking...' : tailscaleStatus }}
+          </span>
+          <button mat-icon-button (click)="refreshStatus()" [disabled]="isLoading">
+            <mat-icon>refresh</mat-icon>
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>  

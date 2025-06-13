@@ -1,0 +1,43 @@
+@use 'scss/defaults/colors' as dc;
+@use 'scss/defaults/variables' as dv;
+@import '../../../../assets/colors.scss'; /**Home cloud changes */
+
+.omv-navigation-bar {
+  min-width: dv.$omv-navigation-bar-width;
+  max-width: dv.$omv-navigation-bar-width;
+  height: 100%;
+
+  .header {
+    background-color: dc.$omv-color-transparent;
+    border-left: 3px solid dc.$omv-color-transparent;
+    height: dv.$omv-top-bar-height;
+    padding-left: dv.$omv-padding;
+    margin-top:0.5rem;  /**Homecloud changes*/
+
+    .logo {
+      width: 100%;
+      height: 100%;
+      background-image: url('^./assets/images/logo.svg');//Homecloud changes
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position-y: center;
+    }
+    /**Home cloud changes start*/
+    .title{
+      margin-left:-70%!important;
+      font-size:1.5em!important;
+      font-weight:bold!important;
+      color:$white!important;
+      font-family:sans-serif!important;
+      
+    }  
+    /**Home cloud changes end*/
+  }
+
+  .content {
+    margin-top:0.5rem; /**Homecloud changes**/
+    .mat-nav-list {
+      padding-top: unset;
+    }
+  }
+}

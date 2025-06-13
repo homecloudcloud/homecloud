@@ -1,0 +1,8 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "startconfiguration.apps.drive.macos"
+  position: 80
+  text: _("macOS")
+  icon: network
+  url: "/startconfiguration/apps/drive/macos"

@@ -1,0 +1,8 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "startconfiguration.apps.photos"
+  position: 70
+  text: _("Photos")
+  icon: "mdi:image-album"
+  url: "/startconfiguration/apps/photos"

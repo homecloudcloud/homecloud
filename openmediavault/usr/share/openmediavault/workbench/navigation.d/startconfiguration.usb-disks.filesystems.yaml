@@ -1,0 +1,8 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "startconfiguration.usb-disks.filesystems"
+  position: 50
+  text: _("FileSystems")
+  icon: "mdi:file-tree"
+  url: "/startconfiguration/usb-disks/filesystems"

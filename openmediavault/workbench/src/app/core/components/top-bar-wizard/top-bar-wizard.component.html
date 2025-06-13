@@ -1,0 +1,37 @@
+<mat-toolbar class="omv-top-bar"
+             color="primary">
+  
+  <button mat-icon-button
+          matTooltip="{{ 'User Settings' | transloco }}"
+          [matMenuTriggerFor]="settingsMenu">
+    <mat-icon svgIcon="{{ icon.user }}"></mat-icon>
+  </button>
+  
+
+  <mat-menu #settingsMenu="matMenu">
+    <ng-template matMenuContent>
+      <button mat-menu-item
+              disabled>
+        <mat-icon svgIcon="{{ icon.user }}"></mat-icon>
+        <span [innerHTML]="loggedInAs | transloco | sanitizeHtml"></span>
+      </button>
+           
+      <button mat-menu-item
+              (click)="onLogout()">
+        <mat-icon svgIcon="{{ icon.logout }}"></mat-icon>
+        <span>{{ 'Logout' | transloco }}</span>
+      </button>
+      
+      <button mat-menu-item
+              [ngClass]="{'active': darkModeEnabled}"
+              (click)="onToggleDarkMode()">
+        <mat-icon svgIcon="mdi:weather-night"></mat-icon>
+        <mat-slide-toggle [checked]="darkModeEnabled">{{ 'Dark mode' | transloco }}</mat-slide-toggle>
+      </button>
+     
+    </ng-template>
+  </mat-menu>
+
+  
+
+</mat-toolbar>

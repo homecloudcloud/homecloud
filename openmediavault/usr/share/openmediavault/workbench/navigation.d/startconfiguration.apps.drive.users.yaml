@@ -1,0 +1,8 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "startconfiguration.apps.drive.users"
+  position: 80
+  text: _("Users")
+  icon: user
+  url: "/startconfiguration/apps/drive/users"

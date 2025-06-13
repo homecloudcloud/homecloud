@@ -1,0 +1,8 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "startconfiguration.usb-disks"
+  position: 20
+  text: _("USB Disks")
+  icon: "mdi:usb-flash-drive-outline"
+  url: "/startconfiguration/usb-disks"

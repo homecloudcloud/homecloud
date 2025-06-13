@@ -1,0 +1,8 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "startconfiguration.notificationsettings"
+  position: 20
+  text: _("Notification Settings")
+  icon: email
+  url: "/startconfiguration/notificationsettings"

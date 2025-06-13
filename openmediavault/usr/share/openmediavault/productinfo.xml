@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<productinfo>
+	<name>Homecloud</name>
+	<versionname>Sandworm</versionname>
+	<url>https://homecloud.cloud</url>
+	<copyright>Copyright pending. All rights reserved.</copyright>
+	<packagename>openmediavault</packagename>
+	<distribution>sandworm</distribution>
+</productinfo>

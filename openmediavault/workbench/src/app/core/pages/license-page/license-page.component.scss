@@ -1,0 +1,108 @@
+// This file is part of OpenMediaVault.
+//
+// @license   http://www.gnu.org/licenses/gpl.html GPL Version 3
+// @author    Volker Theile <volker.theile@openmediavault.org>
+// @copyright Copyright (c) 2009-2024 Volker Theile
+//
+// OpenMediaVault is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// any later version.
+//
+// OpenMediaVault is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//Home cloud changes new component */
+
+@use 'sass:color';
+@use 'scss/defaults/colors' as dc;
+@use 'scss/defaults/variables' as dv;
+@use 'scss/theme';
+
+@import '../../../../assets/colors.scss';
+
+
+omv-license-page {
+
+    omv-top-bar-wizard .omv-top-bar{
+    background:transparent!important;
+    position: absolute;
+    left:80vw;
+    }
+    omv-logo-header{
+        position:fixed;
+        height:20vh;
+        top:0;
+        left:0;
+        z-index:100;
+    }
+   
+      
+
+  #mainContent {
+    //omv-intuition-form-page {
+
+      .mat-card{
+          margin-top:20vh!important;
+
+          omv-form-paragraph{
+            
+            justify-content: center;
+            height:50vh;
+            width:60vw;
+          }
+          .omv-form-paragraph {
+                font-weight:var(--mat-font-weight-subheading-2);
+                font-size:var(--mat-font-size-subheading-2);
+                height:80%;
+                scroll-behavior: auto;
+                overflow-y: auto;
+                overflow-anchor: none; 
+                scroll-snap-type: y mandatory; 
+                scroll-snap-align: start; 
+
+          }
+
+          .mat-form-field {
+
+            .mat-input-element {
+              caret-color: theme.$omv-color-primary;
+            }
+
+            .mat-form-field-label,
+            .mat-hint {
+              color: dc.$omv-color-white;
+            }
+
+            .mat-form-field-underline {
+              background-color: dc.$omv-color-white;
+            }
+
+            .mat-form-field-ripple {
+              background-color: theme.$omv-color-primary;
+            }
+
+            &.mat-form-field-invalid {
+              .mat-input-element {
+                caret-color: theme.$omv-color-error;
+              }
+
+              .mat-form-field-label {
+                color: theme.$omv-color-error;
+              }
+
+              .mat-form-field-ripple {
+                background-color: theme.$omv-color-error;
+              }
+            }
+
+            .mat-form-field-suffix .mat-icon,
+            .mat-form-field-prefix .mat-icon {
+              color: dc.$omv-color-white;
+            }
+          }
+      }
+  
+  }
+}

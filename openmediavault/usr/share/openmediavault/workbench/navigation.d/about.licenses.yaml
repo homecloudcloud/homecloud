@@ -1,0 +1,11 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "about.licenses"
+  position: 20
+  text: _("Licenses")
+  icon: licenses
+  url: "/about/licenses"
+  permissions:
+    role:
+    - admin

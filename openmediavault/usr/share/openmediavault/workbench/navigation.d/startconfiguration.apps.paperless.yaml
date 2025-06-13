@@ -1,0 +1,8 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "startconfiguration.apps.paperless"
+  position: 70
+  text: _("Documents")
+  icon: "mdi:file-document-multiple"
+  url: "/startconfiguration/apps/paperless"

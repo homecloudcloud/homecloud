@@ -1,0 +1,59 @@
+version: "1.0"
+type: component
+data:
+  name: omv-storage-filesystem-generic-create-form-page
+  type: formPage
+  config:
+    hints:
+      - type: info
+        text: _("If a device is not listed here, it is usually because the device already contains a file system or partitions. With the former, the file system can be mounted <a href='#/startconfiguration/usb-disks/filesystems/mount'>here<a>. For the latter, please <a href='#/startconfiguration/usb-disks'>wipe<a> the device as partitions are not supported.")
+        dismissible: true
+        stateId: 199e8c7a-ee3b-11ed-9fb1-2750842abc68
+    fields:
+      - type: textInput
+        name: type
+        label: _("Type")
+        disabled: true
+        submitValue: false
+        value: '{{ _routeUrlSegments | reverse | get(1) | upper }}'
+      - type: select
+        name: devicefile
+        label: _("Device")
+        placeholder: _("Select a device ...")
+        hint: _("Select the device that will be used to create the file system.")
+        valueField: devicefile
+        textField: description
+        store:
+          proxy:
+            service: Homecloud
+            get:
+              method: getFormatCandidatesBg
+              task: true
+          sorters:
+            - dir: asc
+              prop: devicefile
+        validators:
+          required: true
+    buttons:
+      - template: submit
+        execute:
+          type: taskDialog
+          taskDialog:
+            config:
+              title: _("Create file system")
+              width: 75%
+              startOnInit: true
+              request:
+                service: Homecloud
+                method: createFS
+                params:
+                  devicefile: '{{ devicefile }}'
+                  type: '{{ _routeUrlSegments | reverse | get(1) }}'
+              buttons:
+                stop:
+                  hidden: true
+            successUrl: /startconfiguration/usb-disks/filesystems/mount
+      - template: cancel
+        execute:
+          type: url
+          url: /startconfiguration/usb-disks/filesystems
