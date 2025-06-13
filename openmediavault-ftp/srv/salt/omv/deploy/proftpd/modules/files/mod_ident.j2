@@ -1,0 +1,4 @@
+LoadModule mod_ident.c
+<IfModule mod_ident.c>
+  IdentLookups {{ config.identlookups | to_bool | yesno('on,off') }}
+</IfModule>

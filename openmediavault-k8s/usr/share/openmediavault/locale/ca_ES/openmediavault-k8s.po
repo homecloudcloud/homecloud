@@ -1,0 +1,346 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the openmediavault-k8s package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# Translators:
+# Quim Farriol <qfarriol@valette.cat>, 2024
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: openmediavault-k8s\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-03-26 18:29+0100\n"
+"PO-Revision-Date: 2024-03-09 09:44+0000\n"
+"Last-Translator: Quim Farriol <qfarriol@valette.cat>, 2024\n"
+"Language-Team: Catalan (Spain) (https://app.transifex.com/openmediavault/teams/14254/ca_ES/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ca_ES\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Absolute Path"
+msgstr "Camí absolut"
+
+msgid "Access Modes"
+msgstr "Modes d'accés"
+
+msgid "App Version"
+msgstr "Versió de l'aplicació"
+
+msgid "Apply"
+msgstr "Aplicació"
+
+msgid "Architecture"
+msgstr "Arquitectura"
+
+msgid "Available"
+msgstr "Disponible"
+
+msgid "Capacity"
+msgstr "Capacitat"
+
+msgid "Certificate"
+msgstr "Certificat"
+
+msgid "Certificates"
+msgstr "Certificats"
+
+msgid "Chart"
+msgstr "Gràfic"
+
+msgid "Check for new recipes"
+msgstr "Comproveu noves receptes"
+
+msgid "Class"
+msgstr "Classe"
+
+msgid "Cluster IP"
+msgstr "IP del clúster"
+
+msgid "Compressed"
+msgstr "Comprimit"
+
+msgid "Config Maps"
+msgstr "Configuració de mapes"
+
+msgid "Copy to clipboard"
+msgstr "Copiar al portapapers"
+
+msgid "Copy token"
+msgstr "Copia el testimoni"
+
+msgid "Created"
+msgstr "Creat"
+
+msgid "Dashboard"
+msgstr "Panell"
+
+msgid "Data"
+msgstr "Dada"
+
+msgid "Date & Time"
+msgstr "Data i hora"
+
+msgid "Deployments"
+msgstr "Desplegaments"
+
+msgid "Describe"
+msgstr "Descriu"
+
+msgid "Description"
+msgstr "Descripció"
+
+msgid "Do you really want to restore this snapshot?"
+msgstr "Realment voleu restaurar aquesta instantània?"
+
+msgid "Download"
+msgstr "Descarregar"
+
+msgid ""
+"Downloading the kubeconfig file to the local system enables secure remote "
+"management of the Kubernetes cluster using command-line tools like kubectl."
+msgstr ""
+"La descàrrega del fitxer kubeconfig al sistema local permet una gestió "
+"remota segura del clúster Kubernetes mitjançant eines de línia d'ordres com "
+"ara kubectl."
+
+msgid "Enabled"
+msgstr "Activat"
+
+msgid "Etcd Snapshots"
+msgstr "Imatges Etcd"
+
+msgid "External IP"
+msgstr "IP externa"
+
+msgid "GID"
+msgstr "GID"
+
+msgid "Groups"
+msgstr "Grups"
+
+msgid "HTTP port"
+msgstr "Port HTTP"
+
+msgid "HTTPS port"
+msgstr "Port HTTPS"
+
+msgid "Helm Charts"
+msgstr "Gràfics Helm"
+
+msgid "Homepage"
+msgstr "Pàgina d'inici"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "If present, the namespace scope for this request."
+msgstr "Si està present, l'àmbit de l'espai de noms d'aquesta sol·licitud."
+
+msgid "Image"
+msgstr "Imatge"
+
+msgid "Images"
+msgstr "Imatges"
+
+msgid "Import"
+msgstr "Importar"
+
+msgid "Ingredients"
+msgstr "Ingredients"
+
+msgid "Ingress Routes"
+msgstr "Rutes d'entrada"
+
+msgid "Ingresses"
+msgstr "Ingresses"
+
+msgid "Invalid namespace"
+msgstr "Espai de noms no vàlid"
+
+msgid "Job"
+msgstr "Treball"
+
+msgid "Kubeconfig"
+msgstr "Kubeconfig"
+
+msgid "Kubernetes"
+msgstr "Kubernetes"
+
+msgid "Labels"
+msgstr "Etiquetes"
+
+msgid "Load Balancer"
+msgstr "Equilibrador de càrrega"
+
+msgid "Logs"
+msgstr "Logs"
+
+msgid "Manifest"
+msgstr "Manifest"
+
+msgid "Message"
+msgstr "Missatge"
+
+msgid "Name"
+msgstr "Nom"
+
+msgid "Namespace"
+msgstr "Espai de noms"
+
+msgid "Namespaces"
+msgstr "Espais de noms"
+
+msgid "NodePort IP"
+msgstr "NodePort IP"
+
+msgid "Open UI"
+msgstr "Open UI"
+
+msgid "PV"
+msgstr "PV"
+
+msgid "PVC"
+msgstr "PVC"
+
+msgid "Persistent Volume Claims"
+msgstr "Reclamacions de volum persistents"
+
+msgid "Persistent Volumes"
+msgstr "Volums persistents"
+
+msgid "Pods"
+msgstr "Pods"
+
+msgid "Port"
+msgstr "Port"
+
+msgid "Ports"
+msgstr "Ports"
+
+msgid "Ready"
+msgstr "A punt"
+
+msgid "Recipe"
+msgstr "Recepta"
+
+msgid "Recipe Information"
+msgstr "Informació de la recepta"
+
+msgid "Recipe Version"
+msgstr "Versió de la recepta"
+
+msgid "Recipes"
+msgstr "Receptes"
+
+msgid "Reclaim policy"
+msgstr "Política de reclamació"
+
+msgid "Repository"
+msgstr "Repository"
+
+msgid "Resources"
+msgstr "Recursos"
+
+msgid "Restore"
+msgstr "Restaurar"
+
+msgid "Secrets"
+msgstr "Secrets"
+
+msgid "Section"
+msgstr "Secció"
+
+msgid "Services"
+msgstr "Serveis"
+
+msgid "Settings"
+msgstr "Configuració"
+
+msgid "Shared Folders"
+msgstr "Carpetes compartides"
+
+msgid "Size"
+msgstr "Talla"
+
+msgid "Snapshots"
+msgstr "Imatges instantànies"
+
+msgid "Status"
+msgstr "Estat"
+
+msgid "Storage Class"
+msgstr "Classe d'emmagatzematge"
+
+msgid "Tag"
+msgstr "Etiqueta"
+
+msgid "Tags"
+msgstr "Etiquetes"
+
+msgid "Target Namespace"
+msgstr "Espai de noms de destinació"
+
+msgid ""
+"The SSL certificate used by the Dashboard and the LoadBalancer service. If "
+"not set, a self-signed certificate from cert-manager is used."
+msgstr ""
+"El certificat SSL utilitzat pel Dashboard i el servei LoadBalancer. Si no "
+"s'estableix, s'utilitza un certificat autofirmat de cert-manager."
+
+msgid ""
+"The following placeholders can be used in recipes to get access to global "
+"system information and the configuration "
+"database:<br><ul><li>hostname()</li><li>domain()</li><li>fqdn()</li><li>uid(name)</li><li>gid(name)</li><li>sharedfolder_path(name)</li><li>conf_get(id,"
+" uuid=NULL)</li></ul>You have to denote placeholders with double-curly "
+"braces. An overview of additional available filters can be found <a "
+"href='https://twig.symfony.com/doc/filters/index.html' "
+"target='_blank'>here</a>."
+msgstr ""
+"Els següents marcadors de posició es poden utilitzar a les receptes per accedir a la informació global del sistema i a la base de dades de configuració:\n"
+"<br><ul><li>hostname()</li><li>domain()</li><li>fqdn()</li><li>uid(name)</li><li>gid(name)</li><li>sharedfolder_path(name)</li><li>conf_get(id, uuid=NULL)</li></ul>YHeu de denotar marcadors de posició amb claus dobles. Podeu trobar una visió general dels filtres addicionals disponibles <a href='https://twig.symfony.com/doc/filters/index.html' target='_blank'>aquí</a>."
+
+msgid "The location where to store etcd on-demand snapshots."
+msgstr "La ubicació on s'emmagatzemen les instantànies sota demanda etcd."
+
+msgid "The manifest to apply."
+msgstr "El manifest a aplicar."
+
+msgid "The port on which the Kubernetes Dashboard is listening."
+msgstr "El port on escolta el tauler de control de Kubernetes."
+
+msgid "The port on which the LoadBalancer service is listening."
+msgstr "El port on està escoltant el servei LoadBalancer."
+
+msgid "The snapshot was created successfully."
+msgstr "La instantània s'ha creat correctament."
+
+msgid "The snapshot {{ name }} has been successfully restored."
+msgstr "La instantània {{ name }} s'ha restaurat correctament."
+
+msgid "The token to authenticate to the Kubernetes Dashboard."
+msgstr "El testimoni per autenticar-se al tauler de control de Kubernetes."
+
+msgid "Type"
+msgstr "Tipus"
+
+msgid "UID"
+msgstr "UID"
+
+msgid "Up-to-date"
+msgstr "Actualitzat"
+
+msgid "Updated Kubernetes settings."
+msgstr "Configuració de Kubernetes actualitzada."
+
+msgid "Users"
+msgstr "Usuaris"
+
+msgid "View"
+msgstr "Vista"
+
+msgid "Volume"
+msgstr "Volum"

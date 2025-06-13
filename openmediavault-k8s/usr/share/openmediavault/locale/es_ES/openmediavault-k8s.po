@@ -1,0 +1,345 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the openmediavault-k8s package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# Translators:
+# Raul Fernandez Garcia <raulfg3@gmail.com>, 2024
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: openmediavault-k8s\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-03-26 18:29+0100\n"
+"PO-Revision-Date: 2024-03-09 09:44+0000\n"
+"Last-Translator: Raul Fernandez Garcia <raulfg3@gmail.com>, 2024\n"
+"Language-Team: Spanish (Spain) (https://app.transifex.com/openmediavault/teams/14254/es_ES/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: es_ES\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+
+msgid "Absolute Path"
+msgstr ""
+
+msgid "Access Modes"
+msgstr "Modos de acceso"
+
+msgid "App Version"
+msgstr "Versión"
+
+msgid "Apply"
+msgstr "Aplicar"
+
+msgid "Architecture"
+msgstr ""
+
+msgid "Available"
+msgstr "Disponible"
+
+msgid "Capacity"
+msgstr "Capacidad"
+
+msgid "Certificate"
+msgstr "Certificado"
+
+msgid "Certificates"
+msgstr "Certificados"
+
+msgid "Chart"
+msgstr "Grafica"
+
+msgid "Check for new recipes"
+msgstr "Buscar nuevas recetas"
+
+msgid "Class"
+msgstr "Clase"
+
+msgid "Cluster IP"
+msgstr "Cluster IP"
+
+msgid "Compressed"
+msgstr "Comprimido"
+
+msgid "Config Maps"
+msgstr "Mapa de Configuración"
+
+msgid "Copy to clipboard"
+msgstr "Copiar al portapapeles"
+
+msgid "Copy token"
+msgstr "Copiar token"
+
+msgid "Created"
+msgstr "Creado"
+
+msgid "Dashboard"
+msgstr "Panel"
+
+msgid "Data"
+msgstr "Datos"
+
+msgid "Date & Time"
+msgstr "Fecha y Hora"
+
+msgid "Deployments"
+msgstr "Implementaciones"
+
+msgid "Describe"
+msgstr "Describir"
+
+msgid "Description"
+msgstr "Descripción"
+
+msgid "Do you really want to restore this snapshot?"
+msgstr "¿Realmente quieres restaurar esta instantánea?"
+
+msgid "Download"
+msgstr "Descargas"
+
+msgid ""
+"Downloading the kubeconfig file to the local system enables secure remote "
+"management of the Kubernetes cluster using command-line tools like kubectl."
+msgstr ""
+"La descarga del archivo kubeconfig al sistema local permite la "
+"administración remota segura del clúster de Kubernetes mediante herramientas"
+" de línea de comandos como kubectl."
+
+msgid "Enabled"
+msgstr "Habilitado"
+
+msgid "Etcd Snapshots"
+msgstr "Instantánea etcd"
+
+msgid "External IP"
+msgstr "IP Externa"
+
+msgid "GID"
+msgstr "GID"
+
+msgid "Groups"
+msgstr "Grupos"
+
+msgid "HTTP port"
+msgstr "Puerto HTTP"
+
+msgid "HTTPS port"
+msgstr "puerto HTTPS"
+
+msgid "Helm Charts"
+msgstr "Helm Charts"
+
+msgid "Homepage"
+msgstr "Homepage"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "If present, the namespace scope for this request."
+msgstr ""
+"Si está presente, el alcance del espacio de nombres para esta solicitud."
+
+msgid "Image"
+msgstr "Imagen"
+
+msgid "Images"
+msgstr "Imagenes"
+
+msgid "Import"
+msgstr "Importar"
+
+msgid "Ingredients"
+msgstr "Ingredientes"
+
+msgid "Ingress Routes"
+msgstr "Ruta de ingreso"
+
+msgid "Ingresses"
+msgstr "Ingreso"
+
+msgid "Invalid namespace"
+msgstr "espacio de nombres inválido."
+
+msgid "Job"
+msgstr "Trabajo"
+
+msgid "Kubeconfig"
+msgstr "Kubeconfig"
+
+msgid "Kubernetes"
+msgstr "Kubernetes"
+
+msgid "Labels"
+msgstr "Etiquetas"
+
+msgid "Load Balancer"
+msgstr "Balance de carga"
+
+msgid "Logs"
+msgstr "Logs"
+
+msgid "Manifest"
+msgstr "Manifiesto"
+
+msgid "Message"
+msgstr "Mensaje"
+
+msgid "Name"
+msgstr "Nombre"
+
+msgid "Namespace"
+msgstr "Espacio de nombres"
+
+msgid "Namespaces"
+msgstr "Espacios de nombres"
+
+msgid "NodePort IP"
+msgstr "IP del NodePort"
+
+msgid "Open UI"
+msgstr "Abrir UI"
+
+msgid "PV"
+msgstr "PV"
+
+msgid "PVC"
+msgstr "PVC"
+
+msgid "Persistent Volume Claims"
+msgstr "Reclamaciones de volumen persistente"
+
+msgid "Persistent Volumes"
+msgstr "Volúmenes persistentes"
+
+msgid "Pods"
+msgstr "Pods"
+
+msgid "Port"
+msgstr "Puerto"
+
+msgid "Ports"
+msgstr "Puertos"
+
+msgid "Ready"
+msgstr "Listo"
+
+msgid "Recipe"
+msgstr "Receta"
+
+msgid "Recipe Information"
+msgstr "Información de la receta"
+
+msgid "Recipe Version"
+msgstr "Versión de la receta"
+
+msgid "Recipes"
+msgstr "Recetas"
+
+msgid "Reclaim policy"
+msgstr "Política de reclamaciones"
+
+msgid "Repository"
+msgstr "Repositorio"
+
+msgid "Resources"
+msgstr "Recursos"
+
+msgid "Restore"
+msgstr "Restaurar"
+
+msgid "Secrets"
+msgstr "Secretos"
+
+msgid "Section"
+msgstr ""
+
+msgid "Services"
+msgstr "Servicios"
+
+msgid "Settings"
+msgstr "Opciones"
+
+msgid "Shared Folders"
+msgstr ""
+
+msgid "Size"
+msgstr "Tamaño"
+
+msgid "Snapshots"
+msgstr "Instantáneas"
+
+msgid "Status"
+msgstr "Estado"
+
+msgid "Storage Class"
+msgstr "Clases de almacenamiento"
+
+msgid "Tag"
+msgstr "Etiqueta"
+
+msgid "Tags"
+msgstr "Tags"
+
+msgid "Target Namespace"
+msgstr "Espacio de nombres de destino"
+
+msgid ""
+"The SSL certificate used by the Dashboard and the LoadBalancer service. If "
+"not set, a self-signed certificate from cert-manager is used."
+msgstr ""
+"El certificado SSL utilizado por el Panel y el servicio LoadBalancer. Si no "
+"se establece, se utiliza un certificado autofirmado de cert-manager."
+
+msgid ""
+"The following placeholders can be used in recipes to get access to global "
+"system information and the configuration "
+"database:<br><ul><li>hostname()</li><li>domain()</li><li>fqdn()</li><li>uid(name)</li><li>gid(name)</li><li>sharedfolder_path(name)</li><li>conf_get(id,"
+" uuid=NULL)</li></ul>You have to denote placeholders with double-curly "
+"braces. An overview of additional available filters can be found <a "
+"href='https://twig.symfony.com/doc/filters/index.html' "
+"target='_blank'>here</a>."
+msgstr ""
+
+msgid "The location where to store etcd on-demand snapshots."
+msgstr "La ubicación donde almacenar instantáneas bajo demanda de etcd."
+
+msgid "The manifest to apply."
+msgstr "El manifiesto a aplicar"
+
+msgid "The port on which the Kubernetes Dashboard is listening."
+msgstr "El puerto en el que escucha el panel de Kubernetes."
+
+msgid "The port on which the LoadBalancer service is listening."
+msgstr "El puerto en el que escucha el servicio LoadBalancer."
+
+msgid "The snapshot was created successfully."
+msgstr "La instantánea ha sido creada satisfactoriamente."
+
+msgid "The snapshot {{ name }} has been successfully restored."
+msgstr "La instantánea {{ name }} se ha restaurado correctamente."
+
+msgid "The token to authenticate to the Kubernetes Dashboard."
+msgstr "El token para autenticarse en el panel de Kubernetes."
+
+msgid "Type"
+msgstr "Tipo"
+
+msgid "UID"
+msgstr "UID"
+
+msgid "Up-to-date"
+msgstr "Hasta hoy"
+
+msgid "Updated Kubernetes settings."
+msgstr "Actualizar las opciones de Kubernetes."
+
+msgid "Users"
+msgstr "Usuarios"
+
+msgid "View"
+msgstr "Vista"
+
+msgid "Volume"
+msgstr "Volumen"

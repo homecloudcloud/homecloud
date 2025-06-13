@@ -1,0 +1,13 @@
+[Unit]
+Description=Generate the prelogin message
+Wants=network-online.target
+After=network-online.target
+Before=getty.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/omv-salt deploy run --quiet --no-color issue
+RemainAfterExit=yes
+
+[Install]
+WantedBy=getty.target

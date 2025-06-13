@@ -1,0 +1,7 @@
+*.deb
+*.udeb
+.idea/
+__pycache__/
+../testphp.php
+../testphpfile.php
+deb/sudoers

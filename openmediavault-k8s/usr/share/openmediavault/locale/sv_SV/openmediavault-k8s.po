@@ -1,0 +1,351 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the openmediavault-k8s package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# Translators:
+# Jonatan Nyberg, 2024
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: openmediavault-k8s\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-03-26 18:29+0100\n"
+"PO-Revision-Date: 2024-03-09 09:44+0000\n"
+"Last-Translator: Jonatan Nyberg, 2024\n"
+"Language-Team: Swedish (https://app.transifex.com/openmediavault/teams/14254/sv/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sv\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Absolute Path"
+msgstr "Absolut sökväg"
+
+msgid "Access Modes"
+msgstr "Åtkomstlägen"
+
+msgid "App Version"
+msgstr "Appversion"
+
+msgid "Apply"
+msgstr "Verkställ"
+
+msgid "Architecture"
+msgstr "Arkitektur"
+
+msgid "Available"
+msgstr "Tillgänglig"
+
+msgid "Capacity"
+msgstr "Kapacitet"
+
+msgid "Certificate"
+msgstr "Certifikat"
+
+msgid "Certificates"
+msgstr "Certifikat"
+
+msgid "Chart"
+msgstr "Diagram"
+
+msgid "Check for new recipes"
+msgstr "Sök efter nya recept"
+
+msgid "Class"
+msgstr "Klass"
+
+msgid "Cluster IP"
+msgstr "Klustret-IP"
+
+msgid "Compressed"
+msgstr "Komprimerad"
+
+msgid "Config Maps"
+msgstr "Konfigurera kartor"
+
+msgid "Copy to clipboard"
+msgstr "Kopiera till urklipp"
+
+msgid "Copy token"
+msgstr "Kopiera token"
+
+msgid "Created"
+msgstr "Skapad"
+
+msgid "Dashboard"
+msgstr "Instrumentpanel"
+
+msgid "Data"
+msgstr "Data"
+
+msgid "Date & Time"
+msgstr "Datum & tid"
+
+msgid "Deployments"
+msgstr ""
+
+msgid "Describe"
+msgstr "Beskriv"
+
+msgid "Description"
+msgstr "Beskrivning"
+
+msgid "Do you really want to restore this snapshot?"
+msgstr "Vill du verkligen återställa denna ögonblicksbild?"
+
+msgid "Download"
+msgstr "Hämta"
+
+msgid ""
+"Downloading the kubeconfig file to the local system enables secure remote "
+"management of the Kubernetes cluster using command-line tools like kubectl."
+msgstr ""
+"Att hämta kubeconfig-filen till det lokala systemet möjliggör säker "
+"fjärrhantering av Kubernetes-klustret med hjälp av kommandoradsverktyg som "
+"kubectl."
+
+msgid "Enabled"
+msgstr "Aktiverad"
+
+msgid "Etcd Snapshots"
+msgstr "Etcd ögonblicksbilder"
+
+msgid "External IP"
+msgstr "Extern IP"
+
+msgid "GID"
+msgstr "GID"
+
+msgid "Groups"
+msgstr "Grupper"
+
+msgid "HTTP port"
+msgstr "HTTP-port"
+
+msgid "HTTPS port"
+msgstr "HTTPS-port"
+
+msgid "Helm Charts"
+msgstr ""
+
+msgid "Homepage"
+msgstr "Webbplats"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "If present, the namespace scope for this request."
+msgstr ""
+
+msgid "Image"
+msgstr "Bild"
+
+msgid "Images"
+msgstr "Bilder"
+
+msgid "Import"
+msgstr "Importera"
+
+msgid "Ingredients"
+msgstr "Ingredienser"
+
+msgid "Ingress Routes"
+msgstr "Ingressrutter"
+
+msgid "Ingresses"
+msgstr "Ingresser"
+
+msgid "Invalid namespace"
+msgstr ""
+
+msgid "Job"
+msgstr "Jobb"
+
+msgid "Kubeconfig"
+msgstr "Kubeconfig"
+
+msgid "Kubernetes"
+msgstr "Kubernetes"
+
+msgid "Labels"
+msgstr "Etiketter"
+
+msgid "Load Balancer"
+msgstr "Load Balancer"
+
+msgid "Logs"
+msgstr "Loggar"
+
+msgid "Manifest"
+msgstr "Manifest"
+
+msgid "Message"
+msgstr "Meddelande"
+
+msgid "Name"
+msgstr "Namn"
+
+msgid "Namespace"
+msgstr ""
+
+msgid "Namespaces"
+msgstr ""
+
+msgid "NodePort IP"
+msgstr "NodePort-IP"
+
+msgid "Open UI"
+msgstr "Öppna användargränssnittet"
+
+msgid "PV"
+msgstr "PV"
+
+msgid "PVC"
+msgstr "PVC"
+
+msgid "Persistent Volume Claims"
+msgstr "Beständiga volymanspråk"
+
+msgid "Persistent Volumes"
+msgstr "Beständiga volymer"
+
+msgid "Pods"
+msgstr "Poddar"
+
+msgid "Port"
+msgstr "Port"
+
+msgid "Ports"
+msgstr "Portar"
+
+msgid "Ready"
+msgstr "Redo"
+
+msgid "Recipe"
+msgstr "Recept"
+
+msgid "Recipe Information"
+msgstr "Receptinformation"
+
+msgid "Recipe Version"
+msgstr "Receptversion"
+
+msgid "Recipes"
+msgstr "Recept"
+
+msgid "Reclaim policy"
+msgstr "Återkrävningspolicy "
+
+msgid "Repository"
+msgstr "Förråd"
+
+msgid "Resources"
+msgstr "Resurser"
+
+msgid "Restore"
+msgstr "Återställ"
+
+msgid "Secrets"
+msgstr "Hemligheter"
+
+msgid "Section"
+msgstr "Sektion"
+
+msgid "Services"
+msgstr "Tjänster"
+
+msgid "Settings"
+msgstr "Inställningar"
+
+msgid "Shared Folders"
+msgstr "Delade mappar"
+
+msgid "Size"
+msgstr "Storlek"
+
+msgid "Snapshots"
+msgstr "Ögonblicksbilder"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Storage Class"
+msgstr "Förvaringsklass"
+
+msgid "Tag"
+msgstr "Tagg"
+
+msgid "Tags"
+msgstr "Taggar"
+
+msgid "Target Namespace"
+msgstr ""
+
+msgid ""
+"The SSL certificate used by the Dashboard and the LoadBalancer service. If "
+"not set, a self-signed certificate from cert-manager is used."
+msgstr ""
+"SSL-certifikatet som används av instrumentpanelen och LoadBalancer-tjänsten."
+" Om inte inställt används ett självsignerat certifikat från cert-manager."
+
+msgid ""
+"The following placeholders can be used in recipes to get access to global "
+"system information and the configuration "
+"database:<br><ul><li>hostname()</li><li>domain()</li><li>fqdn()</li><li>uid(name)</li><li>gid(name)</li><li>sharedfolder_path(name)</li><li>conf_get(id,"
+" uuid=NULL)</li></ul>You have to denote placeholders with double-curly "
+"braces. An overview of additional available filters can be found <a "
+"href='https://twig.symfony.com/doc/filters/index.html' "
+"target='_blank'>here</a>."
+msgstr ""
+"Följande platshållare kan användas i recept för att få tillgång till global "
+"systeminformation och "
+"konfigurationsdatabasen:<br><ul><li>hostname()</li><li>domain()</li><li>fqdn()</li><li>uid(name)</li><li>gid(name)</li><li>sharedfolder_path(name)</li><li>conf_get(id,"
+" uuid=NULL)</li></ul>Du måste beteckna platshållare med dubbelkrökta "
+"klammerparenteser. En översikt över ytterligare tillgängliga filter finns <a"
+" href='https://twig.symfony.com/doc/filters/index.html' "
+"target='_blank'>här</a>."
+
+msgid "The location where to store etcd on-demand snapshots."
+msgstr "Platsen där man lagrar etcd-on-demand ögonblicksbilder."
+
+msgid "The manifest to apply."
+msgstr "Manifestet som ska verkställas."
+
+msgid "The port on which the Kubernetes Dashboard is listening."
+msgstr "Porten som Kubernetes-instrumentpanel lyssnar på."
+
+msgid "The port on which the LoadBalancer service is listening."
+msgstr "Porten som LoadBalancer-tjänsten lyssnar på."
+
+msgid "The snapshot was created successfully."
+msgstr "Ögonblicksbilden skapades."
+
+msgid "The snapshot {{ name }} has been successfully restored."
+msgstr "Ögonblicksbilden {{ name }} har återställts."
+
+msgid "The token to authenticate to the Kubernetes Dashboard."
+msgstr "Token för att autentisera till Kubernetes-instrumentpanel."
+
+msgid "Type"
+msgstr "Typ"
+
+msgid "UID"
+msgstr "UID"
+
+msgid "Up-to-date"
+msgstr "Uppdaterad"
+
+msgid "Updated Kubernetes settings."
+msgstr "Uppdaterade Kubernetes-inställningar."
+
+msgid "Users"
+msgstr "Användare"
+
+msgid "View"
+msgstr "Visa"
+
+msgid "Volume"
+msgstr "Volym"

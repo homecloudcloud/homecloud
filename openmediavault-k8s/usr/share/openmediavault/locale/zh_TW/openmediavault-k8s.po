@@ -1,0 +1,346 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the openmediavault-k8s package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# Translators:
+# 王大山, 2024
+# songming <by@songming.me>, 2024
+# 黃柏諺 <s8321414@gmail.com>, 2024
+# kochin <kochinc@outlook.com>, 2024
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: openmediavault-k8s\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-03-26 18:29+0100\n"
+"PO-Revision-Date: 2024-03-09 09:44+0000\n"
+"Last-Translator: kochin <kochinc@outlook.com>, 2024\n"
+"Language-Team: Chinese (Taiwan) (https://app.transifex.com/openmediavault/teams/14254/zh_TW/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_TW\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Absolute Path"
+msgstr "絕對路徑"
+
+msgid "Access Modes"
+msgstr "存取模式"
+
+msgid "App Version"
+msgstr "App 版本"
+
+msgid "Apply"
+msgstr "套用"
+
+msgid "Architecture"
+msgstr "架構"
+
+msgid "Available"
+msgstr "可用"
+
+msgid "Capacity"
+msgstr "容量"
+
+msgid "Certificate"
+msgstr "憑證"
+
+msgid "Certificates"
+msgstr "憑證"
+
+msgid "Chart"
+msgstr "Chart"
+
+msgid "Check for new recipes"
+msgstr "檢查新配方"
+
+msgid "Class"
+msgstr "類別"
+
+msgid "Cluster IP"
+msgstr "叢集 IP"
+
+msgid "Compressed"
+msgstr "經過壓縮"
+
+msgid "Config Maps"
+msgstr "設置圖"
+
+msgid "Copy to clipboard"
+msgstr "複製到剪貼板"
+
+msgid "Copy token"
+msgstr "複製權杖"
+
+msgid "Created"
+msgstr "建立於"
+
+msgid "Dashboard"
+msgstr "儀表板"
+
+msgid "Data"
+msgstr "資料"
+
+msgid "Date & Time"
+msgstr "日期與時間"
+
+msgid "Deployments"
+msgstr "部署"
+
+msgid "Describe"
+msgstr "描述"
+
+msgid "Description"
+msgstr "敘述"
+
+msgid "Do you really want to restore this snapshot?"
+msgstr "您確定要還原此快照嗎？"
+
+msgid "Download"
+msgstr "下載"
+
+msgid ""
+"Downloading the kubeconfig file to the local system enables secure remote "
+"management of the Kubernetes cluster using command-line tools like kubectl."
+msgstr "將 kubeconfig 檔案下載到本機系統可以使用 kubectl 等命令列工具對 Kubernetes 叢集進行安全遠端管理。"
+
+msgid "Enabled"
+msgstr "已啟用"
+
+msgid "Etcd Snapshots"
+msgstr "Etcd 快照"
+
+msgid "External IP"
+msgstr "外部 IP"
+
+msgid "GID"
+msgstr "GID"
+
+msgid "Groups"
+msgstr "群組"
+
+msgid "HTTP port"
+msgstr "HTTP 通訊埠"
+
+msgid "HTTPS port"
+msgstr "HTTPS 通訊埠"
+
+msgid "Helm Charts"
+msgstr "Helm Charts"
+
+msgid "Homepage"
+msgstr "首頁"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "If present, the namespace scope for this request."
+msgstr "若存在，則為此請求的命名空間範圍。"
+
+msgid "Image"
+msgstr "鏡像"
+
+msgid "Images"
+msgstr "鏡像"
+
+msgid "Import"
+msgstr "匯入"
+
+msgid "Ingredients"
+msgstr "配料"
+
+msgid "Ingress Routes"
+msgstr "Ingress 路由"
+
+msgid "Ingresses"
+msgstr "Ingresses"
+
+msgid "Invalid namespace"
+msgstr "無效的命名空間"
+
+msgid "Job"
+msgstr "工作"
+
+msgid "Kubeconfig"
+msgstr "Kubeconfig"
+
+msgid "Kubernetes"
+msgstr "Kubernetes"
+
+msgid "Labels"
+msgstr "標號"
+
+msgid "Load Balancer"
+msgstr "負載平衡器"
+
+msgid "Logs"
+msgstr "日誌"
+
+msgid "Manifest"
+msgstr "Manifest"
+
+msgid "Message"
+msgstr "訊息"
+
+msgid "Name"
+msgstr "名稱"
+
+msgid "Namespace"
+msgstr "命名空間"
+
+msgid "Namespaces"
+msgstr "命名空間"
+
+msgid "NodePort IP"
+msgstr "NodePort IP"
+
+msgid "Open UI"
+msgstr "開啟使用者介面"
+
+msgid "PV"
+msgstr "PV"
+
+msgid "PVC"
+msgstr "PVC"
+
+msgid "Persistent Volume Claims"
+msgstr "持久卷宗聲明"
+
+msgid "Persistent Volumes"
+msgstr "持久卷宗"
+
+msgid "Pods"
+msgstr "Pods"
+
+msgid "Port"
+msgstr "通訊埠"
+
+msgid "Ports"
+msgstr "通訊埠"
+
+msgid "Ready"
+msgstr "準備好"
+
+msgid "Recipe"
+msgstr "配方"
+
+msgid "Recipe Information"
+msgstr "配方資訊"
+
+msgid "Recipe Version"
+msgstr "配方版本"
+
+msgid "Recipes"
+msgstr "配方集"
+
+msgid "Reclaim policy"
+msgstr "回收政策"
+
+msgid "Repository"
+msgstr "鏡像庫"
+
+msgid "Resources"
+msgstr "資源"
+
+msgid "Restore"
+msgstr "還原"
+
+msgid "Secrets"
+msgstr "祕密"
+
+msgid "Section"
+msgstr "區塊"
+
+msgid "Services"
+msgstr "服務"
+
+msgid "Settings"
+msgstr "設定"
+
+msgid "Shared Folders"
+msgstr "共享資料夾"
+
+msgid "Size"
+msgstr "大小"
+
+msgid "Snapshots"
+msgstr "快照"
+
+msgid "Status"
+msgstr "狀況"
+
+msgid "Storage Class"
+msgstr "儲存類別"
+
+msgid "Tag"
+msgstr "標籤"
+
+msgid "Tags"
+msgstr "標籤"
+
+msgid "Target Namespace"
+msgstr "目標命名空間"
+
+msgid ""
+"The SSL certificate used by the Dashboard and the LoadBalancer service. If "
+"not set, a self-signed certificate from cert-manager is used."
+msgstr "儀表板與負載平衡服務使用的 SSL 憑證。若未設定，則使用來自 cert-manager 的自行簽署憑證。"
+
+msgid ""
+"The following placeholders can be used in recipes to get access to global "
+"system information and the configuration "
+"database:<br><ul><li>hostname()</li><li>domain()</li><li>fqdn()</li><li>uid(name)</li><li>gid(name)</li><li>sharedfolder_path(name)</li><li>conf_get(id,"
+" uuid=NULL)</li></ul>You have to denote placeholders with double-curly "
+"braces. An overview of additional available filters can be found <a "
+"href='https://twig.symfony.com/doc/filters/index.html' "
+"target='_blank'>here</a>."
+msgstr ""
+"可以在配方中使用以下佔位字串來存取全域系統資訊與設定資料庫：<br><ul><li>hostname()</li><li>domain()</li><li>fqdn()</li><li>uid(name)</li><li>gid(name)</li><li>sharedfolder_path(name)</li><li>conf_get(id,"
+" uuid=NULL)</li></ul>您必須用雙大括號表示佔位字串。可以在<a "
+"href='https://twig.symfony.com/doc/filters/index.html' "
+"target='_blank'>此處</a>找到其他可用篩選條件的概覽。"
+
+msgid "The location where to store etcd on-demand snapshots."
+msgstr "儲存 etcd 隨選快照的位置。"
+
+msgid "The manifest to apply."
+msgstr "要套用的 manifest。"
+
+msgid "The port on which the Kubernetes Dashboard is listening."
+msgstr "Kubernetes 儀表板正在監聽的連接埠。"
+
+msgid "The port on which the LoadBalancer service is listening."
+msgstr "負載平衡服務正在監聽的連接埠。"
+
+msgid "The snapshot was created successfully."
+msgstr "快照建立成功。"
+
+msgid "The snapshot {{ name }} has been successfully restored."
+msgstr "已成功還原快照 {{ name }}。"
+
+msgid "The token to authenticate to the Kubernetes Dashboard."
+msgstr "用於向 Kubernetes 儀表板進行身份驗證的權杖。"
+
+msgid "Type"
+msgstr "類型"
+
+msgid "UID"
+msgstr "UID"
+
+msgid "Up-to-date"
+msgstr "最新"
+
+msgid "Updated Kubernetes settings."
+msgstr "已更新 Kubernetes 設定。"
+
+msgid "Users"
+msgstr "用戶"
+
+msgid "View"
+msgstr "檢視"
+
+msgid "Volume"
+msgstr "卷宗"
