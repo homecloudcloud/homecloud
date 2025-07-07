@@ -4,5 +4,5 @@
     "paperless-ngx": "v2.17.1",
     "jellyfin": "v10.11.0-rc2",
     "vaultwarden": "1.34.1",
-    "traefik": "v2.11"
+    "traefik": "v3.5.0-rc1"
 }
