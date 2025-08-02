@@ -11,9 +11,9 @@ Steps to install Homecloud on Raspberry Pi:
         - Set hostname: homecloud.local
         - username: test
           password: xxxxxx   
-2. Insert SSD. Boot. Connect HDMI and network cable. Check IP on monitor (HDMI connected). SSH using test@IP.
-
-Run raspi-config > Advanced Settings > network interface names > Enable predictable name.
-Enable i2c bus by : raspi-config interface enable i2c
-uncomment repo of raspi in /etc/apt/sources.list.d/raspi.list
+2. Insert SSD. Boot. Connect HDMI and network cable. Check IP on monitor (HDMI connected). SSH using test@IP and sudo su -
+3. Run raspi-config > Advanced Settings > network interface names > Enable predictable name.
+4. Enable i2c bus by : raspi-config interface enable i2c.
+5. Uncomment all non-dev repo of raspi in /etc/apt/sources.list.d/raspi.list
+6. 
 
