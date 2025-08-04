@@ -598,12 +598,12 @@ export class TailscaleConfigFormPageComponent extends BaseFormPageComponent {
         //console.log('response',response);
         if (response.internetConnected !== true) { //Internet down
          // console.log('internet down');
-          const tailscaleButton=document.querySelector('omv-tailscale-setupwizard-config-page omv-submit-button button');
-          const tailscaleCheckbox=document.querySelector('omv-tailscale-setupwizard-config-page omv-form-checkbox');
+          //const tailscaleButton=document.querySelector('omv-tailscale-setupwizard-config-page omv-submit-button button');
+          //const tailscaleCheckbox=document.querySelector('omv-tailscale-setupwizard-config-page omv-form-checkbox');
           const tailscaleConfigContainer=document.querySelector('omv-tailscale-setupwizard-config-page .omv-form-container');
           //console.log('tailscaleButton', tailscaleButton);
-          if(tailscaleButton && tailscaleCheckbox){
-                tailscaleButton.classList.add('mat-button-disabled');
+          if(tailscaleConfigContainer){
+              //  tailscaleButton.classList.add('mat-button-disabled');
                // tailscaleCheckbox.classList.add('hidden');
                 tailscaleConfigContainer.classList.add('hidden');
                 //tailscaleCheckbox.insertAdjacentHTML('afterend','<br><span class="internetError">Homecloud is not connected to Internet.Go to <a class="plainLink" href="#/setupwizard/networkconfig/interfaces">Network Interfaces</a> page to check the status. Connect Homecloud to Internet and try again');
@@ -617,10 +617,10 @@ export class TailscaleConfigFormPageComponent extends BaseFormPageComponent {
           const divider = document.querySelector('omv-tailscale-setupwizard-config-page omv-form-divider');
           const dividerc = document.querySelector('omv-tailscale-setupwizard-config-page .omv-form-divider');
           const container = document.querySelector('omv-tailscale-setupwizard-config-page .omv-form-container');
-          const submitButton=document.querySelector('omv-tailscale-setupwizard-config-page omv-submit-button button');
+          //const submitButton=document.querySelector('omv-tailscale-setupwizard-config-page omv-submit-button button');
           divider.addEventListener('click', () => {            
             container.classList.toggle('hidden');
-            submitButton.classList.toggle('hidden');
+           // submitButton.classList.toggle('hidden');
             if(dividerc){
               dividerc.classList.toggle('expanded');
         

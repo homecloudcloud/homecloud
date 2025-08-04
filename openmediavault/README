@@ -1,0 +1,88 @@
+**Pre-requisite** to install Homecloud on Raspberry PI:
+
+1. Raspberry PI 5 (older models may work as well but not tested).
+2. SD card(32 GB or more) with Raspbian 64 bit image (RASPIOS-bookworm-lite) - DESKTOP version NOT supported.
+3. NVMe hat attached to base card.
+4. OLED display (0.91 inch 128x32 Blue OLED) attached to Raspberry PI pins.
+5. NVMe SSD storage (recommended 128 GB +)
+
+**Steps to install Homecloud on Raspberry Pi:** 
+1. Image RASPI OS (64bit) Lite image to SDCARD. Make sure image is arm64 (not armhf)
+2. Edit settings in Imager:
+Set hostname: homecloud.local
+username: test password: xxxxxx (set your password)
+3. Insert SDCARD in Raspberry Pi. Connect NVMe SSD (CAUTION: ALL DATA WILL BE DELETED ON THIS) on Raspberry Pi using NVMe hat.  Connect HDMI and network cable. 
+4. Power On.
+5. Check IP on monitor (HDMI connected). SSH using test@IP and sudo su -.
+6. Run raspi-config > Advanced Settings > network interface names > Enable predictable name.
+7. Enable i2c bus by : raspi-config interface enable i2c.
+8. Uncomment all non-dev repo of raspi in /etc/apt/sources.list.d/raspi.list
+9. Download setupv1-public.sh script in this repo to rasperry-pi and run. It will prompt for setting password of admin user. If it stops in between reboot system for network changes to take effect and re-run the script.
+10. After running the script continue the below steps.
+11. Change OMV port to 81. Run omv-firstaid command > Configure workbench -> port 81. Do not enable secure port https.
+12. Next steps: setup storage for apps and their users. And cron jobs for certificates renewal.
+13. Create file system on SSD logical volume (created by setup script): mkfs.ext4 /dev/DATA_VOL/home_dirs 
+14. mv /home /home.backup.  
+15. reboot
+16. After reboot, find out the mount path of SSD logical volume using mount or df command.It would be in the format: /srv/dev-disk-by-uuid-***. Copy it and use it in below commands. We will create all home dirs and app directories on this mount path.
+17. mkdir /srv/dev-disk-by-uuid-**/homes 
+18. cp -Rvf /home.backup/ /srv/dev-disk-by-uuid-**/homes/ 
+19. ln -s /srv/dev-disk-by-uuid-** /home chownership to admin:users
+20. create each app data directories: 
+21. mkdir /srv/dev-disk-by-uuid-/immich 
+22. chown -R admin:users /srv/dev-disk-by-uuid-/immich 
+23. mkdir /srv/dev-disk-by-uuid-/paperless 
+24. mkdir /srv/dev-disk-by-uuid-/joplin 
+25. mkdir /srv/dev-disk-by-uuid-/vwdata 
+26. mkdir /srv/dev-disk-by-uuid-/jellyfin 
+27. cd /var/lib 
+28. ln -s /srv/dev-disk-by-uuid-/jellyfin jellyfin 
+29. ln -s /srv/dev-disk-by-uuid-/vwdata vwdata 
+30. ln -s /srv/dev-disk-by-uuid-/immich immich 
+31. ln -s /srv/dev-disk-by-uuid-/joplin joplin 
+32. ln -s /srv/dev-disk-by-uuid-***/paperless paperless
+33. create users for app amd assign permissions 
+34. sudo useradd --system --no-create-home --shell /usr/sbin/nologin vault 
+35. sudo useradd --system --no-create-home --shell /usr/sbin/nologin joplin 
+36. chown -R joplin:joplin srv/dev-disk-by-uuid-**/joplin 
+37. chmod -R 770 srv/dev-disk-by-uuid-**/joplin 
+38. chown -R vault:vault srv/dev-disk-by-uuid-**/vwdata 
+39. chown -R vault:vault /var/lib/vwdata 
+40. chmod -R 770 srv/dev-disk-by-uuid-**/vwdata 
+41. sudo useradd --system --no-create-home --shell /usr/sbin/nologin paperless 
+42. chown -R admin:users /var/lib/jellyfin 
+43. chown -R admin:users /srv/dev-disk-by-uuid-**/jellyfin 
+44. chmod -R 770 srv/dev-disk-by-uuid-**/jellyfin 
+45. mkdir /var/lib/password-reset/ 
+46. chown -R admin:users /var/lib/password-reset
+47. Label internal SSD file system with "Internal-Storage": 
+48. lsblk -o NAME,FSTYPE,LABEL,MOUNTPOINT 
+49. e2label /dev/mapper/DATA_VOL-home_dirs Internal-Storage 
+50. sudo udevadm trigger lsblk -o NAME,FSTYPE,LABEL,MOUNTPOINT
+51. Enable user home directories by first creating share of internal-storage. Do it via GUI Apps->Drive-Shares->create share home-dirs. Choose homes/ as relative-path (THIS IS IMPORTANT). 
+52. Get uuid of share: omv-rpc -u admin 'ShareMgmt' 'enumerateSharedFolders' |jq
+53. enable home dirs - replace uuid from above: omv-rpc -u admin 'UserMgmt' 'setSettings' '{"enable": true,"sharedfolderref": "UUID"}'
+54. Enable SMB service:  omv-rpc -u admin 'SMB' 'setSettings' '{ "enable": true, "workgroup": "WORKGROUP", "serverstring": "%h server", "loglevel": 0, "usesendfile": true, "aio": true, "timeserver": false, "winssupport": false, "winsserver": "", "homesenable": true, "homesbrowseable": true, "homesrecyclebin": true, "homesinheritacls": false, "homesinheritpermissions": false, "homesextraoptions": "force create mode = 0770\nforce directory mode = 0770", "netbios": false, "minprotocol": "SMB2", "extraoptions": "" }'
+55. Apply: omv-salt deploy run samba avahi 
+56. change session timeout to 5 minutes: omv-confdbadm update "conf.webadmin" '{"port": 81, "enablessl": false, "sslport": 443, "forcesslonly": false, "sslcertificateref": "", "timeout": 300}' omv-salt deploy run webgui 
+57. Install sqlite3 package for jellyfin. 
+58. apt install sqlite3. If failing enable all repos in raspi.list. 
+59. After installing comment the repos. 
+60. Delete any end0 interface as we have enabled predicatble network interface: FIND uuid: omv-rpc -u admin 'Homecloud' 'enumerateConfiguredDevicesWithStatus' |jq 
+61. Replace UUID: omv-rpc -u admin 'Network' 'deleteInterface' '{"uuid":"UUID"}' 
+62. Add cron jobs for updates and certificates.
+63. generate uuid /usr/sbin/omv-env get OMV_CONFIGOBJECT_NEW_UUID 
+64. use it : omv-rpc -u admin 'Cron' 'set' 'copy JSON TEXT from below'. Run this one at a time for each JSON
+
+#1 { "uuid": "COPY UUID FROM ABOVE", "enable": true, "execution": "daily", "sendemail": false, "comment": "Auto update for tailscale", "type": "userdefined", "minute": ["0"], "everynminute": false, "hour": ["0"], "everynhour": false, "month": [""], "dayofmonth": [""], "everyndayofmonth": false, "dayofweek": ["*"], "username": "root", "command": "/sbin/update-app.py tailscale" }
+
+#2 { "uuid": "COPY UUID FROM ABOVE", "enable": true, "execution": "daily", "sendemail": false, "comment": "tailscale certs", "type": "userdefined", "minute": ["47"], "everynminute": false, "hour": ["14"], "everynhour": false, "month": [""], "dayofmonth": [""], "everyndayofmonth": false, "dayofweek": ["*"], "username": "root", "command": "/usr/bin/python3 /sbin/renew_tailscale_certificate.py" }
+
+#3
+{ "uuid": "COPY UUID FROM ABOVE", "enable": true, "execution": "daily", "sendemail": false, "comment": "reclaim-space", "type": "userdefined", "minute": ["59"], "everynminute": false, "hour": ["15"], "everynhour": false, "month": [""], "dayofmonth": [""], "everyndayofmonth": false, "dayofweek": ["*"], "username": "root", "command": "/sbin/clear_docker_cache.py -f" }
+
+Verify: omv-rpc -u admin 'Cron' 'getList' '{"start":0,"limit":-1,"type":["userdefined"]}' |jq 
+
+65. Enable auto update for traefik: /sbin/app-auto-updates.py traefik enable
+
+66. Login to console using http://IP with admin user and password. It should take you to setup wizard. Follow the steps to configure.
