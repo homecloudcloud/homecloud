@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OMV Admin - App Links</title>
+    <link rel="icon" type="image/svg+xml" href="assets/logos/logo.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/logos/logo_180180.png">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+        .app-list {
+            margin-top: 20px;
+        }
+        .app-item {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+        }
+        .app-logo {
+            width: 32px;
+            height: 32px;
+            margin-right: 10px;
+            object-fit: contain;
+        }
+        .app-info {
+            flex: 1;
+        }
+        .app-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .app-link {
+            color: #0066cc;
+        }
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin-left: 10px;
+            border: 3px solid rgba(0,0,0,.1);
+            border-radius: 50%;
+            border-top-color: #333;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <h2>WebApp Links of Deployed Applications</h2>
+    <div id="loading">
+        Loading applications... <span class="spinner"></span>
+    </div>
+    <div id="app-list" class="app-list"></div>
+    <p id="error-msg" class="error" style="display: none;"></p>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+        const appListElement = document.getElementById('app-list');
+        const loadingElement = document.getElementById('loading');
+        const errorMsgElement = document.getElementById('error-msg');
+        
+        try {
+            const response = await fetch(`${window.location.origin}/forgot-password/get-app-links`);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            
+            const apps = await response.json();
+            
+            // Hide loading indicator
+            loadingElement.style.display = 'none';
+            
+            if (apps && apps.length > 0) {
+                // Create app list items
+                apps.forEach(app => {
+                    const appItem = document.createElement('div');
+                    appItem.className = 'app-item';
+                    
+                    // Create logo element
+                    const appLogo = document.createElement('img');
+                    appLogo.className = 'app-logo';
+                    
+                    // Set logo based on app name
+                    switch(app.app.toLowerCase()) {
+                        case 'joplin':
+                            appLogo.src = 'assets/logos/joplin.png';
+                            break;
+                        case 'immich':
+                            appLogo.src = 'assets/logos/immich.svg';
+                            break;
+                        case 'vaultwarden':
+                            appLogo.src = 'assets/logos/vaultwarden.svg';
+                            break;
+                        case 'jellyfin':
+                            appLogo.src = 'assets/logos/jellyfin.svg';
+                            break;
+                        case 'paperless-ngx':
+                            appLogo.src = 'assets/logos/paperless-ngx.svg';
+                            break;
+                        default:
+                            appLogo.src = 'assets/logos/default.svg';
+                    }
+                    appLogo.alt = app.app + ' logo';
+                    appLogo.onerror = function() {
+                        this.src = 'assets/logos/default.svg';
+                    };
+                    
+                    // Create info container
+                    const appInfo = document.createElement('div');
+                    appInfo.className = 'app-info';
+                    
+                    const appName = document.createElement('div');
+                    appName.className = 'app-name';
+                    appName.textContent = app.app;
+                    
+                    const appLink = document.createElement('a');
+                    appLink.className = 'app-link';
+                    appLink.href = app.webapp;
+                    appLink.textContent = app.webapp;
+                    appLink.target = '_blank';
+                    
+                    // Add elements to containers
+                    appInfo.appendChild(appName);
+                    appInfo.appendChild(appLink);
+                    
+                    appItem.appendChild(appLogo);
+                    appItem.appendChild(appInfo);
+                    appListElement.appendChild(appItem);
+                });
+            } else {
+                appListElement.innerHTML = '<p>No applications available.</p>';
+            }
+        } catch (error) {
+            console.error('Error fetching app links:', error);
+            loadingElement.style.display = 'none';
+            errorMsgElement.textContent = 'Failed to load application links. Please try again later.';
+            errorMsgElement.style.display = 'block';
+        }
+    });
+    </script>
+</body>
+</html>

@@ -81,6 +81,9 @@ def get_tailscale_fqdn():
                               capture_output=True, text=True)
         if result.returncode == 0:
             status_data = json.loads(result.stdout)
+            # Check BackendState first
+            if status_data.get('BackendState') != 'Running':
+                return None
             fqdn = status_data.get('Self', {}).get('DNSName', '').rstrip('.')
             if fqdn:
                 return fqdn

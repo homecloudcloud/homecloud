@@ -15,38 +15,56 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  */
-import { Component } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { marker as gettext } from '@ngneat/transloco-keys-manager/marker';
 import { ViewEncapsulation } from '@angular/core';
 //import { template } from 'lodash';
 import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
 import { DatatablePageConfig } from '~/app/core/components/intuition/models/datatable-page-config.type';
 import { BaseFormPageComponent } from '~/app/pages/base-page-component';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+
 
 @Component({
   template:`
-  <omv-intuition-form-page id="interface-main-form1" [config]="this.config2"></omv-intuition-form-page>
+  <div id="interface-main-form1">
+    <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
+  </div>
   <omv-intuition-datatable-page #page [config]="this.config"></omv-intuition-datatable-page>
   `,
+  selector: 'omv-interface-datatable-page', 
   styleUrls: ['./interface-main-page.component.scss'],
   encapsulation: ViewEncapsulation.None  // This will disable view encapsulation
 
 })
-export class InterfaceDatatablePageComponent extends BaseFormPageComponent {
+export class InterfaceDatatablePageComponent extends BaseFormPageComponent implements AfterViewInit {
+
+  public safeHtmlContent: SafeHtml;
+  
+  private htmlContent = `<h1>Network Interfaces Setup</h1>
+                <h2>Wired Network</h2>
+                <p>
+                  Simply plug a network cable into your Homecloud device from your router — it will automatically connect.
+                  You can check the connection status in the table below.
+                </p>
+                <h2>Wi-Fi</h2>
+                <p>
+                  To connect via Wi-Fi, press the <strong>Create</strong> button below, choose your Wi-Fi network (SSID), and enter the password.
+                </p>
+                <h2>Hotspot Mode</h2>
+                <p>
+                  If you're connected through Hotspot mode, press the <strong>Create</strong> button below to set up your Wi-Fi connection.
+                </p>
+                <p>
+                  <strong>Important:</strong> Hotspot mode will turn off and your current session will disconnect once Wi-Fi is configured.
+                  Please refer to the Homecloud display for instructions on how to reconnect.
+                </p>`;
 
   public config2: FormPageConfig = {
     fields: [
       {
         type: 'paragraph',
-        title: gettext('Wired Network should automatically get configured once you plug-in network cable connected to Router.')
-      },
-      {
-        type: 'paragraph',
-        title: gettext('To connect to Wi-Fi network press the create button, select your Wi-Fi SSID and enter password.')
-      },
-      {
-        type: 'paragraph',
-        title: gettext('To reset Wi-Fi configuration either use delete button below and re-create or start Hotspot mode by pressing Homecloud power button (located on device) 5 times.')
+        title: ''
       }
     ]
   };
@@ -281,14 +299,18 @@ export class InterfaceDatatablePageComponent extends BaseFormPageComponent {
         }
       }
       
-    ],
-
-    buttons:[
-      {template:'submit',
-        text:'Next: Tailscale configuration',
-        url:'/startconfiguration/tailscaleconfig'
-      }
-
     ]
+
+   
   };
+
+  constructor(private sanitizer: DomSanitizer) {
+    super();
+    // Sanitize the HTML content once during construction
+    this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);
+  }
+
+  ngAfterViewInit(): void {
+    // No need for manual DOM manipulation anymore
+  }
 }

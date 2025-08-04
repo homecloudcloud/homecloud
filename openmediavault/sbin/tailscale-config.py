@@ -8,7 +8,7 @@ import shutil
 
 def error_exit(message):
     print(f"ERROR: {message}")
-    sys.exit(1)
+    sys.exit(0)
 
 def validate_input(param_name, param_value):
     if any(char in param_value for char in ['\'', '"', '`']):

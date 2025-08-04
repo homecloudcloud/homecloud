@@ -18,19 +18,20 @@
 import { Component } from '@angular/core';
 import { marker as gettext } from '@ngneat/transloco-keys-manager/marker';
 import * as _ from 'lodash';
-import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
 import { BaseFormPageComponent } from '~/app/pages/base-page-component';
 import { ViewEncapsulation } from '@angular/core';
 import { DatatablePageConfig } from '~/app/core/components/intuition/models/datatable-page-config.type';
-//import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer,SafeHtml } from '@angular/platform-browser';
 import { RpcService } from '~/app/shared/services/rpc.service';
+
 
 
 @Component({
   selector:'omv-photos-backup-page', //Home cloud changes
-  //template: '<omv-intuition-form-page [config]="this.config"></omv-intuition-form-page>',
   template: `
-  <omv-intuition-form-page id="photos-backup-form1" [config]="this.config"></omv-intuition-form-page>
+  <div id="photos-backup-form1">
+    <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
+  </div>
   <omv-intuition-datatable-page id="photos-backup-data-form" [config]="this.config1"></omv-intuition-datatable-page>
 
   `,
@@ -41,39 +42,14 @@ import { RpcService } from '~/app/shared/services/rpc.service';
 export class AppsPhotosBackupComponent extends BaseFormPageComponent {
  
   private totalGb:number=0;
+  public safeHtmlContent: SafeHtml;
 
-  public config: FormPageConfig = {
-    request: {
-      service: 'Homecloud',
-      get: {
-        method: 'get_backup_size_immich'
-      }
-    },
-    fields: [
-      
-      {
-        type: 'paragraph',
-        title: gettext('Backup your Immich photos and videos to external USB disks plugged in to Homecloud')
-      },
-      {
-        type: 'paragraph',
-        title: gettext('Insert image immich-backup-1.png')
-      },
-      {
-        type: 'textInput',
-        name: 'total_gb',
-        label: gettext('Estimated Immich backup size in GB'),
-        hint: gettext('This is estimated free disk capacity required on external USB disk for completing backup'),
-        value: '',
-        readonly: true
-      }
-    ]
-  };
+  private htmlContent ='';
 
   public config1: DatatablePageConfig = {
   
     stateId: '66d9d3ca-2fee-11ea-8386-e3ebl1cd8f79',
-    autoReload: 10000,
+    autoReload: false,
     remoteSorting: true,
     remotePaging: true,
     sorters: [
@@ -185,12 +161,43 @@ export class AppsPhotosBackupComponent extends BaseFormPageComponent {
     this.rpcService.request('Homecloud', 'get_backup_size_immich', {}).subscribe((data: any) => {
       this.totalGb = Number(data.total_gb);  // Make sure totalGb is a number
       this.config1.actions[0].enabledConstraints.constraint[0].arg1 = this.totalGb; // Update the constraint with the totalGb value
-     
+      this.htmlContent= `
+            <div class="backup-container">
+              <h1 class="backup-heading">
+               🖴 Keep Your Data Safe with Backups
+              </h1>
+              <div class="backup-box">
+                <p class="icon-text">
+                ⚠️ It's a good idea to keep an extra copy of your data outside of <strong>Homecloud</strong>, just in case something goes wrong.
+                </p>
+                <p>
+                You can plug in a USB drive with enough free space to store your files. Homecloud will save a full backup to a folder called <code>homecloud-backups</code> on that drive.
+                </p>
+                <p class="icon-text">
+                🔄 Each time you run a backup, it makes a fresh full copy of your data. You can delete older backups anytime from the restore page.
+                </p>
+                <p class="icon-text">
+                🔓 Remember: backups are not encrypted. Make sure to keep your USB drive somewhere safe and private.
+                </p>
+                <p class="icon-text">
+                  📦 <strong class="backupSizeText">Estimated Immich backup size(in GB):</strong><span class="backupSize">${this.totalGb}</span>
+                </p>
+                <p class="icon-text">
+                  🖴 The table below shows the list of external disks currently connected and available for backup.
+                </p>                              
+              </div>
+            </div> 
+  `;
+
+
+  //Sanitize html
+   this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);
+    
     });
   }
   
   
- constructor(private rpcService: RpcService) {
+ constructor(private rpcService: RpcService,private sanitizer:DomSanitizer) {
     super();
 
  }

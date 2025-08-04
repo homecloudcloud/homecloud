@@ -1,7 +1,0 @@
-version: "1.0"
-type: navigation-item
-data:
-  path: "diagnostics.performance-statistics.network-interfaces"
-  text: _("Network Interfaces")
-  icon: network
-  url: "/diagnostics/performance-statistics/network-interfaces"

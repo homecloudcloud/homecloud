@@ -18,11 +18,11 @@
 import { Component } from '@angular/core';
 import { marker as gettext } from '@ngneat/transloco-keys-manager/marker';
 import * as _ from 'lodash';
-import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
+//import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
 import { BaseFormPageComponent } from '~/app/pages/base-page-component';
 import { ViewEncapsulation } from '@angular/core';
 import { DatatablePageConfig } from '~/app/core/components/intuition/models/datatable-page-config.type';
-//import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer,SafeHtml } from '@angular/platform-browser';
 import { RpcService } from '~/app/shared/services/rpc.service';
 
 @Component({
@@ -30,48 +30,27 @@ import { RpcService } from '~/app/shared/services/rpc.service';
   //template: '<omv-intuition-form-page [config]="this.config"></omv-intuition-form-page>',
   // <omv-intuition-form-page id="paperless-restore-form1" [config]="this.config"></omv-intuition-form-page>
   template: `
-  <omv-intuition-form-page id="paperless-restore-form1" [config]="this.config"></omv-intuition-form-page>
+  <div id="paperless-main-form1">
+    <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
+  </div>
   <omv-intuition-datatable-page id="paperless-restore-data-form" [config]="this.config1"></omv-intuition-datatable-page>
   `,
   styleUrls: ['./paperless-restore-page.component.scss'],
-  encapsulation: ViewEncapsulation.None  // This will disable view encapsulation
+  encapsulation: ViewEncapsulation.None  // This will disable view encapsulation  
 })
 
 export class AppsPaperlessRestoreComponent extends BaseFormPageComponent {
 
   private freeSpace:number=0.0;
 
-  public config: FormPageConfig = {
-    request: {
-      service: 'Homecloud',
-      get: {
-        method: 'get_free_space_internaldisk'
-
-      }
-    },
-    fields: [
-      
-      {
-        type: 'paragraph',
-        title: gettext('Restore backup of stored Notes data from external USB disks. Plug-in external disks that contain Notes backup')
-      },
-      {
-        type: 'textInput',
-        name: 'free_space',
-        label: gettext('Homecloud free space available in GB'),
-        hint: gettext('Available free space should be greater than backup size to complete restore.'),
-        value: '',
-        readonly: true
-      }
-    ]
-  };
-
-
+  public safeHtmlContent: SafeHtml;
+  
+  private htmlContent ='';
 
   public config1: DatatablePageConfig = {
   
     stateId: '32z2n8aa-8ujg-13ea-0324-s4epl2ad2f79',
-    autoReload: 100000,
+    autoReload: false,
     remoteSorting: true,
     remotePaging: true,
     sorters: [
@@ -237,12 +216,53 @@ export class AppsPaperlessRestoreComponent extends BaseFormPageComponent {
     this.rpcService.request('Homecloud', 'get_free_space_internaldisk', {}).subscribe((data: any) => {
       this.freeSpace = Number(data.free_space);  // Make sure totalGb is a number
       this.config1.actions[0].enabledConstraints.constraint[0].arg1 = this.freeSpace; // Update the constraint with the totalGb value
-     
+      this.htmlContent= `
+            <div class="restore-container">
+              <h1 class="restore-heading">
+                ♻️ Restore Your Data from Backup
+              </h1>
+
+              <div class="restore-box">
+                <p class="icon-text">
+                  🖴 To get your data back from an earlier backup, plug in your USB drives to ☁️ Homecloud.
+                </p>
+
+                <p>
+                  If the drive contains valid backups for this app, you'll see them listed in the table below.
+                </p>
+
+                <p class="icon-text">
+                  ☁️ Homecloud needs enough free space to restore. The <strong>Restore</strong> button will stay disabled until there's enough space available.
+                </p>
+
+                <p class="icon-text warning">
+                  ⚠️ <strong>Warning:</strong> Restoring will completely erase your current app setup — including all users and their data. Everything will be replaced with what's in the backup, including the app version.
+                </p>
+
+                <p>
+                  It's recommended to back up your current app setup before starting the restore. This ensures your existing data is preserved in case the restore fails.
+                </p>
+                <p class="icon-text">
+                  📦 <strong class="freespaceSizeText">Homecloud free space available(in GB):</strong><span class="freespaceSize">${this.freeSpace}</span>
+                </p>
+
+                <p class="info-text">
+                  The table below shows all backups found on connected USB drives.
+                </p>
+              </div>
+            </div>
+
+
+  `;
+
+
+      //Sanitize html
+      this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);
       
     });
   }
   
- constructor(private rpcService: RpcService) {
+ constructor(private rpcService: RpcService,private sanitizer:DomSanitizer) {
     super();
 
  }

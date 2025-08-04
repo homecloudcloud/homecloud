@@ -71,7 +71,7 @@ export class AppsJoplinRestoreComponent extends BaseFormPageComponent {
   public config1: DatatablePageConfig = {
   
     stateId: '32z2n8aa-5thj-11ea-0624-s4eml1sd8f79',
-    autoReload: 100000,
+    autoReload: false,
     remoteSorting: true,
     remotePaging: true,
     sorters: [

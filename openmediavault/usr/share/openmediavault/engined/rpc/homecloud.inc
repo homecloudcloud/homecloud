@@ -70,6 +70,7 @@ class Homecloud extends \OMV\Rpc\ServiceAbstract {
         $this->registerMethod("paperless_backup_execute");
         $this->registerMethod("restart_paperless");
         $this->registerMethod("reset_paperless");
+        $this->registerMethod("paperless_getusers");
         $this->registerMethod("getJoplinServiceStatus");
         $this->registerMethod("joplin_get_latest_version");
         $this->registerMethod("joplin_update_version");
@@ -78,11 +79,15 @@ class Homecloud extends \OMV\Rpc\ServiceAbstract {
         $this->registerMethod("get_backup_size_joplin");
         $this->registerMethod("joplin_backup_execute");
         $this->registerMethod("restart_joplin");
+        $this->registerMethod("reset_joplin");
         $this->registerMethod("getJellyfinServiceStatus");
         $this->registerMethod("jellyfin_get_latest_version");
         $this->registerMethod("jellyfin_update_version");
         $this->registerMethod("jellyfin_check_version");
         $this->registerMethod("jellyfin_remove");
+        $this->registerMethod("reset_jellyfin");
+        $this->registerMethod("jellyfin_backup_execute");
+        $this->registerMethod("get_backup_size_jellyfin");
         $this->registerMethod("restore_find_backups");
         $this->registerMethod("restore_find_backupsBg");
         $this->registerMethod("get_free_space_internaldisk");
@@ -90,6 +95,7 @@ class Homecloud extends \OMV\Rpc\ServiceAbstract {
         $this->registerMethod("vaultwarden_restore_execute");
         $this->registerMethod("joplin_restore_execute");
         $this->registerMethod("paperless_restore_execute");
+        $this->registerMethod("jellyfin_restore_execute");
         $this->registerMethod("get_backup_size_drive");
         $this->registerMethod("drive_backup_execute");
         $this->registerMethod("restart_jellyfin");
@@ -103,6 +109,7 @@ class Homecloud extends \OMV\Rpc\ServiceAbstract {
         $this->registerMethod("checkNetworkInterfaceStatusForWizard");
         $this->registerMethod("checkVpnStatusForWizard");
         $this->registerMethod("checkNotificationEmailForWizard");
+        $this->registerMethod("checkInternetStatusForWizard");
         $this->registerMethod("checkDriveUserSetupForWizard");
         $this->registerMethod("checkPhotosAppDeployForWizard");
         $this->registerMethod("checkDocsAppDeployForWizard");
@@ -145,70 +152,317 @@ class Homecloud extends \OMV\Rpc\ServiceAbstract {
         $this->registerMethod("getInterface");
         $this->registerMethod("getHotspotStatus");
         $this->registerMethod("getSysInfo");
+        $this->registerMethod("check_app_version");
+        $this->registerMethod("getTraefikServiceStatus");
+        $this->registerMethod("traefik_check_version");
+        $this->registerMethod("traefik_get_latest_version");
+        $this->registerMethod("joplin_getusers");
+        $this->registerMethod("getHostname");
+        $this->registerMethod("immich_delete_thumbnails");
     }
 
 
-        /**
-     * Get the status of the WiFi hotspot.
+
+public function jellyfin_backup_execute($params, $context) {
+    $output_err = "";
+    $cmdArgs = [];
+
+    // Validate the RPC caller context.
+    $this->validateMethodContext($context, [
+        "role" => OMV_ROLE_ADMINISTRATOR
+    ]);
+
+    $this->validateMethodParams($params, "rpc.homecloud.joplin_backup_execute");
+
+    // Get the username who invoked this function
+    $username = $context['username'];
+    
+    // Get the primary group of the user
+    $userInfo = posix_getpwnam($username);
+    if ($userInfo === false) {
+        throw new \OMV\Exception(
+            "Failed to get user information for '{$username}'"
+        );
+    }
+    // Get group name from group ID
+    $groupInfo = posix_getgrgid($userInfo['gid']);
+    if ($groupInfo === false) {
+        throw new \OMV\Exception(
+            "Failed to get group information for user '{$username}'"
+        );
+    }
+    $groupname = $groupInfo['name'];
+
+return $this->execBgProc(function($bgStatusFilename, $bgOutputFilename)
+    use ($params,$username,$groupname) {
+    // Create Process with mount path, username, and group name
+    $output_err="";
+    $cmdArgs = [];
+    $cmdArgs[]='echo "starting backup....";';
+    $cmdArgs[]='export MOUNT_PATH='.escapeshellarg(trim($params["mount_path"])).';';
+    $cmdArgs[]='export USER='.escapeshellarg(trim($username)).';';
+    $cmdArgs[]='export GROUP='.escapeshellarg(trim($groupname)).';';
+    $cmdArgs[]='/sbin/jellyfin_backup_execute.sh $MOUNT_PATH $USER $GROUP';
+    $cmd = new \OMV\System\Process("sudo", $cmdArgs);
+    $cmd->setEnv("SHELL", "/bin/sh");
+    $cmd->setRedirect2to1();
+    if (0 !== ($exitStatus = $this->exec($cmd, $output,
+        $bgOutputFilename))) {
+        throw new \OMV\ExecException($cmd,$output, $exitStatus);
+        }
+
+        return $output;
+      });
+}
+
+public function getHostname($params, $context) {
+    // Validate the RPC caller context.
+    $this->validateMethodContext($context, [
+        "role" => OMV_ROLE_ADMINISTRATOR
+    ]);
+    
+    $context = stream_context_create([
+        "http" => [
+            "ignore_errors" => true,
+            "timeout" => 10
+        ],
+        "ssl" => [
+            "verify_peer" => false,
+            "verify_peer_name" => false
+        ]
+    ]);
+    
+    $response = file_get_contents("https://127.0.0.1:5000/get_hostname", false, $context);
+    $data = json_decode($response, true);
+    
+    return ["hostname" => $data["hostname"]];
+}
+
+
+public function getHotspotStatus($params, $context) {
+    // Validate the RPC caller context.
+    $this->validateMethodContext($context, [
+        "role" => OMV_ROLE_ADMINISTRATOR
+    ]);
+    
+    $result = [
+        "active" => "Inactive",
+        "ssid" => "",
+        "dnsmasq_running" => false,
+        "hostapd_running" => false,
+        "wlan0_ip" => "",
+        "expected_ip" => ""
+    ];
+    
+    try {
+        // Check if dnsmasq service is running
+        $cmd = new \OMV\System\Process("systemctl", ["is-active", "dnsmasq.service"]);
+        try {
+            $dnsmasq_output = [];
+            $cmd->execute($dnsmasq_output);
+            $dnsmasq_status = implode("", $dnsmasq_output);
+            $result["dnsmasq_running"] = (trim($dnsmasq_status) === "active");
+        } catch (\Exception $e) {
+            $result["dnsmasq_running"] = false;
+        }
+        
+        // Check if hostapd service is running
+        $cmd = new \OMV\System\Process("systemctl", ["is-active", "hostapd.service"]);
+        try {
+            $hostapd_output = [];
+            $cmd->execute($hostapd_output);
+            $hostapd_status = implode("", $hostapd_output);
+            $result["hostapd_running"] = (trim($hostapd_status) === "active");
+        } catch (\Exception $e) {
+            $result["hostapd_running"] = false;
+        }
+        
+        // Get expected IP from dnsmasq.conf
+        $expected_ip = "";
+        if (file_exists('/etc/dnsmasq.conf')) {
+            $dnsmasq_content = file_get_contents('/etc/dnsmasq.conf');
+            if (preg_match('/listen-address=.*,([0-9.]+)/', $dnsmasq_content, $matches)) {
+                $expected_ip = $matches[1];
+                $result["expected_ip"] = $expected_ip;
+            }
+        }
+        
+        // Check wlan0 IP address
+        $cmd = new \OMV\System\Process("ip", ["addr", "show", "wlan0"]);
+        try {
+            $ip_output = [];
+            $cmd->execute($ip_output);
+            $ip_output_str = implode("\n", $ip_output);
+            if (preg_match('/inet ([0-9.]+)\//', $ip_output_str, $matches)) {
+                $result["wlan0_ip"] = $matches[1];
+            }
+        } catch (\Exception $e) {
+            // wlan0 interface might not exist or have IP
+        }
+        
+        // Check iwconfig for Master mode and get SSID
+        $cmd = new \OMV\System\Process("iwconfig", ["wlan0"]);
+        try {
+            $iwconfig_output = [];
+            $cmd->execute($iwconfig_output);
+            $iwconfig_output_str = implode("\n", $iwconfig_output);
+            
+            // Get SSID from hostapd configuration
+            if (file_exists('/etc/hostapd/hostapd.conf')) {
+                $hostapd_content = file_get_contents('/etc/hostapd/hostapd.conf');
+                if (preg_match('/ssid=(.+)/', $hostapd_content, $matches)) {
+                    $result["ssid"] = trim($matches[1]);
+                }
+            }
+            
+            // Determine if hotspot is active based on all conditions
+            $ip_matches = ($result["wlan0_ip"] === $expected_ip && !empty($expected_ip));
+            $services_running = ($result["dnsmasq_running"] && $result["hostapd_running"]);
+            $master_mode = (strpos($iwconfig_output_str, 'Mode:Master') !== false);
+            
+            // Debug: Log the status for troubleshooting
+            error_log("Hotspot debug - dnsmasq: " . ($result["dnsmasq_running"] ? "true" : "false") . 
+                     ", hostapd: " . ($result["hostapd_running"] ? "true" : "false") . 
+                     ", IP match: " . ($ip_matches ? "true" : "false") . 
+                     ", Master mode: " . ($master_mode ? "true" : "false"));
+            
+            if ($services_running && $ip_matches && $master_mode) {
+                $result["active"] = "Active";
+            }
+            
+        } catch (\Exception $e) {
+            // iwconfig might fail if wlan0 doesn't exist
+            error_log("iwconfig error: " . $e->getMessage());
+        }
+        
+        return $result;
+        
+    } catch (\Exception $e) {
+        error_log("Error checking hotspot status: " . $e->getMessage());
+        return $result;
+    }
+}
+
+
+    
+    /**
+     * Delete Immich thumbnails to free up space
      * @param params The method parameters.
      * @param context The context of the caller.
-     * @return Array containing the hotspot status information.
+     * @return Array containing status information.
      */
-    public function getHotspotStatus($params, $context) {
+    
+    public function immich_delete_thumbnails($params, $context) {
         // Validate the RPC caller context.
         $this->validateMethodContext($context, [
             "role" => OMV_ROLE_ADMINISTRATOR
         ]);
         
         $result = [
-            "active" => "Inactive",
-            "ssid" => "",
-            "dnsmasq_running" => false
+            "success" => false,
+            "space_freed" => 0,
+            "message" => ""
         ];
         
         try {
-            // Check if dnsmasq service is running
-            $cmd = new \OMV\System\Process("systemctl", ["is-active", "dnsmasq.service"]);
-            try {
-                $cmd->execute($output);
-                $dnsmasq_status = implode("", $output);
-                $result["dnsmasq_running"] = (trim($dnsmasq_status) === "active");
-            } catch (\Exception $e) {
-                // If command fails, dnsmasq is not running
-                $result["dnsmasq_running"] = false;
+            // Check if Immich .env file exists
+            $env_file = '/etc/immich/.env';
+            if (!file_exists($env_file)) {
+                $result["message"] = "Immich not deployed or .env file missing";
+                return $result;
             }
             
-            // Run iwconfig to check if wlan0 is in Master mode
-            $cmd = new \OMV\System\Process("iwconfig", ["wlan0"]);
+            // Read the .env file
+            $env_content = file_get_contents($env_file);
+            $upload_location = null;
+            
+            // Find UPLOAD_LOCATION in the file
+            if (preg_match('/UPLOAD_LOCATION=([^\n]+)/', $env_content, $matches)) {
+                $upload_location = trim($matches[1]);
+            }
+            
+            if (empty($upload_location)) {
+                $result["message"] = "UPLOAD_LOCATION not found in Immich configuration";
+                return $result;
+            }
+            
+            // Append /thumbs to the upload location
+            $thumbs_dir = rtrim($upload_location, '/') . '/thumbs';
+            
+            // Check if the directory exists
+            if (!is_dir($thumbs_dir)) {
+                $result["message"] = "Thumbnails directory not found: " . $thumbs_dir;
+                return $result;
+            }
+            
+            // Get the size of the thumbnails directory
+            $cmd = new \OMV\System\Process("du", ["-sb", $thumbs_dir]);
             $cmd->execute($output);
-            $iwconfig_output = implode("\n", $output);
+            $size_output = implode("", $output);
+            $size_parts = explode("\t", $size_output);
+            $space_used = intval($size_parts[0]);
             
-            // Check if the interface is in Master mode (hotspot/AP mode)
-            if (strpos($iwconfig_output, 'Mode:Master') !== false) {
-                $result["active"] = "Active";
-                
-                // Get the SSID from hostapd configuration
-                $hostapd_conf_file = '/etc/hostapd/hostapd.conf';
-                if (file_exists($hostapd_conf_file)) {
-                    $hostapd_content = file_get_contents($hostapd_conf_file);
-                    $lines = explode("\n", $hostapd_content);
-                    
-                    foreach ($lines as $line) {
-                        if (strpos($line, 'ssid=') === 0) {
-                            $result["ssid"] = trim(substr($line, 5));
-                            break;
-                        }
-                    }
-                }
-            }
+            // Delete the contents of the thumbnails directory
+            $cmd = new \OMV\System\Process("find", [$thumbs_dir, "-type", "f", "-delete"]);
+            $cmd->execute();
+            
+            // Also delete subdirectories but keep the main directory
+            $cmd = new \OMV\System\Process("find", [$thumbs_dir, "-mindepth", "1", "-type", "d", "-exec", "rm", "-rf", "{}", "\\;"]);
+            $cmd->execute();
+            
+            // Set success result
+            $result["success"] = true;
+            $result["space_freed"] = $space_used;
+            $result["message"] = "Successfully deleted thumbnails, freed " . 
+                $this->formatBytes($space_used);
+            
             return $result;
         } catch (\Exception $e) {
-            // Log error but return default result
-            error_log("Error checking hotspot status: " . $e->getMessage());
+            $result["message"] = "Error deleting thumbnails: " . $e->getMessage();
             return $result;
         }
     }
     
+    /**
+     * Helper function to format bytes into human-readable format
+     */
+    private function formatBytes($bytes, $precision = 2) {
+        $units = ['B', 'KB', 'MB', 'GB', 'TB'];
+        
+        $bytes = max($bytes, 0);
+        $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
+        $pow = min($pow, count($units) - 1);
+        
+        $bytes /= pow(1024, $pow);
+        
+        return round($bytes, $precision) . ' ' . $units[$pow];
+    }
+    
+
+    public function get_backup_size_jellyfin($params, $context) {
+        
+	    $output_err="";
+		$cmdArgs = [];
+
+        // Validate the RPC caller context.
+		$this->validateMethodContext($context, [
+			"role" => OMV_ROLE_ADMINISTRATOR
+		]);
+
+        // Validate the parameters of the RPC service method.
+		//$this->validateMethodParams($params, "rpc.homecloud.getImmichServiceStatus");
+
+        // Get the output from the tatus script
+        
+        $cmd = new \OMV\System\Process("/sbin/jellyfin_backup_calculate_size.sh");
+        $cmd->setEnv("SHELL", "/bin/sh");
+        //$cmd->setRedirect2to1();
+        $cmd->execute($output);
+        // Since the script outputs JSON directly, just return the first line
+        return json_decode($output[0], true);
+    }
+
+
     /**
      * Get system information including warranty details.
      * @param params The method parameters.
@@ -226,10 +480,35 @@ class Homecloud extends \OMV\Rpc\ServiceAbstract {
             "purchase_date" => "",
             "storage" => "",
             "warranty_status" => "Unknown",
-            "hardware_version" => ""
+            "hardware_version" => "",
+            "total_memory" => "",
+            "cpu_cores" => "",
+            "software_version" => ""
         ];
         
         try {
+            // Get total memory
+            $meminfo = file_get_contents('/proc/meminfo');
+            if (preg_match('/MemTotal:\s+(\d+) kB/', $meminfo, $matches)) {
+                $total_memory_kb = $matches[1];
+                $total_memory_gb = round($total_memory_kb / 1024 / 1024, 1);
+                $result["total_memory"] = $total_memory_gb . " GB";
+            }
+            
+            // Get CPU cores
+            $cpu_info = file_get_contents('/proc/cpuinfo');
+            $cpu_cores = substr_count($cpu_info, 'processor');
+            $result["cpu_cores"] = (string)$cpu_cores;
+            
+            // Get software versions from both packages
+            $omv_version = shell_exec("dpkg-query -W --showformat='\${Version}' openmediavault 2>/dev/null");
+            $homecloud_version = shell_exec("dpkg-query -W --showformat='\${Version}' homecloud 2>/dev/null");
+            
+            $omv_ver = ($omv_version !== null && trim($omv_version) !== '') ? trim($omv_version) : "Unknown";
+            $homecloud_ver = ($homecloud_version !== null && trim($homecloud_version) !== '') ? trim($homecloud_version) : "Unknown";
+            
+            $result["software_version"] = $omv_ver . ":" . $homecloud_ver;
+            
             // Check if warranty file exists
             $warranty_file = '/boot/warranty.json';
             if (file_exists($warranty_file)) {
@@ -275,6 +554,18 @@ class Homecloud extends \OMV\Rpc\ServiceAbstract {
         }
     }
 
+    public function check_app_version($params, $context) {
+        $this->validateMethodContext($context, ["role" => OMV_ROLE_ADMINISTRATOR]);
+        $this->validateMethodParams($params, "rpc.homecloud.check_app_version");
+
+        $cmd = new \OMV\System\Process("/sbin/app_versions.py ", [$params['appname']]);
+        $cmd->setEnv("SHELL", "/bin/sh");
+        $cmd->execute($output);
+        // Since the script outputs JSON directly, just return the first line
+        return json_decode($output[0], true);
+    }
+
+    
    /**
      * Returns disks without filesystem and not part of any volumegroups.
      */
@@ -493,7 +784,11 @@ class Homecloud extends \OMV\Rpc\ServiceAbstract {
         // Validate the network interface specific parameters of the
         // RPC service method.
         $this->validateMethodParams($params, "rpc.network.setwirelessiface");
-        
+        // Delete hotspot flag file if it exists
+        $hotspot_flag_file = '/var/lib/hotspot_active';
+        if (file_exists($hotspot_flag_file)) {
+            unlink($hotspot_flag_file);
+        }
         // Set the configuration object.
         $result = $this->setInterfaceConfig($params, [
             "type" => "wifi",
@@ -529,6 +824,7 @@ class Homecloud extends \OMV\Rpc\ServiceAbstract {
             error_log("Error stopping hotspot services: " . $e->getMessage());
         }
         // Apply changes using omv-salt
+        
         try {
             $cmd = new \OMV\System\Process("omv-salt", ["deploy", "run", "systemd-networkd"]);
             $cmd->execute();
@@ -2249,11 +2545,16 @@ class Homecloud extends \OMV\Rpc\ServiceAbstract {
 	}
 
 
+
+
 	/**
-	 * Set all the passwords of the current context user.
+	 * Set the password of the current context user.
+	 * @param params An array containing the following fields:
+	 *   \em password The new password.
+	 * @param context The context of the caller.
+	 * @return void
 	 */
 	function setPasswordByContextAll($params, $context) {
-
 		// Validate the RPC caller context.
 		$this->validateMethodContext($context, [
 			"role" => OMV_ROLE_EVERYONE
@@ -2263,10 +2564,42 @@ class Homecloud extends \OMV\Rpc\ServiceAbstract {
 			"rpc.usermgmt.setpasswordbycontext");
 		$user = new \OMV\System\User($context['username']);
 		$user->assertExists();
-		$this->setPasswordByContextSmb($user,$params['password']);
-		$this->setPasswordByContextOmv($user,$params['password']);
-	}
+        
+        $object = $this->callMethod("getUser", [
+			"name" => $context['username']
+		], $this->getAdminContext());
+		// Make sure the user is allowed to modify their account.
+		if (TRUE === $object['disallowusermod']) {
+			throw new \OMV\Exception(
+				"Unauthorized attempt to modify the user account '%s'",
+				$object['name']);
+		}
+        
+		$user->changePassword($params['password']);
+        $this->setPasswordByContextSmb($user->getName(),$params['password']);
 
+		// Notify configuration changes if the given user exists in the
+		// database. System users like 'admin' are ignored.
+		$db = \OMV\Config\Database::getInstance();
+		$filter = [
+			"operator" => "stringEquals",
+			"arg0" => "name",
+			"arg1" => $user->getName()
+		];
+		if (TRUE === $db->exists("conf.system.usermngmnt.user", $filter)) {
+			$object = $db->getByFilter("conf.system.usermngmnt.user",
+				$filter, 1);
+			// Append some more information to the notification object.
+			$objectAssoc = array_merge($object->getAssoc(), [
+				"password" => $params['password']
+			]);
+			// Notify configuration changes.
+			$dispatcher = \OMV\Engine\Notify\Dispatcher::getInstance();
+			$dispatcher->notify(OMV_NOTIFY_MODIFY,
+				"org.openmediavault.conf.system.usermngmnt.user",
+				$objectAssoc, $object->getAssoc());
+		}
+	}
 
 	function setPasswordByContextSmb($user, $password) {
 	    //$name = is_array($user) ? $user['name'] : $user->getName();
@@ -2869,7 +3202,7 @@ class Homecloud extends \OMV\Rpc\ServiceAbstract {
             }
             
             // For wlan0 and end0, state should be false if address is blank
-            if ($devv === 'wlan0' || $devv === 'end0') {
+            if ($devv === 'wlan0' || $devv === 'end0' || $devv === 'eth0') {
                 if (!$hasValidIpv4) {
                     $object['state'] = false;
                 }
@@ -3210,13 +3543,33 @@ function enumerateConfiguredDevicesWithStatus($params, $context) {
 
         //Call Flags to set last completed step
         $flags =  new Flags();
-        $params = ['lastCompletedStepName' => 'network'];
+        $params = ['lastCompletedStepName' => 'networkInterface'];
         $flags->saveLastCompletedStep($params, $context);
 
         
         // Return an array with a success status
         
         return "Network is connected";
+    }
+	function checkInternetStatusForWizard($params, $context) {
+		 // Validate the RPC caller context.
+         $this->validateMethodContext($context, [
+	        "role" => OMV_ROLE_ADMINISTRATOR
+	    ]);
+		$result = $this->callMethod("enumeratePhysicalNetworkDevices", NULL, $context);
+        $internetConnected = false;
+       
+       
+        
+        foreach ($result as $device) {
+            if ($device['type'] === 'internet' && $device['state'] === true) {
+                $internetConnected = true;
+            }
+           
+        }
+        
+        $result['internetConnected']=$internetConnected;
+        return $result;
     }
 
     public function checkVpnStatusForWizard($params, $context) {
@@ -3245,7 +3598,7 @@ function enumerateConfiguredDevicesWithStatus($params, $context) {
 
         //Call Flags to set last completed step
         $flags =  new Flags();
-        $params = ['lastCompletedStepName' => 'vpn'];
+        $params = ['lastCompletedStepName' => 'vpnConfig'];
         $flags->saveLastCompletedStep($params, $context);
 
         
@@ -3297,16 +3650,16 @@ function enumerateConfiguredDevicesWithStatus($params, $context) {
         if(isset($result)){
             if(!$result["total"] > 0 ){
                 throw new \OMV\Exception(
-                    sprintf("No Users created for drive. Please create atleast one user: %s", json_encode($result)));
+                    sprintf("No Users created for drive. Please create atleast one user."));
             }
         }
         else{
             throw new \OMV\Exception(
-                sprintf("No Users created for drive. Please create atleast one user: %s", json_encode($result)));
+                sprintf("No Users created for drive. Please create atleast one user."));
         }
          //Call Flags to set last completed step
          $flags =  new Flags();
-         $params = ['lastCompletedStepName' => 'appsDrive'];
+         $params = ['lastCompletedStepName' => 'appsDriveUsers'];
          $flags->saveLastCompletedStep($params, $context);
  
          
@@ -3324,14 +3677,14 @@ function enumerateConfiguredDevicesWithStatus($params, $context) {
         
         $result=$this->getImmichServiceStatus($params, $context);
         if(isset($result)){
-            if(!$result["status"] === "Not deployed" ){
+            if($result["status"] === "Not deployed" ){
                 throw new \OMV\Exception(
-                    sprintf("Photos app not deployed. Please deploy it again: %s", json_encode($result)));
+                    sprintf("Photos app not deployed. Please deploy it again"));
             }
         }
         else{
             throw new \OMV\Exception(
-                sprintf("Photos app not deployed. Please deploy it again: %s", json_encode($result)));
+                sprintf("Photos app not deployed. Please deploy it again."));
         }
          //Call Flags to set last completed step
          $flags =  new Flags();
@@ -3353,14 +3706,14 @@ function enumerateConfiguredDevicesWithStatus($params, $context) {
         
         $result=$this->getPaperlessServiceStatus($params, $context);
         if(isset($result)){
-            if(!$result["status"] === "Not deployed" ){
+            if($result["status"] === "Not deployed" ){
                 throw new \OMV\Exception(
-                    sprintf("Documents app not deployed. Please deploy it again: %s", json_encode($result)));
+                    sprintf("Documents app not deployed. Please deploy it again."));
             }
         }
         else{
             throw new \OMV\Exception(
-                sprintf("Documents app not deployed. Please deploy it again: %s", json_encode($result)));
+                sprintf("Documents app not deployed. Please deploy it again."));
         }
          //Call Flags to set last completed step
          $flags =  new Flags();
@@ -3382,14 +3735,14 @@ function enumerateConfiguredDevicesWithStatus($params, $context) {
         
         $result=$this->getJoplinServiceStatus($params, $context);
         if(isset($result)){
-            if(!$result["status"] === "Not deployed" ){
+            if($result["status"] === "Not deployed" ){
                 throw new \OMV\Exception(
-                    sprintf("Notes app not deployed. Please deploy it again: %s", json_encode($result)));
+                    sprintf("Notes app not deployed. Please deploy it again."));
             }
         }
         else{
             throw new \OMV\Exception(
-                sprintf("Notes app not deployed. Please deploy it again: %s", json_encode($result)));
+                sprintf("Notes app not deployed. Please deploy it again."));
         }
          //Call Flags to set last completed step
          $flags =  new Flags();
@@ -3411,14 +3764,14 @@ function enumerateConfiguredDevicesWithStatus($params, $context) {
         
         $result=$this->getVaultwardenServiceStatus($params, $context);
         if(isset($result)){
-            if(!$result["status"] === "Not deployed" ){
+            if($result["status"] === "Not deployed" ){
                 throw new \OMV\Exception(
-                    sprintf("Password manager app not deployed. Please deploy it again: %s", json_encode($result)));
+                    sprintf("Password manager app not deployed. Please deploy it again."));
             }
         }
         else{
             throw new \OMV\Exception(
-                sprintf("Password manager app not deployed. Please deploy it again: %s", json_encode($result)));
+                sprintf("Password manager app not deployed. Please deploy it again."));
         }
          //Call Flags to set last completed step
          $flags =  new Flags();
@@ -3440,14 +3793,14 @@ function enumerateConfiguredDevicesWithStatus($params, $context) {
         
         $result=$this->getJellyfinServiceStatus($params, $context);
         if(isset($result)){
-            if(!$result["status"] === "Not deployed" ){
+            if($result["status"] === "Not deployed" ){
                 throw new \OMV\Exception(
-                    sprintf("Media app not deployed. Please deploy it again: %s", json_encode($result)));
+                    sprintf("Media app not deployed. Please deploy it again."));
             }
         }
         else{
             throw new \OMV\Exception(
-                sprintf("Media app not deployed. Please deploy it again: %s", json_encode($result)));
+                sprintf("Media app not deployed. Please deploy it again."));
         }
          //Call Flags to set last completed step
          $flags =  new Flags();
@@ -3716,6 +4069,25 @@ function enumerateConfiguredDevicesWithStatus($params, $context) {
         return json_decode($output[0], true);
     }
 
+    public function traefik_get_latest_version($params, $context) {
+        
+	    $output_err="";
+		$cmdArgs = [];
+
+        // Validate the RPC caller context.
+		$this->validateMethodContext($context, [
+			"role" => OMV_ROLE_ADMINISTRATOR
+		]);
+
+        // Get the output from the tailscale status script
+        
+        $cmd = new \OMV\System\Process("/sbin/check_latest_traefik_version.py");
+        $cmd->setEnv("SHELL", "/bin/sh");
+        //$cmd->setRedirect2to1();
+        $cmd->execute($output);
+        // Since the script outputs JSON directly, just return the first line
+        return json_decode($output[0], true);
+    }
 
     public function immich_check_version($params, $context) {
 	    $output_err="";
@@ -3752,6 +4124,21 @@ function enumerateConfiguredDevicesWithStatus($params, $context) {
         return json_decode($output[0], true);
     }
 
+    public function traefik_check_version($params, $context) {
+	    $output_err="";
+		$cmdArgs = [];
+        // Validate the RPC caller context.
+		$this->validateMethodContext($context, [
+			"role" => OMV_ROLE_ADMINISTRATOR
+		]);
+        // Get the output from the tailscale status script
+        $cmd = new \OMV\System\Process("/sbin/check_traefik_version.py");
+        $cmd->setEnv("SHELL", "/bin/sh");
+        //$cmd->setRedirect2to1();
+        $cmd->execute($output);
+        // Since the script outputs JSON directly, just return the first line
+        return json_decode($output[0], true);
+    }
 
     public function joplin_check_version($params, $context) {
 	    $output_err="";
@@ -3777,7 +4164,7 @@ function enumerateConfiguredDevicesWithStatus($params, $context) {
 			"role" => OMV_ROLE_ADMINISTRATOR
 		]);
         // Get the output from the tailscale status script
-        $cmd = new \OMV\System\Process("/sbin/tailscale_update.py --version");
+        $cmd = new \OMV\System\Process("/sbin/tailscale_ver_update.py --version");
         $cmd->setEnv("SHELL", "/bin/sh");
         //$cmd->setRedirect2to1();
         $cmd->execute($output);
@@ -3880,6 +4267,34 @@ function enumerateConfiguredDevicesWithStatus($params, $context) {
     }
 
 
+    public function paperless_getusers($params, $context) {
+        // Validate the RPC caller context.
+        $this->validateMethodContext($context, [
+            "role" => OMV_ROLE_ADMINISTRATOR
+        ]);
+        
+        $cmd = new \OMV\System\Process("/sbin/paperless_getusers.py");
+        $cmd->setEnv("SHELL", "/bin/sh");
+        //$cmd->setRedirect2to1();
+        $cmd->execute($output);
+        // Since the script outputs JSON directly, just return the first line
+        return json_decode($output[0], true);
+    }
+
+    public function joplin_getusers($params, $context) {
+        // Validate the RPC caller context.
+        $this->validateMethodContext($context, [
+            "role" => OMV_ROLE_ADMINISTRATOR
+        ]);
+        
+        $cmd = new \OMV\System\Process("/sbin/joplin_getusers.py");
+        $cmd->setEnv("SHELL", "/bin/sh");
+        //$cmd->setRedirect2to1();
+        $cmd->execute($output);
+        // Since the script outputs JSON directly, just return the first line
+        return json_decode($output[0], true);
+    }
+    
     public function paperless_update_version($params, $context) {
          // Validate the RPC caller context.
 		$this->validateMethodContext($context, [
@@ -3955,7 +4370,7 @@ function enumerateConfiguredDevicesWithStatus($params, $context) {
        $cmdArgs = [];
        $cmdArgs[]='echo "Starting Tailscale VPN Update";';
        //$cmdArgs[]='export NEW_VERSION_ID='.escapeshellarg(trim($params["version"])).';';
-       $cmdArgs[]='/sbin/tailscale_update.py --update';
+       $cmdArgs[]='/sbin/tailscale_ver_update.py --update';
        $cmd = new \OMV\System\Process("sudo", $cmdArgs);
        //$cmd = new \OMV\System\Process($cmdArgs);
        $cmd->setEnv("SHELL", "/bin/sh");
@@ -4066,6 +4481,37 @@ function enumerateConfiguredDevicesWithStatus($params, $context) {
         });
     }
 
+
+    public function jellyfin_restore_execute($params, $context) {
+        $output_err = "";
+        $cmdArgs = [];
+
+        // Validate the RPC caller context.
+        $this->validateMethodContext($context, [
+            "role" => OMV_ROLE_ADMINISTRATOR
+        ]);
+
+        $this->validateMethodParams($params, "rpc.homecloud.joplin_restore_execute");
+
+        return $this->execBgProc(function($bgStatusFilename, $bgOutputFilename)
+            use ($params) {
+        // Create Process with mount path, username, and group name
+        $output_err="";
+        $cmdArgs = [];
+        $cmdArgs[]='echo "Starting restore....";';
+        $cmdArgs[]='export MOUNT_PATH='.escapeshellarg(trim($params["mount_path"])).';';
+        
+        $cmdArgs[]='/sbin/jellyfin_restore_execute.py $MOUNT_PATH';
+        $cmd = new \OMV\System\Process("sudo", $cmdArgs);
+        $cmd->setEnv("SHELL", "/bin/sh");
+        $cmd->setRedirect2to1();
+        if (0 !== ($exitStatus = $this->exec($cmd, $output,
+            $bgOutputFilename))) {
+            throw new \OMV\ExecException($cmd,$output, $exitStatus);
+            }
+            return $output;
+        });
+    }
 
     public function immich_restore_execute($params, $context) {
         $output_err = "";
@@ -4543,6 +4989,27 @@ public function joplin_backup_execute($params, $context) {
         return json_decode($output[0], true);
     }
 
+    public function getTraefikServiceStatus($params, $context) {
+        
+	    $output_err="";
+		$cmdArgs = [];
+
+        // Validate the RPC caller context.
+		$this->validateMethodContext($context, [
+			"role" => OMV_ROLE_ADMINISTRATOR
+		]);
+        
+
+        // Get the output from the status script
+        
+        $cmd = new \OMV\System\Process("/sbin/check_traefik.py");
+        $cmd->setEnv("SHELL", "/bin/sh");
+        //$cmd->setRedirect2to1();
+        $cmd->execute($output);
+        // Since the script outputs JSON directly, just return the first line
+        return json_decode($output[0], true);
+    }
+
     public function getJoplinServiceStatus($params, $context) {
         
 	    $output_err="";
@@ -4942,12 +5409,38 @@ public function joplin_backup_execute($params, $context) {
         return json_decode($output[0], true);
     }
 
+    public function reset_jellyfin($params, $context) {
+        
+	    $output_err="";
+		$cmdArgs = [];
+
+        // Validate the RPC caller context.
+		$this->validateMethodContext($context, [
+			"role" => OMV_ROLE_ADMINISTRATOR
+		]);
+
+        // Get the output from the tailscale status script
+        
+        $cmd = new \OMV\System\Process("/sbin/reset_jellyfin.sh");
+        $cmd->setEnv("SHELL", "/bin/sh");
+        //$cmd->setRedirect2to1();
+        $cmd->execute($output);
+        // Since the script outputs JSON directly, just return the first line
+        return json_decode($output[0], true);
+    }
+
 
     public function reset_paperless($params, $context) {
         
 	    $output_err="";
 		$cmdArgs = [];
-log>setEnv("SHELL", "/bin/sh");
+        // Validate the RPC caller context.
+		$this->validateMethodContext($context, [
+			"role" => OMV_ROLE_ADMINISTRATOR
+		]);
+        // Get the output from the tailscale status script
+        $cmd = new \OMV\System\Process("/sbin/reset_paperless.sh");
+        $cmd->setEnv("SHELL", "/bin/sh");
         //$cmd->setRedirect2to1();
         $cmd->execute($output);
         // Since the script outputs JSON directly, just return the first line
@@ -4967,6 +5460,26 @@ log>setEnv("SHELL", "/bin/sh");
         // Get the output from the tailscale status script
         
         $cmd = new \OMV\System\Process("/sbin/reset_vaultwarden.sh");
+        $cmd->setEnv("SHELL", "/bin/sh");
+        //$cmd->setRedirect2to1();
+        $cmd->execute($output);
+        // Since the script outputs JSON directly, just return the first line
+        return json_decode($output[0], true);
+    }
+
+    public function reset_joplin($params, $context) {
+        
+	    $output_err="";
+		$cmdArgs = [];
+
+        // Validate the RPC caller context.
+		$this->validateMethodContext($context, [
+			"role" => OMV_ROLE_ADMINISTRATOR
+		]);
+
+        // Get the output from the tailscale status script
+        
+        $cmd = new \OMV\System\Process("/sbin/reset_joplin.sh");
         $cmd->setEnv("SHELL", "/bin/sh");
         //$cmd->setRedirect2to1();
         $cmd->execute($output);

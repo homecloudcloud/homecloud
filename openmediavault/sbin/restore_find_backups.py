@@ -22,9 +22,13 @@ def get_external_disks():
         print("Error executing omv-rpc command.")
         return None
 
-# Function to check if a directory name is a valid version (numerical format)
+# Function to check if a directory name is a valid version (numerical format with optional suffixes)
 def is_valid_version(name):
-    return bool(re.match(r"^\d+(\.\d+)+$", name))
+    # Match versions like: 1.2.3, 10.11.0, 10.11.0-rc2, v1.2.3, etc.
+    #return bool(re.match(r"^v?\d+(\.\d+)+(-\w+\d*)?$", name))
+    return bool(re.match(r"^(v?|\w+-)\d+(\.\d+)+(-\w+\d*)?$", name))
+
+
 
 # Function to calculate the size of a directory in GB
 def get_directory_size(directory):

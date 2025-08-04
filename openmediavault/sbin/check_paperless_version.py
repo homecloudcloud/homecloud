@@ -3,7 +3,11 @@
 import json
 import subprocess
 import requests
+import urllib3
 from typing import Dict, Optional
+
+# Disable SSL warnings
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 def get_api_endpoint() -> Optional[str]:
     """Get Paperless API endpoint using omv-rpc"""
@@ -21,9 +25,24 @@ def get_remote_version(api_endpoint: str) -> Optional[Dict]:
     """Get remote version info from Paperless API"""
     try:
         version_url = f"{api_endpoint}api/remote_version/"
-        response = requests.get(version_url, timeout=10)
+        response = requests.get(version_url, timeout=10, verify=False)
         response.raise_for_status()
-        return response.json()
+        result = response.json()
+        
+        # If version is 0.0.0, try to get version from docker-compose.yml
+        if result.get('version') == '0.0.0':
+            try:
+                import yaml
+                with open('/etc/paperless/docker-compose.yml', 'r') as f:
+                    compose_data = yaml.safe_load(f)
+                    image = compose_data['services']['webserver']['image']
+                    if ':' in image:
+                        version = image.split(':')[-1]
+                        result['version'] = f'v{version}'
+            except Exception:
+                pass
+        
+        return result
     except Exception:
         return None
 

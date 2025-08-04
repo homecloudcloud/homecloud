@@ -1,0 +1,8 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "startconfiguration.apps.media.reset"
+  position: 70
+  text: _("Reset")
+  icon: "mdi:delete-forever"
+  url: "/startconfiguration/apps/media/reset"

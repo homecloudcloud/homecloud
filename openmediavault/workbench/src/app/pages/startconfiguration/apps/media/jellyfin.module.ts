@@ -13,6 +13,8 @@ import {AppsJellyfinRestartComponent} from './restart/jellyfin-restart-page.comp
 import {AppsJellyfinUpdateFormPageComponent} from './update/jellyfin-update-form-page.component';
 import {AppsJellyfinResetPasswordComponent} from './password/jellyfin-resetpassword-form-page.component'
 import {AppsJellyfinPasswordResetDisplayComponent} from './password/jellyfin-password-display-page.component'
+import {AppsJellyfinRestoreComponent} from './restore/jellyfin-restore-page.component';
+import { AppsJellyfinResetComponent } from './reset/jellyfin_reset-page.component';
 
 /*const routes: Routes = [
   { path: 'windows', component: AppsDriveWindowsComponent }
@@ -27,7 +29,9 @@ import {AppsJellyfinPasswordResetDisplayComponent} from './password/jellyfin-pas
     AppsJellyfinRestartComponent,
     AppsJellyfinUpdateFormPageComponent,
     AppsJellyfinResetPasswordComponent,
-    AppsJellyfinPasswordResetDisplayComponent
+    AppsJellyfinPasswordResetDisplayComponent,
+    AppsJellyfinRestoreComponent,
+    AppsJellyfinResetComponent
   ],
   imports: [
     CommonModule,
@@ -42,7 +46,9 @@ import {AppsJellyfinPasswordResetDisplayComponent} from './password/jellyfin-pas
     AppsJellyfinRestartComponent,
     AppsJellyfinUpdateFormPageComponent,
     AppsJellyfinResetPasswordComponent,
-    AppsJellyfinPasswordResetDisplayComponent
+    AppsJellyfinPasswordResetDisplayComponent,
+    AppsJellyfinRestoreComponent,
+    AppsJellyfinResetComponent
   ]
 })
 export class JellyfinModule { }

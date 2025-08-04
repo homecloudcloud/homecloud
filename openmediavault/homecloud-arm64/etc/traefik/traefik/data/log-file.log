@@ -1,0 +1,181 @@
+time="2025-05-25T07:03:19Z" level=info msg="Traefik version 2.11.8 built on 2024-08-06T12:53:55Z"
+time="2025-05-25T07:03:19Z" level=debug msg="Static configuration loaded {\"global\":{\"checkNewVersion\":true},\"serversTransport\":{\"maxIdleConnsPerHost\":200},\"entryPoints\":{\"immich\":{\"address\":\":2284\",\"transport\":{\"lifeCycle\":{\"graceTimeOut\":\"10s\"},\"respondingTimeouts\":{\"readTimeout\":\"20m0s\",\"writeTimeout\":\"20m0s\",\"idleTimeout\":\"20m0s\"}},\"forwardedHeaders\":{},\"http\":{},\"http2\":{\"maxConcurrentStreams\":250},\"udp\":{\"timeout\":\"3s\"}},\"jellyfin\":{\"address\":\":8097\",\"transport\":{\"lifeCycle\":{\"graceTimeOut\":\"10s\"},\"respondingTimeouts\":{\"readTimeout\":\"1m0s\",\"idleTimeout\":\"3m0s\"}},\"forwardedHeaders\":{},\"http\":{},\"http2\":{\"maxConcurrentStreams\":250},\"udp\":{\"timeout\":\"3s\"}},\"joplin\":{\"address\":\":22302\",\"transport\":{\"lifeCycle\":{\"graceTimeOut\":\"10s\"},\"respondingTimeouts\":{\"readTimeout\":\"20m0s\",\"writeTimeout\":\"20m0s\",\"idleTimeout\":\"20m0s\"}},\"forwardedHeaders\":{},\"http\":{},\"http2\":{\"maxConcurrentStreams\":250},\"udp\":{\"timeout\":\"3s\"}},\"paperless-ngx\":{\"address\":\":8001\",\"transport\":{\"lifeCycle\":{\"graceTimeOut\":\"10s\"},\"respondingTimeouts\":{\"readTimeout\":\"1m0s\",\"idleTimeout\":\"3m0s\"}},\"forwardedHeaders\":{},\"http\":{},\"http2\":{\"maxConcurrentStreams\":250},\"udp\":{\"timeout\":\"3s\"}},\"traefik\":{\"address\":\":8080\",\"transport\":{\"lifeCycle\":{\"graceTimeOut\":\"10s\"},\"respondingTimeouts\":{\"readTimeout\":\"1m0s\",\"idleTimeout\":\"3m0s\"}},\"forwardedHeaders\":{},\"http\":{},\"http2\":{\"maxConcurrentStreams\":250},\"udp\":{\"timeout\":\"3s\"}},\"web\":{\"address\":\":80\",\"transport\":{\"lifeCycle\":{\"graceTimeOut\":\"10s\"},\"respondingTimeouts\":{\"readTimeout\":\"1m0s\",\"idleTimeout\":\"3m0s\"}},\"forwardedHeaders\":{},\"http\":{\"redirections\":{\"entryPoint\":{\"to\":\"websecure\",\"scheme\":\"https\",\"permanent\":true,\"priority\":9223372036854775806}}},\"http2\":{\"maxConcurrentStreams\":250},\"udp\":{\"timeout\":\"3s\"}},\"websecure\":{\"address\":\":443\",\"transport\":{\"lifeCycle\":{\"graceTimeOut\":\"10s\"},\"respondingTimeouts\":{\"readTimeout\":\"1m0s\",\"idleTimeout\":\"3m0s\"}},\"forwardedHeaders\":{},\"http\":{},\"http2\":{\"maxConcurrentStreams\":250},\"udp\":{\"timeout\":\"3s\"}}},\"providers\":{\"providersThrottleDuration\":\"2s\",\"docker\":{\"watch\":true,\"endpoint\":\"unix:///var/run/docker.sock\",\"defaultRule\":\"Host(`{{ normalize .Name }}`)\",\"swarmModeRefreshSeconds\":\"15s\"},\"file\":{\"watch\":true,\"filename\":\"config.yaml\"}},\"api\":{\"insecure\":true,\"dashboard\":true,\"debug\":true},\"log\":{\"level\":\"DEBUG\",\"filePath\":\"/data/log-file.log\",\"format\":\"common\"},\"accessLog\":{\"filePath\":\"/dev/log\",\"format\":\"json\",\"filters\":{},\"fields\":{\"defaultMode\":\"keep\",\"names\":{\"ClientUsername\":\"drop\"},\"headers\":{\"defaultMode\":\"keep\",\"names\":{\"Authorization\":\"drop\",\"Content-Type\":\"keep\",\"User-Agent\":\"redact\"}}}}}"
+time="2025-05-25T07:03:19Z" level=info msg="\nStats collection is disabled.\nHelp us improve Traefik by turning this feature on :)\nMore details on: https://doc.traefik.io/traefik/contributing/data-collection/\n"
+time="2025-05-25T07:03:19Z" level=warning msg="Unable to create access logger: error opening access log file: error opening file /dev/log: open /dev/log: no such device or address"
+time="2025-05-25T07:03:19Z" level=info msg="Starting provider aggregator aggregator.ProviderAggregator"
+time="2025-05-25T07:03:19Z" level=debug msg="Starting TCP Server" entryPointName=paperless-ngx
+time="2025-05-25T07:03:19Z" level=debug msg="Starting TCP Server" entryPointName=traefik
+time="2025-05-25T07:03:19Z" level=debug msg="Starting TCP Server" entryPointName=immich
+time="2025-05-25T07:03:19Z" level=debug msg="Starting TCP Server" entryPointName=jellyfin
+time="2025-05-25T07:03:19Z" level=debug msg="Starting TCP Server" entryPointName=web
+time="2025-05-25T07:03:19Z" level=debug msg="Starting TCP Server" entryPointName=websecure
+time="2025-05-25T07:03:19Z" level=info msg="Starting provider *file.Provider"
+time="2025-05-25T07:03:19Z" level=debug msg="*file.Provider provider configuration: {\"watch\":true,\"filename\":\"config.yaml\"}"
+time="2025-05-25T07:03:19Z" level=debug msg="Starting TCP Server" entryPointName=joplin
+time="2025-05-25T07:03:19Z" level=debug msg="add watcher on: ."
+time="2025-05-25T07:03:19Z" level=debug msg="add watcher on: config.yaml"
+time="2025-05-25T07:03:19Z" level=info msg="Starting provider *traefik.Provider"
+time="2025-05-25T07:03:19Z" level=debug msg="*traefik.Provider provider configuration: {}"
+time="2025-05-25T07:03:19Z" level=info msg="Starting provider *acme.ChallengeTLSALPN"
+time="2025-05-25T07:03:19Z" level=debug msg="*acme.ChallengeTLSALPN provider configuration: {}"
+time="2025-05-25T07:03:19Z" level=info msg="Starting provider *docker.Provider"
+time="2025-05-25T07:03:19Z" level=debug msg="*docker.Provider provider configuration: {\"watch\":true,\"endpoint\":\"unix:///var/run/docker.sock\",\"defaultRule\":\"Host(`{{ normalize .Name }}`)\",\"swarmModeRefreshSeconds\":\"15s\"}"
+time="2025-05-25T07:03:19Z" level=debug msg="Configuration received: {\"http\":{\"routers\":{\"omv\":{\"entryPoints\":[\"websecure\"],\"service\":\"omv\",\"rule\":\"HostRegexp(`{any:.+}`)\",\"tls\":{}}},\"services\":{\"omv\":{\"loadBalancer\":{\"servers\":[{\"url\":\"http://homecloud:81\"}],\"passHostHeader\":true}}},\"middlewares\":{\"auth\":{\"basicAuth\":{\"users\":[\"admin:$apr1$VRhRHFpg$cmjT/3i70s62IQD734BYe/\",\"renu:$apr1$3uxoeZ8G$.bFD68cK9goXn7XiooW460\",\"family:$apr1$8nkMfohN$Ubgtmxr7Es1PJaEZ1SVIH/\",\"test:$apr1$eNfSkZ4Y$qrYvjf1l2Hp3JqBz4GRqL1\"],\"headerField\":\"X-My-Header\"}}}},\"tcp\":{},\"udp\":{},\"tls\":{\"stores\":{\"default\":{}}}}" providerName=file
+time="2025-05-25T07:03:19Z" level=debug msg="Configuration received: {\"http\":{\"routers\":{\"api\":{\"entryPoints\":[\"traefik\"],\"service\":\"api@internal\",\"rule\":\"PathPrefix(`/api`)\",\"priority\":9223372036854775806},\"dashboard\":{\"entryPoints\":[\"traefik\"],\"middlewares\":[\"dashboard_redirect@internal\",\"dashboard_stripprefix@internal\"],\"service\":\"dashboard@internal\",\"rule\":\"PathPrefix(`/`)\",\"priority\":9223372036854775805},\"debug\":{\"entryPoints\":[\"traefik\"],\"service\":\"api@internal\",\"rule\":\"PathPrefix(`/debug`)\",\"priority\":9223372036854775806},\"web-to-websecure\":{\"entryPoints\":[\"web\"],\"middlewares\":[\"redirect-web-to-websecure\"],\"service\":\"noop@internal\",\"rule\":\"HostRegexp(`{host:.+}`)\",\"priority\":9223372036854775806}},\"services\":{\"api\":{},\"dashboard\":{},\"noop\":{}},\"middlewares\":{\"dashboard_redirect\":{\"redirectRegex\":{\"regex\":\"^(http:\\\\/\\\\/(\\\\[[\\\\w:.]+\\\\]|[\\\\w\\\\._-]+)(:\\\\d+)?)\\\\/$\",\"replacement\":\"${1}/dashboard/\",\"permanent\":true}},\"dashboard_stripprefix\":{\"stripPrefix\":{\"prefixes\":[\"/dashboard/\",\"/dashboard\"]}},\"redirect-web-to-websecure\":{\"redirectScheme\":{\"scheme\":\"https\",\"port\":\"443\",\"permanent\":true}}},\"serversTransports\":{\"default\":{\"maxIdleConnsPerHost\":200}}},\"tcp\":{},\"udp\":{},\"tls\":{}}" providerName=internal
+time="2025-05-25T07:03:19Z" level=debug msg="Adding certificate for domain(s) *.net"
+time="2025-05-25T07:03:19Z" level=debug msg="Added outgoing tracing middleware api@internal" routerName=api@internal middlewareType=TracingForwarder middlewareName=tracing entryPointName=traefik
+time="2025-05-25T07:03:19Z" level=debug msg="Added outgoing tracing middleware dashboard@internal" middlewareType=TracingForwarder entryPointName=traefik routerName=dashboard@internal middlewareName=tracing
+time="2025-05-25T07:03:19Z" level=debug msg="Creating middleware" entryPointName=traefik routerName=dashboard@internal middlewareName=dashboard_stripprefix@internal middlewareType=StripPrefix
+time="2025-05-25T07:03:19Z" level=debug msg="Adding tracing to middleware" middlewareName=dashboard_stripprefix@internal entryPointName=traefik routerName=dashboard@internal
+time="2025-05-25T07:03:19Z" level=debug msg="Creating middleware" routerName=dashboard@internal middlewareName=dashboard_redirect@internal middlewareType=RedirectRegex entryPointName=traefik
+time="2025-05-25T07:03:19Z" level=debug msg="Setting up redirection from ^(http:\\/\\/(\\[[\\w:.]+\\]|[\\w\\._-]+)(:\\d+)?)\\/$ to ${1}/dashboard/" middlewareName=dashboard_redirect@internal middlewareType=RedirectRegex entryPointName=traefik routerName=dashboard@internal
+time="2025-05-25T07:03:19Z" level=debug msg="Adding tracing to middleware" routerName=dashboard@internal entryPointName=traefik middlewareName=dashboard_redirect@internal
+time="2025-05-25T07:03:19Z" level=debug msg="Added outgoing tracing middleware api@internal" middlewareName=tracing middlewareType=TracingForwarder entryPointName=traefik routerName=debug@internal
+time="2025-05-25T07:03:19Z" level=debug msg="Creating middleware" entryPointName=traefik middlewareName=traefik-internal-recovery middlewareType=Recovery
+time="2025-05-25T07:03:19Z" level=debug msg="Added outgoing tracing middleware noop@internal" entryPointName=web routerName=web-to-websecure@internal middlewareName=tracing middlewareType=TracingForwarder
+time="2025-05-25T07:03:19Z" level=debug msg="Creating middleware" entryPointName=web routerName=web-to-websecure@internal middlewareName=redirect-web-to-websecure@internal middlewareType=RedirectScheme
+time="2025-05-25T07:03:19Z" level=debug msg="Setting up redirection to https 443" middlewareType=RedirectScheme entryPointName=web routerName=web-to-websecure@internal middlewareName=redirect-web-to-websecure@internal
+time="2025-05-25T07:03:19Z" level=debug msg="Creating middleware" entryPointName=web middlewareName=traefik-internal-recovery middlewareType=Recovery
+time="2025-05-25T07:03:19Z" level=debug msg="Creating middleware" entryPointName=websecure routerName=omv@file serviceName=omv middlewareType=Pipelining middlewareName=pipelining
+time="2025-05-25T07:03:19Z" level=debug msg="Creating load-balancer" routerName=omv@file serviceName=omv entryPointName=websecure
+time="2025-05-25T07:03:19Z" level=debug msg="Creating server 0 http://homecloud:81" entryPointName=websecure routerName=omv@file serviceName=omv serverName=0
+time="2025-05-25T07:03:19Z" level=debug msg="child http://homecloud:81 now UP"
+time="2025-05-25T07:03:19Z" level=debug msg="Propagating new UP status"
+time="2025-05-25T07:03:19Z" level=debug msg="Added outgoing tracing middleware omv" middlewareName=tracing entryPointName=websecure routerName=omv@file middlewareType=TracingForwarder
+time="2025-05-25T07:03:19Z" level=debug msg="Creating middleware" entryPointName=websecure middlewareName=traefik-internal-recovery middlewareType=Recovery
+time="2025-05-25T07:03:19Z" level=warning msg="No domain found in rule HostRegexp(`{any:.+}`), the TLS options applied for this router will depend on the SNI of each request" entryPointName=websecure routerName=omv@file
+time="2025-05-25T07:03:20Z" level=debug msg="Provider connection established with docker 27.2.0 (API 1.47)" providerName=docker
+time="2025-05-25T07:03:20Z" level=debug msg="Filtering disabled container" providerName=docker container=traefik-traefik-0717baa242e7a0b7ebb0687e5c240992b7c770af835d33c83a06bb94f0078720
+time="2025-05-25T07:03:20Z" level=debug msg="Filtering disabled container" container=db-joplin-926f225cf1ca725b27a8b222679628fe96a1bc820fad343e82cd945b6aee21cf providerName=docker
+time="2025-05-25T07:03:20Z" level=debug msg="Filtering disabled container" providerName=docker container=db-paperless-d02ab09a098cb06603f386aad071c13abf0d0cdab5c975c07a55465004f77895
+time="2025-05-25T07:03:20Z" level=debug msg="Filtering disabled container" container=gotenberg-paperless-e1b11f4a423967102ffb74a21c4ee500292f4d7bc7769d899c6d1a619fed6b81 providerName=docker
+time="2025-05-25T07:03:20Z" level=debug msg="Filtering disabled container" providerName=docker container=broker-paperless-c6a9b73fdb59f92ef4ac74e3530d24a37fa47e64abcab83b863f268dfa8f3ed9
+time="2025-05-25T07:03:20Z" level=debug msg="Filtering disabled container" container=tika-paperless-b3c40ae3bc4885f2cfe95d5a27cba63ac5eab98f7a2c0a0fadeb1d93ebcc6ca8 providerName=docker
+time="2025-05-25T07:03:20Z" level=debug msg="Filtering disabled container" providerName=docker container=database-immich-8ab45adbdd789b3f6951656069c147c5c4829a073d4c75bd58c9b3cc3b46573d
+time="2025-05-25T07:03:20Z" level=debug msg="Filtering disabled container" providerName=docker container=immich-machine-learning-immich-5b23bd372d714f42b308e2b4a82c775155cfeaebbb7984bdb207f8079b46c3d0
+time="2025-05-25T07:03:20Z" level=debug msg="Filtering disabled container" providerName=docker container=redis-immich-5d78fb6219e3dfe08b1ceaac3bbcbda8ba1295abfaee80ff1ee2d5ac633e80a7
+time="2025-05-25T07:03:20Z" level=debug msg="Configuration received: {\"http\":{\"routers\":{\"forgotpassword\":{\"service\":\"reset-app-password-reset\",\"rule\":\"HostRegexp(`{any:.+}`) \\u0026\\u0026 PathPrefix(`/forgot-password`)\",\"tls\":{}},\"immich\":{\"entryPoints\":[\"immich\"],\"service\":\"immich\",\"rule\":\" HostRegexp(`{any:.+}`)\",\"tls\":{\"certResolver\":\"myresolver\"}},\"joplin\":{\"entryPoints\":[\"joplin\"],\"service\":\"joplin\",\"rule\":\" HostRegexp(`{any:.+}`)\",\"tls\":{\"certResolver\":\"myresolver\"}},\"paperless\":{\"service\":\"paperless-2\",\"rule\":\" HostRegexp(`{any:.+}`) \\u0026\\u0026 PathPrefix(`/paperless/`)\",\"tls\":{}},\"paperless-2\":{\"entryPoints\":[\"paperless-ngx\"],\"service\":\"paperless-2\",\"rule\":\" HostRegexp(`{any:.+}`) \\u0026\\u0026 PathPrefix(`/paperless/`)\",\"tls\":{\"certResolver\":\"myresolver\"}},\"vaultwarden\":{\"service\":\"vaultwarden-vault-warden\",\"rule\":\"HostRegexp(`{any:.+}`) \\u0026\\u0026 PathPrefix(`/passwords`)\",\"tls\":{}}},\"services\":{\"immich\":{\"loadBalancer\":{\"servers\":[{\"url\":\"http://172.18.0.5:2283\"}],\"passHostHeader\":true}},\"joplin\":{\"loadBalancer\":{\"servers\":[{\"url\":\"http://172.21.0.3:22300\"}],\"passHostHeader\":true}},\"paperless-2\":{\"loadBalancer\":{\"servers\":[{\"url\":\"http://172.20.0.6:8000\"}],\"passHostHeader\":true}},\"reset-app-password-reset\":{\"loadBalancer\":{\"servers\":[{\"url\":\"http://172.22.0.2:80\"}],\"passHostHeader\":true}},\"vaultwarden-vault-warden\":{\"loadBalancer\":{\"servers\":[{\"url\":\"http://172.19.0.2:80\"}],\"passHostHeader\":true}}},\"middlewares\":{\"joplin\":{\"headers\":{\"customRequestHeaders\":{\"X-Forwarded-Proto \":\" https\"}}}}},\"tcp\":{},\"udp\":{},\"tls\":{}}" providerName=docker
+time="2025-05-25T07:03:20Z" level=debug msg="No entryPoint defined for this router, using the default one(s) instead: [immich jellyfin joplin paperless-ngx web websecure]" routerName=forgotpassword
+time="2025-05-25T07:03:20Z" level=debug msg="No entryPoint defined for this router, using the default one(s) instead: [immich jellyfin joplin paperless-ngx web websecure]" routerName=vaultwarden
+time="2025-05-25T07:03:20Z" level=debug msg="No entryPoint defined for this router, using the default one(s) instead: [immich jellyfin joplin paperless-ngx web websecure]" routerName=paperless
+time="2025-05-25T07:03:20Z" level=debug msg="Adding certificate for domain(s) *.net"
+time="2025-05-25T07:03:20Z" level=debug msg="Added outgoing tracing middleware dashboard@internal" entryPointName=traefik middlewareType=TracingForwarder middlewareName=tracing routerName=dashboard@internal
+time="2025-05-25T07:03:20Z" level=debug msg="Creating middleware" routerName=dashboard@internal entryPointName=traefik middlewareName=dashboard_stripprefix@internal middlewareType=StripPrefix
+time="2025-05-25T07:03:20Z" level=debug msg="Adding tracing to middleware" routerName=dashboard@internal middlewareName=dashboard_stripprefix@internal entryPointName=traefik
+time="2025-05-25T07:03:20Z" level=debug msg="Creating middleware" entryPointName=traefik routerName=dashboard@internal middlewareName=dashboard_redirect@internal middlewareType=RedirectRegex
+time="2025-05-25T07:03:20Z" level=debug msg="Setting up redirection from ^(http:\\/\\/(\\[[\\w:.]+\\]|[\\w\\._-]+)(:\\d+)?)\\/$ to ${1}/dashboard/" entryPointName=traefik routerName=dashboard@internal middlewareName=dashboard_redirect@internal middlewareType=RedirectRegex
+time="2025-05-25T07:03:20Z" level=debug msg="Adding tracing to middleware" middlewareName=dashboard_redirect@internal entryPointName=traefik routerName=dashboard@internal
+time="2025-05-25T07:03:20Z" level=debug msg="Added outgoing tracing middleware api@internal" entryPointName=traefik routerName=debug@internal middlewareName=tracing middlewareType=TracingForwarder
+time="2025-05-25T07:03:20Z" level=debug msg="Added outgoing tracing middleware api@internal" middlewareType=TracingForwarder middlewareName=tracing entryPointName=traefik routerName=api@internal
+time="2025-05-25T07:03:20Z" level=debug msg="Creating middleware" middlewareType=Recovery entryPointName=traefik middlewareName=traefik-internal-recovery
+time="2025-05-25T07:03:20Z" level=debug msg="Added outgoing tracing middleware noop@internal" middlewareType=TracingForwarder entryPointName=web routerName=web-to-websecure@internal middlewareName=tracing
+time="2025-05-25T07:03:20Z" level=debug msg="Creating middleware" middlewareType=RedirectScheme entryPointName=web routerName=web-to-websecure@internal middlewareName=redirect-web-to-websecure@internal
+time="2025-05-25T07:03:20Z" level=debug msg="Setting up redirection to https 443" entryPointName=web routerName=web-to-websecure@internal middlewareName=redirect-web-to-websecure@internal middlewareType=RedirectScheme
+time="2025-05-25T07:03:20Z" level=debug msg="Creating middleware" middlewareName=traefik-internal-recovery middlewareType=Recovery entryPointName=web
+time="2025-05-25T07:03:20Z" level=debug msg="Creating middleware" serviceName=reset-app-password-reset entryPointName=paperless-ngx routerName=forgotpassword@docker middlewareName=pipelining middlewareType=Pipelining
+time="2025-05-25T07:03:20Z" level=debug msg="Creating load-balancer" serviceName=reset-app-password-reset entryPointName=paperless-ngx routerName=forgotpassword@docker
+time="2025-05-25T07:03:20Z" level=debug msg="Creating server 0 http://172.22.0.2:80" serviceName=reset-app-password-reset entryPointName=paperless-ngx routerName=forgotpassword@docker serverName=0
+time="2025-05-25T07:03:20Z" level=debug msg="child http://172.22.0.2:80 now UP"
+time="2025-05-25T07:03:20Z" level=debug msg="Propagating new UP status"
+time="2025-05-25T07:03:20Z" level=debug msg="Added outgoing tracing middleware reset-app-password-reset" middlewareType=TracingForwarder entryPointName=paperless-ngx routerName=forgotpassword@docker middlewareName=tracing
+time="2025-05-25T07:03:20Z" level=debug msg="Creating middleware" routerName=paperless@docker serviceName=paperless-2 entryPointName=paperless-ngx middlewareName=pipelining middlewareType=Pipelining
+time="2025-05-25T07:03:20Z" level=debug msg="Creating load-balancer" serviceName=paperless-2 entryPointName=paperless-ngx routerName=paperless@docker
+time="2025-05-25T07:03:20Z" level=debug msg="Creating server 0 http://172.20.0.6:8000" serverName=0 entryPointName=paperless-ngx routerName=paperless@docker serviceName=paperless-2
+time="2025-05-25T07:03:20Z" level=debug msg="child http://172.20.0.6:8000 now UP"
+time="2025-05-25T07:03:20Z" level=debug msg="Propagating new UP status"
+time="2025-05-25T07:03:20Z" level=debug msg="Added outgoing tracing middleware paperless-2" routerName=paperless@docker middlewareName=tracing middlewareType=TracingForwarder entryPointName=paperless-ngx
+time="2025-05-25T07:03:20Z" level=debug msg="Creating middleware" middlewareType=Pipelining serviceName=vaultwarden-vault-warden entryPointName=paperless-ngx routerName=vaultwarden@docker middlewareName=pipelining
+time="2025-05-25T07:03:20Z" level=debug msg="Creating load-balancer" serviceName=vaultwarden-vault-warden entryPointName=paperless-ngx routerName=vaultwarden@docker
+time="2025-05-25T07:03:20Z" level=debug msg="Creating server 0 http://172.19.0.2:80" entryPointName=paperless-ngx routerName=vaultwarden@docker serviceName=vaultwarden-vault-warden serverName=0
+time="2025-05-25T07:03:20Z" level=debug msg="child http://172.19.0.2:80 now UP"
+time="2025-05-25T07:03:20Z" level=debug msg="Propagating new UP status"
+time="2025-05-25T07:03:20Z" level=debug msg="Added outgoing tracing middleware vaultwarden-vault-warden" middlewareType=TracingForwarder entryPointName=paperless-ngx routerName=vaultwarden@docker middlewareName=tracing
+time="2025-05-25T07:03:20Z" level=debug msg="Creating middleware" middlewareName=pipelining middlewareType=Pipelining entryPointName=paperless-ngx routerName=paperless-2@docker serviceName=paperless-2
+time="2025-05-25T07:03:20Z" level=debug msg="Creating load-balancer" serviceName=paperless-2 entryPointName=paperless-ngx routerName=paperless-2@docker
+time="2025-05-25T07:03:20Z" level=debug msg="Creating server 0 http://172.20.0.6:8000" serviceName=paperless-2 serverName=0 entryPointName=paperless-ngx routerName=paperless-2@docker
+time="2025-05-25T07:03:20Z" level=debug msg="child http://172.20.0.6:8000 now UP"
+time="2025-05-25T07:03:20Z" level=debug msg="Propagating new UP status"
+time="2025-05-25T07:03:20Z" level=debug msg="Added outgoing tracing middleware paperless-2" middlewareType=TracingForwarder entryPointName=paperless-ngx routerName=paperless-2@docker middlewareName=tracing
+time="2025-05-25T07:03:20Z" level=debug msg="Creating middleware" middlewareName=traefik-internal-recovery middlewareType=Recovery entryPointName=paperless-ngx
+time="2025-05-25T07:03:20Z" level=debug msg="Creating middleware" entryPointName=web middlewareName=traefik-internal-recovery middlewareType=Recovery
+time="2025-05-25T07:03:20Z" level=debug msg="Creating middleware" middlewareName=pipelining middlewareType=Pipelining routerName=omv@file serviceName=omv entryPointName=websecure
+time="2025-05-25T07:03:20Z" level=debug msg="Creating load-balancer" serviceName=omv entryPointName=websecure routerName=omv@file
+time="2025-05-25T07:03:20Z" level=debug msg="Creating server 0 http://homecloud:81" serverName=0 entryPointName=websecure routerName=omv@file serviceName=omv
+time="2025-05-25T07:03:20Z" level=debug msg="child http://homecloud:81 now UP"
+time="2025-05-25T07:03:20Z" level=debug msg="Propagating new UP status"
+time="2025-05-25T07:03:20Z" level=debug msg="Added outgoing tracing middleware omv" entryPointName=websecure routerName=omv@file middlewareName=tracing middlewareType=TracingForwarder
+time="2025-05-25T07:03:20Z" level=debug msg="Creating middleware" middlewareType=Recovery middlewareName=traefik-internal-recovery entryPointName=websecure
+time="2025-05-25T07:03:20Z" level=debug msg="Creating middleware" middlewareName=pipelining middlewareType=Pipelining routerName=immich@docker serviceName=immich entryPointName=immich
+time="2025-05-25T07:03:20Z" level=debug msg="Creating load-balancer" entryPointName=immich routerName=immich@docker serviceName=immich
+time="2025-05-25T07:03:20Z" level=debug msg="Creating server 0 http://172.18.0.5:2283" routerName=immich@docker serviceName=immich serverName=0 entryPointName=immich
+time="2025-05-25T07:03:20Z" level=debug msg="child http://172.18.0.5:2283 now UP"
+time="2025-05-25T07:03:20Z" level=debug msg="Propagating new UP status"
+time="2025-05-25T07:03:20Z" level=debug msg="Added outgoing tracing middleware immich" entryPointName=immich routerName=immich@docker middlewareName=tracing middlewareType=TracingForwarder
+time="2025-05-25T07:03:20Z" level=debug msg="Creating middleware" entryPointName=immich middlewareName=traefik-internal-recovery middlewareType=Recovery
+time="2025-05-25T07:03:20Z" level=debug msg="Creating middleware" entryPointName=jellyfin middlewareName=traefik-internal-recovery middlewareType=Recovery
+time="2025-05-25T07:03:20Z" level=debug msg="Creating middleware" middlewareType=Pipelining routerName=joplin@docker entryPointName=joplin serviceName=joplin middlewareName=pipelining
+time="2025-05-25T07:03:20Z" level=debug msg="Creating load-balancer" entryPointName=joplin serviceName=joplin routerName=joplin@docker
+time="2025-05-25T07:03:20Z" level=debug msg="Creating server 0 http://172.21.0.3:22300" entryPointName=joplin serviceName=joplin serverName=0 routerName=joplin@docker
+time="2025-05-25T07:03:20Z" level=debug msg="child http://172.21.0.3:22300 now UP"
+time="2025-05-25T07:03:20Z" level=debug msg="Propagating new UP status"
+time="2025-05-25T07:03:20Z" level=debug msg="Added outgoing tracing middleware joplin" middlewareName=tracing middlewareType=TracingForwarder entryPointName=joplin routerName=joplin@docker
+time="2025-05-25T07:03:20Z" level=debug msg="Creating middleware" middlewareName=traefik-internal-recovery middlewareType=Recovery entryPointName=joplin
+time="2025-05-25T07:03:20Z" level=warning msg="No domain found in rule  HostRegexp(`{any:.+}`) && PathPrefix(`/paperless/`), the TLS options applied for this router will depend on the SNI of each request" entryPointName=web routerName=paperless@docker
+time="2025-05-25T07:03:20Z" level=warning msg="No domain found in rule HostRegexp(`{any:.+}`) && PathPrefix(`/passwords`), the TLS options applied for this router will depend on the SNI of each request" entryPointName=web routerName=vaultwarden@docker
+time="2025-05-25T07:03:20Z" level=warning msg="No domain found in rule HostRegexp(`{any:.+}`) && PathPrefix(`/forgot-password`), the TLS options applied for this router will depend on the SNI of each request" routerName=forgotpassword@docker entryPointName=web
+time="2025-05-25T07:03:20Z" level=warning msg="No domain found in rule HostRegexp(`{any:.+}`) && PathPrefix(`/forgot-password`), the TLS options applied for this router will depend on the SNI of each request" entryPointName=websecure routerName=forgotpassword@docker
+time="2025-05-25T07:03:20Z" level=warning msg="No domain found in rule  HostRegexp(`{any:.+}`) && PathPrefix(`/paperless/`), the TLS options applied for this router will depend on the SNI of each request" entryPointName=websecure routerName=paperless@docker
+time="2025-05-25T07:03:20Z" level=warning msg="No domain found in rule HostRegexp(`{any:.+}`) && PathPrefix(`/passwords`), the TLS options applied for this router will depend on the SNI of each request" routerName=vaultwarden@docker entryPointName=websecure
+time="2025-05-25T07:03:20Z" level=warning msg="No domain found in rule HostRegexp(`{any:.+}`), the TLS options applied for this router will depend on the SNI of each request" entryPointName=websecure routerName=omv@file
+time="2025-05-25T07:03:20Z" level=warning msg="No domain found in rule  HostRegexp(`{any:.+}`) && PathPrefix(`/paperless/`), the TLS options applied for this router will depend on the SNI of each request" routerName=paperless@docker entryPointName=immich
+time="2025-05-25T07:03:20Z" level=warning msg="No domain found in rule  HostRegexp(`{any:.+}`), the TLS options applied for this router will depend on the SNI of each request" entryPointName=immich routerName=immich@docker
+time="2025-05-25T07:03:20Z" level=warning msg="No domain found in rule HostRegexp(`{any:.+}`) && PathPrefix(`/passwords`), the TLS options applied for this router will depend on the SNI of each request" entryPointName=immich routerName=vaultwarden@docker
+time="2025-05-25T07:03:20Z" level=warning msg="No domain found in rule HostRegexp(`{any:.+}`) && PathPrefix(`/forgot-password`), the TLS options applied for this router will depend on the SNI of each request" entryPointName=immich routerName=forgotpassword@docker
+time="2025-05-25T07:03:20Z" level=warning msg="No domain found in rule  HostRegexp(`{any:.+}`) && PathPrefix(`/paperless/`), the TLS options applied for this router will depend on the SNI of each request" routerName=paperless@docker entryPointName=jellyfin
+time="2025-05-25T07:03:20Z" level=warning msg="No domain found in rule HostRegexp(`{any:.+}`) && PathPrefix(`/passwords`), the TLS options applied for this router will depend on the SNI of each request" routerName=vaultwarden@docker entryPointName=jellyfin
+time="2025-05-25T07:03:20Z" level=warning msg="No domain found in rule HostRegexp(`{any:.+}`) && PathPrefix(`/forgot-password`), the TLS options applied for this router will depend on the SNI of each request" routerName=forgotpassword@docker entryPointName=jellyfin
+time="2025-05-25T07:03:20Z" level=warning msg="No domain found in rule  HostRegexp(`{any:.+}`) && PathPrefix(`/paperless/`), the TLS options applied for this router will depend on the SNI of each request" entryPointName=joplin routerName=paperless@docker
+time="2025-05-25T07:03:20Z" level=warning msg="No domain found in rule HostRegexp(`{any:.+}`) && PathPrefix(`/passwords`), the TLS options applied for this router will depend on the SNI of each request" entryPointName=joplin routerName=vaultwarden@docker
+time="2025-05-25T07:03:20Z" level=warning msg="No domain found in rule  HostRegexp(`{any:.+}`), the TLS options applied for this router will depend on the SNI of each request" entryPointName=joplin routerName=joplin@docker
+time="2025-05-25T07:03:20Z" level=warning msg="No domain found in rule HostRegexp(`{any:.+}`) && PathPrefix(`/forgot-password`), the TLS options applied for this router will depend on the SNI of each request" routerName=forgotpassword@docker entryPointName=joplin
+time="2025-05-25T07:03:20Z" level=warning msg="No domain found in rule HostRegexp(`{any:.+}`) && PathPrefix(`/forgot-password`), the TLS options applied for this router will depend on the SNI of each request" entryPointName=paperless-ngx routerName=forgotpassword@docker
+time="2025-05-25T07:03:20Z" level=warning msg="No domain found in rule  HostRegexp(`{any:.+}`) && PathPrefix(`/paperless/`), the TLS options applied for this router will depend on the SNI of each request" entryPointName=paperless-ngx routerName=paperless@docker
+time="2025-05-25T07:03:20Z" level=warning msg="No domain found in rule HostRegexp(`{any:.+}`) && PathPrefix(`/passwords`), the TLS options applied for this router will depend on the SNI of each request" entryPointName=paperless-ngx routerName=vaultwarden@docker
+time="2025-05-25T07:03:20Z" level=warning msg="No domain found in rule  HostRegexp(`{any:.+}`) && PathPrefix(`/paperless/`), the TLS options applied for this router will depend on the SNI of each request" entryPointName=paperless-ngx routerName=paperless-2@docker
+time="2025-05-25T07:03:20Z" level=error msg="the router joplin@docker uses a non-existent resolver: myresolver"
+time="2025-05-25T07:03:20Z" level=error msg="the router immich@docker uses a non-existent resolver: myresolver"
+time="2025-05-25T07:03:20Z" level=error msg="the router paperless-2@docker uses a non-existent resolver: myresolver"
+time="2025-05-25T07:04:06Z" level=debug msg="Serving default certificate for request: \"homecloud.tail1f689.ts.net\""
+time="2025-05-25T07:05:10Z" level=info msg="I have to go..."
+time="2025-05-25T07:05:10Z" level=info msg="Stopping server gracefully"
+time="2025-05-25T07:05:10Z" level=debug msg="Waiting 10s seconds before killing connections." entryPointName=websecure
+time="2025-05-25T07:05:10Z" level=debug msg="Waiting 10s seconds before killing connections." entryPointName=jellyfin
+time="2025-05-25T07:05:10Z" level=debug msg="Waiting 10s seconds before killing connections." entryPointName=paperless-ngx
+time="2025-05-25T07:05:10Z" level=error msg="accept tcp [::]:443: use of closed network connection" entryPointName=websecure
+time="2025-05-25T07:05:10Z" level=debug msg="Waiting 10s seconds before killing connections." entryPointName=joplin
+time="2025-05-25T07:05:10Z" level=debug msg="Waiting 10s seconds before killing connections." entryPointName=traefik
+time="2025-05-25T07:05:10Z" level=error msg="accept tcp [::]:22302: use of closed network connection" entryPointName=joplin
+time="2025-05-25T07:05:10Z" level=error msg="accept tcp [::]:8001: use of closed network connection" entryPointName=paperless-ngx
+time="2025-05-25T07:05:10Z" level=error msg="close tcp [::]:22302: use of closed network connection" entryPointName=joplin
+time="2025-05-25T07:05:10Z" level=error msg="accept tcp [::]:8080: use of closed network connection" entryPointName=traefik
+time="2025-05-25T07:05:10Z" level=debug msg="Waiting 10s seconds before killing connections." entryPointName=immich
+time="2025-05-25T07:05:10Z" level=debug msg="Entry point paperless-ngx closed" entryPointName=paperless-ngx
+time="2025-05-25T07:05:10Z" level=error msg="close tcp [::]:8080: use of closed network connection" entryPointName=traefik
+time="2025-05-25T07:05:10Z" level=debug msg="Entry point traefik closed" entryPointName=traefik
+time="2025-05-25T07:05:10Z" level=debug msg="Entry point joplin closed" entryPointName=joplin
+time="2025-05-25T07:05:10Z" level=debug msg="Waiting 10s seconds before killing connections." entryPointName=web
+time="2025-05-25T07:05:10Z" level=error msg="accept tcp [::]:2284: use of closed network connection" entryPointName=immich
+time="2025-05-25T07:05:10Z" level=error msg="close tcp [::]:2284: use of closed network connection" entryPointName=immich
+time="2025-05-25T07:05:10Z" level=error msg="accept tcp [::]:80: use of closed network connection" entryPointName=web
+time="2025-05-25T07:05:10Z" level=debug msg="Entry point immich closed" entryPointName=immich
+time="2025-05-25T07:05:10Z" level=error msg="accept tcp [::]:8097: use of closed network connection" entryPointName=jellyfin
+time="2025-05-25T07:05:10Z" level=error msg="close tcp [::]:8097: use of closed network connection" entryPointName=jellyfin
+time="2025-05-25T07:05:10Z" level=error msg="close tcp [::]:80: use of closed network connection" entryPointName=web
+time="2025-05-25T07:05:10Z" level=debug msg="Entry point jellyfin closed" entryPointName=jellyfin
+time="2025-05-25T07:05:10Z" level=debug msg="Entry point web closed" entryPointName=web
+time="2025-05-25T07:05:10Z" level=error msg="Error while starting server: accept tcp [::]:8001: use of closed network connection" entryPointName=paperless-ngx
+time="2025-05-25T07:05:10Z" level=error msg="close tcp [::]:443: use of closed network connection" entryPointName=websecure
+time="2025-05-25T07:05:20Z" level=debug msg="Server failed to shutdown before deadline because: context deadline exceeded" entryPointName=websecure
+time="2025-05-25T07:05:20Z" level=debug msg="Entry point websecure closed" entryPointName=websecure
+time="2025-05-25T07:05:20Z" level=info msg="Server stopped"
+time="2025-05-25T07:05:20Z" level=info msg="Shutting down"

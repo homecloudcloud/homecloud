@@ -21,80 +21,206 @@ import { marker as gettext } from '@ngneat/transloco-keys-manager/marker';
 import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
 import { BaseFormPageComponent } from '~/app/pages/base-page-component';
 
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer,SafeHtml } from '@angular/platform-browser';
 import { ViewEncapsulation } from '@angular/core';
 
 @Component({
   template: `<omv-logo-header></omv-logo-header>
-             <omv-intuition-form-page [config]="this.config" id="email-notification-form"></omv-intuition-form-page>
+            <div id="mainContainer">
+              <div id="notification-form1">
+                      <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
+              </div>
+              <omv-intuition-form-page [config]="this.config" id="email-notification-form"></omv-intuition-form-page>
+            </div>
              <omv-intuition-form-page [config]="this.navconfig" id="navButtons">
              </omv-intuition-form-page>`,
-  selector:'omv-notification-settings-form-page',  //Home cloud changes
+  selector:'omv-setupwizard-notification-settings-form-page',  //Home cloud changes
   styles: [`
     @import '../../../../assets/colors.scss';
-    omv-notification-settings-form-page{
 
-      omv-top-bar-wizard .omv-top-bar{
-        background:transparent!important;
-        position: absolute;
-        left:80vw;
-    }
-      omv-logo-header{
-        position:fixed;
-        height:20vh;
-        top:0;
-        left:0;
-        z-index:100;
-      }
     
-      #email-notification-form{
-          
-        .mat-card{
-            margin-top:20vh!important;
-            .omv-form-paragraph{
-              font-weight:var(--mat-font-weight-subheading-2);
-              font-size:var(--mat-font-size-subheading-2);
+    .omv-dark-theme{
+       omv-setupwizard-notification-settings-form-page{
 
+          #mainContainer{
+              h1,h2,h3{color:$lightblue !important;}
+              p,li{color:#ffffff !important;}
+              //scrollbar-color:$lightblue transparent;
+              .plainLink:hover,.plainLink:focus{
+                background-color:$lightblue;
+              
+              }
             }
 
+            #navButtons{
+                .mat-card{
+                      background-color:$lightblue!important;
+                }
+                .mat-card-actions{
+                      button{
+                        border:1px solid #ffffff!important;
+                      
+                      }
+                      button:hover,button:focus{
+                        background-color:#ffffff!important;
+                        color:$lightblue!important;
+                      }
+                }
+            }
+          
+         
         }
-      }
-      #navButtons{
-        .mat-card{
-            background-color:$blue!important;
-        }
-        mat-card-content{
-            display:none!important;
-        }
-        .mat-card-actions{
-            justify-content:space-between!important;
-            flex-direction:row-reverse!important;
-        } 
-        @media screen and (max-width: 600px) {
-          .mat-card-actions{
-            flex-direction:column-reverse!important;
-            align-items:center!important;
-            justify-content:center!important;
-            row-gap:20px;
+      }   
+    omv-setupwizard-notification-settings-form-page{
+
+          omv-top-bar-wizard .omv-top-bar{
+            background:transparent!important;
+            position: absolute;
+            left:80vw;
           }
-        }
-      } 
-      .plainLink{
-      font-weight:bold;
-      }
-      .plainLink:hover,.plainLink:focus{
-        background-color:$lightblue;
-        color:white;
-        padding:10px;
-        text-decoration: none;
-        font-weight:bold;
-      }
+          omv-logo-header{
+            position:fixed;
+            height:20vh;
+            top:0;
+            left:0;
+            z-index:100;
+          }
+          #mainContainer{
+              margin-top:20vh;
+              overflow-y:auto;
+              height:70vh;     
+              scrollbar-color:$lightblue transparent;
+              --scrollbar-border-radius: 0 !important;
+              --scrollbar-thumb-color:red !important;
+              --scrollbar-thumb-hover-color: var(--scrollbar-thumb-color) !important;
+
+              #notification-form1{            
+                  margin-bottom:-3rem;
+                  .omv-form-paragraph{
+                  padding:2rem;
+                  line-height: 1.5rem;
+                  }
+        
+              }
+            
+              .omv-form-paragraph,h2,p,li,h3 {
+                font-size: var(--mat-font-size-subheading-2) !important;
+              
+              }
+              .omv-form-paragraph,p,li {
+                font-size: var(--mat-font-size-subheading-2) !important;
+                font-weight:var(--mat-font-weight-subheading-2) !important;
+              }
+              h1{
+                font-size: var(--mat-font-size-headline) !important;
+              
+              }
+            
+              
+              h2,h1,h3 {
+                color:$blue;
+              }
+        
+              
+              
+              ul {
+                list-style-type: disc;
+                margin-left: 20px;
+              }
+        
+              .hidden{
+                display:none !important;
+              }
+              .plainLink{
+                font-weight:bold;
+              }
+              .plainLink:hover,.plainLink:focus{
+                background-color:$lightblue;
+                color:white;
+                padding:10px;
+                text-decoration: none;
+                font-weight:bold;
+              }
+              @media screen and (max-width: 768px) {
+                .mat-form-field-infix{
+                    .mat-input-element{
+                      margin-top:2rem;
+                    }
+                    .mat-form-field-label{
+                      text-wrap:wrap;
+                    }
+                }
+              }
+
+              
+
+
+          }
+
+        
+          #navButtons{
+            position:fixed;
+            width:100%;
+            bottom:0;
+          
+            .mat-card{
+                background-color:$blue!important;
+            }
+            mat-card-content{
+                display:none!important;
+            }
+            .mat-card-actions{
+                justify-content:space-between!important;
+                flex-direction:row-reverse!important;
+                button{
+                  border:1px solid #ffffff!important;
+                
+                }
+                button:hover,button:focus{
+                  background-color:#ffffff!important;
+                  color:$lightblue!important;
+                }
+            }
+            @media screen and (max-width: 600px) {
+              .mat-card-actions{
+                flex-direction:column-reverse!important;
+                align-items:center!important;
+                justify-content:center!important;
+                row-gap:20px;
+              }
+            }
+          } 
+     
     }
   `],
     encapsulation: ViewEncapsulation.None,  // This will disable view encapsulation
 })
 
 export class NotificationSettingsFormPageComponent extends BaseFormPageComponent {
+   public safeHtmlContent: SafeHtml;
+  private htmlContent=`<h1>✉️ Set Up Email Notifications</h1>
+                      <p>
+                        To use features like <strong>password reset</strong> and receive <strong>important alerts</strong>,
+                        configure your email settings below 📬.
+                      </p>
+
+                      <p>
+                        🛡️ <strong>Homecloud uses your personal email account</strong> to send notifications — ensuring your privacy.
+                        To do this, you’ll need to authorize email sending through your provider.
+                      </p>
+
+                      <div class="setup-steps">
+                        <ul>
+                        <li>📌 Settings vary by email provider.</li><br>
+                        <li>
+                        💡 For <strong>Gmail</strong> or <strong>Yahoo</strong>, generate an <strong>App Password</strong>.
+                        <br/>👉 <a class="plainLink" href="https://myaccount.google.com/apppasswords" target="_blank">Generate Gmail App Password</a>
+                        </li><br>
+                        <li>🧾 Then, complete the form below with your email settings.</li>
+                        </ul>
+                      </div>
+
+                     `;
   public config: FormPageConfig = {
     request: {
       service: 'EmailNotification',
@@ -106,15 +232,24 @@ export class NotificationSettingsFormPageComponent extends BaseFormPageComponent
       }
     },
     fields: [
-      {
+      /*{
         type: 'paragraph',
-        title: gettext('Homecloud can send you e-mail notifications about security events, low storage and more. To enable you will need a Gmail or any other SMTP relay provider account and generate an app password for authentication'),
+        title: gettext('To enable password reset functionality and receive important notifications, set up your email settings. Your email provider will be used to send messages directly to your inbox.If you are using Gmail or Yahoo, you will need to generate an app-specific password to allow Homecloud to send notifications from your account.'),
         name:'paragraph1'
       },
       {
+        type: 'divider',
+        title: gettext('Settings for sending email notifications')
+      },
+      {
         type: 'paragraph',
-        title: gettext(`To generate Google app password go to : <a class="plainLink" href="https://myaccount.google.com/apppasswords" target="_blank"> Create Google App Password </a>`),
+        title: gettext(`Gmail users first: <a class="plainLink" href="https://myaccount.google.com/apppasswords" target="_blank"> generate Google App Password </a>`),
         name:'paragraph2'
+      },
+      */
+     {
+        type: 'divider',
+        title: gettext('Account setup for sending E-mails')
       },
       {
         type: 'checkbox',
@@ -125,8 +260,8 @@ export class NotificationSettingsFormPageComponent extends BaseFormPageComponent
       {
         type: 'textInput',
         name: 'server',
-        label: gettext('SMTP server'),
-        hint: gettext('Outgoing SMTP mail server address, e.g. smtp.gmail.com.'),
+        label: gettext('Outgoing SMTP server'),
+        hint: gettext('For Gmail enter: smtp.gmail.com'),
         value: 'smtp.gmail.com',
         validators: {
           requiredIf: { operator: 'eq', arg0: { prop: 'enable' }, arg1: true },
@@ -137,7 +272,7 @@ export class NotificationSettingsFormPageComponent extends BaseFormPageComponent
         type: 'numberInput',
         name: 'port',
         label: gettext('SMTP port'),
-        hint: gettext('The default SMTP mail server port, e.g. for gmail it is 587.'),
+        hint: gettext('For Gmail enter: 587.'),
         value: 587,
         validators: {
           min: 1,
@@ -163,7 +298,7 @@ export class NotificationSettingsFormPageComponent extends BaseFormPageComponent
       {
         type: 'textInput',
         name: 'sender',
-        label: gettext('Sender email - Enter your Gmail account e-mail id which will be used to send e-mail notifications'),
+        label: gettext('Enter the email id to use for sending emails. Gmail users: Enter your full email address ending with @gmail.com'),
         value: '',
         validators: {
           requiredIf: { operator: 'truthy', arg0: { prop: 'enable' } },
@@ -174,48 +309,41 @@ export class NotificationSettingsFormPageComponent extends BaseFormPageComponent
         type: 'checkbox',
         name: 'authenable',
         label: gettext('Authentication required'),
-        value: false
+        value: true,
+        modifiers: [
+          {
+            type: 'hidden'
+          }
+        ]
       },
       {
         type: 'textInput',
         name: 'username',
-        label: gettext('User name - Enter your Gmail account e-mail id'),
+        label: gettext('User name. For Gmail,Yahoo enter your full email id.'),
         value: '',
         autocomplete: 'off',
-        modifiers: [
-          {
-            type: 'disabled',
-            constraint: { operator: 'falsy', arg0: { prop: 'authenable' } }
-          }
-        ],
         validators: {
-          requiredIf: { operator: 'truthy', arg0: { prop: 'authenable' } }
+          requiredIf: { operator: 'truthy', arg0: { prop: 'enable' } }
         }
       },
       {
         type: 'passwordInput',
         name: 'password',
-        label: gettext('Password - Paste your app password generated in Google Account here'),
+        label: gettext('Enter password for email account. For Gmail,Yahoo enter the app password generated.'),
         value: '',
         autocomplete: 'new-password',
-        modifiers: [
-          {
-            type: 'disabled',
-            constraint: { operator: 'falsy', arg0: { prop: 'authenable' } }
-          }
-        ],
         validators: {
-          requiredIf: { operator: 'truthy', arg0: { prop: 'authenable' } }
+          requiredIf: { operator: 'truthy', arg0: { prop: 'enable' } }
         }
       },
       {
         type: 'divider',
-        title: gettext('Recipient')
+        title: gettext('Admin Email Id (Recovery Password will be sent here)')
       },
       {
         type: 'textInput',
         name: 'primaryemail',
-        label: gettext('Receiver email - Probably it will be your e-mail address that is same as sender'),
+        label: gettext('Notifications and admin password (if you forget) will be sent here so make sure it is correct. You may keep it same as your sending account'),
         value: '',
         validators: {
           requiredIf: { operator: 'truthy', arg0: { prop: 'enable' } },
@@ -228,6 +356,11 @@ export class NotificationSettingsFormPageComponent extends BaseFormPageComponent
         name: 'secondaryemail',
         label: gettext('Secondary email - Additional e-mail address'),
         value: '',
+        modifiers: [
+          {
+            type: 'hidden'  // This will hide the field in the UI
+          }
+        ],
         validators: {
           patternType: 'email'
         }
@@ -237,13 +370,14 @@ export class NotificationSettingsFormPageComponent extends BaseFormPageComponent
       {
         template: 'submit'
       },
-      {
+      /*{
         template: 'cancel',
         execute: {
           type: 'url',
-          url: '/setupwizard/notificationsettings'
+          url: '/system/notification'
         }
       },
+      */
       {
         text: gettext('Test'),
         enabledConstraint: { operator: 'truthy', arg0: { prop: 'enable' } },
@@ -255,7 +389,7 @@ export class NotificationSettingsFormPageComponent extends BaseFormPageComponent
             progressMessage: gettext('Please wait, sending a test email ...'),
             successNotification: gettext(
               // eslint-disable-next-line max-len
-              'An attempt to send the test email has been made. Please check your mailbox. If the email does not arrive, check any spam folders and also check there are no Postfix related errors in the system log.'
+              'An attempt to send the test email has been made. Please check your mailbox. If the email does not arrive, check spam folders or account settings. '
             )
           }
         }
@@ -281,7 +415,7 @@ export class NotificationSettingsFormPageComponent extends BaseFormPageComponent
         
       },
       {template:'submit',
-        text:'Next: Apps-Drive Set Up >',
+        text:'Next: Apps-Main Page >',
         disabled:false,
         /*execute: {
           type: 'url',
@@ -293,9 +427,10 @@ export class NotificationSettingsFormPageComponent extends BaseFormPageComponent
             service: 'HomeCloud',
             task:false,
             method: 'checkNotificationEmailForWizard',
-            successUrl:'/setupwizard/apps/drive',
+            successUrl:'/setupwizard/apps',
             progressMessage: gettext('Please wait, checking notification email...'),
             successNotification: gettext('Notification email check completed successfully.'),
+            
           }
         }
       }
@@ -303,10 +438,11 @@ export class NotificationSettingsFormPageComponent extends BaseFormPageComponent
 
   };
   
-  constructor(private sanitizer: DomSanitizer) {
+ constructor(private sanitizer: DomSanitizer) {
     super();
-    this.config.fields[1].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[1].title) as unknown as string;   
-    
+    //this.config.fields[2].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[2].title) as unknown as string;   
+     // Sanitize the HTML content once during construction
+    this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);
   }
   ngAfterViewInit(): void {
      
@@ -314,13 +450,13 @@ export class NotificationSettingsFormPageComponent extends BaseFormPageComponent
     setTimeout(() => {
 
       // Select all paragraph elements (assuming they are rendered as `window-drive-form1 omv-form-paragraph` elements)
-        const paragraphs = document.querySelectorAll('#email-notification-form omv-form-paragraph');
+       // const paragraphs = document.querySelectorAll('omv-setupwizard-notification-settings-form-page #email-notification-form omv-form-paragraph');
 
-        // Inject the sanitized HTML into the correct paragraph element
+        /* Inject the sanitized HTML into the correct paragraph element
         paragraphs[1].innerHTML =
-        (this.config.fields[1].title as any).changingThisBreaksApplicationSecurity ||
-        this.config.fields[1].title?.toString();  
-        
+        (this.config.fields[2].title as any).changingThisBreaksApplicationSecurity ||
+        this.config.fields[2].title?.toString();  
+        */
         this.enableNavButtons();
      
     
@@ -337,6 +473,18 @@ export class NotificationSettingsFormPageComponent extends BaseFormPageComponent
         }
       });
     
+  }
+
+   ngOnInit(): void {
+    console.log('NotificationSettings initialized');
+    const innerElement = document.querySelector('#mainContainer') as HTMLElement;
+    console.log('scrolltop before:',innerElement.scrollTop);
+    
+    console.log('Inner Element:', innerElement);
+    if (innerElement) {
+      innerElement.scrollTop = 0; // Ensure the scroll position is at the top
+    }
+    console.log('scrolltop now:',innerElement.scrollTop);
   }
 
 }

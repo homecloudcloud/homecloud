@@ -42,7 +42,20 @@ def disable_funnel(source_port: int, destination_port: int) -> Dict[str, Any]:
             "off"
         ]
         
-        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+        print(f"Running command: {' '.join(cmd)}")
+        sys.stdout.flush()
+        result = subprocess.run(cmd, text=True, timeout=60)
+        
+        print(f"Command completed with exit code: {result.returncode}")
+        sys.stdout.flush()
+        
+        if result.returncode != 0:
+            return {
+                "status": "Error",
+                "message": f"Tailscale funnel command failed with exit code {result.returncode}",
+                "source_port": source_port,
+                "destination_port": destination_port
+            }
         #paperless env file update
         if destination_port == 8000:
             try:
@@ -152,6 +165,13 @@ def disable_funnel(source_port: int, destination_port: int) -> Dict[str, Any]:
                 "destination_port": destination_port
             }
             
+    except subprocess.TimeoutExpired:
+        return {
+            "status": "Error",
+            "message": "Tailscale funnel command timed out after 30 seconds",
+            "source_port": source_port,
+            "destination_port": destination_port
+        }
     except subprocess.CalledProcessError as e:
         return {
             "status": "Error",

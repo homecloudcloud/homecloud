@@ -1,8 +1,0 @@
-version: "1.0"
-type: navigation-item
-data:
-  path: "system.certificate.ssh"
-  position: 10
-  text: _("SSH")
-  icon: ssh
-  url: "/system/certificate/ssh"

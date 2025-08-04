@@ -3,7 +3,13 @@
 import os
 import yaml
 import subprocess
+import requests
+import urllib3
 from typing import List
+
+
+# Disable SSL warnings
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 def run_command(cmd: List[str], ignore_errors: bool = True) -> None:
     """Run command and optionally ignore errors"""

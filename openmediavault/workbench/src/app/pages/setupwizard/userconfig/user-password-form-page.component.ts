@@ -35,7 +35,7 @@ export class UserPasswordFormPageComponent extends BaseFormPageComponent {
 
   public config: FormPageConfig = {
     request: {
-      service: 'UserMgmt',
+      service: 'Homecloud',
       post: {
         method: 'setPasswordByContextAll'  /*home cloud changes*/
       }

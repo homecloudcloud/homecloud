@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from '~/app/shared/shared.module';
 import {AppsDriveMainComponent} from '~/app/pages/startconfiguration/apps/drive/drive-form-page.component'
 import {AppsDriveWindowsComponent} from '~/app/pages/startconfiguration/apps/drive/windows/drive-access-form-page.component';
-import {AppsDriveAccessComponent} from '~/app/pages/startconfiguration/apps/drive/iPhone/drive-access-form-page.component';
+import {AppsDriveAccessComponent} from '~/app/pages/startconfiguration/apps/drive/access/drive-access-form-page.component';
 import {AppsDrivemacOSComponent} from '~/app/pages/startconfiguration/apps/drive/macos/drive-access-form-page.component';
 import {AppsDriveandroidComponent} from '~/app/pages/startconfiguration/apps/drive/android/drive-access-form-page.component';
 import {AppsDriveBackupComponent} from '~/app/pages/startconfiguration/apps/drive/backup/drive-backup-page.component';

@@ -1,0 +1,62 @@
+@import '../../../../../assets/colors.scss';
+
+.omv-dark-theme{
+  h1,h2,h3{
+        color:$lightblue !important;
+    }
+}
+
+/*:host {
+      ::ng-deep {
+*/
+omv-filesystem-main-page{
+        #filesystem-main-form-1{
+          margin-bottom:-2rem !important;
+        }
+        #filesystem-main-form-2{
+          margin-top:-2rem !important;
+        }
+
+
+        .omv-form-paragraph{
+          padding:2rem!important;
+          line-height:1.5rem!important;
+        }
+
+        .omv-form-paragraph h2,
+        .omv-form-paragraph p,
+        .omv-form-paragraph li,
+        .omv-form-paragraph h3 {
+          font-size: var(--mat-font-size-subheading-2) !important;
+        
+        }
+        .omv-form-paragraph p,
+        .omv-form-paragraph li {
+          font-size: var(--mat-font-size-subheading-2) !important;
+          font-weight:var(--mat-font-weight-subheading-2) !important;
+        }
+        .omv-form-paragraph h1{
+          font-size: var(--mat-font-size-headline) !important;
+          line-height:2rem;
+        
+        }
+      
+        
+        .omv-form-paragraph h2,
+        .omv-form-paragraph h1,
+        .omv-form-paragraph h3 {
+          color:$blue;
+        }
+
+        .omv-form-paragraph a.plainLink{
+          font-weight:bold;
+        }
+        .omv-form-paragraph a.plainLink:hover,
+        .omv-form-paragraph a.plainLink:focus{
+            background-color:$lightblue;
+            color:white;
+            padding:10px;
+            text-decoration: none;
+            font-weight:bold;
+        }
+      }

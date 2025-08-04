@@ -21,7 +21,7 @@ import * as _ from 'lodash';
 import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
 import { BaseFormPageComponent } from '~/app/pages/base-page-component';
 import { ViewEncapsulation } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer,SafeHtml } from '@angular/platform-browser';
 import { RpcService } from '~/app/shared/services/rpc.service';
 
 
@@ -30,7 +30,9 @@ import { RpcService } from '~/app/shared/services/rpc.service';
 @Component({
   selector:'omv-joplin-restart-page', //Home cloud changes
   //template: '<omv-intuition-form-page [config]="this.config"></omv-intuition-form-page>',
-  template: `
+  template: `<div id="joplin-restart-form">
+              <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
+            </div>
   <omv-intuition-form-page id="joplin-restart-form1" [config]="this.config"></omv-intuition-form-page>
   `,
   styleUrls: ['./joplin-restart-page.component.scss'],
@@ -38,8 +40,11 @@ import { RpcService } from '~/app/shared/services/rpc.service';
 })
 
 export class AppsJoplinRestartComponent extends BaseFormPageComponent {
-  private hostname: string = '';
+  //private hostname: string = '';
   private joplinStatus: string = '';
+  public safeHtmlContent:SafeHtml;
+  private htmlContent=`<h1>Joplin Status</h1>
+                       <p>Joplin backend service runs on Homecloud and is required to be running for mobile or web app to work.</p>  `;
   public config: FormPageConfig = {
     request: {
       service: 'Homecloud',
@@ -49,10 +54,6 @@ export class AppsJoplinRestartComponent extends BaseFormPageComponent {
     },
     fields: [
       
-      {
-        type: 'paragraph',
-        title: gettext('Joplin backend service runs on Homecloud and is required to be running for mobile or web app to work.')
-      },
       {
         type: 'textInput',
         name: 'status',
@@ -84,49 +85,39 @@ export class AppsJoplinRestartComponent extends BaseFormPageComponent {
   };
 
   constructor(private sanitizer: DomSanitizer, private rpcService: RpcService) {
-    super();   
+    super();  
+    // Sanitize the HTML content once during construction
+      this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);   
     
   }
   ngOnInit(){
-    console.log('ngOnInit called');
+  //  console.log('ngOnInit called');
     this.fetchStatusAndUpdateFields();  //get hostname value and update in link
   }
   fetchStatusAndUpdateFields(): void {
     this.rpcService.request('Homecloud', 'getJoplinServiceStatus').subscribe(response => {
-      this.hostname = response.hostname; // Adjust based on API response structure
+      //this.hostname = response.hostname; // Adjust based on API response structure
       this.joplinStatus = response.status;
       this.updateFieldColors(this.joplinStatus);  //Update colors based on status
       this.updateFieldVisibility(this.joplinStatus);//enable or disable button based on status
-      this.config.fields[4].title=`To begin using Joplin: Login with user:admin@localhost, default password: admin to create users. After that use mobile or computer app to start using. <a class="drive-btn" href="${this.hostname}" target="_blank"> &nbsp;&nbsp;Joplin WebApp for Admin</a>`;
-      // Sanitize the title 
-      this.config.fields[4].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[4].title) as unknown as string;
-      this.addSanitizedHtml();
+    
     });
   }
-  addSanitizedHtml(){
-     // Select all paragraph elements (assuming they are rendered as `ios-drive-form1 omv-form-paragraph` elements)
-     const paragraphs = document.querySelectorAll('#joplin-config-form1 .omv-form-paragraph');
-
-     // Inject the sanitized HTML into the correct paragraph element
-     paragraphs[3].innerHTML =
-     (this.config.fields[4].title as any).changingThisBreaksApplicationSecurity ||
-     this.config.fields[4].title?.toString();
-
-  }
+  
 
   updateFieldColors(status:string):void{
-    console.log('updating field colors');
+  //  console.log('updating field colors');
     const element = document.querySelector('#joplin-restart-form1 omv-form-text-input:nth-of-type(1) .mat-form-field input');
     if(element){
       console.log('element found', element);
       if(status === 'Running'){
-        console.log('Adding green removing red');
-        element.classList.add('greenpaperlessstatus');
-        element.classList.remove('redpaperlessstatus');
+    //    console.log('Adding green removing red');
+        element.classList.add('greenappstatus');
+        element.classList.remove('redapptatus');
       }else{
-        console.log('Adding red removing green');
-        element.classList.add('redpaperlessstatus');
-        element.classList.remove('greenpaperlessstatus');
+     //   console.log('Adding red removing green');
+        element.classList.add('redappstatus');
+        element.classList.remove('greenappstatus');
         
       }
     }
@@ -135,13 +126,13 @@ export class AppsJoplinRestartComponent extends BaseFormPageComponent {
   updateFieldVisibility(status:string):void{
     const button = document.querySelector('#joplin-restart-form1 mat-card-actions button');
     if(button){
-      console.log('button found', button);
+    //  console.log('button found', button);
       if(status === 'Not deployed'){
-        console.log('Disabling button');
+     //   console.log('Disabling button');
         button.classList.add('disabled-btn');
       }
       else{
-        console.log('Enabling button');
+    //    console.log('Enabling button');
         button.classList.remove('disabled-btn');
       }
     }

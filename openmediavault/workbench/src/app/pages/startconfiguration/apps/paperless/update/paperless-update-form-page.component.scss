@@ -1,29 +1,64 @@
 @import '../../../../../../assets/colors.scss';
 
-.omv-form-paragraph {
-  font-size: var(--mat-font-size-subheading-2) !important;
+.omv-dark-theme{
+  h1,h2,h3{
+        color:$lightblue !important;
+    }
 }
 
 
-.hidden{
-  display:none !important;
+omv-paperless-update-page{
+  #paperless-update-form1,#paperless-update-form3{
+    margin-bottom:-2rem;
+  }
+  
+  .hidden{
+    display:none !important;
+  }
+
+  .greenUpdateStatus{
+    background-color:$lightgreen !important;
+    width:200px !important;
+  }
+  .redUpdateStatus{
+    background-color:$lightred !important;
+    width:300px !important;
+  }
+  .plainLink{
+    font-weight:bold;
+  }
+  .plainLink:hover, .plainLink:focus{
+    background-color:$lightblue;
+    color:white;
+    padding:10px;
+    text-decoration: none;
+    font-weight:bold;
+  }
+  .omv-form-paragraph{
+    padding:2rem;
+    line-height:1.5rem;
+  }
+
+  .omv-form-paragraph,h2,p,li,h3 {
+    font-size: var(--mat-font-size-subheading-2) !important;
+      
+  }
+  .omv-form-paragraph,p,li {
+    font-size: var(--mat-font-size-subheading-2) !important;
+    font-weight:var(--mat-font-weight-subheading-2) !important;
+  }
+  h1{
+    font-size: var(--mat-font-size-headline) !important;
+    line-height:2rem;
+      
+  }
+    
+      
+  h2,h1,h3 {
+    color:$blue;
+  }
+
+
+
 }
 
-.greenUpdateStatus{
-  background-color:$lightgreen !important;
-  width:200px !important;
-}
-.redUpdateStatus{
-  background-color:$lightred !important;
-  width:300px !important;
-}
-omv-paperless-update-page .plainLink{
-  font-weight:bold;
-}
-omv-paperless-update-page .plainLink:hover,omv-paperless-update-page .plainLink:focus{
-  background-color:$lightblue;
-  color:white;
-  padding:10px;
-  text-decoration: none;
-  font-weight:bold;
-}

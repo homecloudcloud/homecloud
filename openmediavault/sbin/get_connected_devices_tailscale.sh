@@ -29,7 +29,7 @@ if [ "$OS_TYPE" = "all" ]; then
     tailscale status --json | jq '
     {
         data: [
-            .Peer[] |
+            (.Peer // [])[] |
             # Create the name first
             (. + {computed_name: (if .DNSName then (.DNSName | rtrimstr(".")) else (.HostName | rtrimstr(".")) end)}) |
             # Only select entries where computed_name is not empty
@@ -47,7 +47,7 @@ else
     tailscale status --json | jq --arg os "$OS_TYPE" '
     {
         data: [
-            .Peer[] | 
+            (.Peer // [])[] | 
             select(.OS | ascii_downcase | contains($os)) |
             # Create the name first
             (. + {computed_name: (if .DNSName then (.DNSName | rtrimstr(".")) else (.HostName | rtrimstr(".")) end)}) |

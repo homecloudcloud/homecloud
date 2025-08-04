@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  reset-app:
+    image: homecloudcloud/forgot-password:0.2
+    labels:
+    - traefik.enable=true
+    - traefik.http.routers.forgotpassword.rule=HostRegexp(`{any:.+}`) && PathPrefix(`/forgot-password`)
+    - traefik.http.routers.forgotpassword.tls=true
+    ports:
+      - :80
+    env_file:
+      - ./app/config.env
+    volumes:
+      - ./reset.sh:/reset.sh:ro
+    restart: unless-stopped

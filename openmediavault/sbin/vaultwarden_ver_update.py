@@ -8,6 +8,11 @@ import requests
 import argparse
 import yaml
 from datetime import datetime
+import urllib3
+
+
+# Disable SSL warnings
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 def print_status(message, error=False):
     """Print formatted status messages"""
@@ -60,8 +65,8 @@ WantedBy=multi-user.target
             subprocess.run(['systemctl', 'enable', 'vaultwarden.service'], check=True)
             subprocess.run(['systemctl', 'daemon-reload'], check=True)
             return True
-            
-        return True
+        else:   
+            return True
     except Exception as e:
         print_status(f"Error creating systemd service: {str(e)}", error=True)
         return False
@@ -81,6 +86,21 @@ def update_docker_compose(file_path, target_version):
             return True
     except Exception as e:
         print_status(f"Error updating docker-compose file: {str(e)}", error=True)
+        return False
+
+
+def check_internet_connectivity():
+    """Check internet connectivity using OMV RPC"""
+    try:
+        result = subprocess.run(['omv-rpc', '-u', 'admin', 'Homecloud', 'enumeratePhysicalNetworkDevices'],
+                              capture_output=True, text=True, check=True)
+        devices = json.loads(result.stdout)
+        
+        for device in devices:
+            if device.get('devicename') == 'internet0':
+                return device.get('state', False)
+        return False
+    except Exception:
         return False
 
 def run_docker_pull():
@@ -121,7 +141,7 @@ def create_required_directories():
                         raise Exception(f"Failed to set ownership of {directory}: {str(e)}")
         return True
     except Exception as e:
-        print_status(f"Error creating directories: {str(e)}", error=True)
+        #print_status(f"Error creating directories: {str(e)}", error=True)
         return False
 
 def main():
@@ -135,6 +155,13 @@ def main():
         if os.geteuid() != 0:
             raise Exception("This script must be run as root")
 
+        # Check internet connectivity
+        print_status("Checking internet connectivity...")
+        if not check_internet_connectivity():
+            print_status("Not connected to Internet. Check your network connectivity", error=True)
+            sys.exit(0)
+
+            
         # Check deployment status
         print_status("Checking deployment status...")
         result = subprocess.run(['omv-rpc', '-u', 'admin', 'Homecloud', 'getVaultwardenServiceStatus'],
@@ -180,8 +207,8 @@ def main():
             print_status(f"Target version: {target_version}")
 
             # Compare versions
-            if deployed_version >= target_version:
-                raise Exception(f"Target version {target_version} is not greater than current version {deployed_version}")
+            #if deployed_version >= target_version:
+            #    raise Exception(f"Target version {target_version} is not greater than current version {deployed_version}")
 
             # Stop service
             print_status("Stopping vaultwarden service...")

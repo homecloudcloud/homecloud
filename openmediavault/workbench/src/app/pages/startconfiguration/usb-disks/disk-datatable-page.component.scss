@@ -1,0 +1,70 @@
+@import '../../../../assets/colors.scss';
+
+.omv-dark-theme{
+  h1,h2,h3{
+        color:$lightblue !important;
+    }
+}
+
+omv-usb-disk-main-page {
+
+    omv-navigation-page{
+     mat-card:hover,mat-card:focus{
+      background-color: $lightblue !important;
+      color: white !important   ;
+      }
+
+    }
+
+      #usb-disk-main-form-1{
+        margin-bottom:-2rem !important;
+      }
+
+      .usb-ports-image{
+        width:30%;
+      }
+      
+      /* Media query for small screens */
+      @media screen and (max-width: 768px) {
+        .usb-ports-image {
+          width: 100%;
+        }
+      }
+
+
+      .omv-form-paragraph{
+        padding:2rem!important;
+        line-height:1.5rem!important;
+      }
+
+      .omv-form-paragraph,h2,p,li,h3 {
+        font-size: var(--mat-font-size-subheading-2) !important;
+      
+      }
+      .omv-form-paragraph,p,li {
+        font-size: var(--mat-font-size-subheading-2) !important;
+        font-weight:var(--mat-font-weight-subheading-2) !important;
+      }
+      h1{
+        font-size: var(--mat-font-size-headline) !important;
+        line-height:2rem;
+      
+      }
+    
+      
+      h2,h1,h3 {
+        color:$blue;
+      }
+
+       a.plainLink{
+        font-weight:bold;
+      }
+      a.plainLink:hover,a.plainLink:focus{
+          background-color:$lightblue;
+          color:white;
+          padding:10px;
+          text-decoration: none;
+          font-weight:bold;
+      }
+
+}

@@ -4,5 +4,5 @@ data:
   path: "startconfiguration.apps.photos.reset"
   position: 70
   text: _("Reset")
-  icon: network
+  icon: "mdi:delete-forever"
   url: "/startconfiguration/apps/photos/reset"

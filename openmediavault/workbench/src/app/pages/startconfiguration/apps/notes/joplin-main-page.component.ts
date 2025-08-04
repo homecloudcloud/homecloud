@@ -21,7 +21,7 @@ import * as _ from 'lodash';
 import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
 import { BaseFormPageComponent } from '~/app/pages/base-page-component';
 import { ViewEncapsulation } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer,SafeHtml } from '@angular/platform-browser';
 import { RpcService } from '~/app/shared/services/rpc.service';
 
 
@@ -29,7 +29,9 @@ import { RpcService } from '~/app/shared/services/rpc.service';
   selector:'omv-joplin-main-page', //Home cloud changes
   //template: '<omv-intuition-form-page [config]="this.config"></omv-intuition-form-page>',
   template: `
-  <omv-intuition-form-page id="joplin-main-form1" [config]="this.config"></omv-intuition-form-page>
+  <div id="joplin-main-form1">
+    <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
+  </div>
   <omv-intuition-form-page id="joplin-main-form2" [config]="this.config2"></omv-intuition-form-page>
   <omv-intuition-form-page id="joplin-main-form3" [config]="this.config3"></omv-intuition-form-page>
   <omv-navigation-page></omv-navigation-page>
@@ -41,48 +43,66 @@ import { RpcService } from '~/app/shared/services/rpc.service';
 })
 
 export class AppsJoplinMainComponent extends BaseFormPageComponent {
-  public config: FormPageConfig = {
-    request: {
-      service: 'Homecloud',
-      get: {
-        method: 'getJoplinServiceStatus'
-      }
-    },
-    fields: [
-      {
-        type: 'paragraph',
-        title: gettext('Homecloud supports opensource Notes app: Joplin.')
-      },
-      {
-        type: 'paragraph',
-        title: gettext('Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be encrypted, copied, tagged and modified either from the applications directly or from your own text editor. ')
-      },
-      {
-        type: 'paragraph',
-        title: gettext('Joplin is "offline first", which means you always have all your data on your phone or computer. This ensures that your notes are always accessible, whether you have an internet connection or not.All your private personal documents are transformed using optical character recognition (OCR) to searchable archive accessible on any device. All data resides on Homecloud in your physical and logical control giving you privacy and control.')
-      },
-      {
-        type: 'paragraph',
-        title: gettext('')
-      },
-      {
-        type: 'paragraph',
-        title: gettext('Joplin has two components: 1. Backend service that runs on Homecloud. It stores all your notes on Homecloud within privacy and security of your Home. No data is stored on any public cloud')
-      },
-      {
-        type: 'paragraph',
-        title: gettext('2.Frontend which is a app that can be used to take notes, import/export notes and share among users. The application is available for Windows, Linux, macOS, Android and iOS. A Web Clipper, to save web pages and screenshots from your browser, is also available for Firefox and Chrome.')
-      },
-      {
-        type: 'paragraph',
-        title: gettext('You can also selectively share notes with your family, friends who also can create account on Joplin app deployed on your Homecloud. They would need to acces your Tailscale VPN to connect to Homecloud.')
-      },
-      {
-        type: 'paragraph',
-        title: gettext(` This is an open source 3rd party software. By clicking deploy you agree to terms and conditions enter link here. To learn more about Joplin visit open source project at:&nbsp;&nbsp; <a class="plainLink" href="https://joplinapp.org/" target="_blank">Learn more about Joplin </a> `)
-      }
-    ]
-  };
+  public safeHtmlContent: SafeHtml;
+  
+  private htmlContent = `
+    <div class="content-wrapper">
+      <div class="left-column">
+        <div class="joplin-logo"></div>
+        <p class="intro-text">
+          Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be encrypted, copied, tagged and modified either from the applications directly or from your own text editor.
+        </p>
+        <h2>Key Features:</h2>
+        <ul>
+          <li><strong>Text search</strong><br>
+            Full text search is available on all platforms to quickly find the information you need. 
+          </li>
+
+          <li><strong>Offline First:</strong><br>
+            Joplin is "offline first", which means you always have all your data on your phone or computer. This ensures that your notes are always accessible, whether you have an internet connection or not.
+          </li>
+
+          <li><strong>Secure sync</strong><br>
+            The notes can be securely synchronised using end-to-end encryption with Homecloud.
+          </li>
+
+        </ul>
+
+        <h2>How It Works</h2>
+        <p><strong>Joplin has two components:</strong></p>
+
+        <h3>1. Backend (Runs on Homecloud)</h3>
+        <ul>
+          <li>It stores all your notes on Homecloud privately. No data is stored on any public cloud</li>
+        </ul>
+
+        <h3>2. Frontend (Mobile App & Web App)</h3>
+        <ul>
+          <li>Users can take notes, import/export notes and share among users.</li>
+          <li>The application is available for Windows, Linux, macOS, Android and iOS.</li>
+          <li>A Web Clipper, to save web pages and screenshots from your browser, is also available for Firefox and Chrome.</li>
+          <li>Share specific notes securely with family or friends — they can create their own accounts on your Joplin instance. They would need to access your Tailscale VPN to connect to Homecloud.</li>
+        </ul>
+
+        <h2>Deployment Notice</h2>
+        <p>
+          Joplin is an open-source third-party application. Before deploying, please read more about it here:<br> 
+          <a href="https://joplinapp.org/" class="plainLink" target="_blank">https://joplinapp.org/</a>
+        </p>
+
+        <h2>Getting Started</h2>
+        <p>Follow below instructions for deployment.</p>
+        <p>After deploying, go to the <a class="plainLink" href="#/startconfiguration/apps/notes/access">access page</a> to start using the app.</p>
+      </div>
+
+      <div class="right-column">
+        <img src="/assets/images/Joplin_image.webp" alt="Joplin dashboard image">
+      </div>
+    </div>
+
+    
+`;
+  
 
   public config2: FormPageConfig = {
       request: {
@@ -97,6 +117,12 @@ export class AppsJoplinMainComponent extends BaseFormPageComponent {
         name: 'version',
         label: gettext('Latest Joplin version available to deploy'),
         hint: gettext('This version will be deployed'),
+        value: '',
+        readonly: true
+      },
+      {
+        type: 'textInput',
+        name: 'message',
         value: '',
         readonly: true
       },
@@ -149,7 +175,7 @@ export class AppsJoplinMainComponent extends BaseFormPageComponent {
                   }
                 }
               },
-            successUrl:'/startconfiguration/apps/joplin'
+            successUrl:'/startconfiguration/apps/notes/access'
             }
         }
       }
@@ -229,30 +255,14 @@ export class AppsJoplinMainComponent extends BaseFormPageComponent {
     ]
 
   };
-  constructor(private rpcService: RpcService,private sanitizer: DomSanitizer) {
+   constructor(private rpcService: RpcService,private sanitizer: DomSanitizer) {
     super();
-    // Sanitize the title 
-    this.config.fields[7].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[7].title) as unknown as string;
-
+     // Sanitize the HTML content once during construction
+    this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);
 
   }
 
-  ngAfterViewInit(): void {
-        
-    // Delay the operation to ensure the view is fully rendered
-    setTimeout(() => {
-      
-      // Select all paragraph elements 
-      const paragraphs = document.querySelectorAll('#joplin-main-form1 .omv-form-paragraph');
-      
-
-
-      paragraphs[7].innerHTML =
-      (this.config.fields[7].title as any).changingThisBreaksApplicationSecurity ||
-      this.config.fields[7].title?.toString();
-      
-    }, 100); // Timeout ensures it happens after the view has rendered
-  }
+  
   ngOnInit(){
     this.fetchStatusAndUpdateFields();  //get hostname value and update in link
     
@@ -266,39 +276,68 @@ export class AppsJoplinMainComponent extends BaseFormPageComponent {
     });
   }
 
+
   updateFieldVisibility(status:string):void{
-    console.log('deploy status',status);
-    const checkboxDeploy=document.querySelector('omv-joplin-main-page #joplin-main-form2 omv-form-checkbox mat-checkbox');
-    const checkboxRemove=document.querySelector('omv-joplin-main-page #joplin-main-form3 omv-form-checkbox mat-checkbox');
+  //  console.log('deploy status',status);
+    const checkboxDeploy=document.querySelector('omv-joplin-main-page #joplin-main-form2 omv-form-checkbox');
+    const checkboxRemove=document.querySelector('omv-joplin-main-page #joplin-main-form2 omv-form-checkbox');
     const deployButton = document.querySelector('omv-joplin-main-page  #joplin-main-form2 omv-submit-button button');
-    const removeButton = document.querySelector('omv-joplin-main-page  #joplin-main-form3 omv-submit-button button');
-    const joplinMainForm2=document.querySelector('omv-joplin-main-page #joplin-main-form2');
-    const joplinMainForm3=document.querySelector('omv-joplin-main-page #joplin-main-form3');
+    
+    const photosMainForm2=document.querySelector('omv-joplin-main-page #joplin-main-form2');
+    const photosMainForm3=document.querySelector('omv-joplin-main-page #joplin-main-form3');
    
     if(status === 'Not deployed'){
-      console.log('status is not deployed');
-      joplinMainForm3.classList.add('hidden');
+      
+     // console.log('status is not deployed');
+      photosMainForm3.classList.add('hidden');
       checkboxDeploy.classList.remove('hidden');
-      checkboxDeploy.addEventListener('click', () => {
-        // Add a small delay to ensure class changes are applied
-        setTimeout(() => {
-            const isChecked = checkboxDeploy.classList.contains('mat-checkbox-checked');
-            console.log('Checkbox checked status:', isChecked);            
-            if (isChecked) {
-                deployButton.classList.remove('mat-button-disabled');
-                console.log('Deploy button enabled - classes:', deployButton.className);
-            } else {
-                deployButton.classList.add('mat-button-disabled');
-                console.log('Deploy button disabled - classes:', deployButton.className);
-            }
-        }, 0);
-    });
+      this.rpcService.request('Homecloud', 'joplin_get_latest_version').subscribe(response => {
+        const version = response.version;
+        if (!version || version.trim() === '') {
+          // Version is null, undefined, empty, or contains only spaces
+          deployButton.classList.add('mat-button-disabled');
+          checkboxDeploy.classList.add('hidden');
+        }
+        else{
+           this.checkboxDeployListener();
+        }
+      });     
      
-    }else{
-      console.log('status is deployed');
-      joplinMainForm2.classList.add('hidden');
+    }
+    else{
+    //  console.log('status is deployed');
+      photosMainForm2.classList.add('hidden');
       checkboxRemove.classList.remove('hidden');
-      checkboxRemove.addEventListener('click', () => {
+      this.checkboxRemoveListener();
+     
+    }
+  }
+
+  checkboxDeployListener(){
+    const checkboxDeploy=document.querySelector('omv-joplin-main-page #joplin-main-form2 omv-form-checkbox mat-checkbox');
+    const deployButton = document.querySelector('omv-joplin-main-page  #joplin-main-form2 omv-submit-button button');
+     checkboxDeploy.addEventListener('click', () => {
+            // Add a small delay to ensure class changes are applied
+            setTimeout(() => {
+                const isChecked = checkboxDeploy.classList.contains('mat-checkbox-checked');
+            //   console.log('Checkbox checked status:', isChecked);
+                
+                if (isChecked) {
+                    deployButton.classList.remove('mat-button-disabled');
+              //     console.log('Deploy button enabled - classes:', deployButton.className);
+                } else {
+                    deployButton.classList.add('mat-button-disabled');
+            //       console.log('Deploy button disabled - classes:', deployButton.className);
+                }
+            }, 0);
+      });
+
+  }
+
+  checkboxRemoveListener(){
+    const removeButton = document.querySelector('omv-joplin-main-page  #joplin-main-form3 omv-submit-button button');
+    const checkboxRemove=document.querySelector('omv-joplin-main-page #joplin-main-form3 omv-form-checkbox mat-checkbox');
+    checkboxRemove.addEventListener('click', () => {
         // Add a small delay to ensure class changes are applied
         setTimeout(() => {
             const isChecked = checkboxRemove.classList.contains('mat-checkbox-checked');
@@ -307,16 +346,15 @@ export class AppsJoplinMainComponent extends BaseFormPageComponent {
             if (isChecked) {
                 removeButton.classList.remove('mat-button-disabled');
                 removeButton.classList.add('red', 'white');
-                console.log('Remove button enabled - classes:', removeButton.className);
+          //      console.log('Remove button enabled - classes:', removeButton.className);
             } else {
                 removeButton.classList.add('mat-button-disabled');
                 removeButton.classList.remove('red', 'white');
-                console.log('Remove button disabled - classes:', removeButton.className);
+          //      console.log('Remove button disabled - classes:', removeButton.className);
             }
         }, 0);
     });
-     
-    }
   }
+
 
 }

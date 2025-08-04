@@ -51,7 +51,7 @@ service_status=$(get_service_status)
 output_status "$service_status" "$timestamp"
 
 # Exit with appropriate status code
-if [ "$service_status" = "Running" ] || [ "$service_status" = "Starting" ]; then
+if [ "$service_status" = "Running" ] || [ "$service_status" = "Starting" ] || [ "$service_status" = "starting" ] || [ "$service_status" = "running" ]; then
     exit 0
 else
     exit 1

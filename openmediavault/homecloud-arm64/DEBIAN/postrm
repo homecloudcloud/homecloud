@@ -1,0 +1,52 @@
+#!/bin/bash
+set -e
+
+# Restore original hostapd.conf if backup exists
+if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
+    if [ -f /etc/hostapd/hostapd.conf.bak ]; then
+        mv -f /etc/hostapd/hostapd.conf.bak /etc/hostapd/hostapd.conf
+        systemctl is-active --quiet hostapd && systemctl restart hostapd || true
+    fi
+    
+    # Restore original systemd-udevd.service if backup exists
+    if [ -f /lib/systemd/system/systemd-udevd.service.bak ]; then
+        mv -f /lib/systemd/system/systemd-udevd.service.bak /lib/systemd/system/systemd-udevd.service
+        systemctl daemon-reload
+        systemctl restart systemd-udevd.service
+    fi
+
+# Stop and disable services during package removal
+    # Stop and disable the OLED display disk service
+    systemctl stop oled-display-disk.service || true
+    systemctl disable oled-display-disk.service || true
+
+    # Stop and disable the watchdog service
+    systemctl stop watchdog-eye.service || true
+    systemctl disable watchdog-eye.service || true
+
+    # Stop and disable the traefik service
+    systemctl stop traefik.service || true
+    systemctl disable traefik.service || true
+
+    # Stop and disable the reboot-listener service
+    systemctl stop reboot-listener.service || true
+    systemctl disable reboot-listener.service || true
+
+    # Stop and disable the check_certificates service
+    systemctl stop check_certificates.service || true
+    systemctl disable check_certificates.service || true
+
+    # Stop and disable the password-reset service
+    systemctl stop password-reset.service || true
+    systemctl disable password-reset.service || true
+
+    # Stop and disable the init-display service
+    systemctl stop init-display.service || true
+    systemctl disable init-display.service || true
+
+    # Reload systemd to apply changes
+    systemctl daemon-reload || true
+    
+fi
+
+exit 0

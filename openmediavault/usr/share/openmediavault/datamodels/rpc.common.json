@@ -75,7 +75,7 @@
                         "required": true
                     },
                     "accepted-date": {
-                        "type": "number",
+                        "type": "string",
                         "required": true
                     },
 					"comment": {
@@ -86,6 +86,39 @@
             }
 
         }
+    }
+},
+
+{
+    "type": "rpc",
+    "id": "rpc.common.savetailscaletermsflags",
+    "params": {
+        "type": "object",
+        "properties": {
+            "tailscaleTermsVersion": {
+                "type": "string",
+                "required": true
+            },
+            "user": {
+                "type": "string",
+                "required": true
+            },
+            "accepted": {
+                "type": "boolean",
+                "required": true
+             },
+            "accepted-date": {
+                "type": "string",
+                "required": true
+            },
+			"comment": {
+				"type": "string",
+				"required": true
+			}        
+        }
+            
+
+        
     }
 },
 {

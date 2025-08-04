@@ -21,6 +21,7 @@ import * as _ from 'lodash';
 
 import { DashboardWidgetConfig } from '~/app/core/components/dashboard/models/dashboard-widget-config.model';
 import { DashboardWidgetConfigService } from '~/app/core/services/dashboard-widget-config.service';
+import { RpcService } from '~/app/shared/services/rpc.service';
 
 @Component({
   selector: 'omv-dashboard-page',
@@ -28,15 +29,18 @@ import { DashboardWidgetConfigService } from '~/app/core/services/dashboard-widg
   styleUrls: ['./dashboard-page.component.scss']
 })
 export class DashboardPageComponent implements OnInit {
+  public hotspotStatus: string = '';
+  public hotspotActive: boolean = false;
   public widgets: Array<DashboardWidgetConfig> = [];
 
   public notConfiguredMessage: string = gettext(
     "The dashboard has not yet been configured. To personalize it, please go to the <a href='#/dashboard/settings'>settings page</a>."
   );
 
-  constructor(private dashboardWidgetConfigService: DashboardWidgetConfigService) {}
+  constructor(private dashboardWidgetConfigService: DashboardWidgetConfigService,private rpcService:RpcService) {}
 
   ngOnInit(): void {
+    this.getHotspotStatus();
     this.dashboardWidgetConfigService.configs$.subscribe(
       (widgets: Array<DashboardWidgetConfig>) => {
         const enabledWidgets: Array<string> = this.dashboardWidgetConfigService.getEnabled();
@@ -50,4 +54,35 @@ export class DashboardPageComponent implements OnInit {
       }
     );
   }
+
+  getHotspotStatus(): void {
+  //console.log('getHotspotStatus method called');
+  this.rpcService.request('Homecloud', 'getHotspotStatus').subscribe({
+    next: (response: any) => {
+      //console.log('RPC response received:', response);
+      this.hotspotStatus = response.active;
+      if(this.hotspotStatus === 'Active') {
+        this.hotspotActive = true;
+      }
+      //console.log('Hotspot status:', this.hotspotStatus);
+      //console.log('Hotspot active:', this.hotspotActive);
+    },
+    error: (error) => {
+      console.error('Error fetching hotspot status:', error);
+      this.hotspotStatus = '';
+      this.hotspotActive = false;
+    }
+  });
+}
+
+navigateToNetworkConfig(event: Event): void {
+  event.preventDefault();
+  // Use Angular router to navigate
+  window.location.href = '/#/startconfiguration/networkconfig/interfaces';
+}
+
+
+
+
+
 }

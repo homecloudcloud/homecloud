@@ -38,28 +38,22 @@ def check_service_status() -> str:
         print(f"Error checking service status: {e}")
         return "inactive"
 
-def check_docker_status(image_name: str) -> str:
-    """
-    Check docker container status
-    Returns: "Running", "Starting", or "Down"
-    """
+
+def check_docker_status(image_name):
+    """Get docker container status for given image"""
     try:
-        cmd = ["docker", "ps", "--format", "{{.Status}}"]
+        cmd = ['docker', 'ps', '--filter', f'ancestor={image_name}', '--format', '{{.Status}}']
         result = subprocess.run(cmd, capture_output=True, text=True)
+        status = result.stdout.strip().lower()
         
-        if result.returncode != 0:
-            return "Down"
-        
-        status = result.stdout.lower()
-        
-        if "healthy" in status:
+        if 'healthy' in status:
             return "Running"
-        elif "starting" in status:
+        elif 'starting' in status:
             return "Starting"
-        else:
-            return "Down"
-    except Exception as e:
-        print(f"Error checking docker status: {e}")
+        elif 'up' in status:
+            return "Running"
+        return "Down"
+    except Exception:
         return "Down"
 
 def read_env_file() -> Tuple[str, str]:

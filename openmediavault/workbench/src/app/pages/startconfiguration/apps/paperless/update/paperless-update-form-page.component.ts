@@ -22,14 +22,21 @@ import { FormPageConfig } from '~/app/core/components/intuition/models/form-page
 import { BaseFormPageComponent } from '~/app/pages/base-page-component';
 import { ViewEncapsulation } from '@angular/core';
 import { RpcService } from '~/app/shared/services/rpc.service';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer,SafeHtml } from '@angular/platform-browser';
 import { FormPageButtonConfig } from '~/app/core/components/intuition/models/form-page-config.type';
 
 
 @Component({
   selector:'omv-paperless-update-page', //Home cloud changes
-  template: `<omv-intuition-form-page id="paperless-update-form"[config]="this.config"></omv-intuition-form-page>
-             <omv-intuition-form-page id="paperless-update-form"[config]="this.config2"></omv-intuition-form-page>`,
+  template: `
+              <div id="paperless-update-form1">
+                <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
+              </div>
+              <omv-intuition-form-page id="paperless-update-form2"[config]="this.config"></omv-intuition-form-page>
+              <div id="paperless-update-form3">
+                <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent1"></div>
+              </div>
+             <omv-intuition-form-page id="paperless-update-form4"[config]="this.config2"></omv-intuition-form-page>`,
   styleUrls: ['./paperless-update-form-page.component.scss'],
   encapsulation: ViewEncapsulation.None  // This will disable view encapsulation
 })
@@ -37,8 +44,45 @@ import { FormPageButtonConfig } from '~/app/core/components/intuition/models/for
 
 export class AppsPaperlessUpdateFormPageComponent extends BaseFormPageComponent {
   private statustosend:string='';
+  private buttonText:string='';
+  public safeHtmlContent: SafeHtml;
+  public safeHtmlContent1: SafeHtml;
+  
+  
+  private htmlContent= `
+            <div class="update-section">
+              <h1>🔄 Check for Backend App Updates</h1>
+              <p>
+              Stay up to date with the latest <strong>community-driven updates</strong> for the app backend running on your Homecloud.
+              </p>
+
+              <ul>
+              <li>📱 <strong>Mobile app updates</strong> are delivered through your device's App Store or Google Play.</li>
+              <li>☁️ <strong>Backend updates</strong> are downloaded directly from app open-source community repositories.</li>
+              </ul>
+
+              <p>
+              📋 Before updating, please <a href="https://github.com/paperless-ngx/paperless-ngx" class="plainLink" target="_blank">review the release notes</a> for important information.
+              </p>
+
+              <p>
+              ⚠️ We recommend taking a <strong>backup</strong> of your app before proceeding with any update.
+              </p>
+            </div>
+
+  `;
+  private htmlContent1= `
+
+            <div class="auto-update-box">
+              <h3>⚙️ Enable Auto Updates</h3>
+              <p>Automatically keep your app backend up to date with the latest releases.</p>
+              <p class="note">Note: Mobile app updates are managed by your phone's app store.</p>
+            </div>
+            
+
+  `;
   private buttonConfig:FormPageButtonConfig= {
-      text: 'Enable/Disable Auto updates for paperless-ngx backend',
+      text: this.buttonText,
       disabled: false,
       submit: true,
       class: 'omv-background-color-pair-primary',
@@ -67,26 +111,6 @@ export class AppsPaperlessUpdateFormPageComponent extends BaseFormPageComponent 
       
     },
     fields: [
-
-      {
-        type: 'paragraph',
-        title: gettext('Paperless-ngx community releases update to backend service and mobile app. Mobile app updates are pushed to your phone via app store or playstore.')
-      },
-
-      {
-        type: 'paragraph',
-        title: gettext('Software updates are directly downloaded from community repositories and are not tested by Homecloud product team.')
-      },
-
-      {
-        type: 'paragraph',
-        title: gettext('Review release information before proceeding with update. Details available at:&nbsp;&nbsp;<a class="plainLink" href="https://github.com/paperless-ngx/paperless-ngx" target="_blank">Review release informaton</a> ')
-      },
-
-      {
-        type: 'paragraph',
-        title: gettext('Take Paperless-ngx backup before proceeding further. Go to Photos -> backup page for taking backup')
-      },
 
       {
         type: 'textInput',
@@ -186,8 +210,8 @@ export class AppsPaperlessUpdateFormPageComponent extends BaseFormPageComponent 
       {
         type: 'textInput',
         name: 'status',
-        label: gettext('Auto updates for Paperless-ngx backend'),
-        hint: gettext(''),
+        label: gettext('Enable Auto Updates'),
+        hint: gettext(`Automatically keep your app backend up to date with the latest releases.Note: Mobile app updates are managed by your phone's app store.`),
         value: '',
         readonly: true
       }
@@ -200,25 +224,10 @@ export class AppsPaperlessUpdateFormPageComponent extends BaseFormPageComponent 
 
   constructor(private rpcService: RpcService, private sanitizer: DomSanitizer){
     super();
-    
-    this.config.fields[2].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[2].title) as unknown as string;
-  }
-
-  ngAfterViewInit(): void {
-    // Delay the operation to ensure the view is fully rendered
-    setTimeout(() => {
-      
-
-      // Select all paragraph elements (assuming they are rendered as `photos-update-form omv-form-paragraph` elements)
-        const paragraphs = document.querySelectorAll('#paperless-update-form .omv-form-paragraph');
-
-        // Inject the sanitized HTML into the correct paragraph element
-        paragraphs[2].innerHTML =
-        (this.config.fields[2].title as any).changingThisBreaksApplicationSecurity ||
-        this.config.fields[2].title?.toString();
-
-               
-    }, 100); // Timeout ensures it happens after the view has rendered
+    //Sanitize html
+    this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);
+    this.safeHtmlContent1 = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent1);
+   
   }
 
 
@@ -228,8 +237,10 @@ export class AppsPaperlessUpdateFormPageComponent extends BaseFormPageComponent 
       action: 'status'
     }).subscribe(response => {
       this.statustosend = response.status === 'enabled' ? 'disable' : 'enable';
+      this.buttonText = response.status === 'enabled' ? 'Disable Auto updates for paperless-ngx backend' : 'Enable Auto updates for paperless-ngx backend';
       // Set the button config after we have the status
       this.buttonConfig.execute.request.params.action = this.statustosend;
+      this.buttonConfig.text = this.buttonText;
       this.config2.buttons = [this.buttonConfig];
     });
     this.fetchStatusAndUpdateFields();  //get hostname value and update in link
@@ -237,7 +248,7 @@ export class AppsPaperlessUpdateFormPageComponent extends BaseFormPageComponent 
   fetchStatusAndUpdateFields(): void {
     this.rpcService.request('Homecloud', 'paperless_check_version').subscribe(response => {
       const status = response.status;
-      console.log('status',status);
+      //console.log('status',status);
       this.updateFieldColors(status);     //Update colors based on status
       this.updateFieldVisibility(status); //Hide or show the checkbox for updates based on status     
     });
@@ -257,7 +268,7 @@ export class AppsPaperlessUpdateFormPageComponent extends BaseFormPageComponent 
   }
 
   updateFieldVisibility(status:string):void{
-    const checkbox=document.querySelector('omv-paperless-update-page omv-form-checkbox mat-checkbox');
+    const checkbox=document.querySelector('omv-paperless-update-page omv-form-checkbox');
     const updateButton = document.querySelector('omv-paperless-update-page omv-submit-button button');
     if(status !== 'Update-Available'){
       checkbox.classList.add('hidden');
@@ -274,10 +285,10 @@ export class AppsPaperlessUpdateFormPageComponent extends BaseFormPageComponent 
             
             if (isChecked) {
                 updateButton.classList.remove('mat-button-disabled');
-                console.log('Update button enabled - classes:', updateButton.className);
+               // console.log('Update button enabled - classes:', updateButton.className);
             } else {
                 updateButton.classList.add('mat-button-disabled');
-                console.log('Update button disabled - classes:', updateButton.className);
+               // console.log('Update button disabled - classes:', updateButton.className);
             }
         }, 0);
     });

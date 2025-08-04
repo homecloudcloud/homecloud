@@ -21,6 +21,8 @@ import * as _ from 'lodash';
 import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
 import { BaseFormPageComponent } from '~/app/pages/base-page-component';
 import { ViewEncapsulation } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
+import { RpcService } from '~/app/shared/services/rpc.service';
 
 
 
@@ -28,9 +30,8 @@ import { ViewEncapsulation } from '@angular/core';
   selector:'omv-jellyfin-resetpassword-page', //Home cloud changes
   //template: '<omv-intuition-form-page [config]="this.config"></omv-intuition-form-page>',
   template: `
-  <omv-intuition-form-page id="jellyfin-resetpassword-form1" [config]="this.config"></omv-intuition-form-page>
-  <omv-intuition-form-page id="jellyfin-resetpassword-form2" [config]="this.config2"></omv-intuition-form-page>
-  <omv-intuition-form-page id="jellyfin-resetpassword-form3" [config]="this.config3"></omv-intuition-form-page> 
+  <omv-intuition-form-page id="jellyfin-resetpassword-form1" [config]="this.config3"></omv-intuition-form-page> 
+
   `,
   styleUrls: ['./jellyfin-resetpassword-form-page.component.scss'],
   encapsulation: ViewEncapsulation.None  // This will disable view encapsulation
@@ -39,57 +40,22 @@ import { ViewEncapsulation } from '@angular/core';
 
 
 export class AppsJellyfinResetPasswordComponent extends BaseFormPageComponent {
+  private htmlContent:string='';
+  private jellyfinUsers: string = '';
+  private hostname: string = '';
+  private jellyfinStatus: string = '';
  
-  public config: FormPageConfig = {
-    fields: [
-      {
-        type: 'paragraph',
-        title: gettext('If you have forgotten your Jellyin app userid or password, follow below steps to recover password. ')
-      }
-    ]
-  };
-  
-  public config2: FormPageConfig = {
-    request: {
-      service: 'Homecloud',
-      get: {
-        method: 'jellyfin_getusers'
-      }
-    },
-    fields: [
-      {
-        type: 'paragraph',
-        title: gettext('User id(s) in Jellyfin.')
-      },
-      {
-        type: 'textInput',
-        name: 'users',
-        label: gettext('Jellyfin user(s) list '),
-        hint: gettext('Blank means no Jellyfin user created yet. Go to Access page and open WebApp to create first user'),
-        value: '',
-        readonly: true
-      }
-    ]
-  };
-
+ 
   public config3: FormPageConfig = {
     fields: [
-      {
-        type: 'paragraph',
-        title: gettext('To reset password Open Jellyfin web app (---enter link here ----)and click Forgot Password. Enter user for which password need to be reset and press Submit')
-      },
-      {
-        type: 'paragraph',
-        title: gettext('After submission return to this page and press show pin button below.')
-      },
-      {
-        type: 'paragraph',
-        title: gettext('')
+    
+     {type:'paragraph',
+        title:''
       }
     ],
     buttons: [
       {
-        text: 'Show generated PIN',
+        text: gettext(`🔑 Get Reset PIN`),
         disabled:false,
         submit:true,
        // class:'omv-background-color-pair-primary',
@@ -108,6 +74,88 @@ export class AppsJellyfinResetPasswordComponent extends BaseFormPageComponent {
     buttonAlign: 'start' // You can adjust the alignment to 'start', 'center', or 'end'
 
   };
+   constructor(private sanitizer: DomSanitizer,private rpcService:RpcService) {
+         super();
+       
+  }
+ 
+
+  ngOnInit(){
+   // console.log('ngOnInit called');
+    this.fetchUsersAndUpdateFields();  //get hostname value and update in link
+  }
+  fetchUsersAndUpdateFields(): void {
+    this.rpcService.request('Homecloud', 'jellyfin_getusers').subscribe(response => {
+      this.jellyfinUsers = response.users;
+      //console.log('jellyfin users',this.jellyfinUsers);
+      this.updateFieldVisibility(this.jellyfinUsers);//enable or disable button based on user
+      this.rpcService.request('Homecloud', 'getJellyfinServiceStatus').subscribe(response => {
+          this.hostname = response.hostname; // Adjust based on API response structure
+          this.jellyfinStatus = response.status; // Store the status for later use
+          this.updateHtml();
+      });
+
+
+     
+    });
+  }
+ 
+
+  updateFieldVisibility(jellyfinUsers:string):void{
+  
+    const button = document.querySelector('#jellyfin-resetpassword-form1 button');
+    if(button){
+      if(jellyfinUsers === ''){
+        button.classList.add('disabled-btn');
+      }else{
+        button.classList.remove('disabled-btn');
+      }
+    }
+  }
+
+  updateHtml():void{
+
+    this.htmlContent=`         
+                      <div class="container">
+                          <h1>🔐 Forgot Your Jellyfin Password?</h1>
+                          <p>No worries! Follow these steps to reset it safely:</p>
+                          <ol>
+                              <li>👥 Check the list of existing Jellyfin users below.</li><br>
+                              <p><strong>${this.jellyfinUsers}</strong></p>
+                              <hr>
+                              <div class="note">
+                                📭 <strong>Note:</strong> If the list of users is empty, it means:
+                                <ul>
+                                  <li>⚙️ Jellyfin is not deployed yet, or</li>
+                                  <li>👤 No Jellyfin users have been created yet.</li>
+                                </ul>
+                              </div>
+                              <br>
+                              <li>🌐 Open the 👉 <a href="${this.hostname}" class="app-btn ${this.jellyfinStatus !== 'Running' ? 'disabled-btn' : ''}" target="_blank"><strong>Jellyfin Web App</strong></a>.<br>
+                               <span class="status-error ${this.jellyfinStatus !== 'Running' ? '' : 'hidden'}" >Jellyfin is not running! Go to <a href="#/startconfiguration/apps/media/restart" class="plainLink"><strong>Jellyfin status page</strong></a> to check the status or restart the app</span>
+                               </li><br>
+                              <li>🔘 Click on <strong>Forgot Password</strong>.</li><br>
+                              <li>✍️ Enter the username you want to reset and click <strong>Submit</strong>.</li><br>
+                              <li>📄 Wait for the message: <em>“A file has been created.”</em></li><br>
+                              <li>🔁 Return to this page and click the button below to get your PIN.</li><br>
+                              <li>📋 Copy the PIN and paste it into the Jellyfin screen when prompted.</li>
+                          </ol>
+                      </div>`;
+
+      
+         this.config3.fields[0].title = this.htmlContent;
+         // Sanitize the HTML content once during construction
+         this.config3.fields[0].title = this.sanitizer.bypassSecurityTrustHtml(this.config3.fields[0].title) as unknown as string;
+          // Select all paragraph elements 
+         const paragraphs = document.querySelectorAll('omv-jellyfin-resetpassword-page omv-form-paragraph .omv-form-paragraph');
+      
+         // Inject the sanitized HTML into the correct paragraph element       
+         paragraphs[0].innerHTML =
+         (this.config3.fields[0].title as any).changingThisBreaksApplicationSecurity ||
+         this.config3.fields[0].title?.toString();
+
+  }
+  
  
  
 }

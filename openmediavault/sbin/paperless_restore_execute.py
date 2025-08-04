@@ -33,30 +33,26 @@ class PaperlessRestore:
         )
         self.logger = logging.getLogger(__name__)
 
-
     def ensure_user_and_group(self):
         """Ensure paperless user and group exist"""
         self.logger.info("Ensuring paperless user and group exist...")
         try:
-            # Check if group exists, create if it doesn't
+            # Check if user exists using getent which is more reliable
             try:
-                self.run_command(['getent', 'group', 'paperless'])
-            except:
-                self.logger.info("Creating paperless group")
-                self.run_command(['groupadd', 'paperless'])
-    
-            # Check if user exists, create if it doesn't
-            try:
-                self.run_command(['id', 'paperless'])
-            except:
-                self.logger.info("Creating paperless user")
-                self.run_command(['useradd', '-r', '-g', 'paperless', 'paperless'])
-    
+                result = subprocess.run(['getent', 'passwd', 'paperless'], 
+                                    capture_output=True, text=True, check=True)
+                self.logger.info("paperless user already exists")
+            except subprocess.CalledProcessError:
+                self.logger.info("Creating paperless system user")
+                subprocess.run(['useradd', '--system', '--no-create-home', '--shell', '/usr/sbin/nologin', 'paperless'], 
+                            check=True)
+                self.logger.info("paperless user created successfully")
+
             return True
         except Exception as e:
-            self.logger.error(f"Failed to create user/group: {str(e)}")
+            self.logger.error(f"Failed to create user: {str(e)}")
             return False
-    
+
 
     def cleanup(self):
         """Clean up on failure"""
@@ -242,20 +238,18 @@ class PaperlessRestore:
                 etc_paperless.mkdir(parents=True)
 
             # Handle /var/lib/paperless and its target
-            if var_lib_paperless.is_symlink():
-                target_path = Path(os.path.realpath(var_lib_paperless))
-                var_lib_paperless.unlink()
-                if target_path.exists():
-                    for item in target_path.iterdir():
-                        if item.is_file():
-                            item.unlink()
-                        elif item.is_dir():
-                            shutil.rmtree(item)
-            elif var_lib_paperless.exists():
-                shutil.rmtree(var_lib_paperless)
+           
+            if var_lib_paperless.exists():
+                for entry in os.listdir(var_lib_paperless):
+                    entry_path = os.path.join(var_lib_paperless, entry)
+                    if os.path.isfile(entry_path) or os.path.islink(entry_path):
+                        os.unlink(entry_path)  # remove file or symlink
+                    elif os.path.isdir(entry_path):
+                        shutil.rmtree(entry_path)  # remove subdirectory and its contents
 
             # Create paperless directory on DATA_VOL mount point
             paperless_data_path.mkdir(parents=True, exist_ok=True)
+
             if paperless_data_path.exists():
                 for item in paperless_data_path.iterdir():
                     if item.is_file():
@@ -264,13 +258,13 @@ class PaperlessRestore:
                         shutil.rmtree(item)
             
             # Create the symlink
-            os.symlink(str(paperless_data_path), str(var_lib_paperless))
+            #os.symlink(str(paperless_data_path), str(var_lib_paperless))
             
             # Create import directory
             import_dir = var_lib_paperless / 'import'
             import_dir.mkdir(parents=True, exist_ok=True)
             
-            self.logger.info(f"Created symlink: {var_lib_paperless} -> {paperless_data_path}")
+            #self.logger.info(f"Created symlink: {var_lib_paperless} -> {paperless_data_path}")
             return True
         except Exception as e:
             self.logger.error(f"Failed to prepare directories: {str(e)}")
@@ -281,7 +275,7 @@ class PaperlessRestore:
             self.logger.info("Pulling Docker images...")
             
             # First get the list of services from docker-compose.yml
-            with open('etc/paperless/docker-compose.yml', 'r') as f:
+            with open('/etc/paperless/docker-compose.yml', 'r') as f:
                 compose_data = yaml.safe_load(f)
                 services = compose_data.get('services', {}).keys()
 
@@ -291,7 +285,7 @@ class PaperlessRestore:
                 
                 pull_cmd = [
                     'docker', 'compose',
-                    '-f', 'etc/paperless/docker-compose.yml',
+                    '-f', '/etc/paperless/docker-compose.yml',
                     'pull',
                     service
                 ]
@@ -372,13 +366,19 @@ class PaperlessRestore:
             if not self.ensure_user_and_group():
                 raise Exception("Failed to create paperless user/group")
 
-            # Set ownership
-            self.run_command(['chown', '-R', 'paperless:paperless', '/var/lib/paperless/import'])
+            # Set ownership and permissions for all paperless directories
+            self.run_command(['chown', '-R', 'paperless:paperless', '/var/lib/paperless'])
+            self.run_command(['chmod', '-R', '755', '/var/lib/paperless'])
+            
+            # Set specific permissions for import directory and files
+            self.run_command(['find', '/var/lib/paperless/import', '-type', 'f', '-exec', 'chmod', '644', '{}', ';'])
+            self.run_command(['find', '/var/lib/paperless/import', '-type', 'd', '-exec', 'chmod', '755', '{}', ';'])
 
             return True
         except Exception as e:
             self.logger.error(f"File restoration failed: {str(e)}")
             return False
+
 
 
     def create_service(self):
@@ -469,58 +469,74 @@ WantedBy=multi-user.target
             return False
 
     def run(self):
-        """Main restoration process"""
+        """Main restore process"""
+        atexit.register(self.cleanup)
         self.cleanup_needed = True
+        
+        errors = []
+        success_count = 0
+        total_steps = 0
+        
         try:
             steps = [
                 (self.validate_backup_path, "Backup path validation"),
-                (self.check_space, "Space validation"),
-                (self.validate_backup_contents, "Backup validation"),
-                (self.stop_services, "Service stoppage"),
-                (self.prepare_directories, "Directory preparation"),
-                (self.restore_files, "File restoration"),
-                (self.create_service, "Service creation"),
-                (self.pull_docker_images, "Pulling Docker images"),  # Add this step
-                (self.wait_for_healthy, "Service health check"),
-                (self.import_documents, "Document import"),
-                (self.cleanup_import, "Import cleanup")
+                (self.validate_backup_contents, "Backup contents validation"),
+                (self.check_space, "Space check"),
+                (self.stop_services, "Stop services"),
+                (self.prepare_directories, "Prepare directories"),
+                (self.restore_files, "Restore files"),
+                (self.pull_docker_images, "Pull Docker images"),
+                (self.create_service, "Create service"),
+                (self.wait_for_healthy, "Wait for service health"),
+                (self.import_documents, "Import documents"),
+                (self.cleanup_import, "Cleanup import")
             ]
-
+            
+            total_steps = len(steps)
+            
             for step_func, step_name in steps:
                 self.logger.info(f"Starting {step_name}...")
-                if not step_func():
-                    print(json.dumps({
-                        "status": "error",
-                        "message": f"Failed during {step_name}"
-                    }))
-                    return False
-
-            self.cleanup_needed = False
-            print(json.dumps({
-                "status": "success",
-                "message": "Paperless restoration completed successfully"
-            }))
-            return True
-
+                try:
+                    if step_func():
+                        success_count += 1
+                        self.logger.info(f"{step_name} completed successfully")
+                    else:
+                        errors.append(f"Failed: {step_name}")
+                        self.logger.error(f"{step_name} failed")
+                except Exception as e:
+                    errors.append(f"Error in {step_name}: {str(e)}")
+                    self.logger.error(f"Exception in {step_name}: {str(e)}")
+            
+            # Determine final status
+            if len(errors) == 0:
+                self.cleanup_needed = False
+                self.logger.info("Paperless restore completed successfully")
+                return {"success": True, "message": "Paperless data restore completed successfully. Go to Access page.", 
+                    "steps_completed": f"{success_count}/{total_steps}"}
+            else:
+                error_summary = "; ".join(errors)
+                self.logger.error(f"Restore completed with errors: {error_summary}")
+                return {"success": False, "message": f"Restore completed with errors: {error_summary}",
+                    "steps_completed": f"{success_count}/{total_steps}", "errors": errors}
+            
         except Exception as e:
-            print(json.dumps({
-                "status": "error",
-                "message": f"Unexpected error: {str(e)}"
-            }))
-            return False
+            self.logger.error(f"Restore failed: {str(e)}")
+            return {"success": False, "message": f"Restore failed: {str(e)}",
+                "steps_completed": f"{success_count}/{total_steps}"}
 
 def main():
     if len(sys.argv) != 2:
-        print(json.dumps({
-            "status": "error",
-            "message": "Usage: paperless_restore.py <backup_path>"
-        }))
+        result = {"success": False, "message": "Usage: paperless_restore_execute.py <backup_path>"}
+        print(json.dumps(result))
         sys.exit(1)
+    
+    backup_path = sys.argv[1]
+    restore = PaperlessRestore(backup_path)
+    
+    result = restore.run()
+    print(json.dumps(result))
+    sys.exit(0 if result["success"] else 1)
 
-    restore = PaperlessRestore(sys.argv[1])
-    atexit.register(restore.cleanup)
-    success = restore.run()
-    sys.exit(0 if success else 1)
 
 if __name__ == "__main__":
     main()

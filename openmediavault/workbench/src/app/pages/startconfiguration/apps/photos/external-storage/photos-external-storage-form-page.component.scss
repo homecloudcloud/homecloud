@@ -1,54 +1,77 @@
 @import '../../../../../../assets/colors.scss';
 
-.omv-form-paragraph {
-    font-size: var(--mat-font-size-subheading-2) !important;
-  }
-  #photos-external-storage-form1 omv-intuition-form .omv-form-container .omv-form-container-item:nth-of-type(1) omv-form-paragraph .omv-form-paragraph  
-  {
-    content: url('^./assets/images/immich-external-disk-1.png');
-    background-size: cover;
-    background-position: center;
-    width: 50%;
-    height: 50%;
-  }
-  #photos-external-storage-form1 omv-intuition-form .omv-form-container .omv-form-container-item:nth-of-type(10) omv-form-paragraph .omv-form-paragraph  
-  {
-    content: url('^./assets/images/immich-external-disk-5.png');
-    background-size: cover;
-    background-position: center;
-    width: 50%;
-    height: 50%;
-  }
+.omv-dark-theme{
+  h1,h2,h3{
+        color:$lightblue !important;
+    }
+}
+
+omv-photos-external-storage-page{
+      .status-error{
+        color:$lightred;
+        font-weight:bold;
+      }
+      .omv-form-paragraph{
+        padding:2rem;
+        line-height:1.5rem;
+      }
+      .omv-form-paragraph,h2,p,li,h3 {
+        font-size: var(--mat-font-size-subheading-2) !important;
+      }
+      .omv-form-paragraph,p,li {
+        font-size: var(--mat-font-size-subheading-2) !important;
+        font-weight:var(--mat-font-weight-subheading-2) !important;
+      }
+      h1{
+        font-size: var(--mat-font-size-headline) !important;
+      
+      }
+ 
+      h2,h1,h3 {
+        color:$blue;
+      }
+      li {
+        margin-bottom: 10px;
+      }
+    
+      .app-btn {
+        margin-top: 10px;
+        margin-bottom: 5px;
+        background-color:$lightblue;
+        color: white;
+        font-weight: bold;
+        padding: 15px 30px;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid $lightblue;
+        border-radius: 10px;
+        display: flex;
+        width: 16rem;
+        height: 1rem;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .hidden{
+      display: none;
+    }
+
+
+    .disabled-btn{
+      pointer-events:none;
+      background-color:$grey;
+    }
   
-
-  .immich-btn {
-    margin-top: 10px;
-    margin-bottom: 5px;
-    background-color:$lightblue;
-    color: white;
-    font-weight: bold;
-    padding: 15px 30px;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid $lightblue;
-    border-radius: 10px;
-    display: flex;
-    width: 14rem;
-    height: 1rem;
-    cursor: pointer;
-    text-decoration: none;
+   
+    .plainLink{
+      font-weight:bold;
+    }
+    .plainLink:hover,.plainLink:focus{
+      background-color:$lightblue;
+      color:white;
+      padding:10px;
+      text-decoration: none;
+      font-weight:bold;
+    }
 }
 
-
-.disabled-btn{
-  pointer-events:none;
-  background-color:$grey;
-}
-.redimmichstatus{
-  background-color: $lightred !important;
-  width:100px !important;
-}
-.greenimmichstatus{
-  background-color: $lightgreen !important;
-  width:100px !important;
-}

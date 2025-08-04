@@ -22,14 +22,20 @@ import { FormPageConfig } from '~/app/core/components/intuition/models/form-page
 import { BaseFormPageComponent } from '~/app/pages/base-page-component';
 import { ViewEncapsulation } from '@angular/core';
 import { RpcService } from '~/app/shared/services/rpc.service';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer,SafeHtml } from '@angular/platform-browser';
 import { FormPageButtonConfig } from '~/app/core/components/intuition/models/form-page-config.type';
 
 
 @Component({
   selector:'omv-password-manager-update-page', //Home cloud changes
-  template: `<omv-intuition-form-page id="password-manager-update-form"[config]="this.config"></omv-intuition-form-page>
-             <omv-intuition-form-page id="password-manager-update-form"[config]="this.config2"></omv-intuition-form-page>`,
+  template: `<div id="password-manager-update-form1">
+                <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
+              </div>
+              <omv-intuition-form-page id="password-manager-update-form2"[config]="this.config"></omv-intuition-form-page>
+              <div id="password-manager-update-form3">
+                <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent1"></div>
+              </div>
+             <omv-intuition-form-page id="password-manager-update-form4"[config]="this.config2"></omv-intuition-form-page>`,
   styleUrls: ['./password-manager-update-form-page.component.scss'],
   encapsulation: ViewEncapsulation.None  // This will disable view encapsulation
 })
@@ -37,8 +43,45 @@ import { FormPageButtonConfig } from '~/app/core/components/intuition/models/for
 
 export class AppsPasswordManagerUpdateFormPageComponent extends BaseFormPageComponent {
   private statustosend:string='';
+  private buttonText:string='';
+  public safeHtmlContent: SafeHtml;
+  public safeHtmlContent1: SafeHtml;
+  
+  
+  private htmlContent= `
+            <div class="update-section">
+              <h1>🔄 Check for Backend App Updates</h1>
+              <p>
+              Stay up to date with the latest <strong>community-driven updates</strong> for the app backend running on your Homecloud.
+              </p>
+
+              <ul>
+              <li>📱 <strong>Mobile app updates</strong> are delivered through your device's App Store or Google Play.</li>
+              <li>☁️ <strong>Backend updates</strong> are downloaded directly from app open-source community repositories.</li>
+              </ul>
+
+              <p>
+              📋 Before updating, please <a href="https://github.com/dani-garcia/vaultwarden" class="plainLink" target="_blank">review the release notes</a> for important information.
+              </p>
+
+              <p>
+              ⚠️ We recommend taking a <strong>backup</strong> of your app before proceeding with any update.
+              </p>
+            </div>
+
+  `;
+  private htmlContent1= `
+
+            <div class="auto-update-box">
+              <h3>⚙️ Enable Auto Updates</h3>
+              <p>Automatically keep your app backend up to date with the latest releases.</p>
+              <p class="note">Note: Mobile app updates are managed by your phone's app store.</p>
+            </div>
+            
+
+  `;
   private buttonConfig:FormPageButtonConfig= {
-      text: 'Enable/Disable Auto updates for Vaultwarden backend',
+      text: this.buttonText,
       disabled: false,
       submit: true,
       class: 'omv-background-color-pair-primary',
@@ -70,25 +113,7 @@ export class AppsPasswordManagerUpdateFormPageComponent extends BaseFormPageComp
     },
     fields: [
 
-      {
-        type: 'paragraph',
-        title: gettext('Vaultwarden community releases update to backend service and mobile app (Bitwarden). Mobile app updates are pushed to your phone via app store or playstore.')
-      },
-
-      {
-        type: 'paragraph',
-        title: gettext('Software updates are directly downloaded from community repositories and are not tested by Homecloud product team.')
-      },
-
-      {
-        type: 'paragraph',
-        title: gettext('Review release information before proceeding with update. Details available at:&nbsp;&nbsp;<a class="plainLink" href="https://github.com/dani-garcia/vaultwarden" target="_blank">Review release informaton</a> ')
-      },
-
-      {
-        type: 'paragraph',
-        title: gettext('Take Vaultwarden backup before proceeding further. Go to Password-Manager -> Backup page for taking backup')
-      },
+      
 
       {
         type: 'textInput',
@@ -201,26 +226,13 @@ export class AppsPasswordManagerUpdateFormPageComponent extends BaseFormPageComp
 
   constructor(private rpcService: RpcService, private sanitizer: DomSanitizer){
     super();
-    
-    this.config.fields[2].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[2].title) as unknown as string;
+    //Sanitize html
+    this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);
+    this.safeHtmlContent1 = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent1);
+   
   }
 
-  ngAfterViewInit(): void {
-    // Delay the operation to ensure the view is fully rendered
-    setTimeout(() => {
-      
-
-      // Select all paragraph elements (assuming they are rendered as `photos-update-form omv-form-paragraph` elements)
-        const paragraphs = document.querySelectorAll('#password-manager-update-form .omv-form-paragraph');
-
-        // Inject the sanitized HTML into the correct paragraph element
-        paragraphs[2].innerHTML =
-        (this.config.fields[2].title as any).changingThisBreaksApplicationSecurity ||
-        this.config.fields[2].title?.toString();
-
-               
-    }, 100); // Timeout ensures it happens after the view has rendered
-  }
+  
 
 
   ngOnInit():void{
@@ -229,8 +241,10 @@ export class AppsPasswordManagerUpdateFormPageComponent extends BaseFormPageComp
       action: 'status'
     }).subscribe(response => {
       this.statustosend = response.status === 'enabled' ? 'disable' : 'enable';
+      this.buttonText = response.status === 'enabled' ? 'Disable Auto updates for Vaultwarden backend' : 'Enable Auto updates for Vaultwarden backend';
       // Set the button config after we have the status
       this.buttonConfig.execute.request.params.action = this.statustosend;
+      this.buttonConfig.text = this.buttonText;
       this.config2.buttons = [this.buttonConfig];
     });
     this.fetchStatusAndUpdateFields();  //get hostname value and update in link
@@ -259,7 +273,7 @@ export class AppsPasswordManagerUpdateFormPageComponent extends BaseFormPageComp
   }
 
   updateFieldVisibility(status:string):void{
-    const checkbox=document.querySelector('omv-password-manager-update-page omv-form-checkbox mat-checkbox');
+    const checkbox=document.querySelector('omv-password-manager-update-page omv-form-checkbox');
     const updateButton = document.querySelector('omv-password-manager-update-page omv-submit-button button');
     if(status !== 'Update-Available'){
       checkbox.classList.add('hidden');

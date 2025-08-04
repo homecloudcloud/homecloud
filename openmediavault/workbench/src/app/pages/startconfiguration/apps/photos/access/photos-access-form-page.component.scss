@@ -1,0 +1,111 @@
+@import '../../../../../../assets/colors.scss';
+
+.omv-dark-theme{
+  h1,h2,h3{
+        color:$lightblue !important;
+    }
+    .hostURL{
+      color:black;
+    }
+}
+
+omv-photos-access-page{
+      #photos-access-form2{
+        margin-top:-2rem;
+        margin-bottom:-2rem;
+      }
+
+       @media screen and (max-width: 768px) {
+
+
+        #photos-access-form3 .mat-card-actions button{
+        
+        text-wrap: wrap;
+        line-height: 1.5rem;
+        padding: 0.5rem;
+      }
+  
+      }
+      .omv-form-paragraph{
+        padding:2rem;
+        line-height:1.5rem;
+      }
+      .omv-form-paragraph,h2,p,li,h3 {
+        font-size: var(--mat-font-size-subheading-2) !important;
+      }
+      .omv-form-paragraph,p,li {
+        font-size: var(--mat-font-size-subheading-2) !important;
+        font-weight:var(--mat-font-weight-subheading-2) !important;
+      }
+      h1{
+        font-size: var(--mat-font-size-headline) !important;
+      
+      }
+ 
+      h2,h1,h3 {
+        color:$blue;
+      }
+      li {
+        margin-bottom: 10px;
+      }
+    
+      .app-btn {
+        margin-top: 10px;
+        margin-bottom: 5px;
+        background-color:$lightblue;
+        color: white;
+        font-weight: bold;
+        padding: 15px 30px;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid $lightblue;
+        border-radius: 10px;
+        display: flex;
+        width: 16rem;
+        height: 1rem;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .mobile-app-links{
+      display: flex;
+      gap:20px;
+      flex-direction: row;
+    }
+
+    @media screen and (max-width: 768px) {
+      .mobile-app-links{
+      
+        flex-direction: column;
+      }
+      
+    }
+
+    .disabled-btn{
+      pointer-events:none;
+      background-color:$grey;
+    }
+    .status-error{
+      background-color: $lightred !important;
+      width:100px !important;
+    }
+    
+    .hidden{
+      display: none!important;
+    } 
+    .plainLink{
+      font-weight:bold;
+    }
+    .plainLink:hover,.plainLink:focus{
+      background-color:$lightblue;
+      color:white;
+      padding:10px;
+      text-decoration: none;
+      font-weight:bold;
+    }
+    .hostURL{
+      background-color: $yellow;
+      display: inline-block;
+    }
+}
+

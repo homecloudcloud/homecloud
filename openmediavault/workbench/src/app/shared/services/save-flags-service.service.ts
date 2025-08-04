@@ -7,7 +7,7 @@ interface LicenseData {
   'licenseVersion': string;
   'user': string;
   'accepted': boolean;
-  'accepted-date': number;
+  'accepted-date': string;
   'comment': string;
 }
 
@@ -20,13 +20,13 @@ export class SaveFlagsServiceService {
   constructor(private rpcService: RpcService) {}
 
   saveLicenseFlag(licenseData:LicenseData):Observable<any> {
-    console.log('saveLicenseFlag called');
+    //console.log('saveLicenseFlag called');
     
     return this.rpcService.request('Flags', 'saveLicenseFlag', {licenseData: licenseData});
 
   }
   saveSetUpFlags(flagName:string,flagValue:boolean):Observable<any> {
-    console.log('saveSetUpFlags called');
+    //console.log('saveSetUpFlags called');
     
     return this.rpcService.request('Flags', 'saveSetUpFlags', {flagName: flagName, flagValue: flagValue});
 

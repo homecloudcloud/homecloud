@@ -1,0 +1,5 @@
+/**
+ * Generated bundle index. Do not edit.
+ */
+/// <amd-module name="ngx-scrollbar/reached-event" />
+export * from './public_api';

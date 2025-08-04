@@ -1,6 +1,48 @@
 @import '../../../../../assets/colors.scss';
 
-.hidden{
+.omv-dark-theme{
+
+  h1,h2,h3{
+        color:$lightblue !important;
+    }
+  }
+
+
+omv-tailscale-status-page{
+  #tailscale-status-form1,#tailscale-status-form2{
+    margin-bottom:-3rem;
+  }
+  .omv-form-paragraph{
+    padding:2rem;
+    line-height: 1.5rem;
+  }
+
+  .omv-form-paragraph,h2,p,li,h3 {
+    font-size: var(--mat-font-size-subheading-2) !important;
+   
+  }
+  .omv-form-paragraph,p,li {
+    font-size: var(--mat-font-size-subheading-2) !important;
+    font-weight:var(--mat-font-weight-subheading-2) !important;
+  }
+  h1{
+    font-size: var(--mat-font-size-headline) !important;
+   
+  }
+ 
+  
+  h2,h1,h3 {
+    color:$blue;
+  }
+
+  
+  
+  ul {
+    list-style-type: disc;
+    margin-left: 20px;
+  }
+
+  .hidden{
     display:none!important;
   }
   #data-message-form omv-form-paragraph:nth-of-type(1) .omv-form-paragraph{
@@ -15,7 +57,7 @@
     background-color:$lightred !important;
     width:50px !important;
   }
-  #data-table-form .datatable-header{
-    background-color:$lightblue !important;
-    
-  }
+ 
+
+}
+

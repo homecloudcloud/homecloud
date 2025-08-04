@@ -9,7 +9,8 @@ import {
   SystemInformationService
 } from '~/app/shared/services/system-information.service';
 
-const DEFAULT_TITLE = 'openmediavault Workbench';
+//const DEFAULT_TITLE = 'openmediavault Workbench';
+const DEFAULT_TITLE = 'Control Panel'; //Homecloud changes
 
 @Injectable({
   providedIn: 'root'

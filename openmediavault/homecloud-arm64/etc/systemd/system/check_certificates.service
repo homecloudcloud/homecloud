@@ -1,0 +1,15 @@
+[Unit]
+Description=OMV Certificate Management Service
+After=openmediavault-engined.service network.target
+Before=oled-display-disk.service
+Wants=openmediavault-engined.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /sbin/check_certificates.py
+RemainAfterExit=yes
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

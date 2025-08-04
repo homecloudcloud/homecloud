@@ -18,11 +18,11 @@
 import { Component } from '@angular/core';
 import { marker as gettext } from '@ngneat/transloco-keys-manager/marker';
 import * as _ from 'lodash';
-import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
+//import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
 import { BaseFormPageComponent } from '~/app/pages/base-page-component';
 import { ViewEncapsulation } from '@angular/core';
 import { DatatablePageConfig } from '~/app/core/components/intuition/models/datatable-page-config.type';
-//import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer,SafeHtml } from '@angular/platform-browser';
 import { RpcService } from '~/app/shared/services/rpc.service';
 
 @Component({
@@ -30,7 +30,9 @@ import { RpcService } from '~/app/shared/services/rpc.service';
   //template: '<omv-intuition-form-page [config]="this.config"></omv-intuition-form-page>',
   // <omv-intuition-form-page id="photos-restore-form1" [config]="this.config"></omv-intuition-form-page>
   template: `
-  <omv-intuition-form-page id="photos-restore-form1" [config]="this.config"></omv-intuition-form-page>
+   <div id="photos-restore-form1">
+    <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
+  </div>
   <omv-intuition-datatable-page id="photos-restore-data-form" [config]="this.config1"></omv-intuition-datatable-page>
   `,
   styleUrls: ['./photos-restore-page.component.scss'],
@@ -40,38 +42,15 @@ import { RpcService } from '~/app/shared/services/rpc.service';
 export class AppsPhotosRestoreComponent extends BaseFormPageComponent {
 
   private freeSpace:number=0.0;
-
-  public config: FormPageConfig = {
-    request: {
-      service: 'Homecloud',
-      get: {
-        method: 'get_free_space_internaldisk'
-
-      }
-    },
-    fields: [
-      
-      {
-        type: 'paragraph',
-        title: gettext('Restore backup of Immich photos and videos from external USB disks. Plug-in external disks that contain Immich backup')
-      },
-      {
-        type: 'textInput',
-        name: 'free_space',
-        label: gettext('Homecloud free space available in GB'),
-        hint: gettext('Available free space should be greater than backup size to complete restore.'),
-        value: '',
-        readonly: true
-      }
-    ]
-  };
-
+  public safeHtmlContent: SafeHtml;
+  
+  private htmlContent ='';
 
 
   public config1: DatatablePageConfig = {
   
     stateId: '63a9d3ca-2fee-11ea-9065-e3epl1sd8f79',
-    autoReload: 10000,
+    autoReload: false,
     remoteSorting: true,
     remotePaging: true,
     sorters: [
@@ -149,7 +128,7 @@ export class AppsPhotosRestoreComponent extends BaseFormPageComponent {
           taskDialog: {
             config: {
               title: gettext('Message'),
-              autoScroll: false,
+              autoScroll: true,
               startOnInit: true,
               buttons: {
                 start: {
@@ -237,12 +216,53 @@ export class AppsPhotosRestoreComponent extends BaseFormPageComponent {
     this.rpcService.request('Homecloud', 'get_free_space_internaldisk', {}).subscribe((data: any) => {
       this.freeSpace = Number(data.free_space);  // Make sure totalGb is a number
       this.config1.actions[0].enabledConstraints.constraint[0].arg1 = this.freeSpace; // Update the constraint with the totalGb value
-     
+      this.htmlContent= `
+            <div class="restore-container">
+              <h1 class="restore-heading">
+                ♻️ Restore Your Data from Backup
+              </h1>
+
+              <div class="restore-box">
+                <p class="icon-text">
+                  🖴 To get your data back from an earlier backup, plug in your USB drives to ☁️ Homecloud.
+                </p>
+
+                <p>
+                  If the drive contains valid backups for this app, you'll see them listed in the table below.
+                </p>
+
+                <p class="icon-text">
+                  ☁️ Homecloud needs enough free space to restore. The <strong>Restore</strong> button will stay disabled until there's enough space available.
+                </p>
+
+                <p class="icon-text warning">
+                  ⚠️ <strong>Warning:</strong> Restoring will completely erase your current app setup — including all users and their data. Everything will be replaced with what's in the backup, including the app version.
+                </p>
+
+                <p>
+                  It's recommended to back up your current app setup before starting the restore. This ensures your existing data is preserved in case the restore fails.
+                </p>
+                <p class="icon-text">
+                  📦 <strong class="freespaceSizeText">Homecloud free space available(in GB):</strong><span class="freespaceSize">${this.freeSpace}</span>
+                </p>
+
+                <p class="info-text">
+                  The table below shows all backups found on connected USB drives.
+                </p>
+              </div>
+            </div>
+
+
+  `;
+
+
+      //Sanitize html
+      this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);
       
     });
   }
   
- constructor(private rpcService: RpcService) {
+ constructor(private rpcService: RpcService,private sanitizer:DomSanitizer) {
     super();
 
  }

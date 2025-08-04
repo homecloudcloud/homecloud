@@ -1,0 +1,8 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "startconfiguration.apps.photos.external-storage"
+  position: 70
+  text: _("USB Disks")
+  icon: "mdi:usb-flash-drive-outline"
+  url: "/startconfiguration/apps/photos/external-storage"

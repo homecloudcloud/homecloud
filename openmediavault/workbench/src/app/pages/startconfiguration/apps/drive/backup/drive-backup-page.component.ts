@@ -18,18 +18,21 @@
 import { Component } from '@angular/core';
 import { marker as gettext } from '@ngneat/transloco-keys-manager/marker';
 import * as _ from 'lodash';
-import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
+//import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
 import { BaseFormPageComponent } from '~/app/pages/base-page-component';
 import { ViewEncapsulation } from '@angular/core';
 import { DatatablePageConfig } from '~/app/core/components/intuition/models/datatable-page-config.type';
 import { RpcService } from '~/app/shared/services/rpc.service';
+import { DomSanitizer,SafeHtml } from '@angular/platform-browser';
 
 
 @Component({
   selector:'omv-drive-backup-page', //Home cloud changes
   //template: '<omv-intuition-form-page [config]="this.config"></omv-intuition-form-page>',
   template: `
-  <omv-intuition-form-page id="drive-backup-form1" [config]="this.config"></omv-intuition-form-page>
+  <div id="drive-backup-form1">
+    <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
+  </div>
   <omv-intuition-datatable-page id="drive-backup-data-form" [config]="this.config1"></omv-intuition-datatable-page>
 
   `,
@@ -40,39 +43,16 @@ import { RpcService } from '~/app/shared/services/rpc.service';
 export class AppsDriveBackupComponent extends BaseFormPageComponent {
 
   private totalGb:number=0.0;
+  public safeHtmlContent: SafeHtml;
+  
+  private htmlContent ='';
 
-  public config: FormPageConfig = {
-    request: {
-      service: 'Homecloud',
-      get: {
-        method: 'get_backup_size_drive'
-      }
-    },
-    fields: [
-      
-      {
-        type: 'paragraph',
-        title: gettext('Backup your Drive files to external USB disks plugged in to Homecloud. This includes files of all users stored on Drive.')
-      },
-      {
-        type: 'paragraph',
-        title: gettext('Insert image paperless-backup-1.png')
-      },
-      {
-        type: 'textInput',
-        name: 'total_gb',
-        label: gettext('Estimated Drive backup size in GB'),
-        hint: gettext('This is estimated free disk capacity required on external USB disk for completing backup'),
-        value: '',
-        readonly: true
-      }
-    ]
-  };
+  
 
   public config1: DatatablePageConfig = {
   
     stateId: '67d4d3ca-6dsp-25ea-5142-e3ebl1cd8f55',
-    autoReload: 10000,
+    autoReload: false,
     remoteSorting: true,
     remotePaging: true,
     sorters: [
@@ -132,6 +112,11 @@ export class AppsDriveBackupComponent extends BaseFormPageComponent {
               operator: 'gt',
               arg0: { prop: 'available' },
               arg1: this.totalGb
+            },
+            {
+              operator: 'eq',
+              arg0: { prop: 'filesystem' },
+              arg1: 'ext4'
             }
           ]
     
@@ -140,7 +125,7 @@ export class AppsDriveBackupComponent extends BaseFormPageComponent {
           confirmationDialogConfig: {
           template: 'confirmation',
           message: gettext(
-            'Backup will be stored in folder named drive_backups_timestamp under homecloud_backups in selected backup disk. Do you want to continue? Backup would be incremental - only files changed since last backup would be copied. Files will never be deleted in backup'
+            'Backup will be stored in folder under homecloud_backups in selected backup disk. Do you want to continue? Backup would be incremental - only files changed since last backup would be copied. Files will never be deleted in backup'
           )
         },
         execute: {
@@ -148,7 +133,7 @@ export class AppsDriveBackupComponent extends BaseFormPageComponent {
           taskDialog: {
             config: {
               title: gettext('Message'),
-              autoScroll: false,
+              autoScroll: true,
               startOnInit: true,
               buttons: {
                 start: {
@@ -185,14 +170,44 @@ export class AppsDriveBackupComponent extends BaseFormPageComponent {
     this.rpcService.request('Homecloud', 'get_backup_size_drive', {}).subscribe((data: any) => {
       this.totalGb = data.total_gb;
       this.config1.actions[0].enabledConstraints.constraint[0].arg1 = this.totalGb; // Update the constraint with the totalGb value
-      
+      this.htmlContent= `
+            <div class="backup-container">
+              <h1 class="backup-heading">
+               🖴 Keep Your Data Safe with Backups
+              </h1>
+              <div class="backup-box">
+                <p class="icon-text">
+                ⚠️ It's a good idea to keep an extra copy of your data outside of <strong>Homecloud</strong>, just in case something goes wrong.
+                </p>
+                <p>
+                You can plug in a USB drive with enough free space to store your files. Homecloud will save a full backup to a folder called <code>homecloud-backups</code> on that drive.
+                </p>
+                <p class="icon-text">
+                🔄 Each time you run a backup, it makes incremental copy of your data (new or changed files since last backup are copied).
+                </p>
+                <p class="icon-text">
+                🔓 Remember: backups are not encrypted. Make sure to keep your USB drive somewhere safe and private.
+                </p>
+                <p class="icon-text">
+                  📦 <strong class="backupSizeText">Estimated Drive backup size(in GB):</strong><span class="backupSize">${this.totalGb}</span>
+                </p>
+                <p class="icon-text">
+                  🖴 The table below shows the list of external disks currently connected and available for backup. Backup of Drive app is only supported on USB drives with EXT4 file systems. Go to Filesystems page to format USB drive with EXT4 filesystem.
+                </p>                              
+              </div>
+            </div> 
+  `;
+
+
+      //Sanitize html
+      this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);
     });
   }
   
   
   
   
- constructor(private rpcService: RpcService) {
+ constructor(private rpcService: RpcService,private sanitizer:DomSanitizer) {
     super();
 
  }

@@ -18,10 +18,10 @@ import { InterfaceEthernetFormPageComponent } from '~/app/pages/startconfigurati
 import { InterfaceVlanFormPageComponent } from '~/app/pages/startconfiguration/networkconfig/interfaces/interface-vlan-form-page.component';
 import { InterfaceWifiFormPageComponent } from '~/app/pages/startconfiguration/networkconfig/interfaces/interface-wifi-form-page.component';
 import { NetworkMainComponent } from '~/app/pages/startconfiguration/networkconfig/network-main-page.component';
-import { TailscaleConfigFormPageComponent} from '~/app/pages/startconfiguration/vpn/tailscaleconfig/tailscale-config-form-page.component';
-import { TailscaleStatusComponent } from '~/app/pages/startconfiguration/vpn/tailscale-status/tailscale-status-form-page.component';
-import { TailscaleAccessComponent } from '~/app/pages/startconfiguration/vpn/tailscale-access/tailscale-access-form-page.component';
-import { TailscaleUpdateFormPageComponent } from '~/app/pages/startconfiguration/vpn/tailscale-update/tailscale-update-form-page.component';
+//import { TailscaleConfigFormPageComponent} from '~/app/pages/startconfiguration/vpn/tailscaleconfig/tailscale-config-form-page.component';
+//import { TailscaleStatusComponent } from '~/app/pages/startconfiguration/vpn/tailscale-status/tailscale-status-form-page.component';
+//import { TailscaleAccessComponent } from '~/app/pages/startconfiguration/vpn/tailscale-access/tailscale-access-form-page.component';
+//import { TailscaleUpdateFormPageComponent } from '~/app/pages/startconfiguration/vpn/tailscale-update/tailscale-update-form-page.component';
 
 /*import { NetworkRoutingModule } from '~/app/pages/network/network-routing.module';
 import { ProxyFormPageComponent } from '~/app/pages/network/proxy/proxy-form-page.component';
@@ -36,6 +36,9 @@ import { AppsModule } from './apps/apps.module';
 import { NotificationSettingsFormPageComponent } from './notification/notification-settings-form-page.component';
 import { DateTimeFormPageComponent } from './date-time/date-time-form-page.component';
 import {USBModule} from './usb-disks/usb-disks.module';
+//import { TailscaleTermsFormPageComponent } from './vpn/tailscale-terms/tailscale-terms-form-page.component';
+import { startconfigurationMainComponent } from './startconfiguration-main-page.component';
+import { VpnModule } from './vpn/vpn.module';
 
 @NgModule({
   declarations: [
@@ -53,27 +56,30 @@ import {USBModule} from './usb-disks/usb-disks.module';
     */
     InterfaceBridgeFormPageComponent,
     InterfaceDetailsFormPageComponent,
-    TailscaleConfigFormPageComponent,
+    //TailscaleConfigFormPageComponent,
     UserPasswordFormPageComponent,
     UserFormPageComponent,
     UserDatatablePageComponent,
-    TailscaleStatusComponent,
-    TailscaleAccessComponent,
-    TailscaleUpdateFormPageComponent,
+    //TailscaleStatusComponent,
+   // TailscaleAccessComponent,
+    //TailscaleUpdateFormPageComponent,
+   // TailscaleTermsFormPageComponent,
     NotificationSettingsFormPageComponent,
     DateTimeFormPageComponent,
-    NetworkMainComponent
+    NetworkMainComponent,
+    startconfigurationMainComponent
   ],
   /**Home cloud changes start */
   exports:[
-    TailscaleConfigFormPageComponent,
+    //TailscaleConfigFormPageComponent,
     InterfaceWifiFormPageComponent,
     UserPasswordFormPageComponent,
     UserFormPageComponent,
     UserDatatablePageComponent,
-    TailscaleStatusComponent,
-    TailscaleAccessComponent,
-    TailscaleUpdateFormPageComponent,
+   // TailscaleStatusComponent,
+   // TailscaleAccessComponent,
+   // TailscaleUpdateFormPageComponent,
+   // TailscaleTermsFormPageComponent,
     NotificationSettingsFormPageComponent,
     DateTimeFormPageComponent,
     NetworkMainComponent
@@ -89,7 +95,8 @@ import {USBModule} from './usb-disks/usb-disks.module';
     TranslocoModule,
     PagesModule,
     AppsModule,
-    USBModule
+    USBModule,
+    VpnModule
 
   ]
 })

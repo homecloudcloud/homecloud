@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OMV Admin - Reset Password</title>
+    <link rel="icon" type="image/svg+xml" href="assets/logos/logo.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/logos/logo_180180.png">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+        .password-requirements {
+            font-size: 0.8em;
+            color: #666;
+            margin-top: 4px;
+        }
+        input[type="password"], input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin-left: 10px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <h2>Reset Your Password</h2>
+    <form id="resetForm">
+        <input type="hidden" id="token" name="token">
+        
+        <label for="password">New Password:</label><br>
+        <input type="password" id="password" name="password" minlength="8" required pattern="^[^\s]{8,}$"><br>
+        <div class="password-requirements">Password must be at least 8 characters long with no spaces.</div><br>
+        
+        <button type="button" id="requestOtpButton">Generate Verification Code</button>
+        <p id="otpMsg"></p>
+        
+        <label for="otp">Verification Code (from Homecloud display):</label><br>
+        <input type="text" id="otp" name="otp" pattern="[0-9]{4}" maxlength="4" inputmode="numeric" placeholder="Enter 4-digit code"><br><br>
+        
+        <button type="submit" id="submitButton" disabled>Reset Password <span id="spinner" class="spinner" style="display: none;"></span></button>
+    </form>
+    <p id="msg"></p>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+        if (!token) {
+            document.getElementById("msg").innerText = "Missing token.";
+            document.getElementById("msg").className = "error";
+            document.getElementById("submitButton").disabled = true;
+            document.getElementById("requestOtpButton").disabled = true;
+        } else {
+            document.getElementById("token").value = token;
+        }
+
+        // Function to check if form is valid
+        function checkFormValidity() {
+            const password = document.getElementById("password").value;
+            const otp = document.getElementById("otp").value;
+            const submitButton = document.getElementById("submitButton");
+            
+            // Check password requirements: at least 8 chars and no spaces
+            const validPassword = password.length >= 8 && !password.includes(' ');
+            
+            // Enable submit button only if both password and OTP are valid
+            submitButton.disabled = !(validPassword && otp && otp.length === 4 && /^\d{4}$/.test(otp));
+        }
+
+        // Add event listeners to input fields
+        document.getElementById("password").addEventListener("input", checkFormValidity);
+        document.getElementById("otp").addEventListener("input", function(e) {
+            // Allow only digits
+            this.value = this.value.replace(/[^0-9]/g, '');
+            checkFormValidity();
+        });
+
+        // Request OTP button handler
+        document.getElementById("requestOtpButton").addEventListener("click", async function() {
+            const otpButton = document.getElementById("requestOtpButton");
+            const otpMsg = document.getElementById("otpMsg");
+            
+            otpButton.disabled = true;
+            otpMsg.innerText = "Requesting verification code...";
+            otpMsg.className = "";
+            
+            try {
+                const res = await fetch(`${window.location.origin}/forgot-password/request-homecloud-totp`, {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"}
+                });
+                
+                const data = await res.json();
+                
+                if (res.ok) {
+                    otpMsg.innerText = "Verification code displayed on display of Homecloud device. Enter it below.";
+                    otpMsg.className = "success";
+                    // Store the timeout so we can clear it if needed
+                    window.otpButtonTimeout = setTimeout(() => {
+                        otpButton.disabled = false;
+                    }, 30000); // Re-enable after 30 seconds
+                } else {
+                    otpMsg.innerText = data.message || "Failed to generate verification code.";
+                    otpMsg.className = "error";
+                    otpButton.disabled = false;
+                }
+            } catch (error) {
+                otpMsg.innerText = "Network error. Please try again.";
+                otpMsg.className = "error";
+                otpButton.disabled = false;
+            }
+        });
+
+        // Form submission handler
+       // Form submission handler
+        document.getElementById("resetForm").onsubmit = async function(event) {
+            event.preventDefault();
+            
+            // Disable the submit button and show spinner
+            const submitButton = document.getElementById("submitButton");
+            const requestOtpButton = document.getElementById("requestOtpButton");
+            const spinner = document.getElementById("spinner");
+            const msgElement = document.getElementById("msg");
+            
+            submitButton.disabled = true;
+            spinner.style.display = "inline-block";
+            msgElement.innerText = "Processing request...";
+            msgElement.className = "";
+            
+            try {
+                const password = document.getElementById("password").value;
+                const otp = document.getElementById("otp").value;
+                
+                const res = await fetch(`${window.location.origin}/forgot-password/reset-password`, {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({
+                        token, 
+                        new_password: password,
+                        otp: otp
+                    })
+                });
+                
+                const data = await res.json();
+                
+                if (res.ok) {
+                    // Start countdown timer for redirect
+                    let secondsLeft = 10;
+                    msgElement.innerText = `Password reset successful. Redirecting to login page in ${secondsLeft} seconds...`;
+                    msgElement.className = "success";
+                    
+                    // Keep button disabled on success
+                    // Permanently disable the OTP request button
+                    requestOtpButton.disabled = true;
+                    // Clear any timeout that might re-enable the button
+                    clearTimeout(window.otpButtonTimeout);
+                    
+                    // Set up countdown timer
+                    const countdownInterval = setInterval(() => {
+                        secondsLeft--;
+                        if (secondsLeft <= 0) {
+                            clearInterval(countdownInterval);
+                            // Redirect to login page
+                            window.location.href = `${window.location.origin}`;
+                        } else {
+                            msgElement.innerText = `Password reset successful. Redirecting to login page in ${secondsLeft} seconds...`;
+                        }
+                    }, 1000);
+                } else {
+                    msgElement.innerText = data.error || "An error occurred.";
+                    msgElement.className = "error";
+                    // Re-enable button on error
+                    submitButton.disabled = false;
+                    checkFormValidity();
+                }
+            } catch (error) {
+                msgElement.innerText = "Network error. Please try again.";
+                msgElement.className = "error";
+                // Re-enable button on error
+                submitButton.disabled = false;
+                checkFormValidity();
+            } finally {
+                // Always hide spinner
+                spinner.style.display = "none";
+            }
+        };
+    </script>
+</body>
+</html>

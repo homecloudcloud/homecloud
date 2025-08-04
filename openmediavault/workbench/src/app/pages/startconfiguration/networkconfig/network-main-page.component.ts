@@ -15,105 +15,73 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  */
-import { Component } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { marker as gettext } from '@ngneat/transloco-keys-manager/marker';
 import * as _ from 'lodash';
 import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
 import { BaseFormPageComponent } from '~/app/pages/base-page-component';
 import { ViewEncapsulation } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { RpcService } from '~/app/shared/services/rpc.service';
-
 
 @Component({
   selector:'network-main-page', //Home cloud changes
-  //template: '<omv-intuition-form-page [config]="this.config"></omv-intuition-form-page>',
   template: `
-  <omv-intuition-form-page id="network-main-form1" [config]="this.config2"></omv-intuition-form-page>
+  <div id="network-main-form1">
+    <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
+  </div>
   <omv-intuition-form-page id="network-main-form2" [config]="this.config3"></omv-intuition-form-page>
   <omv-navigation-page></omv-navigation-page>
   `,
   styleUrls: ['./network-main-page.component.scss'],
   encapsulation: ViewEncapsulation.None  // This will disable view encapsulation
-
-  
 })
 
-export class NetworkMainComponent extends BaseFormPageComponent {
+export class NetworkMainComponent extends BaseFormPageComponent implements AfterViewInit {
   
+  public safeHtmlContent: SafeHtml;
+  
+  private htmlContent = `<div class="section">
+    <h1>Connecting Homecloud to Network</h1>
+    <p>There are two ways to connect your Homecloud to a network: via a wired Ethernet connection or through Wi-Fi. For the best performance and stability, we recommend using a wired connection whenever possible.</p>
+  </div>           
+  <div class="section">
+    <h2>🖧 Wired Network (Recommended for Best Performance)</h2>
+    <p>For optimal performance and reliability, use a wired Ethernet connection.</p>
+    <ul>
+      <li><strong>Connect Ethernet Cable:</strong> Plug one end into your Homecloud and the other into your router.</li><br>
+      <li><strong>Wait for IP Address:</strong> After a few minutes, the Homecloud display will show its assigned <strong>IP address</strong>.</li><br>
+      <li><strong>Access Homecloud:</strong> Enter the IP address into your web browser on any device connected to the same local network.</li><br>
+      <li><strong>Power On If Display Is Off:</strong> Press the power button <strong>once</strong> to turn on the display if it's off.</li><br>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>📶 Wi-Fi Setup (For Temporary Use When Wired Network Is Unavailable)</h2>
+    <p>If you can't use a wired connection, use the temporary <strong>Hotspot mode</strong> to connect to Homecloud and set up Wi-Fi.</p>
+    <ul>
+      <li><strong>Activate Hotspot Mode:</strong> Press the <strong>power button 5 times quickly</strong>. Homecloud will display a message and then restart.</li><br>
+      <li><strong>Connect to Homecloud's Temporary Wi-Fi:</strong><br>
+        <ul>
+          <li>Look for the <strong>SSID: Homecloud</strong> on your access device's(Phone,Laptop) Wi-Fi list.</li>
+          <li>Connect using the <strong>password</strong> shown on the Homecloud display.</li>
+        </ul>
+      </li>
+      <li><strong>Access the Setup Page:</strong> The display will show a URL (e.g., <code>https://172.31.1.1</code>). Open this in your browser.</li><br>
+      <li><strong>Login:</strong> Use the <strong>username and password</strong> provided in the Homecloud package.</li><br>
+      <li><strong>Configure Wi-Fi:</strong> Navigate to the <strong><a class="plainLink" href="/#/startconfiguration/networkconfig/interfaces">Network->Interfaces</strong></a> page and enter your Wi-Fi credentials.</li>
+    </ul>
+  </div>`;
+
   public config2: FormPageConfig = {
-        fields: [
-          {
-            type: 'paragraph',
-            title: gettext('Wired Network:')
-          },
-          {
-            type: 'paragraph',
-            title: gettext('For Optimal Performance and Reliability use a Wired Network. Plug-in a network cable to Homecloud and your router to setup wired connection.')
-          },
-          {
-            type: 'paragraph',
-            title: gettext('Within few minutes Homecloud display should show network IP address. Use it to access Homecloud via web browser from your local network.')
-          },
-          {
-            type: 'paragraph',
-            title: gettext('If Homecloud display is off press power button once to turn it on.')
-          },
-          {
-            type: 'paragraph',
-            title: gettext('Insert display pic here')
-          },
-          {
-            type: 'paragraph',
-            title: gettext('Wi-Fi Setup (For temporary use when wired network unavailable)')
-          },
-          {
-            type: 'paragraph',
-            title: gettext('To configure Wi-FI network (when wired network is unavailable) activate Hotspot mode on Homecloud.')
-          },
-          {
-            type: 'paragraph',
-            title: gettext('Activate Hotspot: Press Homecloud power button 5 times in quick succession.')
-          },
-          {
-            type: 'paragraph',
-            title: gettext('Display may show a message and Homecloud will restart.')
-          },
-          {
-            type: 'paragraph',
-            title: gettext('On restart a temporary Wi-Fi network (SSID: Homecloud) will be created.')
-          },
-          {
-            type: 'paragraph',
-            title: gettext('Homecloud display with show SSID and password required to connect to it')
-          },
-          {
-            type: 'paragraph',
-            title: gettext('Insert display pic 2 here')
-          },
-          {
-            type: 'paragraph',
-            title: gettext('Connect your access device (e.g., phone, tablet, or laptop) to this WiFi SSID by going to Wifi settings and selecting this network.')
-          },
-          {
-            type: 'paragraph',
-            title: gettext('Homecloud display with show the URL e.g. https://172.31.1.1. Open it on the browser on your access device')
-          },
-          {
-            type: 'paragraph',
-            title: gettext('Login with your Homecloud username, password provided in the Homecloud package.')
-          },
-          {
-            type: 'paragraph',
-            title: gettext('Insert display pic 3 here')
-          },
-          {
-            type: 'paragraph',
-            title: gettext('Go to Network page and configure Wi-FI')
-          }
-        ]
-      };
-  
+    
+    fields: [
+      {
+        type: 'paragraph',
+        title: ''
+      }
+    ]
+  };
 
   public config3: FormPageConfig = {
     request: {
@@ -133,39 +101,30 @@ export class NetworkMainComponent extends BaseFormPageComponent {
       }
     ]
   };
-  constructor(private rpcService: RpcService,private sanitizer: DomSanitizer) {
+  
+  constructor(private sanitizer: DomSanitizer,private rpcService:RpcService) {
     super();
-    // Sanitize the title 
-    this.config2.fields[7].title = this.sanitizer.bypassSecurityTrustHtml(this.config2.fields[7].title) as unknown as string;
+    // Sanitize the HTML content once during construction
+    this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);
+  }
 
-
+  ngOnInit():void{
+   this.rpcService.request('Homecloud', 'getHotspotStatus').subscribe((response: any) => {
+        const hotSpotForm = document.getElementById('network-main-form2');
+        if(hotSpotForm){
+          // Check if the response is defined and has the 'active' property
+          if(response && response.active !== 'Active'){                   
+              hotSpotForm.classList.add('hidden');
+          }
+          
+          else{
+              hotSpotForm.classList.remove('hidden');
+          }
+        }
+   });
   }
 
   ngAfterViewInit(): void {
-        
-    // Delay the operation to ensure the view is fully rendered
-    setTimeout(() => {
-      
-      // Select all paragraph elements 
-      const paragraphs = document.querySelectorAll('#network-main-form1 .omv-form-paragraph');
-      
-
-
-      paragraphs[7].innerHTML =
-      (this.config2.fields[7].title as any).changingThisBreaksApplicationSecurity ||
-      this.config2.fields[7].title?.toString();
-      
-    }, 100); // Timeout ensures it happens after the view has rendered
-  }
-  ngOnInit(){
-    this.fetchStatusAndUpdateFields();  //get hostname value and update in link
     
   }
-  fetchStatusAndUpdateFields(): void {
-    this.rpcService.request('Homecloud', 'getPaperlessServiceStatus').subscribe(response => {
-      const status = response.status;
-      console.log('status',status);
-    });
-  }
-
 }

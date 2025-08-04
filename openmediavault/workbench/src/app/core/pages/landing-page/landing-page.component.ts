@@ -8,6 +8,7 @@ import { ViewEncapsulation } from '@angular/core';
 
 import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
 import { BaseFormPageComponent } from '~/app/pages/base-page-component';
+import { DomSanitizer,SafeHtml} from '@angular/platform-browser';
 
 
 
@@ -16,8 +17,13 @@ import { BaseFormPageComponent } from '~/app/pages/base-page-component';
   selector: 'omv-landing-page',
   //templateUrl: './landing-page.component.html',
   template:`<omv-logo-header></omv-logo-header>
-             <omv-intuition-form-page [config]="this.config" id="mainContent"></omv-intuition-form-page>
-             <omv-intuition-form-page [config]="this.navconfig" id="navButtons"></omv-intuition-form-page>
+            <div id="mainContainer">
+                <div id="landing-main-form1">
+                  <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
+                </div>
+                <omv-intuition-form-page [config]="this.config" id="mainContent"></omv-intuition-form-page>
+            </div>
+            <omv-intuition-form-page [config]="this.navconfig" id="navButtons"></omv-intuition-form-page>
              `,
   styleUrls: ['./landing-page.component.scss'],
   encapsulation:ViewEncapsulation.None
@@ -26,6 +32,28 @@ export class LandingPageComponent extends BaseFormPageComponent {
 
   buttonTitle: string = 'Configure';  // Default title
   url: string = '';
+  public safeHtmlContent: SafeHtml; 
+  private htmlContent = `
+  <div class="container">
+      <h1>Welcome to <span class="highlight">Homecloud</span>!</h1>
+      <h2 class="tagline">Your private cloud is ready for liftoff 🚀</h2>
+
+      <div class="features">
+        <p>🔐 Private & Secure</p>
+        <p>📱 Access Anywhere</p>
+        <p>🛠️ Fully Customizable</p>
+      </div>
+
+      <div class="info-box">
+      <p>
+      Before we begin, take a quick look at your Homecloud system details below 👇like serial number, storage capacity, and hardware version.
+      </p>
+      <p>
+      💡 Need help during setup? Visit
+      <a class="plainLink" href="https://homecloud.cloud" target="_blank">homecloud.cloud</a> and head to the <strong>Support</strong> section for guides and assistance.
+      </p>
+  </div>
+`;
 
   
   public config: FormPageConfig = {
@@ -37,10 +65,7 @@ export class LandingPageComponent extends BaseFormPageComponent {
       } 
     },
     fields: [
-      {
-        type:'paragraph',   
-        title: gettext('Welcome To Homecloud')
-      },
+      
       {
         type:'textInput',
         label:gettext('Serial Number'),
@@ -92,10 +117,14 @@ export class LandingPageComponent extends BaseFormPageComponent {
       ]
     };
 
-  constructor(private activatedRoute: ActivatedRoute,private router: Router, private rpcService:RpcService) { super();}
+  constructor(private activatedRoute: ActivatedRoute,private router: Router, private rpcService:RpcService, private sanitizer:DomSanitizer) { 
+     super();
+     // Sanitize the HTML content once during construction
+    this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);
+  }
 
   ngOnInit(): void {
-    console.log('ngOnInit called');
+   // console.log('ngOnInit called');
     this.getLastCompletedStep();
   }
 
@@ -110,16 +139,27 @@ export class LandingPageComponent extends BaseFormPageComponent {
       .subscribe({
         next: (result: any) => {
           const urlMap = {
-            network: '/setupwizard/vpn/tailscaleconfig',
-            vpn: '/setupwizard/datetime',
+            networkMain: '/setupwizard/networkconfig/interfaces',
+            networkInterface: '/setupwizard/vpn',
+            vpnMain: '/setupwizard/vpn/tailscaleconfig',
+            vpnConfig: '/setupwizard/vpn/access',
+            vpnAccess: '/setupwizard/datetime',
             datetime: '/setupwizard/notificationsettings',
-            notification: '/setupwizard/apps/drive',
-            appsDrive: '/setupwizard/apps/photos',
-            appsPhotos: '/setupwizard/apps/paperless',
-            appsPaperless: '/setupwizard/apps/notes',
-            appsNotes: '/setupwizard/apps/password-manager',
-            appsPasswordManager: '/setupwizard/apps/media',
-            appsMedia: '/setupwizard/complete',
+            notification: '/setupwizard/apps',
+            appsMain: '/setupwizard/apps/drive',
+            appsDrive: '/setupwizard/apps/drive/users',
+            appsDriveUsers: '/setupwizard/apps/drive/access',
+            appsDriveAccess: '/setupwizard/apps/photos',
+            appsPhotos: '/setupwizard/apps/photos/access',
+            appsPhotosAccess: '/setupwizard/apps/paperless',
+            appsPaperless: '/setupwizard/apps/paperless/access',
+            appsPaperlessAccess: '/setupwizard/apps/notes',
+            appsNotes: '/setupwizard/apps/notes/access',
+            appsNotesAccess: '/setupwizard/apps/password-manager',
+            appsPasswordManager: '/setupwizard/apps/password-manager/access',
+            appsPasswordManagerAccess: '/setupwizard/apps/media',
+            appsMedia: '/setupwizard/media/access',
+            appsMediaAccess: '/setupwizard/complete',
             complete: '/dashboard',
             default: '/setupwizard'
           };

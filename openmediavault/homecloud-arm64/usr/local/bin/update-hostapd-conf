@@ -1,0 +1,24 @@
+#!/bin/bash
+set -e
+
+# Check if source file exists
+if [ ! -f "$1" ]; then
+    echo "Error: Source file not found: $1"
+    exit 1
+fi
+
+# Create backup of original file if it exists
+if [ -f /etc/hostapd/hostapd.conf ]; then
+    cp -f /etc/hostapd/hostapd.conf /etc/hostapd/hostapd.conf.bak
+fi
+
+# Copy the new configuration file
+cp -f "$1" /etc/hostapd/hostapd.conf
+
+# Set proper permissions
+chmod 644 /etc/hostapd/hostapd.conf
+
+# Restart hostapd service if it's running
+systemctl is-active --quiet hostapd && systemctl restart hostapd || true
+
+exit 0

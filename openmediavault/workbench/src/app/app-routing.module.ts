@@ -39,7 +39,9 @@ import { LicensePageComponent } from './core/pages/license-page/license-page.com
 //import { CompletePageComponent } from './core/pages/complete-page/complete-page.component';
 //import { WizardSummaryPageComponent } from './core/pages/wizard-summary-page/wizard-summary-page.component';
 import { LicenseGuardService } from './shared/services/license-guard.service';
-import { WizardGuardService } from './shared/services/wizard-guard.service';
+//import { WizardGuardService } from './shared/services/wizard-guard.service';
+import { UpdateDatatablePageComponent } from './pages/system/updates/update-datatable-page.component';
+import { UpdateMainPageComponent } from './pages/system/updates/update-main-page.component';
 
 /**Home cloud changes end */
 
@@ -66,8 +68,10 @@ const routes: Routes = [
 
     path: '',
     component: WorkbenchLayoutComponent,
-    canActivate: [AuthGuardService,LicenseGuardService,WizardGuardService], // Apply guards here
-    canActivateChild: [AuthGuardService,LicenseGuardService,WizardGuardService], // This will protect all children
+    //canActivate: [AuthGuardService,LicenseGuardService,WizardGuardService], // Apply guards here
+    canActivate: [AuthGuardService,LicenseGuardService], // Apply guards here
+    //canActivateChild: [AuthGuardService,LicenseGuardService,WizardGuardService], // This will protect all children
+    canActivateChild: [AuthGuardService,LicenseGuardService], // This will protect all children
     children: [
       {
         path: '',
@@ -151,6 +155,28 @@ const routes: Routes = [
           import('./pages/diagnostics/diagnostics.module').then((m) => m.DiagnosticsModule),
         data: { title: gettext('Diagnostics') }
       },
+      {
+          path: 'updatemgmt',
+          canActivate: [AuthGuardService],
+          canActivateChild: [AuthGuardService],
+          data: { title: gettext('Update Management') },
+          children: [
+            {
+              path: '',
+              component: UpdateMainPageComponent,
+              canActivate: [AuthGuardService],
+              canActivateChild: [AuthGuardService]
+              
+            },
+            {
+              path: 'updates',
+              component: UpdateDatatablePageComponent,
+              canActivate: [AuthGuardService],
+              canActivateChild: [AuthGuardService],
+              data: { title: gettext('Updates') }
+            }
+          ]
+        },
       { path: 'logout', children: [] }
     ]
   },

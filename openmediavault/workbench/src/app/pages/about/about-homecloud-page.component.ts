@@ -8,6 +8,7 @@ import { ViewEncapsulation } from '@angular/core';
 
 import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
 import { BaseFormPageComponent } from '~/app/pages/base-page-component';
+import { DomSanitizer,SafeHtml } from '@angular/platform-browser';
 
 
 
@@ -15,14 +16,18 @@ import { BaseFormPageComponent } from '~/app/pages/base-page-component';
 @Component({
   selector: 'omv-about-homecloud-page',
   //templateUrl: './about-page.component.html',
-  template:`<omv-intuition-form-page [config]="this.config" id="mainContent"></omv-intuition-form-page>
+  template:`<div id="mainContentHeading">
+              <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
+            </div>
+            <omv-intuition-form-page [config]="this.config" id="mainContent"></omv-intuition-form-page>
              <omv-navigation-page></omv-navigation-page>
             `,
   styleUrls: ['./about-homecloud-page.component.scss'],
   encapsulation:ViewEncapsulation.None
 })
 export class AboutHomecloudPageComponent extends BaseFormPageComponent {
-
+    public safeHtmlContent:SafeHtml;
+    private htmlContent=`<h1>About Your Homecloud</h1>`;
   
   public config: FormPageConfig = {
 
@@ -33,10 +38,7 @@ export class AboutHomecloudPageComponent extends BaseFormPageComponent {
       } 
     },
     fields: [
-      {
-        type:'paragraph',   
-        title: gettext('About your Homecloud')
-      },
+      
       {
         type:'textInput',
         label:gettext('Serial Number'),
@@ -52,7 +54,20 @@ export class AboutHomecloudPageComponent extends BaseFormPageComponent {
         value:'',   
         readonly:true
       },
-    
+      {
+        type:'textInput',
+        label:gettext('Total Memory'),
+        name:'total_memory',
+        value:'',   
+        readonly:true
+      },
+      {
+        type:'textInput',
+        label:gettext('CPU Cores'),
+        name:'cpu_cores',
+        value:'',   
+        readonly:true
+      },
       {
         type:'textInput',
         label:gettext('Warranty Status'),
@@ -66,12 +81,22 @@ export class AboutHomecloudPageComponent extends BaseFormPageComponent {
       name:'hardware_version',
       value:'',   
       readonly:true
+      },
+      {
+        type:'textInput',
+        label:gettext('Software Version'),
+        name:'software_version',
+        value:'',   
+        readonly:true
       }
     ]
     };
     
 
-  constructor() { super();}
+  constructor(private sanitizer:DomSanitizer) { super();
+    // Sanitize the HTML content once during construction
+      this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);
+  }
 
   
 

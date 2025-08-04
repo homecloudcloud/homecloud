@@ -1,0 +1,42 @@
+entryPoints:
+  web:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+  websecure:
+    address: ":443"
+  immich:
+    address: ":2284"
+    transport:
+      respondingTimeouts:
+        readTimeout: 1200s
+        idleTimeout: 1200s
+        writeTimeout: 1200s
+  joplin:
+    address: ":22302"
+    transport:
+      respondingTimeouts:
+        readTimeout: 1200s
+        idleTimeout: 1200s
+        writeTimeout: 1200s
+  paperless-ngx:
+    address: ":8001"
+providers:
+  docker:
+    exposedByDefault: false
+    watch: true
+  file:
+    filename: config.yaml
+    watch: true
+api:
+  insecure: true 
+  dashboard: true
+  debug: true
+
+accessLog:
+  filePath: "/data/access.log"
+log:
+  level: DEBUG
+  filePath: "/data/log-file.log"

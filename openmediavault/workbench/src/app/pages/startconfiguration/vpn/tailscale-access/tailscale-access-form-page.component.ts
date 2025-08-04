@@ -21,17 +21,63 @@ import { marker as gettext } from '@ngneat/transloco-keys-manager/marker';
 import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
 import { BaseFormPageComponent } from '~/app/pages/base-page-component';
 import { ViewEncapsulation } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer,SafeHtml } from '@angular/platform-browser';
 
 
 
 @Component({
   selector:'omv-tailscale-startconfig-access-page', //Home cloud changes
-  template: '<omv-intuition-form-page [config]="this.config" id="tailscale-access-page"></omv-intuition-form-page>',
+  template: `<div id="tailscale-access-form1">
+                <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
+             </div>
+             <omv-intuition-form-page [config]="this.config" id="tailscale-access-page"></omv-intuition-form-page>
+             `,
 
   styles: [`
     @import '../../../../../assets/colors.scss';
+    .omv-dark-theme{
+      omv-tailscale-startconfig-access-page{
+        h1,h2,h3{
+        color:$lightblue !important;
+    }
+       
+      }
+
+    }
     omv-tailscale-startconfig-access-page{
+      #tailscale-access-form1{
+        margin-bottom:-3rem;
+        .omv-form-paragraph{
+        padding:2rem;
+        line-height: 1.5rem;
+      }
+
+      }
+     
+      .omv-form-paragraph,h2,p,li,h3 {
+        font-size: var(--mat-font-size-subheading-2) !important;
+      
+      }
+      .omv-form-paragraph,p,li {
+        font-size: var(--mat-font-size-subheading-2) !important;
+        font-weight:var(--mat-font-weight-subheading-2) !important;
+      }
+      h1{
+        font-size: var(--mat-font-size-headline) !important;
+      
+      }
+    
+      
+      h2,h1,h3 {
+        color:$blue;
+      }
+
+      
+      
+      ul {
+        list-style-type: disc;
+        margin-left: 20px;
+      }
 
       .omv-form-container{
         border: 1px solid $lightblue !important;
@@ -39,6 +85,7 @@ import { DomSanitizer } from '@angular/platform-browser';
       omv-form-paragraph:first-child .omv-form-paragraph {
         font-size: var(--mat-font-size-headline) !important;
         font-weight: var(--mat-font-weight-headline) !important;
+       
       }
 
       omv-form-paragraph:not(:first-child) .omv-form-paragraph, .omv-form-container-item omv-form-paragraph .omv-form-paragraph {
@@ -164,6 +211,23 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 
 export class TailscaleAccessComponent extends BaseFormPageComponent {
+  public safeHtmlContent: SafeHtml;
+  private htmlContent=`<h1>📲 How to Set Up Tailscale VPN on Your Access Devices</h1>
+            <p>
+              To use Homecloud over VPN, make sure your access device — such as your phone or laptop — is connected to the VPN. 
+              It’s a simple step that keeps your connection private and secure. Follow below steps to check that.
+            </p>
+            <ul>
+              <li>Go to <a class="plainLink" href="#/startconfiguration/vpn/status">VPN status page</a></li><br>
+              <li>Verify that VPN is configured and status is <strong>"Up"</strong> on your Homecloud server.</li><br>
+              <li>Verify that your access device(phone/laptop) is in the device list on this page.</li><br>
+              <li>If present, your access device is connected to VPN.</li>
+              <p> Note: If VPN is configured and status is <strong>"Up"</strong> on Homecloud server, all access devices should also be connected to VPN.
+            </ul>
+
+            <p>
+              ⚠️ <strong>If you're not connected to the VPN</strong>, Homecloud will only be accessible on your local network.
+            </p>`;
   public config: FormPageConfig = {
     request: {
       service: 'Homecloud',
@@ -172,21 +236,7 @@ export class TailscaleAccessComponent extends BaseFormPageComponent {
       }
     },
     fields: [
-      {
-        type: 'paragraph',
-        title: gettext('How to set up Tailscale VPN on your access devices like phone or laptop?'),
-        name:'paragraph0'
-      },
-      {
-        type: 'paragraph',
-        title: gettext('To use Homecloud, make sure your access device like your phone or laptop is connected to the VPN. It’s a simple step that keeps your connection private and secure.'),
-        name:'paragraph1'
-      },
-      {
-        type: 'paragraph',
-        title: gettext('If you’re not connected to the VPN, Homecloud will only be available on your local network.'),
-        name:'paragraph3'
-      },
+     
       {
         type: 'divider',
         title: gettext('Set up Tailscale VPN on iOS devices'),
@@ -207,7 +257,7 @@ export class TailscaleAccessComponent extends BaseFormPageComponent {
           },
           {
             type: 'paragraph',
-            title: gettext('After installing the app on your device, log in to Tailscale using the same account you used to sign up OR with a user ID you have invited to your Tailscale network. For quick access copy ID from below:'),
+            title: gettext('After installing the app on your device, log in to Tailscale using the same account you used to sign up. For quick access copy ID from below:'),
             name:'paragraph6'
           },
           {
@@ -296,11 +346,7 @@ export class TailscaleAccessComponent extends BaseFormPageComponent {
         title: gettext('Repeat the above steps for all the devices you want to access Homecloud from.'),
         name:'paragraph16'
       },
-      {
-        type: 'paragraph',
-        title: gettext('To make sure your device is set up right with Tailscale VPN, just head to the VPN → Status page. You should see your device listed in the table there.'),
-        name:'paragraph17'
-      },
+      
       {
         type: 'paragraph',
         title: gettext(''),
@@ -319,15 +365,17 @@ export class TailscaleAccessComponent extends BaseFormPageComponent {
      
       // Sanitize the title 
     
-          this.config.fields[4].fields[1].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[4].fields[1].title) as unknown as string;
-          this.config.fields[4].fields[5].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[4].fields[5].title) as unknown as string;
+          this.config.fields[1].fields[1].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[1].fields[1].title) as unknown as string;
+          this.config.fields[1].fields[5].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[1].fields[5].title) as unknown as string;
           
-          this.config.fields[6].fields[1].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[6].fields[1].title) as unknown as string;
-          this.config.fields[6].fields[5].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[6].fields[5].title) as unknown as string;
-          this.config.fields[8].fields[0].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[8].fields[0].title) as unknown as string;
-          this.config.fields[12].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[12].title) as unknown as string;
+          this.config.fields[3].fields[1].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[3].fields[1].title) as unknown as string;
+          this.config.fields[3].fields[5].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[3].fields[5].title) as unknown as string;
+          this.config.fields[5].fields[0].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[5].fields[0].title) as unknown as string;
+          this.config.fields[8].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[8].title) as unknown as string;
+        
           
-      
+          // Sanitize the HTML content once during construction
+          this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);
     }
     
    
@@ -341,29 +389,29 @@ export class TailscaleAccessComponent extends BaseFormPageComponent {
   
           // Inject the sanitized HTML into the correct paragraph element
           
-          paragraphs[4].innerHTML =
-          (this.config.fields[4].fields[1].title as any).changingThisBreaksApplicationSecurity ||
-          this.config.fields[4].fields[1].title?.toString();
+          paragraphs[1].innerHTML =
+          (this.config.fields[1].fields[1].title as any).changingThisBreaksApplicationSecurity ||
+          this.config.fields[1].fields[1].title?.toString();
 
-          paragraphs[7].innerHTML =
-          (this.config.fields[4].fields[5].title as any).changingThisBreaksApplicationSecurity ||
-          this.config.fields[4].fields[5].title?.toString();
+          paragraphs[4].innerHTML =
+          (this.config.fields[1].fields[5].title as any).changingThisBreaksApplicationSecurity ||
+          this.config.fields[1].fields[5].title?.toString();
+
+          paragraphs[6].innerHTML =
+          (this.config.fields[3].fields[1].title as any).changingThisBreaksApplicationSecurity ||
+          this.config.fields[3].fields[1].title?.toString();
 
           paragraphs[9].innerHTML =
-          (this.config.fields[6].fields[1].title as any).changingThisBreaksApplicationSecurity ||
-          this.config.fields[6].fields[1].title?.toString();
-
-          paragraphs[12].innerHTML =
-          (this.config.fields[6].fields[5].title as any).changingThisBreaksApplicationSecurity ||
-          this.config.fields[6].fields[5].title?.toString();
+          (this.config.fields[3].fields[5].title as any).changingThisBreaksApplicationSecurity ||
+          this.config.fields[3].fields[5].title?.toString();
   
-          paragraphs[13].innerHTML =
-          (this.config.fields[8].fields[0].title as any).changingThisBreaksApplicationSecurity ||
-          this.config.fields[8].fields[0].title?.toString();
+          paragraphs[10].innerHTML =
+          (this.config.fields[5].fields[0].title as any).changingThisBreaksApplicationSecurity ||
+          this.config.fields[5].fields[0].title?.toString();
 
-          paragraphs[17].innerHTML =
-          (this.config.fields[12].title as any).changingThisBreaksApplicationSecurity ||
-          this.config.fields[12].title?.toString();
+          paragraphs[13].innerHTML =
+          (this.config.fields[8].title as any).changingThisBreaksApplicationSecurity ||
+          this.config.fields[8].title?.toString();
   
           // Call the collapseContainers method to set up the collapsible containers
           this.collapseContainers();

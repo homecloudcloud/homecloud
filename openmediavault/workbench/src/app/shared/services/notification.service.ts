@@ -54,7 +54,8 @@ export class NotificationService {
       // Store the notification.
       this.add(notification);
       // Show the notification as toasty.
-      const fn: (message: string, title: string) => any = _.bind(
+      /**Homecloud changes start */
+  /*    const fn: (message: string, title: string) => any = _.bind(
         this.toastrService[notification.type],
         this.toastrService
       );
@@ -62,6 +63,14 @@ export class NotificationService {
         _.truncate(translate(notification.message), { length: 1500, omission: '...' }),
         translate(notification.title)
       );
+  */
+        this.toastrService[notification.type](
+        _.truncate(translate(notification.message), { length: 1500, omission: '...' }),
+        translate(notification.title),
+        { timeOut: notification.type === 'error' ? 5000 : 1000 }
+      );
+  /**Homecloud changes end */
+
     }, 5);
   }
 

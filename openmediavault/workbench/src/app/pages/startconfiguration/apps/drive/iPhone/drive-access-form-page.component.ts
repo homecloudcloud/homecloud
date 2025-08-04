@@ -49,7 +49,7 @@ export class AppsDriveAccessComponent extends BaseFormPageComponent {
   private hostname: string = '';
   public config1: DatatablePageConfig = {
     stateId: '66d9d3db-2fee-11ea-8386-e3eba0cf8f79',
-    autoReload: 10000,
+    autoReload: 90000,
     remoteSorting: true,
     remotePaging: true,
     sorters: [

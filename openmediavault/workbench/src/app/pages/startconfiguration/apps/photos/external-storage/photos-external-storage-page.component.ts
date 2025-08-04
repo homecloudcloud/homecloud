@@ -16,12 +16,12 @@
  * GNU General Public License for more details.
  */
 import { Component } from '@angular/core';
-import { marker as gettext } from '@ngneat/transloco-keys-manager/marker';
+//import { marker as gettext } from '@ngneat/transloco-keys-manager/marker';
 import * as _ from 'lodash';
-import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
+//import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
 import { BaseFormPageComponent } from '~/app/pages/base-page-component';
 import { ViewEncapsulation } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer,SafeHtml} from '@angular/platform-browser';
 import { RpcService } from '~/app/shared/services/rpc.service';
 
 
@@ -31,7 +31,10 @@ import { RpcService } from '~/app/shared/services/rpc.service';
   selector:'omv-photos-external-storage-page', //Home cloud changes
   //template: '<omv-intuition-form-page [config]="this.config"></omv-intuition-form-page>',
   template: `
-  <omv-intuition-form-page id="photos-external-storage-form1" [config]="this.config"></omv-intuition-form-page>
+  <div id="photos-external-storage-form">
+    <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
+  </div>
+  
   `,
   styleUrls: ['./photos-external-storage-form-page.component.scss'],
   encapsulation: ViewEncapsulation.None  // This will disable view encapsulation
@@ -40,70 +43,12 @@ import { RpcService } from '~/app/shared/services/rpc.service';
 export class AppsPhotosExternalStorageComponent extends BaseFormPageComponent {
   private hostname: string = '';
   private immichStatus: string = '';
-  public config: FormPageConfig = {
-    request: {
-      service: 'Homecloud',
-      get: {
-        method: 'getImmichServiceStatus'
-      }
-    },
-    fields: [
-      {
-        type: 'paragraph',
-        title: gettext('')
-      },
-      {
-        type: 'paragraph',
-        title: gettext('Your pictures on USB disks can be indexed and accessed via Immich. Immich only scans, indexes and creates thumbnails of media found on external disks. It does not move those files to Homecloud internal storage')
-      },
-      {
-        type: 'paragraph',
-        title: gettext('To enable indexing of media on USB disks, first plug-in those disks to USB slot of Homecloud')
-      },
-      {
-        type: 'paragraph',
-        title: gettext('Open Immich webapp login with user having Immich admin rights. To find Immich user with admin rights, go to <a href="/#/startconfiguration/apps/photos/password"> &nbsp;&nbsp; Passwords</a> ')
-      },
-      
-      {
-        type: 'paragraph',
-        title: gettext('')
-      },
-      
-      {
-        type: 'paragraph',
-        title: gettext('After login go to right top corner > User > Administration > External Libraries > Create Library')
-      },
-      {
-        type: 'paragraph',
-        title: gettext('Select the owner from listed Immich users who would access all the media in external USB storage. This user can share these photos with other users.')
-      },
-      {
-        type: 'paragraph',
-        title: gettext('After creating library, click the three dots on right side of the row and select > edit import paths.')
-      },
-      {
-        type: 'paragraph',
-        title: gettext('Select Add Path and paste the below string in Path > Add')
-      },
-      {
-        type: 'textInput',
-        name: 'path',
-        label: gettext('External library path'),
-        hint: gettext('Paste this in external library import path in Immich library settings'),
-        value: '/external-storage/',
-        readonly: true
-      },
-      {
-        type: 'paragraph',
-        title: gettext('')
-      },
-
-    ]
-  };
+  public safeHtmlContent:SafeHtml;
+  private htmlContent='';
 
   constructor(private sanitizer: DomSanitizer, private rpcService: RpcService) {
     super();   
+    
     
   }
   ngOnInit(){
@@ -113,31 +58,40 @@ export class AppsPhotosExternalStorageComponent extends BaseFormPageComponent {
     this.rpcService.request('Homecloud', 'getImmichServiceStatus').subscribe(response => {
       this.immichStatus = response.status;
       this.hostname = response.hostname; // Adjust based on API response structure
-      console.log('immichstatus',this.immichStatus);
-      console.log('hostname',this.hostname);
-
   
-
-      //Update title with hostname
-      this.config.fields[4].title=`Login to Immich webapp <a class="immich-btn" href="${this.hostname}" target="_blank"> &nbsp;&nbsp;Access Immich WebApp</a>`;
+      this.updateHtml();
       
-      
-      // Sanitize the title 
-      this.config.fields[4].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[4].title) as unknown as string;
-      this.addSanitizedHtml();
+    
     });
   }
-  addSanitizedHtml(){
-     // Select all paragraph elements (assuming they are rendered as `ios-drive-form1 omv-form-paragraph` elements)
-     const paragraphs = document.querySelectorAll('#photos-external-storage-form1 .omv-form-paragraph');
 
-     // Inject the sanitized HTML into the correct paragraph element
-     paragraphs[4].innerHTML =
-     (this.config.fields[4].title as any).changingThisBreaksApplicationSecurity ||
-     this.config.fields[4].title?.toString();
-     
+  updateHtml(): void {
+    this.htmlContent = `<div class="container">
+                            <h1>📸 Access Your USB Photos with Immich!</h1>
+                            <p>🔌 Plug in your USB drive to Homecloud and go to the <a href="#/startconfiguration/usb-disks/filesystems" class="plainLink"><strong>Filesystems</strong></a> page to check if it's recognized.</p>
+                            <p>🖥️ Open the <a class="app-btn ${this.immichStatus !== 'Running' ? 'disabled-btn' : ''}" href="${this.hostname}/admin/library-management" target="_blank"><strong>Immich web app</strong></a> and login as an admin user.<br>
+                            <span class="status-error ${this.immichStatus !== 'Running' ? '' : 'hidden'}" >Immich is not running! Go to <a href="#/startconfiguration/apps/photos/restart" class="plainLink"><strong>photos status page</strong></a> to check the status or restart the app</span></p>
+                            👉 Need admin info? Check <a class="plainLink" href="/#/startconfiguration/apps/photos/password">Passwords</a></p>
 
+                            <h2>📁 Create a Library for USB Photos</h2>
+                            <ol>
+                              <li>Click <strong>Create Library</strong></li><br>
+                              <li>Select the 📷 user who owns these photos</li><br>
+                              <li>In the <strong>Add Import Path</strong> box, paste:
+                                <code>/external-storage/</code>
+                              </li><br>
+                              <li>Click <strong>Add</strong>, then <strong>Validate</strong> ✅ and <strong>Save</strong> 💾</li><br>
+                              <li>Click the 3 dots ••• and select <strong>Scan</strong> 🔍</li><br>
+                            </ol>
+
+                            <p>⏳ It may take a while depending on how many photos you have — could be hours or even days!</p>
+
+                            <p>🧠 <em>Note: Immich doesn’t move your files — it just indexes and creates thumbnails, using a bit of Homecloud’s internal storage.</em></p>
+                        </div>`;
+    //Sanitize the HTML content
+    this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);
   }
+  
 
 
   

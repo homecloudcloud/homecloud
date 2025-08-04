@@ -21,7 +21,7 @@ import * as _ from 'lodash';
 import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
 import { BaseFormPageComponent } from '~/app/pages/base-page-component';
 import { ViewEncapsulation } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer,SafeHtml } from '@angular/platform-browser';
 import { RpcService } from '~/app/shared/services/rpc.service';
 
 
@@ -29,7 +29,9 @@ import { RpcService } from '~/app/shared/services/rpc.service';
   selector:'omv-jellyfin-main-page', //Home cloud changes
   //template: '<omv-intuition-form-page [config]="this.config"></omv-intuition-form-page>',
   template: `
-  <omv-intuition-form-page id="jellyfin-main-form1" [config]="this.config"></omv-intuition-form-page>
+  <div id="jellyfin-main-form1">
+    <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
+   </div>
   <omv-intuition-form-page id="jellyfin-main-form2" [config]="this.config2"></omv-intuition-form-page>
   <omv-intuition-form-page id="jellyfin-main-form3" [config]="this.config3"></omv-intuition-form-page>
   <omv-navigation-page></omv-navigation-page>
@@ -41,48 +43,65 @@ import { RpcService } from '~/app/shared/services/rpc.service';
 })
 
 export class AppsJellyfinMainComponent extends BaseFormPageComponent {
-  public config: FormPageConfig = {
-    request: {
-      service: 'Homecloud',
-      get: {
-        method: 'getJellyfinServiceStatus'
-      }
-    },
-    fields: [
-      {
-        type: 'paragraph',
-        title: gettext('Homecloud supports opensource media server Jellyfin.')
-      },
-      {
-        type: 'paragraph',
-        title: gettext('Jellyfin is the volunteer-built media solution that puts you in control of your media. Stream to any device from your own server, with no strings attached. Your media, your server, your way.')
-      },
-      {
-        type: 'paragraph',
-        title: gettext('Jellyfin enables you to collect, manage, and stream your media. Run the Jellyfin server on your Homecloud and gain access to the leading free-software entertainment system, bells and whistles included.')
-      },
-      {
-        type: 'paragraph',
-        title: gettext('')
-      },
-      {
-        type: 'paragraph',
-        title: gettext('Jellyfin has two components: 1. Backend service that runs on Homecloud. It stores all your media on Homecloud within privacy and security of your Home. No data is stored on any public cloud')
-      },
-      {
-        type: 'paragraph',
-        title: gettext('2.Frontend which is based on multiple apps like WebApp (Browser based from any platform), Audio book listening app, music app, video app for iOS and Android devices.')
-      },
-      {
-        type: 'paragraph',
-        title: gettext('')
-      },
-      {
-        type: 'paragraph',
-        title: gettext(` This is an open source 3rd party software. By clicking deploy you agree to terms and conditions enter link here. To learn more about Jellyfin visit open source project at:&nbsp;&nbsp; <a class="plainLink" href="https://jellyfin.org/" target="_blank">Learn more about Jellyfin </a> `)
-      }
-    ]
-  };
+  public safeHtmlContent: SafeHtml;
+  
+  private htmlContent = `
+    <div class="content-wrapper">
+      <div class="left-column">
+        <div class="jellyfin-logo"></div>
+        <p class="intro-text">
+          Jellyfin is the volunteer-built media solution that puts you in control of your media. Stream to any device from Homecloud, with no strings attached. Jellyfin enables you to collect, manage, and stream your media. Run the Jellyfin server on your Homecloud and gain access to the leading free-software entertainment system, bells and whistles included.
+        </p>
+        <h2>Key Features:</h2>
+        <ul>
+          <li><strong>Media Library Management</strong><br>
+            Automatically organizes your TV shows, movies, music, and photos.Pulls metadata, posters, trailers, and subtitles from online sources.
+          </li>
+
+          <li><strong>Streaming to Any Device</strong><br>
+            Stream media to web browsers, smart TVs, mobile apps, Kodi, and DLNA devices.
+          </li>
+
+          <li><strong>Fully Free & Open Source (No Telemetry)</strong><br>
+            No licensing fees, subscriptions, or proprietary lock-in.
+          </li>
+
+
+        </ul>
+
+        <h2>How It Works</h2>
+        <p><strong>Jellyfin has two components:</strong></p>
+
+        <h3>1. Backend (Runs on Homecloud)</h3>
+        <ul>
+          <li>It stores all your media on Homecloud privately. No data is stored on any public cloud.</li>
+        </ul>
+
+        <h3>2. Frontend (Mobile App & Web App)</h3>
+        <ul>
+          <li>Multiple apps like WebApp (Browser based from any platform), Audio book listening app, music app, video app for iOS and Android devices.</li>
+         
+        </ul>
+
+        <h2>Deployment Notice</h2>
+        <p>
+          Jellyfin is an open-source third-party application. Before deploying, please read more about it here:<br> 
+          <a href="https://jellyfin.org/" class="plainLink" target="_blank">https://jellyfin.org/</a>
+        </p>
+
+        <h2>Getting Started</h2>
+        <p>Follow below instructions for deployment.</p>
+        <p>After deploying, go to the <a class="plainLink" href="#/startconfiguration/apps/media/access">access page</a> to start using the app.</p>
+      </div>
+
+      <div class="right-column">
+        <img src="/assets/images/jellyfin.png" alt="Jellyfin dashboard image">
+      </div>
+    </div>
+
+    
+`;
+  
 
   public config2: FormPageConfig = {
       request: {
@@ -97,6 +116,12 @@ export class AppsJellyfinMainComponent extends BaseFormPageComponent {
         name: 'version',
         label: gettext('Latest Jellyfin version available to deploy'),
         hint: gettext('This version will be deployed'),
+        value: '',
+        readonly: true
+      },
+      {
+        type: 'textInput',
+        name: 'message',
         value: '',
         readonly: true
       },
@@ -153,7 +178,7 @@ export class AppsJellyfinMainComponent extends BaseFormPageComponent {
                   }
                 }
               },
-            successUrl:'/startconfiguration/apps/media'
+            successUrl:'/startconfiguration/apps/media/access'
             }
         }
       }
@@ -235,28 +260,12 @@ export class AppsJellyfinMainComponent extends BaseFormPageComponent {
   };
   constructor(private rpcService: RpcService,private sanitizer: DomSanitizer) {
     super();
-    // Sanitize the title 
-    this.config.fields[7].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[7].title) as unknown as string;
-
+     // Sanitize the HTML content once during construction
+    this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);
 
   }
 
-  ngAfterViewInit(): void {
-        
-    // Delay the operation to ensure the view is fully rendered
-    setTimeout(() => {
-      
-      // Select all paragraph elements 
-      const paragraphs = document.querySelectorAll('#jellyfin-main-form1 .omv-form-paragraph');
-      
-
-
-      paragraphs[7].innerHTML =
-      (this.config.fields[7].title as any).changingThisBreaksApplicationSecurity ||
-      this.config.fields[7].title?.toString();
-      
-    }, 100); // Timeout ensures it happens after the view has rendered
-  }
+  
   ngOnInit(){
     this.fetchStatusAndUpdateFields();  //get hostname value and update in link
     
@@ -270,39 +279,69 @@ export class AppsJellyfinMainComponent extends BaseFormPageComponent {
     });
   }
 
+
+
   updateFieldVisibility(status:string):void{
-    console.log('deploy status',status);
-    const checkboxDeploy=document.querySelector('omv-jellyfin-main-page #jellyfin-main-form2 omv-form-checkbox mat-checkbox');
-    const checkboxRemove=document.querySelector('omv-jellyfin-main-page #jellyfin-main-form3 omv-form-checkbox mat-checkbox');
+  //  console.log('deploy status',status);
+    const checkboxDeploy=document.querySelector('omv-jellyfin-main-page #jellyfin-main-form2 omv-form-checkbox');
+    const checkboxRemove=document.querySelector('omv-jellyfin-main-page #jellyfin-main-form3 omv-form-checkbox');
     const deployButton = document.querySelector('omv-jellyfin-main-page  #jellyfin-main-form2 omv-submit-button button');
-    const removeButton = document.querySelector('omv-jellyfin-main-page  #jellyfin-main-form3 omv-submit-button button');
-    const jellyfinMainForm2=document.querySelector('omv-jellyfin-main-page #jellyfin-main-form2');
-    const jellyfinMainForm3=document.querySelector('omv-jellyfin-main-page #jellyfin-main-form3');
+    
+    const photosMainForm2=document.querySelector('omv-jellyfin-main-page #jellyfin-main-form2');
+    const photosMainForm3=document.querySelector('omv-jellyfin-main-page #jellyfin-main-form3');
    
     if(status === 'Not deployed'){
-      console.log('status is not deployed');
-      jellyfinMainForm3.classList.add('hidden');
+      
+     // console.log('status is not deployed');
+      photosMainForm3.classList.add('hidden');
       checkboxDeploy.classList.remove('hidden');
-      checkboxDeploy.addEventListener('click', () => {
-        // Add a small delay to ensure class changes are applied
-        setTimeout(() => {
-            const isChecked = checkboxDeploy.classList.contains('mat-checkbox-checked');
-            console.log('Checkbox checked status:', isChecked);            
-            if (isChecked) {
-                deployButton.classList.remove('mat-button-disabled');
-                console.log('Deploy button enabled - classes:', deployButton.className);
-            } else {
-                deployButton.classList.add('mat-button-disabled');
-                console.log('Deploy button disabled - classes:', deployButton.className);
-            }
-        }, 0);
-    });
+      this.rpcService.request('Homecloud', 'jellyfin_get_latest_version').subscribe(response => {
+        const version = response.version;
+        if (!version || version.trim() === '') {
+          // Version is null, undefined, empty, or contains only spaces
+          deployButton.classList.add('mat-button-disabled');
+          checkboxDeploy.classList.add('hidden');
+        }
+        else{
+           this.checkboxDeployListener();
+        }
+      });     
      
-    }else{
-      console.log('status is deployed');
-      jellyfinMainForm2.classList.add('hidden');
+    }
+    else{
+    //  console.log('status is deployed');
+      photosMainForm2.classList.add('hidden');
       checkboxRemove.classList.remove('hidden');
-      checkboxRemove.addEventListener('click', () => {
+      this.checkboxRemoveListener();
+     
+    }
+  }
+
+  checkboxDeployListener(){
+    const checkboxDeploy=document.querySelector('omv-jellyfin-main-page #jellyfin-main-form2 omv-form-checkbox mat-checkbox');
+    const deployButton = document.querySelector('omv-jellyfin-main-page  #jellyfin-main-form2 omv-submit-button button');
+     checkboxDeploy.addEventListener('click', () => {
+            // Add a small delay to ensure class changes are applied
+            setTimeout(() => {
+                const isChecked = checkboxDeploy.classList.contains('mat-checkbox-checked');
+            //   console.log('Checkbox checked status:', isChecked);
+                
+                if (isChecked) {
+                    deployButton.classList.remove('mat-button-disabled');
+              //     console.log('Deploy button enabled - classes:', deployButton.className);
+                } else {
+                    deployButton.classList.add('mat-button-disabled');
+            //       console.log('Deploy button disabled - classes:', deployButton.className);
+                }
+            }, 0);
+      });
+
+  }
+
+  checkboxRemoveListener(){
+    const removeButton = document.querySelector('omv-jellyfin-main-page  #jellyfin-main-form3 omv-submit-button button');
+    const checkboxRemove=document.querySelector('omv-jellyfin-main-page #jellyfin-main-form3 omv-form-checkbox mat-checkbox');
+    checkboxRemove.addEventListener('click', () => {
         // Add a small delay to ensure class changes are applied
         setTimeout(() => {
             const isChecked = checkboxRemove.classList.contains('mat-checkbox-checked');
@@ -311,16 +350,14 @@ export class AppsJellyfinMainComponent extends BaseFormPageComponent {
             if (isChecked) {
                 removeButton.classList.remove('mat-button-disabled');
                 removeButton.classList.add('red', 'white');
-                console.log('Remove button enabled - classes:', removeButton.className);
+          //      console.log('Remove button enabled - classes:', removeButton.className);
             } else {
                 removeButton.classList.add('mat-button-disabled');
                 removeButton.classList.remove('red', 'white');
-                console.log('Remove button disabled - classes:', removeButton.className);
+          //      console.log('Remove button disabled - classes:', removeButton.className);
             }
         }, 0);
     });
-     
-    }
   }
 
 }

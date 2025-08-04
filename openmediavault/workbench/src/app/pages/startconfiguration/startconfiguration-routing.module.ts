@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, ROUTES, Routes } from '@angular/router';
 import { marker as gettext } from '@ngneat/transloco-keys-manager/marker';
 
-import { NavigationPageComponent } from '~/app/core/pages/navigation-page/navigation-page.component';
+//import { NavigationPageComponent } from '~/app/core/pages/navigation-page/navigation-page.component';
 import { RouteConfigService } from '~/app/core/services/route-config.service';
 /*import { FirewallRuleFormPageComponent } from '~/app/pages/network/firewall/rules/firewall-rule-form-page.component';
 import { FirewallRuleInetDatatablePageComponent } from '~/app/pages/network/firewall/rules/firewall-rule-inet-datatable-page.component';
@@ -25,7 +25,7 @@ import { TailscaleAccessComponent } from './vpn/tailscale-access/tailscale-acces
 import { TailscaleUpdateFormPageComponent} from './vpn/tailscale-update/tailscale-update-form-page.component'
 import { AppsDriveWindowsComponent } from '~/app/pages/startconfiguration/apps/drive/windows/drive-access-form-page.component';
 import { AppsDriveMainComponent } from '~/app/pages/startconfiguration/apps/drive/drive-form-page.component';
-import { AppsDriveAccessComponent } from '~/app/pages/startconfiguration/apps/drive/iPhone/drive-access-form-page.component';
+import { AppsDriveAccessComponent } from '~/app/pages/startconfiguration/apps/drive/access/drive-access-form-page.component';
 import { AppsDrivemacOSComponent } from '~/app/pages/startconfiguration/apps/drive/macos/drive-access-form-page.component';
 import { AppsDriveandroidComponent } from '~/app/pages/startconfiguration/apps/drive/android/drive-access-form-page.component';
 import {AppsDriveBackupComponent} from '~/app/pages/startconfiguration/apps/drive/backup/drive-backup-page.component';
@@ -38,7 +38,7 @@ import {SharedFolderDatatablePageComponent} from '~/app/pages/startconfiguration
 import {SharedFolderFormPageComponent} from '~/app/pages/startconfiguration/apps/drive/shares/shared-folder-form-page.component';
 import {SharedFolderPermissionsDatatablePageComponent} from '~/app/pages/startconfiguration/apps/drive/shares/shared-folder-permissions-datatable-page.component';
 import { AppsPhotosMainComponent } from './apps/photos/photos-form-main-page.component';
-import { AppsPhotosConfigComponent } from './apps/photos/access/photos-form-page.component';
+import { AppsPhotosAccessComponent } from './apps/photos/access/photos-access-form-page.component';
 import { AppsPhotosRestartComponent } from './apps/photos/restart/photos-restart-page.component';
 import { AppsPhotosDBResetComponent } from './apps/photos/reset/photos-db_reset-page.component';
 import { AppsPhotosBackupComponent } from './apps/photos/backup/photos-backup-page.component';
@@ -46,6 +46,7 @@ import { AppsPhotosPasswordResetComponent } from './apps/photos/password/photos-
 import { AppsPhotosPasswordResetDisplayComponent } from './apps/photos/password/photos-password-display-page.component';
 import { AppsPhotosUpdateFormPageComponent } from './apps/photos/update/photos-update-form-page.component';
 import { AppsPhotosRestoreComponent} from './apps/photos/restore/photos-restore-page.component';
+import { AppsPhotosExternalStorageComponent} from './apps/photos/external-storage/photos-external-storage-page.component';
 import { AppsPasswordManagerMainComponent } from './apps/password-manager/password-manager-main-page.component';
 import {AppsPasswordManagerConfigComponent} from './apps/password-manager/access/password-manager-form-page.component';
 import {AppsPasswordManagerBackupComponent} from './apps/password-manager/backup/password-manager-backup-page.component';
@@ -75,6 +76,7 @@ import {AppsJellyfinRestartComponent } from './apps/media/restart/jellyfin-resta
 import {AppsJellyfinUpdateFormPageComponent} from './apps/media/update/jellyfin-update-form-page.component';
 import {AppsJellyfinResetPasswordComponent} from './apps/media/password/jellyfin-resetpassword-form-page.component'
 import {AppsJellyfinPasswordResetDisplayComponent} from './apps/media/password/jellyfin-password-display-page.component'
+import {AppsJellyfinRestoreComponent} from './apps/media/restore/jellyfin-restore-page.component'
 import {DateTimeFormPageComponent} from './date-time/date-time-form-page.component';
 import {NotificationSettingsFormPageComponent} from './notification/notification-settings-form-page.component';
 import {DiskDatatablePageComponent} from '~/app/pages/startconfiguration/usb-disks/disk-datatable-page.component';
@@ -86,11 +88,20 @@ import { FilesystemMountFormPageComponent } from '~/app/pages/startconfiguration
 import { FilesystemQuotaDatatablePageComponent } from '~/app/pages/startconfiguration/usb-disks/filesystems/filesystem-quota-datatable-page.component';
 import { FilesystemQuotaFormPageComponent } from '~/app/pages/startconfiguration/usb-disks/filesystems/filesystem-quota-form-page.component';
 import {NetworkMainComponent} from '~/app/pages/startconfiguration/networkconfig/network-main-page.component';
+import { TailscaleTermsFormPageComponent } from './vpn/tailscale-terms/tailscale-terms-form-page.component';
+import { AppsMainComponent } from './apps/apps-main-page.component';
+import { startconfigurationMainComponent } from './startconfiguration-main-page.component';
+import { VPNMainComponent } from './vpn/vpn-main-page.component';
+import { VPNSecurebrowseComponent } from './vpn/tailscale-secure-browsing/tailscale-securebrowse-form-page.component';
+import { AppsJellyfinResetComponent } from './apps/media/reset/jellyfin_reset-page.component';
+import { AppsJoplinResetComponent } from './apps/notes/reset/joplin_reset-page.component';
+import { AppsPasswordManagerPasswordResetComponent } from './apps/password-manager/password/password-manager-password-page.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: NavigationPageComponent
+    //component: NavigationPageComponent
+    component: startconfigurationMainComponent
   },
   {
     path:'networkconfig',
@@ -246,7 +257,8 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: NavigationPageComponent
+        //component: NavigationPageComponent
+        component: VPNMainComponent
       },
       {
         path: 'tailscaleconfig',
@@ -280,6 +292,22 @@ const routes: Routes = [
           title: gettext('Update VPN'),
           editing: true
         }
+      },
+      {
+        path: 'terms',
+        component: TailscaleTermsFormPageComponent,
+        data: { 
+          title: gettext('Tailscale terms'),
+          editing: true
+        }
+      },
+      {
+        path: 'securebrowse',
+        component: VPNSecurebrowseComponent,
+        data: { 
+          title: gettext('Tailscale secure browse'),
+          editing: true
+        }
       }
     ]
   },
@@ -289,7 +317,8 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: NavigationPageComponent
+        //component: NavigationPageComponent
+        component: AppsMainComponent
       },
       {
         path: 'drive',
@@ -453,7 +482,7 @@ const routes: Routes = [
           },
           {
             path: 'access',
-            component: AppsPhotosConfigComponent,
+            component: AppsPhotosAccessComponent,
             data: {
               title: gettext('Access'),
               editing: true
@@ -485,13 +514,14 @@ const routes: Routes = [
           },
           {
             path: 'password',
+            data: { title: gettext('Password') },
             //component: AppsPhotosPasswordResetComponent,
             children: [
               {
                 path: '',
                 component: AppsPhotosPasswordResetComponent,
                 data: {
-                  title: gettext('Password'),
+                 // title: gettext('Password'),
                   editing: true
                 },
               },
@@ -519,6 +549,14 @@ const routes: Routes = [
             component: AppsPhotosRestoreComponent,
             data:{
               title: gettext('Restore'),
+              editing: true
+            }
+          },
+          {
+            path: 'external-storage',
+            component: AppsPhotosExternalStorageComponent,
+            data:{
+              title: gettext('USB'),
               editing: true
             }
           }
@@ -549,6 +587,14 @@ const routes: Routes = [
             component: AppsPasswordManagerBackupComponent,
             data: {
               title: gettext('Backup'),
+              editing: true
+            }
+          },
+          {
+            path: 'password',
+            component: AppsPasswordManagerPasswordResetComponent,
+            data: {
+              title: gettext('Password'),
               editing: true
             }
           },
@@ -595,6 +641,7 @@ const routes: Routes = [
             path: '',
             component: AppsPaperlessMainComponent,
             data: {
+              
               editing: true
             }
           },
@@ -602,6 +649,7 @@ const routes: Routes = [
             path: 'access',
             component: AppsPaperlessAccessComponent,
             data: {
+              title: gettext('Access'),
               editing: true
             }
           },
@@ -609,6 +657,7 @@ const routes: Routes = [
             path: 'password',
             component: AppsPaperlessPasswordResetComponent,
             data: {
+              title: gettext('Password'),
               editing: true
             }
           },
@@ -670,6 +719,7 @@ const routes: Routes = [
             path: 'access',
             component: AppsJoplinAccessComponent,
             data: {
+              title: gettext('Access'),
               editing: true
             }
           },
@@ -677,6 +727,7 @@ const routes: Routes = [
             path: 'backup',
             component: AppsJoplinBackupComponent,
             data: {
+              title: gettext('Backup'),
               editing: true
             }
           },
@@ -684,6 +735,7 @@ const routes: Routes = [
             path: 'password',
             component: AppsJoplinPasswordResetComponent,
             data: {
+              title: gettext('Password'),
               editing: true
             }
           },
@@ -692,6 +744,14 @@ const routes: Routes = [
             component: AppsJoplinRestartComponent,
             data: {
               title: gettext('Status'),
+              editing: true
+            }
+          },
+          {
+            path: 'reset',
+            component: AppsJoplinResetComponent,
+            data: {
+              title: gettext('Reset'),
               editing: true
             }
           },
@@ -729,6 +789,7 @@ const routes: Routes = [
             path: 'access',
             component: AppsJellyfinAccessComponent,
             data: {
+              title: gettext('Access'),
               editing: true
             }
           },
@@ -736,6 +797,7 @@ const routes: Routes = [
             path: 'backup',
             component: AppsJellyfinBackupComponent,
             data: {
+              title: gettext('Backup'),
               editing: true
             }
           },
@@ -743,6 +805,15 @@ const routes: Routes = [
             path: 'restart',
             component: AppsJellyfinRestartComponent,
             data: {
+              title: gettext('Status'),
+              editing: true
+            }
+          },
+          {
+            path: 'reset',
+            component: AppsJellyfinResetComponent,
+            data: {
+              title: gettext('Reset'),
               editing: true
             }
           },
@@ -750,17 +821,21 @@ const routes: Routes = [
             path: 'update',
             component: AppsJellyfinUpdateFormPageComponent,
             data: {
+              title: gettext('Update'),
               editing: true
             }
           },
           {
             path: 'password',
+            data: {
+                  title: gettext('Password')
+                },
             children: [
               {
                 path: '',
                 component: AppsJellyfinResetPasswordComponent,
                 data: {
-                  title: gettext('Password'),
+                //  title: gettext('Password'),
                   editing: true
                 },
               },
@@ -774,6 +849,14 @@ const routes: Routes = [
               }
             ]
           },
+          {
+            path: 'restore',
+            component: AppsJellyfinRestoreComponent,
+            data: {
+              title: gettext('Restore'),
+              editing: true
+            }
+          }
         ]
       }
     ]

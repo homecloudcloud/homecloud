@@ -21,7 +21,7 @@ import * as _ from 'lodash';
 import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
 import { BaseFormPageComponent } from '~/app/pages/base-page-component';
 import { ViewEncapsulation } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer,SafeHtml } from '@angular/platform-browser';
 import { RpcService } from '~/app/shared/services/rpc.service';
 
 
@@ -30,7 +30,9 @@ import { RpcService } from '~/app/shared/services/rpc.service';
 @Component({
   selector:'omv-paperless-restart-page', //Home cloud changes
   //template: '<omv-intuition-form-page [config]="this.config"></omv-intuition-form-page>',
-  template: `
+  template: `<div id="paperless-restart-form">
+              <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
+            </div>
   <omv-intuition-form-page id="paperless-restart-form1" [config]="this.config"></omv-intuition-form-page>
   `,
   styleUrls: ['./paperless-restart-page.component.scss'],
@@ -38,8 +40,12 @@ import { RpcService } from '~/app/shared/services/rpc.service';
 })
 
 export class AppsPaperlessRestartComponent extends BaseFormPageComponent {
-  private hostname: string = '';
+  //private hostname: string = '';
   private paperlessStatus: string = '';
+  public safeHtmlContent:SafeHtml;
+  private htmlContent=`<h1>Paperless-ngx Status</h1>
+                       <p>Paperless-ngx backend service runs on Homecloud and is required to be running for mobile or web app to work.</p>`; 
+                      
   public config: FormPageConfig = {
     request: {
       service: 'Homecloud',
@@ -48,11 +54,7 @@ export class AppsPaperlessRestartComponent extends BaseFormPageComponent {
       }
     },
     fields: [
-      
-      {
-        type: 'paragraph',
-        title: gettext('Paperless-ngx backend service runs on Homecloud and is required to be running for mobile or web app to work.')
-      },
+  
       {
         type: 'textInput',
         name: 'status',
@@ -85,49 +87,38 @@ export class AppsPaperlessRestartComponent extends BaseFormPageComponent {
 
   constructor(private sanitizer: DomSanitizer, private rpcService: RpcService) {
     super();   
+    // Sanitize the HTML content once during construction
+      this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);  
     
   }
   ngOnInit(){
-    console.log('ngOnInit called');
+    //console.log('ngOnInit called');
     this.fetchStatusAndUpdateFields();  //get hostname value and update in link
   }
   fetchStatusAndUpdateFields(): void {
     this.rpcService.request('Homecloud', 'getPaperlessServiceStatus').subscribe(response => {
-      this.hostname = response.hostname; // Adjust based on API response structure
+      //this.hostname = response.hostname; // Adjust based on API response structure
       this.paperlessStatus = response.status;
       this.updateFieldColors(this.paperlessStatus);  //Update colors based on status
       this.updateFieldVisibility(this.paperlessStatus);//enable or disable button based on status
-      this.config.fields[4].title=`To begin using Paperless-ngx: Login with user:admin, password set at deployment (reset if you forgot) at this link <a class="drive-btn" href="${this.hostname}" target="_blank"> &nbsp;&nbsp;Access Paperless-ngx WebApp</a>`;
-      // Sanitize the title 
-      this.config.fields[4].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[4].title) as unknown as string;
-      this.addSanitizedHtml();
+     
     });
   }
-  addSanitizedHtml(){
-     // Select all paragraph elements (assuming they are rendered as `ios-drive-form1 omv-form-paragraph` elements)
-     const paragraphs = document.querySelectorAll('#paperless-config-form1 .omv-form-paragraph');
-
-     // Inject the sanitized HTML into the correct paragraph element
-     paragraphs[3].innerHTML =
-     (this.config.fields[4].title as any).changingThisBreaksApplicationSecurity ||
-     this.config.fields[4].title?.toString();
-
-  }
-
+ 
   updateFieldColors(status:string):void{
-    console.log('updating field colors');
+   // console.log('updating field colors');
     const element = document.querySelector('#paperless-restart-form1 omv-form-text-input:nth-of-type(1) .mat-form-field input');
     if(element){
-      console.log('element found', element);
+    //  console.log('element found', element);
       if(status === 'Running'){
-        console.log('Adding green removing red');
-        element.classList.add('greenpaperlessstatus');
-        element.classList.remove('redpaperlessstatus');
+      //  console.log('Adding green removing red');
+        element.classList.add('greenappstatus');
+        element.classList.remove('redappstatus');
       }else{
-        console.log('Adding red removing green');
-        element.classList.add('redpaperlessstatus');
-        element.classList.remove('greenpaperlessstatus');
-        
+       // console.log('Adding red removing green');
+        element.classList.add('redappstatus');
+        element.classList.remove('greenappstatus');
+
       }
     }
   }
@@ -137,13 +128,13 @@ export class AppsPaperlessRestartComponent extends BaseFormPageComponent {
 
     const button = document.querySelector('#paperless-restart-form1 mat-card-actions button');
     if(button){
-      console.log('button found', button);
+    //  console.log('button found', button);
       if(status === 'Not deployed'){
-        console.log('Disabling button');
+      //  console.log('Disabling button');
         button.classList.add('disabled-btn');
       }
       else{
-        console.log('Enabling button');
+        //console.log('Enabling button');
         button.classList.remove('disabled-btn');
       }
     }

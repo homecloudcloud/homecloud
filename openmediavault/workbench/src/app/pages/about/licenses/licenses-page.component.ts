@@ -8,6 +8,11 @@ import { ViewEncapsulation } from '@angular/core';
 
 import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
 import { BaseFormPageComponent } from '~/app/pages/base-page-component';
+import { ReadLicenseTextServiceService } from '~/app/shared/services/read-license-text-service.service';
+import { ModalDialogComponent } from '~/app/shared/components/modal-dialog/modal-dialog.component';
+import { DomSanitizer } from '@angular/platform-browser';
+import { DialogService } from '~/app/shared/services/dialog.service';
+
 
 
 
@@ -24,55 +29,69 @@ import { BaseFormPageComponent } from '~/app/pages/base-page-component';
 })
 export class LicensesPageComponent extends BaseFormPageComponent {
 
-  
+  private licenseVersion: string;
   public config: FormPageConfig = {
 
-    request: {
-      service: 'Homecloud',
+   /* request: {
+      service: 'Flags',
       get: {
-        method: 'getSysInfo'
+        method: 'readLicenseText'
       } 
     },
+    */
     fields: [
       {
         type:'paragraph',   
-        title: gettext('About your Homecloud')
-      },
-      {
-        type:'textInput',
-        label:gettext('Serial Number'),
-        name:'serial_number',
-        value: '',   
+        title: gettext(''),
+        name:'licenseText',
+        value:'',
         readonly:true
-      },
-    
-      {
-        type:'textInput',
-        label:gettext('Storage Capacity'),
-        name:'storage',
-        value:'',   
-        readonly:true
-      },
-    
-      {
-        type:'textInput',
-        label:gettext('Warranty Status'),
-        name:'warranty_status',
-        value:'',   
-        readonly:true
-      },
-      {
-      type:'textInput',
-      label:gettext('Hardware Version'),
-      name:'hardware_version',
-      value:'',   
-      readonly:true
       }
     ]
     };
     
 
-  constructor() { super();}
+  constructor(private readLicenseTextService:ReadLicenseTextServiceService,
+              private sanitizer:DomSanitizer,
+              private dialogService: DialogService)
+               { super();}
+
+  ngOnInit(): void {
+      
+      this.getLicenseDetails();
+    }
+    private getLicenseDetails(): void {
+      this.readLicenseTextService.readLicenseText()
+        .subscribe({
+          next: (response: any) => {
+            this.licenseVersion=response.licenseVersion; //get license version
+            console.log('license version:',this.licenseVersion);
+            //Sanitizing HTML
+              this.config.fields[0].value=response.licenseText;
+              //console.log(this.config.fields[0].value); 
+              this.config.fields[0].value=this.sanitizer.bypassSecurityTrustHtml(this.config.fields[0].value) as unknown as string;
+              //console.log(this.config.fields[0].value);
+  
+              const textarea = document.querySelector('omv-licenses-page .omv-form-paragraph');
+              if (textarea) {
+                  textarea.innerHTML=(this.config.fields[0].value as any).changingThisBreaksApplicationSecurity || this.config.fields[0].value?.toString();
+              }
+          },
+          error: (error: any) => {
+            console.error('Error fetching license details:', error);
+            this.dialogService
+            .open(ModalDialogComponent,{
+              data:{
+                template: 'error',
+                title: gettext('Error'),
+                message: gettext('An error occurred while fetching the license details.')
+              }       
+            }
+            );
+          }
+  
+        });
+    }
 
   
 

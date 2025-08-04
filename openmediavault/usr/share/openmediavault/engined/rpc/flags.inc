@@ -42,6 +42,7 @@ class Flags extends \OMV\Rpc\ServiceAbstract {
 		$this->registerMethod("saveLicenseFlag");
 		$this->registerMethod("readLicenseFlag");
 		$this->registerMethod("readLicenseText");
+		$this->registerMethod("getTailscaleTerms");
 		$this->registerMethod("readSetUpFlags");
 		$this->registerMethod("saveSetUpFlags");
 		$this->registerMethod("saveLastCompletedStep");
@@ -134,7 +135,7 @@ class Flags extends \OMV\Rpc\ServiceAbstract {
 
 				$flagArray=json_decode(file_get_contents($flagFile),true);
 				foreach ($flagArray as $entry) {
-					if (isset($entry['user']) && $entry['user'] === $params['username']) {
+					if (isset($entry['licenseVersion']) && isset($entry['user']) && $entry['user'] === $params['username']) {
 						if ($entry['accepted'] === true) {
 							$output["flagValue"]=true;
 							break;
@@ -162,6 +163,22 @@ class Flags extends \OMV\Rpc\ServiceAbstract {
 		}		
 		else{
 				throw new \OMV\Exception(sprintf("License file does not exist."));
+		}
+
+	}
+	public function getTailscaleTerms($params,$context){
+		
+		$tailscaleTermsFile="/etc/homecloud/tailscaleterms.json";
+		if (file_exists($tailscaleTermsFile)){
+				$tailscaleTermsData=json_decode(file_get_contents($tailscaleTermsFile), true);
+				foreach($tailscaleTermsData as $entry){
+					if(isset($entry['latest']) && $entry['latest'] === true){
+						return $entry;
+					}
+				}
+		}		
+		else{
+				throw new \OMV\Exception(sprintf("Tailscale terms file does not exist."));
 		}
 
 	}

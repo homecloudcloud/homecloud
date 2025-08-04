@@ -105,6 +105,7 @@ export enum Icon {
   connection = 'mdi:connection',
   drive = 'mdi:folder-network-outline',
   code = 'mdi:code-brackets',
-  licenses ='mdi:certificate'
+  licenses ='mdi:certificate',
+  mount ='mdi:folder-outline'
   //end
 }

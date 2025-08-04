@@ -43,6 +43,7 @@ class TailscaleConfig extends \OMV\Rpc\ServiceAbstract {
 		$this->registerMethod("generateAccessToken");
 		$this->registerMethod("DisconnectVPN");
 		$this->registerMethod("ConnectVPN");
+		$this->registerMethod("savetailscaleTermsFlag");
 
 	}
 
@@ -51,21 +52,21 @@ class TailscaleConfig extends \OMV\Rpc\ServiceAbstract {
 	    $this->validateMethodContext($context, [
 	        "role" => OMV_ROLE_ADMINISTRATOR
 	    ]);
-	
+		
 	    // Validate the parameters of the RPC service method.
-	    $this->validateMethodParams($params, "rpc.homecloud.generateAccessToken");
-	    
+	    $this->validateMethodParams($params["tailscaleClientData"], "rpc.homecloud.generateAccessToken");
+	    $this->savetailscaleTermsFlag($params["tailscaleTermsData"], $context);
 	    return $this->execBgProc(function($bgStatusFilename, $bgOutputFilename)
 	            use ($params) {
 	            
 	        $cmdArgs = [];
 	        $cmdArgs[] = '/sbin/tailscale-config.py';
 	        $cmdArgs[] = '--client-id';
-	        $cmdArgs[] = escapeshellarg(trim($params["clientid"]));
+	        $cmdArgs[] = escapeshellarg(trim($params["tailscaleClientData"]["clientid"]));
 	        $cmdArgs[] = '--client-secret';
-	        $cmdArgs[] = escapeshellarg(trim($params["clientsecret"]));
+	        $cmdArgs[] = escapeshellarg(trim($params["tailscaleClientData"]["clientsecret"]));
 	        $cmdArgs[] = '--tailnet-name';
-	        $cmdArgs[] = escapeshellarg(trim($params["tailnetname"]));
+	        $cmdArgs[] = escapeshellarg(trim($params["tailscaleClientData"]["tailnetname"]));
 	
 	        $cmd = new \OMV\System\Process("sudo", $cmdArgs);
 	        $cmd->setEnv("SHELL", "/bin/sh");
@@ -75,6 +76,7 @@ class TailscaleConfig extends \OMV\Rpc\ServiceAbstract {
 	            throw new \OMV\ExecException($cmd, $output, $exitStatus);
 	        }
 	        return $output;
+			
 	    });
 	}
 	
@@ -133,6 +135,59 @@ class TailscaleConfig extends \OMV\Rpc\ServiceAbstract {
 				error_log("Error executing VPN connect");
 				throw $e;
 			}
+		}
+		final public function savetailscaleTermsFlag($params,$context){
+		
+			try{
+				// Validate the parameters of the RPC service method.
+					$this->validateMethodParams($params, "rpc.common.savetailscaletermsflags");
+					// Get the tailscale terms data from parameters
+					$tailscaleTermsData = $params;
+	
+					// Validate required fields
+					if (!isset($tailscaleTermsData['tailscaleTermsVersion']) ||
+						!isset($tailscaleTermsData['user']) ||
+						!isset($tailscaleTermsData['accepted']) ||
+						!isset($tailscaleTermsData['accepted-date'])|
+						!isset($tailscaleTermsData['comment'])) {
+						throw new \OMV\Exception(sprintf("Missing required tailscale terms data fields"));
+					}
+	
+					//Read flag file contents in an array if file exists already else create new file
+	
+					$flagFile = "/var/flagsfile.json";
+	
+					// Read existing data
+					$flagArray = [];
+					if(file_exists($flagFile)){
+						$flagArray=json_decode(file_get_contents($flagFile),true);
+					
+					}
+					
+				
+					if ($tailscaleTermsData['accepted'] === true){
+						
+						// Write a new entry to file every time user accepts license flag
+						$flagArray[] = $tailscaleTermsData;
+						if (file_put_contents($flagFile, json_encode($flagArray)) === false) {
+							throw new \OMV\Exception("Failed to write tailscale terms data");
+						}
+						
+						
+					}
+					else{
+						
+						throw new \OMV\Exception(sprintf("Tailscale terms have not been accepted yet.".
+								" Please accept the terms before moving to next step."));
+					}
+				
+	
+	
+				 }catch (\Exception $e) {
+					throw $e;
+				}
+				
+	
 		}
 	}
 

@@ -1,0 +1,14 @@
+[Unit]
+Description=Starts docker container for traefik proxy service 
+After=network.target
+
+[Service]
+Type=idle
+Restart=on-failure
+User=root
+StandardOutput=journal
+ExecStart=/bin/bash /sbin/start-traefik.sh
+ExecStop=/bin/bash /sbin/stop-traefik.sh
+
+[Install]
+WantedBy=multi-user.target

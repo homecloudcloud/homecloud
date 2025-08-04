@@ -1,0 +1,26 @@
+services:
+  vaultwarden:
+    container_name: vaultwarden1
+    environment:
+      SMTP_HOST: smtp.gmail.com
+      SMTP_FROM: vikassidana@gmail.com
+      SMTP_PORT: 587
+      SMTP_SECURITY: starttls
+      SMTP_USERNAME: vikassidana@gmail.com
+      SMTP_PASSWORD: xlhismghpyohthlh
+      ADMIN_TOKEN: sep-03-2024
+      DOMAIN: https://homecloud.tail1f689.ts.net/passwords/
+      INVITATIONS_ALLOWED: false
+      SIGNUPS_ALLOWED: true
+      SIGNUPS_VERIFY: false
+    image: vaultwarden/server:1.33.0
+    labels:
+    - traefik.enable=true
+    - traefik.http.routers.vaultwarden.rule=HostRegexp(`{any:.+}`) && PathPrefix(`/passwords`)
+    - traefik.http.routers.vaultwarden.tls=true
+    ports:
+    - :80
+    restart: always
+    user: 109:985
+    volumes:
+    - /var/lib/vwdata/:/data/

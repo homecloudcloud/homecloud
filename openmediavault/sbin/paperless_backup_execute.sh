@@ -128,7 +128,7 @@ if ! wait_for_service; then
 fi
 
 # Start backup
-echo "Starting backup process..."
+echo "Starting backup process...it may take a while depending on data size."
 if ! docker compose -f /etc/paperless/docker-compose.yml exec -T webserver document_exporter "/usr/src/paperless/export" -z ; then
     echo "Error: Backup failed"
     # Restore original docker-compose.yml
@@ -157,6 +157,6 @@ if ! wait_for_service; then
     exit 1
 fi
 
-echo "Backup completed successfully!"
+echo "Paperless backup completed successfully!"
 echo "Backup location: $backup_directory"
 

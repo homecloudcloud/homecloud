@@ -2,8 +2,8 @@ version: '1.0'
 type: navigation-item
 data:
   path: startconfiguration
-  position: 10
-  text: _("Start Configuration")
+  position: 40
+  text: _("Configure")
   icon: "mdi:play"
   url: /startconfiguration
   permissions:

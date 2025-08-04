@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  traefik:
+    image: traefik:v3.5.0-rc1
+    command:
+      - --configFile=/etc/traefik/traefik.yaml
+      - --log.level=DEBUG
+      - --log.output=stdout
+      - --accesslog=false
+      - --accesslog.format=json
+      - --providers.file.directory=/etc/traefik/dynamic
+    network_mode: host
+    ports:
+      - 80:80
+      - 443:443
+    restart: unless-stopped
+    volumes:
+      - /etc/traefik/traefik.yaml:/etc/traefik/traefik.yaml
+      - /etc/traefik/dynamic:/etc/traefik/dynamic
+      - /etc/ssl:/etc/ssl
+      - ./traefik/data:/data
+      - /var/run/docker.sock:/var/run/docker.sock

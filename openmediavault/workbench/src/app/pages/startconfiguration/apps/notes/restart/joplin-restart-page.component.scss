@@ -1,14 +1,17 @@
 @import '../../../../../../assets/colors.scss';
 
-.omv-form-paragraph {
-    font-size: var(--mat-font-size-subheading-2) !important;
+.omv-dark-theme{
+  h1,h2,h3{
+    color:$lightblue;
   }
- 
-  .redpaperlessstatus{
+}
+
+omv-joplin-restart-page{
+   .redappstatus{
     background-color: $lightred !important;
     width:100px !important;
   }
-  .greenpaperlessstatus{
+  .greenappstatus{
     background-color: $lightgreen !important;
     width:100px !important;
   }
@@ -16,5 +19,51 @@
     pointer-events:none!important;
     background-color:$grey!important;
   }
+
+  #joplin-restart-form{
+    .omv-form-paragraph{
+    padding:2rem;
+    line-height: 1.5rem;
+    margin-bottom:-3rem;
+  }
+
+
+  }
+  
+  .omv-form-paragraph,h2,p,li,h3 {
+    font-size: var(--mat-font-size-subheading-2) !important;
+   
+  }
+  .omv-form-paragraph,p,li {
+    font-size: var(--mat-font-size-subheading-2) !important;
+    font-weight:var(--mat-font-weight-subheading-2) !important;
+  }
+  h1{
+    font-size: var(--mat-font-size-headline) !important;
+   
+  }
+ 
+  
+  h2,h1,h3 {
+    color:$blue;
+  }
+
+  ul {
+    list-style-type: disc;
+    margin-left: 20px;
+  }
+ 
+ a.plainLink{
+    font-weight:bold;
+  }
+ a.plainLink:hover,a.plainLink:focus{
+    background-color:$lightblue;
+    color:white;
+    padding:10px;
+    text-decoration: none;
+    font-weight:bold;
+  }
+
+}
 
  

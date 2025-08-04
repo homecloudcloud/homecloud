@@ -1,0 +1,74 @@
+@import '../../../../../assets/colors.scss';
+
+
+ .omv-dark-theme{
+
+    h1,h2,h3{
+        color:$lightblue !important;
+    }
+ }
+  
+
+
+omv-tailscale-terms-page{ 
+
+  .omv-form-paragraph,h2,p,li,h3,table.td,th,ul,ol {
+    font-size: var(--mat-font-size-subheading-2) !important;
+   
+  }
+  .omv-form-paragraph,p,li,td,ul,ol {
+    font-size: var(--mat-font-size-subheading-2) !important;
+    font-weight:var(--mat-font-weight-subheading-2) !important;
+  }
+  h1{
+    font-size: var(--mat-font-size-headline) !important;
+   
+  }
+  .omv-form-paragraph {
+    font-weight:var(--mat-font-weight-subheading-2)!important;
+    font-size:var(--mat-font-size-subheading-2)!important;
+    scroll-behavior: auto;
+    overflow-y: auto;
+    overflow-anchor: none; 
+    scroll-snap-type: y mandatory; 
+    scroll-snap-align: start; 
+
+
+
+  h1, h2, h3, h4 {            
+      color:$blue;        
+  } 
+  
+ 
+  
+  table {            
+      width: 100%;            
+      border-collapse: collapse;            
+      margin-bottom: 20px;        
+  }        
+  th, td {            
+      border: 1px solid #ddd;            
+      padding: 8px;            
+      text-align: left;        
+  }        
+  th {            
+      background-color: #f2f2f2;        
+  }        
+  ul {            
+      list-style-type: disc;            
+      margin-left: 20px;        
+  }       
+  ol {            
+      list-style-type: decimal;            
+      margin-left: 20px;        
+  }        
+  
+
+}
+
+    
+
+  
+
+}
+

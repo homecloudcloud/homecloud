@@ -15,7 +15,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  */
-import { Component } from '@angular/core';
+import { Component,AfterViewInit } from '@angular/core';
 import { marker as gettext } from '@ngneat/transloco-keys-manager/marker';
 import * as _ from 'lodash';
 import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
@@ -32,20 +32,47 @@ import { ViewEncapsulation } from '@angular/core';
   encapsulation: ViewEncapsulation.None,  // This will disable view encapsulation
   selector:'omv-setupwizard-complete-page',  //Home cloud changes
 })
-export class CompletePageComponent extends BaseFormPageComponent {
+export class CompletePageComponent extends BaseFormPageComponent implements AfterViewInit {
   public config: FormPageConfig = {
     
     fields: [
      {
         type:'paragraph',   
-        title: gettext('You have successfully setup your Homecloud.')
-     },
-     
+        title: gettext('Setup complete! Explore Homecloud features below:')
+     }
     ],
     buttons: [
+        {
+          template:'submit',
+          class:'backupButton',
+          text:gettext('Backup your data'),
+          execute:{
+            type:'url',
+            url:'/startconfiguration/apps/drive/shares#shared-folder-main-form-2'
+          }
+        },
+        {
+          template:'submit',
+          class:'photosUSBButton',
+          text:gettext('Access photos on USB drives'),
+          execute:{
+            type:'url',
+            url:'/startconfiguration/apps/photos/external-storage'
+          }
+        },
+        {
+          template:'submit',
+          class:'usbDataButton',
+          text:gettext('Access data on USB drives'),
+          execute:{
+            type:'url',
+            url:'/startconfiguration/usb-disks'
+          }
+        },
          {
             template: 'submit',
-            text: gettext('Go to Dashboard'),
+            class: 'workbenchButton',
+            text: gettext('Explore more on Workbench'),
             execute: {
               type: 'request',
               request:{
@@ -63,9 +90,31 @@ export class CompletePageComponent extends BaseFormPageComponent {
   };
   
   constructor() {
-      super();    
+      super();   
       
    }
+
+   ngAfterViewInit(): void {
+    setTimeout(() => {
+        const buttons = document.querySelectorAll('omv-setupwizard-complete-page #mainContent omv-submit-button');
+        
+        buttons.forEach(button => {
+          const span = button.querySelector('button .mat-button-wrapper');
+          const buttonText = span?.textContent?.trim();
+          
+          if (buttonText?.includes('Backup your data')) {
+            button.classList.add('backupButton');
+          } else if (buttonText?.includes('Access photos on USB drives')) {
+            button.classList.add('photosUSBButton');
+          } else if (buttonText?.includes('Access data on USB drives')) {
+            button.classList.add('usbDataButton');
+          } else if (buttonText?.includes('Explore more on Workbench')) {
+            button.classList.add('workbenchButton');
+          }
+        });
+    }, 100);
+  }
+
     
 
   

@@ -1,0 +1,14 @@
+[Unit]
+Description=Display messages on OLED and also catches mount/unmount events from udev
+After=network.target
+
+[Service]
+Type=idle
+Restart=on-failure
+User=root
+ExecStart=/bin/bash /sbin/run-display.sh
+ExecStop=/bin/bash /sbin/stop-display.sh
+ExecStopPost=/sbin/reboot-listener.sh
+
+[Install]
+WantedBy=multi-user.target

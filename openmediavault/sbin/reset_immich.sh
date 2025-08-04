@@ -63,16 +63,9 @@ if [ ! -e "$UPLOAD_LOCATION" ]; then
     exit 1
 fi
 
-# Delete the DB directory
-if ! rm -rf "$DB_DATA_LOCATION/*"; then
-    # Start immich service again before exiting
-    systemctl start immich.service
-    output_result "Error: Failed to delete $DB_DATA_LOCATION" 1
-    exit 1
-fi
 
 # Clean the UPLOAD directory (delete contents but keep the directory)
-if ! find "$UPLOAD_LOCATION" -mindepth 1 -delete; then
+if ! rm -rf "$UPLOAD_LOCATION"/*; then
     # Start immich service again before exiting
     systemctl start immich.service
     output_result "Error: Failed to clean contents of $UPLOAD_LOCATION" 1

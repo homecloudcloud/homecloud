@@ -34,10 +34,23 @@ export class InterfaceWifiFormPageComponent extends BaseFormPageComponent {
         params: {
           uuid: '{{ _routeParams.uuid }}'
         }
-      },
-      post: {
-        method: 'setWirelessIface'
       }
+      ,
+      post: {
+        method: 'setWirelessIface',
+        confirmationDialogConfig:{
+          template: 'confirmation',
+          message: gettext(`<div style="border: 1px solid #F5C2C7; background-color: #F8D7DA; padding: 1em; border-radius: 8px; color: #842029;">
+          <strong>Note:</strong> If you're currently connected via Wi-Fi or Hotspot mode, your session may disconnect after this step.
+          Homecloud will switch to the new Wi-Fi settings you entered.
+          <br><br>
+          Make sure to reconnect your phone or computer to the same Wi-Fi network you've selected.
+          Check the Homecloud display for connection status.
+          </div>`),
+          title:''
+        }
+      }
+      
     },
     fields: [
       {
@@ -412,9 +425,11 @@ export class InterfaceWifiFormPageComponent extends BaseFormPageComponent {
     buttons: [
       {
         template: 'submit',
+       
         execute: {
           type: 'url',
           url: '/startconfiguration/networkconfig/interfaces'
+               
         }
       },
 

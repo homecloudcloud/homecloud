@@ -1,0 +1,33 @@
+http:
+  routers:
+    omv:
+      rule: HostRegexp(`{any:.+}`)
+      service: omv
+      entryPoints: websecure
+      tls: true
+  services:
+    omv:
+      loadBalancer:
+        servers:
+          - url: "http://homecloud:81"
+        passHostHeader: true
+  middlewares:
+    auth:
+      basicAuth:
+        users:
+          - "admin:$apr1$VRhRHFpg$cmjT/3i70s62IQD734BYe/"
+          - "renu:$apr1$1XTy5vQN$sKBGkCMWkGuHGMLBOywz2."
+          - "family:$apr1$8nkMfohN$Ubgtmxr7Es1PJaEZ1SVIH/"
+        headerField: "X-My-Header"
+        removeHeader: false
+tls:
+  certificates:
+    - certFile: /etc/ssl/certs/test.crt
+      keyFile: /etc/ssl/private/test.key
+      stores:
+        - default
+  stores:
+    default:
+      defaultCertificate:
+        certFile: /etc/ssl/certs/homecloud.tail1f689.ts.net.crt
+        keyFile: /etc/ssl/private/homecloud.tail1f689.ts.net.key

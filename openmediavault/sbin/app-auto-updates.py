@@ -61,7 +61,7 @@ def find_existing_cron(app_name):
     return None
 
 def validate_app_name(app_name):
-    valid_apps = ['immich', 'paperless', 'joplin', 'jellyfin', 'vaultwarden', 'tailscale']
+    valid_apps = ['immich', 'paperless', 'joplin', 'jellyfin', 'vaultwarden', 'tailscale', 'traefik']
     if app_name not in valid_apps:
         error_msg = {
             "error": "Invalid app name",
@@ -100,7 +100,6 @@ def manage_auto_update(app_name, action):
                     "status": "enabled"
                 }
             else:
-                # Create new cron job that runs every 3 days
                 new_uuid = get_new_uuid()
                 cron_config = {
                     "uuid": new_uuid,

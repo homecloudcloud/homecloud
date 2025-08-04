@@ -590,5 +590,18 @@
 			}
         }
     }
+},
+{
+	"type": "rpc",
+	"id": "rpc.homecloud.check_app_version",
+	"params": {
+		"type": "object",
+		"properties": {
+			"appname": {
+				"type": "string",
+				"required": true
+			}
+		}
+	}
 }
 ]

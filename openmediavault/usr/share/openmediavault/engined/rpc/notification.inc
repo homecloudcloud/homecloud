@@ -329,12 +329,7 @@ class OMVRpcServiceEmailNotification extends \OMV\Rpc\ServiceAbstract {
 				$cmd->setRedirect2to1();
 				$cmd->execute();
 			} catch (\Exception $e) {
-				// Log error but continue with other scripts
-				\OMV\Logger::error(
-					"Failed to update SMTP configuration for %s: %s",
-					$script,
-					$e->getMessage()
-				);
+				// Ignore all errors from scripts
 			}
 		}
 

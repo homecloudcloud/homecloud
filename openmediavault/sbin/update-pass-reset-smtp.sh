@@ -49,7 +49,7 @@ while getopts "s:f:r:h:p:u:w:" opt; do
 done
 
 # Check if config.env exists
-env_file="/etc/password-reset/config.env"
+env_file="/var/lib/password-reset/config.env"
 if [ ! -f "$env_file" ]; then
     echo "Error: $env_file does not exist"
     exit 0 

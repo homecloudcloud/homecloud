@@ -2,7 +2,7 @@ version: "1.0"
 type: navigation-item
 data:
   path: "about.code"
-  position: 20
+  position: 90
   text: _("Code")
   icon: code
   url: "/about/code"

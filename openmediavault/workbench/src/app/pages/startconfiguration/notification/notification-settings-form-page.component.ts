@@ -21,24 +21,117 @@ import { marker as gettext } from '@ngneat/transloco-keys-manager/marker';
 import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
 import { BaseFormPageComponent } from '~/app/pages/base-page-component';
 
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer,SafeHtml } from '@angular/platform-browser';
+import { ViewEncapsulation } from '@angular/core';
 
 @Component({
-  template: '<omv-intuition-form-page id="email-notification-form" [config]="this.config"></omv-intuition-form-page>',
+  template: `<div id="notification-form1">
+                    <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
+             </div>
+              <omv-intuition-form-page id="email-notification-form" [config]="this.config"></omv-intuition-form-page>`,
   selector:'omv-notification-settings-form-page',  //Home cloud changes
   styles:[` 
-        omv-notification-settings-form-page{
-          .omv-form-paragraph{
-            font-size:-var(--mat-font-size-subheading-2)!important;
-            font-weight:-var(--mat-font-weight-subheading-2)!important;
+      @import '../../../../assets/colors.scss';
+      .omv-dark-theme{
+       
+          h1,h2,h3{
+          color:$lightblue !important;
           }
-        }
+         
+      }
+        omv-notification-settings-form-page{
+            #notification-form1{
+              margin-bottom:-3rem;
+              .omv-form-paragraph{
+              padding:2rem;
+              line-height: 1.5rem;
+              }
+    
+            }
+        
+          .omv-form-paragraph,h2,p,li,h3 {
+            font-size: var(--mat-font-size-subheading-2) !important;
+          
+          }
+          .omv-form-paragraph,p,li {
+            font-size: var(--mat-font-size-subheading-2) !important;
+            font-weight:var(--mat-font-weight-subheading-2) !important;
+          }
+          h1{
+            font-size: var(--mat-font-size-headline) !important;
+          
+          }
+        
+          
+          h2,h1,h3 {
+            color:$blue;
+          }
+    
+          
+          
+          ul {
+            list-style-type: disc;
+            margin-left: 20px;
+          }
+    
+          .hidden{
+            display:none !important;
+          }
+          .plainLink{
+            font-weight:bold;
+          }
+          .plainLink:hover,.plainLink:focus{
+            background-color:$lightblue;
+            color:white;
+            padding:10px;
+            text-decoration: none;
+            font-weight:bold;
+          }
+
+          @media screen and (max-width: 768px) {
+                .mat-form-field-infix{
+                    .mat-input-element{
+                      margin-top:2rem;
+                    }
+                    .mat-form-field-label{
+                      text-wrap:wrap;
+                    }
+                }
+          }
+         
+        
+      }
         
   
   
-  `]
+  `],
+    encapsulation: ViewEncapsulation.None,  // This will disable view encapsulation
 })
 export class NotificationSettingsFormPageComponent extends BaseFormPageComponent {
+  public safeHtmlContent: SafeHtml;
+  private htmlContent=`<h1>✉️ Set Up Email Notifications</h1>
+                      <p>
+                        To use features like <strong>password reset</strong> and receive <strong>important alerts</strong>,
+                        configure your email settings below 📬.
+                      </p>
+
+                      <p>
+                        🛡️ <strong>Homecloud uses your personal email account</strong> to send notifications — ensuring your privacy.
+                        To do this, you’ll need to authorize email sending through your provider.
+                      </p>
+
+                      <div class="setup-steps">
+                        <ul>
+                        <li>📌 Settings vary by email provider.</li><br>
+                        <li>
+                        💡 For <strong>Gmail</strong> or <strong>Yahoo</strong>, generate an <strong>App Password</strong>.
+                        <br/>👉 <a class="plainLink" href="https://myaccount.google.com/apppasswords" target="_blank">Generate Gmail App Password</a>
+                        </li><br>
+                        <li>🧾 Then, complete the form below with your email settings.</li>
+                        </ul>
+                      </div>
+
+                     `;
   public config: FormPageConfig = {
     request: {
       service: 'EmailNotification',
@@ -50,7 +143,7 @@ export class NotificationSettingsFormPageComponent extends BaseFormPageComponent
       }
     },
     fields: [
-      {
+      /*{
         type: 'paragraph',
         title: gettext('To enable password reset functionality and receive important notifications, set up your email settings. Your email provider will be used to send messages directly to your inbox.If you are using Gmail or Yahoo, you will need to generate an app-specific password to allow Homecloud to send notifications from your account.'),
         name:'paragraph1'
@@ -61,20 +154,25 @@ export class NotificationSettingsFormPageComponent extends BaseFormPageComponent
       },
       {
         type: 'paragraph',
-        title: gettext('Gmail users first: <a class="drive-btn" href="https://myaccount.google.com/apppasswords" target="_blank"> generate Google App Password </a>'),
+        title: gettext(`Gmail users first: <a class="plainLink" href="https://myaccount.google.com/apppasswords" target="_blank"> generate Google App Password </a>`),
         name:'paragraph2'
+      },
+      */
+     {
+        type: 'divider',
+        title: gettext('Account setup for sending E-mails')
       },
       {
         type: 'checkbox',
         name: 'enable',
         label: gettext('Enabled'),
-        value: false
+        value: true
       },
       {
         type: 'textInput',
         name: 'server',
-        label: gettext('SMTP server'),
-        hint: gettext('Outgoing SMTP mail server address. Gmail users enter: smtp.gmail.com.'),
+        label: gettext('Outgoing SMTP server'),
+        hint: gettext('For Gmail enter: smtp.gmail.com'),
         value: 'smtp.gmail.com',
         validators: {
           requiredIf: { operator: 'eq', arg0: { prop: 'enable' }, arg1: true },
@@ -85,7 +183,7 @@ export class NotificationSettingsFormPageComponent extends BaseFormPageComponent
         type: 'numberInput',
         name: 'port',
         label: gettext('SMTP port'),
-        hint: gettext('The default SMTP mail server port. Gmail users enter: 587.'),
+        hint: gettext('For Gmail enter: 587.'),
         value: 587,
         validators: {
           min: 1,
@@ -122,22 +220,21 @@ export class NotificationSettingsFormPageComponent extends BaseFormPageComponent
         type: 'checkbox',
         name: 'authenable',
         label: gettext('Authentication required'),
-        value: false
+        value: true,
+        modifiers: [
+          {
+            type: 'hidden'
+          }
+        ]
       },
       {
         type: 'textInput',
         name: 'username',
-        label: gettext('User name - Enter your email account username e.g. Gmail e-mail id.'),
+        label: gettext('User name. For Gmail,Yahoo enter your full email id.'),
         value: '',
         autocomplete: 'off',
-        modifiers: [
-          {
-            type: 'disabled',
-            constraint: { operator: 'falsy', arg0: { prop: 'authenable' } }
-          }
-        ],
         validators: {
-          requiredIf: { operator: 'truthy', arg0: { prop: 'authenable' } }
+          requiredIf: { operator: 'truthy', arg0: { prop: 'enable' } }
         }
       },
       {
@@ -146,24 +243,18 @@ export class NotificationSettingsFormPageComponent extends BaseFormPageComponent
         label: gettext('Enter password for email account. For Gmail,Yahoo enter the app password generated.'),
         value: '',
         autocomplete: 'new-password',
-        modifiers: [
-          {
-            type: 'disabled',
-            constraint: { operator: 'falsy', arg0: { prop: 'authenable' } }
-          }
-        ],
         validators: {
-          requiredIf: { operator: 'truthy', arg0: { prop: 'authenable' } }
+          requiredIf: { operator: 'truthy', arg0: { prop: 'enable' } }
         }
       },
       {
         type: 'divider',
-        title: gettext('Recipient')
+        title: gettext('Admin Email Id (Recovery Password will be sent here)')
       },
       {
         type: 'textInput',
         name: 'primaryemail',
-        label: gettext('Enter the email address to receive password reset links and system notifications. It can be the same as the sender email entered above or a different one.'),
+        label: gettext('Notifications and admin password (if you forget) will be sent here so make sure it is correct. You may keep it same as your sending account'),
         value: '',
         validators: {
           requiredIf: { operator: 'truthy', arg0: { prop: 'enable' } },
@@ -217,24 +308,26 @@ export class NotificationSettingsFormPageComponent extends BaseFormPageComponent
   };
   constructor(private sanitizer: DomSanitizer) {
     super();
-    this.config.fields[1].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[1].title) as unknown as string;   
-    
+    //this.config.fields[2].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[2].title) as unknown as string;   
+     // Sanitize the HTML content once during construction
+    this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);
   }
 
-  ngAfterViewInit(): void {
+  /*ngAfterViewInit(): void {
      
     // Delay the operation to ensure the view is fully rendered
     setTimeout(() => {
 
       // Select all paragraph elements (assuming they are rendered as `window-drive-form1 omv-form-paragraph` elements)
-        const paragraphs = document.querySelectorAll('#email-notification-form omv-form-paragraph');
+        const paragraphs = document.querySelectorAll('omv-notification-settings-form-page #email-notification-form omv-form-paragraph');
 
         // Inject the sanitized HTML into the correct paragraph element
         paragraphs[1].innerHTML =
-        (this.config.fields[1].title as any).changingThisBreaksApplicationSecurity ||
-        this.config.fields[1].title?.toString();  
+        (this.config.fields[2].title as any).changingThisBreaksApplicationSecurity ||
+        this.config.fields[2].title?.toString();  
      
     
     }, 100); // Timeout ensures it happens after the view has rendered
   }
+    */
 }

@@ -21,6 +21,7 @@ import * as _ from 'lodash';
 import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
 import { BaseFormPageComponent } from '~/app/pages/base-page-component';
 import { ViewEncapsulation } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 
 
 
@@ -30,19 +31,53 @@ import { ViewEncapsulation } from '@angular/core';
   selector:'omv-photos-db_reset-page', //Home cloud changes
   //template: '<omv-intuition-form-page [config]="this.config"></omv-intuition-form-page>',
   template: `
-  <omv-intuition-form-page id="photos-db_reset-form1" [config]="this.config"></omv-intuition-form-page>
+  <omv-intuition-form-page id="photos-reset-form1" [config]="this.config"></omv-intuition-form-page>
+  <omv-intuition-form-page id="photos-reset-form2" [config]="this.config2"></omv-intuition-form-page>
   `,
   styleUrls: ['./photos-db_reset-page.component.scss'],
   encapsulation: ViewEncapsulation.None  // This will disable view encapsulation
 })
 
 export class AppsPhotosDBResetComponent extends BaseFormPageComponent {
+ // public safeHtmlContent: SafeHtml;
+  private htmlContent=`
+  <div class="container">
+    <h1>🧹 Reset Immich</h1>
+    <p>
+    Want a clean slate? Reset your <strong>Immich app</strong> and start fresh 🆕.
+    </p>
+
+    <div class="warning">
+    ⚠️ <strong>WARNING:</strong><br />
+        This will permanently <strong>DELETE all Immich users and data</strong>, including:
+        <ul>
+          <li>🎞️ Uploaded photos & videos</li>
+          <li>🖼️ Thumbnails</li>
+          <li>🧠 Face recognition info</li>
+        </ul>
+        🚫 <strong>This cannot be undone!</strong>
+    </div>
+
+    <p class="backup-tip">💾 Please take an <strong>Immich backup</strong> before continuing 🛡️</p>
+
+    <div class="note">
+      📁 <strong>Note:</strong> This will <strong>NOT delete original media files</strong> on external USB drives.
+    </div>
+    `;
+    private htmlContent1=`
+    <h2>🧹 Is Immich Not Starting Because Internal Storage Is Full?</h2>
+
+    <p>
+      Click the button below to delete thumbnails and temporarily free up storage.
+      Thumbnails will be automatically regenerated over time, so make sure to use this opportunity to <strong>permanently delete photos</strong> in Immich to free up space for good.
+    </p>`;
 
   public config: FormPageConfig = {
     
     fields: [
       
-      {
+      
+      /*{
         type: 'paragraph',
         title: gettext('Reset Immich App to fresh state')
       },
@@ -58,10 +93,11 @@ export class AppsPhotosDBResetComponent extends BaseFormPageComponent {
         type: 'paragraph',
         title: gettext('NOTE: It will NOT delete original media files present in external plugged-in USB disks.')
       }
+      */
     ],
     buttons: [
       {
-        text: 'Delete ALL Immich users and their uploaded photos and videos',
+        text: gettext(`🔁 Reset Immich`),
         disabled:false,
         submit:true,
        // class:'omv-background-color-pair-primary',
@@ -86,7 +122,73 @@ export class AppsPhotosDBResetComponent extends BaseFormPageComponent {
     ],
     buttonAlign: 'start' // You can adjust the alignment to 'start', 'center', or 'end'
   };
-  
+
+  public config2: FormPageConfig = {
+      fields: [
+        
+      ],
+      buttons: [
+        {
+          text: 'Delete Thumbnails from Immich',
+          disabled:false,
+          submit:true,
+          class:'omv-background-color-pair-primary',
+          execute: {
+            type: 'request',
+            request: {
+              service: 'Homecloud',
+              method: 'immich_delete_thumbnails',
+              task: false, // Set to true if this is a long-running task
+              progressMessage: 'Delete Thumbnails',
+              successNotification: 'Deleted Thumbnails',
+              successUrl: '/startconfiguration/apps/photos'
+            }
+          }
+        },
+      ]
+    };
+    constructor(private sanitizer: DomSanitizer) {
+        super();
+        //this.config.fields[2].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[2].title) as unknown as string;   
+         
+        this.config.fields = [
+          {
+            type: 'paragraph',
+            title: this.htmlContent
+          }
+        ];
+        // Sanitize the HTML content once during construction
+        this.config.fields[0].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[0].title) as unknown as string;
+        
+        this.config2.fields = [
+          {
+            type: 'paragraph',
+            title: this.htmlContent1
+          }
+        ];
+        // Sanitize the HTML content once during construction
+        this.config2.fields[0].title = this.sanitizer.bypassSecurityTrustHtml(this.config2.fields[0].title) as unknown as string;
+        
+
+      
+    }
+
+    ngAfterViewInit() {
+      setTimeout(() => {
+
+        // Select all paragraph elements 
+        const paragraphs = document.querySelectorAll('omv-photos-db_reset-page omv-form-paragraph .omv-form-paragraph');
+     
+        // Inject the sanitized HTML into the correct paragraph element       
+        paragraphs[0].innerHTML =
+        (this.config.fields[0].title as any).changingThisBreaksApplicationSecurity ||
+        this.config.fields[0].title?.toString();
+        paragraphs[1].innerHTML =
+        (this.config2.fields[0].title as any).changingThisBreaksApplicationSecurity ||
+        this.config2.fields[0].title?.toString();
+       
+      }, 100);
+  }
 
 
 }

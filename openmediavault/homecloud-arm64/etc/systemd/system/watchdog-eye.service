@@ -1,0 +1,13 @@
+[Unit]
+Description=Keeps an eye on photoprism and other services 
+After=network.target oled-display-disk.service collectd.service
+Requires=oled-display-disk.service
+
+[Service]
+Type=idle
+Restart=on-failure
+User=root
+ExecStart=/bin/bash /sbin/run-monitor.sh
+
+[Install]
+WantedBy=multi-user.target

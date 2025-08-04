@@ -1,0 +1,71 @@
+http:
+  routers:
+    # Main app router (FQDN over HTTPS)
+    omv:
+      entryPoints:
+      - websecure
+      priority: 1
+      rule: PathPrefix(`/`)
+      service: omv
+      tls: true
+    redirect-homecloudfqdn-to-https:
+      entryPoints:
+        - web
+      rule: Host(`homecloud.tail1f689.ts.net`)
+      middlewares:
+        - to-https-scheme
+      service: noop@internal
+      priority: 100
+    # Redirect http://<IP> → https://<IP>
+    redirect-ip-to-https:
+      entryPoints:
+        - web
+      rule: "Host(`192.168.1.17`)"
+      middlewares:
+        - ip-redirect
+      service: noop@internal
+      priority: 50
+    redirect-homecloud-to-fqdn:
+      entryPoints:
+        - web
+      rule: Host(`homecloud`)
+      middlewares:
+        - to-fqdn
+      service: noop@internal
+      priority: 100
+   
+  middlewares:
+    to-https-scheme:
+      redirectScheme:
+        scheme: https
+        permanent: true
+    ip-redirect:
+      redirectRegex:
+        regex: "^http://(\\d+\\.\\d+\\.\\d+\\.\\d+)(:\\d+)?(.*)"
+        replacement: "https://$1$3"
+        permanent: true
+    to-fqdn:
+      redirectRegex:
+        regex: "^http://homecloud(:[0-9]+)?(.*)"
+        replacement: "https://homecloud.tail1f689.ts.net$2"
+        permanent: true
+
+
+  services:
+    omv:
+      loadBalancer:
+        passHostHeader: true
+        servers:
+          - url: http://localhost:81
+
+tls:
+  certificates:
+    - certFile: /etc/ssl/certs/homecloud.tail1f689.ts.net.crt
+      keyFile: /etc/ssl/private/homecloud.tail1f689.ts.net.key
+      stores:
+        - default
+  stores:
+    default:
+      defaultCertificate:
+        certFile: /etc/ssl/certs/openmediavault-aec9765e-6783-4c2f-9d6f-d33e5bc2299e.crt
+        keyFile: /etc/ssl/private/openmediavault-aec9765e-6783-4c2f-9d6f-d33e5bc2299e.key

@@ -22,6 +22,7 @@ import { FormPageConfig } from '~/app/core/components/intuition/models/form-page
 import { BaseFormPageComponent } from '~/app/pages/base-page-component';
 import { ViewEncapsulation } from '@angular/core';
 import { RpcService } from '~/app/shared/services/rpc.service';
+import { DomSanitizer } from '@angular/platform-browser';
 //import { DatatablePageConfig } from '~/app/core/components/intuition/models/datatable-page-config.type';
 
 
@@ -39,7 +40,10 @@ import { RpcService } from '~/app/shared/services/rpc.service';
 })
 
 export class AppsPhotosPasswordResetComponent extends BaseFormPageComponent {
+  private htmlContent:string='';
   private immichUser: string = '';
+  private hostname: string = '';
+  private immichStatus: string = '';
   public config: FormPageConfig = {
     request: {
       service: 'Homecloud',
@@ -50,7 +54,7 @@ export class AppsPhotosPasswordResetComponent extends BaseFormPageComponent {
     },
     fields: [
       
-      {
+     /* {
         type: 'paragraph',
         title: gettext('If you forgot password of the user account with admin priviliges (first user id created in Immich) you can reset it here using instructions below.')
       },
@@ -66,7 +70,11 @@ export class AppsPhotosPasswordResetComponent extends BaseFormPageComponent {
         type: 'paragraph',
         title: gettext('User id with admin priviliges in Immich.')
       },
-      {
+      */
+      {type:'paragraph',
+        title:''
+      }
+      /*{
         type: 'textInput',
         name: 'email',
         label: gettext('Immich user with admin priviliges'),
@@ -74,11 +82,12 @@ export class AppsPhotosPasswordResetComponent extends BaseFormPageComponent {
         value: '',
         readonly: true
       }
+      */
 
     ],
     buttons: [
       {
-        text: 'Reset password',
+        text: gettext(`🔁 Reset Admin Password`),
         disabled:false,
         submit:true,
        // class:'omv-background-color-pair-primary',
@@ -98,21 +107,29 @@ export class AppsPhotosPasswordResetComponent extends BaseFormPageComponent {
 
   };
 
-  constructor(private rpcService: RpcService) {
-    
-      super();
-     
-    }
+ constructor(private sanitizer: DomSanitizer,private rpcService:RpcService) {
+         super();
+       
+  }
+ 
 
   ngOnInit(){
-    console.log('ngOnInit called');
+   // console.log('ngOnInit called');
     this.fetchUsersAndUpdateFields();  //get hostname value and update in link
   }
   fetchUsersAndUpdateFields(): void {
     this.rpcService.request('Homecloud', 'immich_get_admin_users').subscribe(response => {
       this.immichUser = response.email;
-      console.log('immichUser',this.immichUser);
+      //console.log('immichUser',this.immichUser);
       this.updateFieldVisibility(this.immichUser);//enable or disable button based on user
+      this.rpcService.request('Homecloud', 'getImmichServiceStatus').subscribe(response => {
+         // console.log(this.hostname);
+          this.hostname = response.hostname; // Adjust based on API response structure
+          this.immichStatus = response.status;
+          this.updateHtml();
+      });
+
+
      
     });
   }
@@ -129,5 +146,50 @@ export class AppsPhotosPasswordResetComponent extends BaseFormPageComponent {
       }
     }
   }
+
+  updateHtml():void{
+
+    this.htmlContent=` <div class="container">
+                        <h1>🔐 Forgot Immich Password?</h1>
+                        <p>
+                        You can reset any Immich user's password by logging into the
+                        👉 <a class="app-btn ${this.immichStatus !== 'Running' ? 'disabled-btn' : ''}" href="${this.hostname}" target="_blank"><strong>Immich web app</strong></a>
+                        with a user account that has <strong>admin privileges</strong> 👑.<br>
+                        <span class="status-error ${this.immichStatus !== 'Running' ? '' : 'hidden'}" >Immich is not running! Go to <a href="#/startconfiguration/apps/photos/restart" class="plainLink"><strong>photos status page</strong></a> to check the status or restart the app</span></p>
+                        </p>
+
+                        <p>The current admin user is shown below:</p>
+                        <p><strong>${this.immichUser}</strong></p>
+                        <!-- Admin user form display here -->
+
+                        <hr />
+
+                        <h2>🛑 Forgot Admin User's Password?</h2>
+                        <p>
+                        If you’ve lost access to the admin account, you can reset it using the button below:
+                        </p>
+                        <div class="note">
+                        📭 <strong>Note:</strong> If the admin field is empty, it means:
+                        <ul>
+                          <li>⚙️ Immich is not deployed yet, or</li>
+                          <li>👤 The first admin user hasn’t been created.</li>
+                        </ul>
+                        </div>
+                      </div>`;
+
+      
+         this.config.fields[0].title = this.htmlContent;
+         // Sanitize the HTML content once during construction
+         this.config.fields[0].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[0].title) as unknown as string;
+          // Select all paragraph elements 
+         const paragraphs = document.querySelectorAll('omv-photos-password-page omv-form-paragraph .omv-form-paragraph');
+      
+         // Inject the sanitized HTML into the correct paragraph element       
+         paragraphs[0].innerHTML =
+         (this.config.fields[0].title as any).changingThisBreaksApplicationSecurity ||
+         this.config.fields[0].title?.toString();
+
+  }
+  
 
 }

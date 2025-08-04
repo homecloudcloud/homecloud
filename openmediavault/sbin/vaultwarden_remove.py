@@ -4,8 +4,13 @@ import os
 import sys
 import subprocess
 import yaml
+import requests
+import urllib3
 from pathlib import Path
 import shutil
+
+# Disable SSL warnings
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 def print_status(message, error=False):
     """Print formatted status messages"""

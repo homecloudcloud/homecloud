@@ -17,29 +17,58 @@
  */
 import { Component } from '@angular/core';
 import { marker as gettext } from '@ngneat/transloco-keys-manager/marker';
-import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
+//import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
 import { DatatablePageConfig } from '~/app/core/components/intuition/models/datatable-page-config.type';
-
+import { DomSanitizer,SafeHtml } from '@angular/platform-browser';
+import { ViewEncapsulation } from '@angular/core';
 @Component({
-  template: `<omv-intuition-form-page id="drive-shares"[config]="this.config2"></omv-intuition-form-page>
-             <omv-intuition-datatable-page [config]="this.config"></omv-intuition-datatable-page>`
+  selector:'omv-shared-folder-main-page',
+  template: ` <div id="shared-folder-main-form-1">
+                <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
+              </div>
+             <omv-intuition-datatable-page [config]="this.config"></omv-intuition-datatable-page>
+             <div id="shared-folder-main-form-2">
+                <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent1"></div>
+              </div>`,
+  styleUrls: ['./shared-folder-datatable-page.component.scss'],
+  encapsulation:ViewEncapsulation.None
 })
 export class SharedFolderDatatablePageComponent {
-  public config2: FormPageConfig = {
-    fields: [
-      {
-        type: 'paragraph',
-        title: gettext(`Shares are network accessible folders that are used for data sharing among Drive users. Shares can be created on Homecloud internal storage or plugged in USB disks. Shares are only accessible over VPN or local network.`),
-        name:'paragraph1'
-      },
-      {
-        type: 'paragraph',
-        title: gettext(`Shares of Plugged in USB disks are automatically created. Individual user level permissions for shares can be assigned.`),
-        name:'paragraph2'
-      },
+  public safeHtmlContent: SafeHtml;
+  public safeHtmlContent1: SafeHtml;
+  private htmlContent =`
+      <div class="shares-section">
+        <h1>📁 Manage Your Shares</h1>
 
-    ]
-  };
+        <h2>What Are Shares?</h2>
+        <p>📂 Shares are network folders that allow Drive users to store and share files.</p>
+        <p>They can exist on internal Homecloud storage or connected USB drives.</p>
+        <p>🔒 All shares are accessible only over <strong>VPN or local network</strong> for security.</p>
+        <p>🔧 You can set individual permissions for each share right here.</p>
+        <hr>
+        <h2>How to manage them?</h3>
+        <p>📁 The <strong>Drive app</strong> lets you share data over the network by creating <strong>Shares</strong>.</p>
+
+        <p>👤 Each user <a class="plainLink" href="#/startconfiguration/apps/drive/users"><strong>on creation</strong></a> automatically gets a personal share, only accessible by them.</p>
+
+        <p>👨‍👩‍👧‍👦 Want to share files with others? You can create <strong>common shares</strong> and assign permissions below to collaborate with other users.</p>
+        
+        <p>🖴 Shares for USB drives are created <strong>automatically</strong> when plugged in. If not, you can manually add them here.</p
+      </div>
+    `;
+  private htmlContent1=`
+      
+      <div class="backup-section">
+        <h2>🖥️ Backup from Your Computer</h2>
+        <p>Want to use <strong>Apple Time Machine</strong> or <strong>Duplicati</strong> to back up your PC or Mac?</p>
+        <ol>
+          <li>Create a new share above.</li>
+          <li>Assign permission to the correct user.</li>
+          <li>Go to the <a class="plainLink" href="#/startconfiguration/apps/drive/access"><strong>Access page</strong></a> to configure the share on your Mac or PC.</li>
+          <li>Open Time Machine or Duplicati to start back up on the configured network share.</li>
+        </ol>
+      </div>
+    `;
   public config: DatatablePageConfig = {
     stateId: 'c0a05d92-2d72-11ea-9b29-33dda9c523cc',
     autoReload: false,
@@ -155,4 +184,10 @@ export class SharedFolderDatatablePageComponent {
       }
     ]
   };
+  constructor(private sanitizer:DomSanitizer) {
+      //Sanitize html
+        this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);
+        this.safeHtmlContent1 = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent1);
+     
+    }
 }

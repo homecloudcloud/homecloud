@@ -49,7 +49,8 @@ import { TranslocoRootModule } from '~/app/transloco-root.module';
     SharedModule,
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-center',
-      preventDuplicates: true
+      preventDuplicates: true,
+      timeOut:1000, // 1 seconds Homecloud changes
     }),
     TranslocoRootModule,
     MaterialModule,

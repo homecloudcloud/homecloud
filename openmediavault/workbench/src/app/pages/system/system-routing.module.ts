@@ -26,6 +26,7 @@ import { UpdateDatatablePageComponent } from '~/app/pages/system/updates/update-
 import { UpdateSettingsFormPageComponent } from '~/app/pages/system/updates/update-settings-form-page.component';
 import { WorkbenchFormPageComponent } from '~/app/pages/system/workbench/workbench-form-page.component';
 import { IsDirtyGuardService } from '~/app/shared/services/is-dirty-guard.service';
+import { UpdateMainPageComponent } from './updates/update-main-page.component';
 
 const routes: Routes = [
   {
@@ -246,7 +247,8 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: NavigationPageComponent
+        //component: NavigationPageComponent
+        component: UpdateMainPageComponent
       },
       {
         path: 'updates',

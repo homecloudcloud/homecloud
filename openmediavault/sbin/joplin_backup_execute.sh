@@ -27,8 +27,8 @@ get_joplin_version() {
     fi
     
     # Extract version from the image tag in docker-compose.yml
-    # Looking specifically for etechonomy/joplin-server: and capturing the version after it
-    local version=$(grep -A1 "image: etechonomy/joplin-server:" "$compose_file" | head -n1 | sed 's/.*etechonomy\/joplin-server:\([^"]*\).*/\1/')
+    # Looking specifically for joplin/server and capturing the version after it
+    local version=$(grep -A1 "image: joplin/server:" "$compose_file" | head -n1 | sed 's/.*joplin\/server:\([^"]*\).*/\1/')
     
     if [ -z "$version" ]; then
         echo "{\"Status\": \"Error: Could not find Joplin version in $compose_file\"}"

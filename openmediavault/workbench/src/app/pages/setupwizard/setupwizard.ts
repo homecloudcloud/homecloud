@@ -16,16 +16,19 @@
  * GNU General Public License for more details.
  */
 import { Component } from '@angular/core';
-import { marker as gettext } from '@ngneat/transloco-keys-manager/marker';
+//import { marker as gettext } from '@ngneat/transloco-keys-manager/marker';
 import * as _ from 'lodash';
 import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
 import { BaseFormPageComponent } from '~/app/pages/base-page-component';
 import { ViewEncapsulation } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer,SafeHtml } from '@angular/platform-browser';
 
 @Component({
   template: `<omv-logo-header></omv-logo-header>
-             <omv-intuition-form-page [config]="this.config" id="mainContent"></omv-intuition-form-page>
+             <div id="mainContainer">
+                <div id="setupwizard-main-form1">
+                  <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
+             </div>
              <omv-intuition-form-page [config]="this.navconfig" id="navButtons"></omv-intuition-form-page>
             `,        
   styleUrls: ['./setupwizard.scss'],
@@ -33,32 +36,35 @@ import { DomSanitizer } from '@angular/platform-browser';
   selector:'omv-setupwizard-page',  //Home cloud changes
 })
 export class SetupWizardComponent extends BaseFormPageComponent {
-  public config: FormPageConfig = {
+  public safeHtmlContent:SafeHtml;
+  private htmlContent=`<div class="container">
+    <h1>Welcome to the Setup Wizard</h1>
+    <p class="info">
+      This will guide you through the essential steps to get your Homecloud up and running.
+      If you choose to skip any step, you can always return to the <strong>Homecloud Workbench</strong> to complete it later.
+    </p>
+
+    <h2>Steps</h2>
+    <div class="setupSteps">
+      <p>Network Configuration</p>
+      <p>VPN Setup</p>
+      <p>Date & Time Configuration</p>
+      <p>Notification Setup</p>
+      <p>Apps Configuration:</p>
+      <div class="app-list">
+            <p>Cloud storage - Drive</p>
+            <p>Photo management - Immich</p>
+            <p>Document management - Paperless</p>
+            <p>Notes - Joplin</p>
+            <p>Password management - Vaultwarden</p>
+            <p>Media server - Jellyfin</p>
+      </div>
+    </div>
+
     
-    fields: [
-     {
-        type:'paragraph',   
-        title: gettext('This wizard will help you configure your Homecloud.')
-     },
-     {
-        type:'paragraph',   
-        title: gettext('Connect your Homecloud to your router via LAN Cable.')
-     },
-     {
-        type:'paragraph',   
-        /*title: gettext(`<img src="/assets/images/networkCable.jpg" alt="LAN"></img>`)*/
-        title: gettext(' ')
-     },
-     {
-        type:'paragraph',   
-        title: gettext('If you want to use Wifi instead, you can configure it in the next step.')
-     },
-     {
-        type:'paragraph',   
-        title: gettext('Please note that Wifi Connection may be unstable.')
-     }
-    ]
-  };
+
+  </div>`;
+  
   public navconfig: FormPageConfig = {
 
     fields:[
@@ -68,21 +74,19 @@ export class SetupWizardComponent extends BaseFormPageComponent {
       
       {
         template:'submit',
-        text:'Next: Interfaces >',
+        text:"Let's get started",
         execute: {
           type: 'url',
-          url: '/setupwizard/networkconfig/interfaces'
+          url: '/setupwizard/networkconfig'
         }
       }
     ]
 
   };
   constructor(private sanitizer: DomSanitizer) {
-      super();
-     
-      // Sanitize the title 
-    
-          this.config.fields[2].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[2].title) as unknown as string;
+     super();
+     // Sanitize the HTML content once during construction
+    this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);
          
      
       
@@ -90,23 +94,6 @@ export class SetupWizardComponent extends BaseFormPageComponent {
     
     ngAfterViewInit(): void {    
        
-      // Delay the operation to ensure the view is fully rendered
-      setTimeout(() => {
-  
-        // Select all paragraph elements 
-          const paragraphs = document.querySelectorAll('omv-setupwizard-page #mainContent .omv-form-paragraph');
-  
-          // Inject the sanitized HTML into the correct paragraph element
-          
-          paragraphs[2].innerHTML =
-          (this.config.fields[2].title as any).changingThisBreaksApplicationSecurity ||
-          this.config.fields[2].title?.toString();
-  
-  
-      }, 100); // Timeout ensures it happens after the view has rendered
-
-      document.querySelector('meta[name="viewport"]').setAttribute("content", "width=device-width, initial-scale=1.0, user-scalable=yes");
-
     }
 
 

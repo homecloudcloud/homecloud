@@ -52,7 +52,7 @@ export class UserFormPageComponent extends BaseFormPageComponent {
         }
       },
       {
-        type: 'textInput',
+        type: 'hidden',
         name: 'email',
         label: gettext('Email'),
         value: '',

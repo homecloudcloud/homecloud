@@ -1,5 +1,35 @@
 @import '../../../../assets/colors.scss';
 
+.omv-dark-theme{
+    omv-setupwizard-complete-page {
+
+            .mat-card-actions{
+         
+           
+                  button{
+                      border:1px solid #ffffff!important;
+                    
+                    }
+                    button:hover,button:focus{
+                      background-color:#ffffff!important;
+                      color:$lightblue!important;
+                    }
+                    .workbenchButton{
+                        button{
+                      
+                            button:hover,button:focus{
+                            background-color:#ffffff!important;
+                            color:$lightgreen!important;
+                            }
+                        
+                        }
+                    }
+            
+            } 
+    }
+
+}
+
 omv-setupwizard-complete-page {
     omv-top-bar-wizard .omv-top-bar{
         background:transparent!important;
@@ -13,24 +43,78 @@ omv-setupwizard-complete-page {
         top:0;
         left:0;
         z-index:100;
+        omv-apply-config-panel{
+            margin-top:2rem!important;
+        }
       }
     #mainContent{
         display: flex;
         justify-content: center;
+        margin-top:6rem;
 
         .mat-card{
             margin-top:40vh!important;
 
             omv-form-paragraph{
                 justify-content: center;
+                text-align:center;
             }
     
         }
         .mat-card-actions{
-            display: flex;
+            display: grid!important;
             justify-content: center;
+            grid-template-columns: repeat(3, auto);
+            gap:20px;
+            button{
+                      border:1px solid $lightblue!important;
+                    
+                    }
+            button:hover,button:focus{
+                  background-color:#ffffff!important;
+                  color:$lightblue!important;
+                }
+
+            .backupButton{
+                order:2;
+            }
+            .photosUSBButton{
+                order:1;
+            }
+            .usbDataButton{
+                order:0;
+            }
+            .workbenchButton{
+                order:3;
+                display: flex;
+                justify-content: center;
+                
+                button{
+                        background-color: $lightgreen!important;
+                        border:1px solid $lightgreen!important;
+                }
+                button:hover,button:focus{
+                  background-color:#ffffff!important;
+                  color:$lightgreen!important;
+                }
+                
+            }
+            @media screen and (min-width:768px){
+                    .workbenchButton{
+                        grid-column:2/3;
+                    }
+                }
+                
             
         }   
+        @media screen and (max-width:768px){
+            .mat-card-actions{
+
+               grid-template-columns: 1fr; /* 1 column */
+               display:grid!important;
+               place-items:center;
+            }
+        }
        
         
 

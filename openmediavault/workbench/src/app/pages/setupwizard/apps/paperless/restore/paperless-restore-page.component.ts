@@ -71,7 +71,7 @@ export class AppsPaperlessRestoreComponent extends BaseFormPageComponent {
   public config1: DatatablePageConfig = {
   
     stateId: '32z2n8aa-8ujg-13ea-0324-s4epl2ad2f79',
-    autoReload: 100000,
+    autoReload: false,
     remoteSorting: true,
     remotePaging: true,
     sorters: [

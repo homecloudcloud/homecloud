@@ -20,12 +20,89 @@ import { marker as gettext } from '@ngneat/transloco-keys-manager/marker';
 
 import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
 import { BaseFormPageComponent } from '~/app/pages/base-page-component';
+import { DomSanitizer,SafeHtml } from '@angular/platform-browser';
+import { ViewEncapsulation } from '@angular/core';
 
 @Component({
-  template: '<omv-intuition-form-page [config]="this.config"></omv-intuition-form-page>',
-  selector:'omv-date-time-form-page'  //Home cloud changes
+  template: `
+             <div id="datetime-form1">
+                    <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
+             </div>
+             <omv-intuition-form-page [config]="this.config"></omv-intuition-form-page>
+            `,
+  selector:'omv-date-time-form-page',  //Home cloud changes
+  styles: [`
+      @import '../../../../assets/colors.scss';
+      .omv-dark-theme{
+       
+          h1,h2,h3{
+          color:$lightblue !important;
+          }
+         
+      }
+      omv-date-time-form-page{
+        #datetime-form1{
+          margin-bottom:-3rem;
+          .omv-form-paragraph{
+          padding:2rem;
+          line-height: 1.5rem;
+        }
+  
+        }
+       
+        .omv-form-paragraph,h2,p,li,h3 {
+          font-size: var(--mat-font-size-subheading-2) !important;
+        
+        }
+        .omv-form-paragraph,p,li {
+          font-size: var(--mat-font-size-subheading-2) !important;
+          font-weight:var(--mat-font-weight-subheading-2) !important;
+        }
+        h1{
+          font-size: var(--mat-font-size-headline) !important;
+        
+        }
+      
+        
+        h2,h1,h3 {
+          color:$blue;
+        }
+  
+        
+        
+        ul {
+          list-style-type: disc;
+          margin-left: 20px;
+        }
+  
+        .hidden{
+          display:none !important;
+        }
+        .plainLink{
+          font-weight:bold;
+        }
+        .plainLink:hover,.plainLink:focus{
+          background-color:$lightblue;
+          color:white;
+          padding:10px;
+          text-decoration: none;
+          font-weight:bold;
+        }
+  
+      
+      }
+      
+     
+    `],
+    encapsulation: ViewEncapsulation.None  // This will disable view encapsulation
 })
 export class DateTimeFormPageComponent extends BaseFormPageComponent {
+  public safeHtmlContent: SafeHtml;
+  private htmlContent=`<h1>🌍 Set Your Timezone</h1>
+                      <p>
+                      Choose the <strong>timezone</strong> where your <strong>Homecloud</strong> is deployed ⏰.<br/>
+                      This ensures accurate time tracking for logs, schedules, and backups.
+                      </p>`;
   public config: FormPageConfig = {
     request: {
       service: 'System',
@@ -110,4 +187,11 @@ export class DateTimeFormPageComponent extends BaseFormPageComponent {
       }
     ]
   };
+  constructor(private sanitizer: DomSanitizer) {
+        super();
+       
+            // Sanitize the HTML content once during construction
+            this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);
+      }
+      
 }

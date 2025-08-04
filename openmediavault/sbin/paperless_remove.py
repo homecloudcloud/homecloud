@@ -4,7 +4,13 @@ import os
 import subprocess
 import yaml
 import shutil
+import requests
+import urllib3
 from typing import List
+
+
+# Disable SSL warnings
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 def stop_service(service_name: str) -> None:
     """Stop a systemd service if running"""
@@ -78,26 +84,36 @@ def remove_paperless_directory() -> None:
 
 def remove_paperless() -> None:
     """Main function to remove Paperless"""
+    print("Starting Paperless removal...")
+    
     try:
         # 1. Stop service
+        print("Stopping Paperless service...")
         stop_service('paperless')
         
         # 2. Disable service
+        print("Disabling Paperless service...")
         disable_service('paperless')
         
         # 3. Remove service
+        print("Removing service files...")
         remove_service('paperless')
         
         # 4. Get docker images
+        print("Identifying Docker images...")
         images = get_docker_images()
         
         # 5. Remove docker images
-        remove_docker_images(images)
+        if images:
+            print("Removing Docker images...")
+            remove_docker_images(images)
         
         # 6. Remove Paperless directory
+        print("Cleaning up configuration files...")
         remove_paperless_directory()
 
         # 7. Update firewall rules via API
+        print("Updating firewall rules...")
         try:
             response = requests.post(
                 "https://localhost:5000/setup_paperless_firewall",
@@ -109,12 +125,17 @@ def remove_paperless() -> None:
         except Exception as e:
             print(f"Warning: Failed to update firewall rules: {str(e)}")
         
-    except Exception:
-        pass
+        print("Paperless-ngx has been successfully removed. User data is not deleted.")
+        
+    except Exception as e:
+        print(f"Error during removal: {str(e)}")
 
 def main():
     """Main entry point"""
+    print("Starting Paperless-ngx Removal")
+    print("=====================")
     remove_paperless()
+    print("\nRemoval process completed.")
 
 if __name__ == "__main__":
     main()

@@ -36,6 +36,9 @@ import { DateTimeFormPageComponent } from './date-time/date-time-form-page.compo
 import { SetupWizardComponent } from './setupwizard';
 import { ComponentsModule } from '~/app/core/components/components.module';
 import { CompletePageComponent } from './complete/complete';
+import { TailscaleTermsFormPageComponent } from './vpn/tailscale-terms/tailscale-terms-form-page.component';
+import {NetworkMainComponent} from './networkconfig/network-main-page.component';
+import { VPNMainComponent } from './vpn/vpn-main-page.component';
 
 
 @NgModule({
@@ -62,8 +65,11 @@ import { CompletePageComponent } from './complete/complete';
     UserDatatablePageComponent,
     TailscaleStatusComponent,
     TailscaleAccessComponent,
+    TailscaleTermsFormPageComponent,
     NotificationSettingsFormPageComponent,
-    DateTimeFormPageComponent
+    DateTimeFormPageComponent,
+    NetworkMainComponent,
+    VPNMainComponent
   ],
   /**Home cloud changes start */
   exports:[
@@ -74,6 +80,7 @@ import { CompletePageComponent } from './complete/complete';
     UserDatatablePageComponent,
     TailscaleStatusComponent,
     TailscaleAccessComponent,
+    TailscaleTermsFormPageComponent,
     NotificationSettingsFormPageComponent,
     DateTimeFormPageComponent
     

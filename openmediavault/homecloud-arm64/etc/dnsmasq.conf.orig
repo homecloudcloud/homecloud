@@ -1,0 +1,6 @@
+interface=wlan0
+dhcp-range=172.31.1.2,172.31.1.20,255.255.255.0,24h
+dhcp-option=option:router,172.31.1.1
+dhcp-option=option:dns-server,172.31.1.1
+listen-address=127.0.0.1,172.31.1.1
+bind-interfaces

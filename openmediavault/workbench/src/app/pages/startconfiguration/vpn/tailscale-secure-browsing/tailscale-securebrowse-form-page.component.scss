@@ -1,0 +1,74 @@
+@import '../../../../../assets/colors.scss';
+
+.omv-dark-theme{
+
+  h1,h2,h3{
+        color:$lightblue !important;
+    }
+  }
+vpn-securebrowse-page{
+
+  .exit-node-imgs{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .exit-node-img{
+    width:40%;
+  }
+  @media screen and (max-width:768px){
+    .exit-node-img{
+      width:100%;
+    }
+    .exit-node-imgs{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    gap:20px;
+    }
+  }
+
+  .omv-form-paragraph{
+    padding:2rem;
+    line-height:1.5rem;
+  }
+
+  .omv-form-paragraph,h2,p,li,h3 {
+    font-size: var(--mat-font-size-subheading-2) !important;
+   
+  }
+  .omv-form-paragraph,p,li {
+    font-size: var(--mat-font-size-subheading-2) !important;
+    font-weight:var(--mat-font-weight-subheading-2) !important;
+  }
+  h1{
+    font-size: var(--mat-font-size-headline) !important;
+   
+  }
+ 
+  
+  h2,h1,h3 {
+    color:$blue;
+  }
+
+  
+  
+  ul {
+    list-style-type: disc;
+    margin-left: 20px;
+  }
+ 
+  .plainLink{
+    font-weight:bold;
+  }
+  .plainLink:hover,.plainLink:focus{
+    background-color:$lightblue;
+    color:white;
+    padding:10px;
+    text-decoration: none;
+    font-weight:bold;
+  }
+  
+}
+

@@ -27,15 +27,21 @@ import { FormPageConfig } from '~/app/core/components/intuition/models/form-page
 import { BaseFormPageComponent } from '~/app/pages/base-page-component';
 //import { Unsubscribe } from '~/app/decorators';
 import { RpcService } from '~/app/shared/services/rpc.service';
+import { DomSanitizer,SafeHtml } from '@angular/platform-browser';
 
 
 @Component({
   
   selector:'omv-tailscale-status-page', //Home cloud changes
   template: `
-  <omv-intuition-form-page id="status-form" [config]="this.config"></omv-intuition-form-page>
-  <omv-intuition-form-page id="data-message-form" [config]="this.config2"></omv-intuition-form-page>
-  <omv-intuition-datatable-page  id="data-table-form" [config]="this.config1"></omv-intuition-datatable-page>
+            <div id="tailscale-status-form1">
+                <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
+            </div>
+            <omv-intuition-form-page id="status-form" [config]="this.config"></omv-intuition-form-page>
+            <div id="tailscale-status-form2">
+                <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent1"></div>
+            </div>
+            <omv-intuition-datatable-page  id="data-table-form" [config]="this.config1"></omv-intuition-datatable-page>
   `,
   styleUrls: ['./tailscale-status-form-page.component.scss'],
   encapsulation: ViewEncapsulation.None  // This will disable view encapsulation
@@ -47,7 +53,11 @@ export class TailscaleStatusComponent extends BaseFormPageComponent {
   @Unsubscribe()
   private subscriptions: Subscription = new Subscription();
   */
-
+  public safeHtmlContent:SafeHtml;
+  public safeHtmlContent1:SafeHtml;
+  private htmlContent=`<h1>📶 Tailscale Status</h1>`;
+  private htmlContent1=`<h2>🔗 Access Devices</h2>
+                        <p>Access devices added to your VPN account will appear below. These devices can connect to Homecloud.</p>`;
   public config1: DatatablePageConfig = {
     stateId: '66d9d3ca-2fee-11ea-8386-e3eba0cf8f79',
     autoReload: 10000,
@@ -200,20 +210,13 @@ export class TailscaleStatusComponent extends BaseFormPageComponent {
     
     buttonAlign: 'center' // You can adjust the alignment to 'start', 'center', or 'end'
   };
-  public config2: FormPageConfig = {
-   
-    fields: [
-      {
-        type: 'paragraph',
-        title: gettext('Access devices added to your VPN account will show up below.These devices can connect to Homecloud.')
-      }
-    ]
-    
-    
-  };
+ 
 
-  constructor(private rpcService: RpcService,private cdr:ChangeDetectorRef) {
+  constructor(private rpcService: RpcService,private cdr:ChangeDetectorRef,private sanitizer:DomSanitizer) {
     super();
+    // Sanitize the HTML content once during construction
+    this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);
+    this.safeHtmlContent1 = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent1);
 
   }
   ngOnInit() {

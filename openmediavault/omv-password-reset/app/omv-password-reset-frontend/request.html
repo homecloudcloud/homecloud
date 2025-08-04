@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OMV Admin - Request Password Reset</title>
+    <link rel="icon" type="image/svg+xml" href="assets/logos/logo.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/logos/logo_180180.png">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+        input[type="email"] {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin-left: 10px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <h2>Forgot Password</h2>
+    <form id="requestForm">
+        <label for="email">Admin Email:</label><br>
+        <input type="email" id="email" name="email" required><br><br>
+        <button type="submit" id="submitButton">Send Reset Link <span id="spinner" class="spinner" style="display: none;"></span></button>
+    </form>
+    <p id="msg"></p>
+    <script>
+    document.getElementById("requestForm").onsubmit = async function(event) {
+        event.preventDefault();
+        
+        // Get elements
+        const submitButton = document.getElementById("submitButton");
+        const spinner = document.getElementById("spinner");
+        const msgElement = document.getElementById("msg");
+        const email = document.getElementById("email").value;
+        
+        // Disable button and show spinner
+        submitButton.disabled = true;
+        spinner.style.display = "inline-block";
+        msgElement.innerText = "Sending reset link...";
+        msgElement.className = "";
+
+        try {
+            const res = await fetch(`${window.location.origin}/forgot-password/request-reset`, {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({email})
+            });
+
+            const data = await res.json();
+            
+            if (res.ok) {
+                msgElement.innerText = data.message || "Reset link sent successfully. Please check your email.";
+                msgElement.className = "success";
+                // Keep button disabled on success to prevent multiple requests
+            } else {
+                msgElement.innerText = data.error || "Failed to send reset link.";
+                msgElement.className = "error";
+                // Re-enable button on error
+                submitButton.disabled = false;
+            }
+        } catch (err) {
+            msgElement.innerText = "Request failed. Please check your connection.";
+            msgElement.className = "error";
+            console.error("Fetch error:", err);
+            // Re-enable button on error
+            submitButton.disabled = false;
+        } finally {
+            // Always hide spinner
+            spinner.style.display = "none";
+        }
+    };
+    </script>
+</body>
+</html>

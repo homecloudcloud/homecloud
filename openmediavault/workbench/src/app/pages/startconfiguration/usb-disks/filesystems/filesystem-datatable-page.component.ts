@@ -23,23 +23,55 @@ import { Subscription } from 'rxjs';
 import { DatatablePageConfig } from '~/app/core/components/intuition/models/datatable-page-config.type';
 import { MkfsConfig, MkfsConfigService } from '~/app/core/services/mkfs-config.service';
 import { Unsubscribe } from '~/app/decorators';
-import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
-
+//import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
+import { DomSanitizer,SafeHtml } from '@angular/platform-browser';
+import { ViewEncapsulation } from '@angular/core';
 
 @Component({
+  selector:'omv-filesystem-main-page',
   template: `
-  <omv-intuition-form-page [config]="this.config2"></omv-intuition-form-page>
+  <div id="filesystem-main-form-1">
+    <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
+  </div>
   <omv-intuition-datatable-page [config]="this.config"></omv-intuition-datatable-page>
-  <omv-intuition-form-page [config]="this.config3"></omv-intuition-form-page>
-  `
+  <div id="filesystem-main-form-2">
+    <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent1"></div>
+  </div>
+  `,
+  styleUrls: ['./filesystem-datatable-page.component.scss'],
+  encapsulation:ViewEncapsulation.None
 })
 export class FilesystemDatatablePageComponent implements OnInit {
   @Unsubscribe()
   private subscriptions: Subscription = new Subscription();
+  public safeHtmlContent: SafeHtml;
+  public safeHtmlContent1: SafeHtml;
+  private htmlContent =`
+      <div class="usb-guide">
+        <h1>🖴 USB Drive Setup</h2>
+
+        <p>☁️ Data is stored in USB drives using one or more <strong>file systems</strong>.</p>
+
+        <p>✅ If your drive is ready and properly configured, its file systems will appear in the table below.</p>
+
+        <p>❌ Not seeing any file systems? Try using the <strong>Mount</strong> button below to load them manually.</p>
+
+        <p>🆕 Got a new USB drive? Use the <strong>Add</strong> button to format it and create a new file system.</p>
+        <p>☁️ Homecloud supports file systems from Windows, macOS, DOS, and Linux — so most drives will work just fine.</p>
+      </div>
+    `;
+  private htmlContent1 =`
+      <div class="usb-access">
+        <h2>📂 Access Your Files</h3>
+        <p>Go to the <a class="plainLink" href="#/startconfiguration/apps/drive/shares"><strong>Drive > Shares page</strong></a> to manage which drives are shared and set user permissions.</p>
+        <h2>🖼️ Photo Access via Immich</h3>
+        <p>If your USB drive has photos or videos you'd like to view in the <strong>Immich photo app</strong>, go to the <a class="plainLink" href="#/startconfiguration/apps/photos/external-storage"><strong>Immich USB page</strong></a> to configure it.</p>
+      </div>
+    `;
 
   public config: DatatablePageConfig = {
     stateId: '66d9d2ce-2fee-11ea-8386-e3eba0da8g78',
-    autoReload: 10000,
+    autoReload: 90000,
     remoteSorting: true,
     remotePaging: true,
     sorters: [
@@ -198,7 +230,7 @@ export class FilesystemDatatablePageComponent implements OnInit {
       {
         type: 'iconButton',
         text: gettext('Mount'),
-        icon: 'start',
+        icon: 'mount',
         tooltip: gettext('Mount an existing file system.'),
         execute: {
           type: 'url',
@@ -276,23 +308,12 @@ export class FilesystemDatatablePageComponent implements OnInit {
     ]
   };
 
-  public config2: FormPageConfig = {
-    fields: [
-      {
-        type: 'paragraph',
-        title: gettext('A USB drive may contain one or more filesystems (partitions). The filesystems listed below are ready to use with Homecloud. If your drive is new (unformatted) or has been wiped, you can create a new filesystem here to begin using it')
-      }
-    ]
-  };
-  public config3: FormPageConfig = {
-    fields: [
-      {
-        type: 'paragraph',
-        title: gettext('To share above listed filesystem via Drive go to shares')
-      }
-    ]
-  };
-  constructor(private mkfsConfigService: MkfsConfigService) {}
+ 
+  constructor(private mkfsConfigService: MkfsConfigService,private sanitizer:DomSanitizer) {
+    //Sanitize html
+      this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);
+      this.safeHtmlContent1 = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent1);
+  }
 
   ngOnInit(): void {
     this.subscriptions.add(

@@ -22,14 +22,20 @@ import { FormPageConfig } from '~/app/core/components/intuition/models/form-page
 import { BaseFormPageComponent } from '~/app/pages/base-page-component';
 import { ViewEncapsulation } from '@angular/core';
 import { RpcService } from '~/app/shared/services/rpc.service';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer,SafeHtml } from '@angular/platform-browser';
 import { FormPageButtonConfig } from '~/app/core/components/intuition/models/form-page-config.type';
 
 
 @Component({
   selector:'omv-photos-update-page', //Home cloud changes
-  template: `<omv-intuition-form-page id="photos-update-form"[config]="this.config"></omv-intuition-form-page>
-             <omv-intuition-form-page id="photos-update-form"[config]="this.config2"></omv-intuition-form-page>`,
+  template: `<div id="photos-update-form1">
+                <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
+              </div>
+              <omv-intuition-form-page id="photos-update-form2"[config]="this.config"></omv-intuition-form-page>
+              <div id="photos-update-form3">
+                <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent1"></div>
+              </div>
+             <omv-intuition-form-page id="photos-update-form4"[config]="this.config2"></omv-intuition-form-page>`,
   styleUrls: ['./photos-update-form-page.component.scss'],
   encapsulation: ViewEncapsulation.None  // This will disable view encapsulation
 })
@@ -37,8 +43,45 @@ import { FormPageButtonConfig } from '~/app/core/components/intuition/models/for
 
 export class AppsPhotosUpdateFormPageComponent extends BaseFormPageComponent {
   private statustosend:string='';
+  private buttonText:string='';
+  public safeHtmlContent: SafeHtml;
+  public safeHtmlContent1: SafeHtml;
+  
+  
+  private htmlContent= `
+            <div class="update-section">
+              <h1>🔄 Check for Backend App Updates</h1>
+              <p>
+              Stay up to date with the latest <strong>community-driven updates</strong> for the app backend running on your Homecloud.
+              </p>
+
+              <ul>
+              <li>📱 <strong>Mobile app updates</strong> are delivered through your device's App Store or Google Play.</li>
+              <li>☁️ <strong>Backend updates</strong> are downloaded directly from app open-source community repositories.</li>
+              </ul>
+
+              <p>
+              📋 Before updating, please <a href="https://github.com/immich-app/immich/" class="plainLink" target="_blank">review the release notes</a> for important information.
+              </p>
+
+              <p>
+              ⚠️ We recommend taking a <strong>backup</strong> of your app before proceeding with any update.
+              </p>
+            </div>
+
+  `;
+  private htmlContent1= `
+
+            <div class="auto-update-box">
+              <h3>⚙️ Enable Auto Updates</h3>
+              <p>Automatically keep your app backend up to date with the latest releases.</p>
+              <p class="note">Note: Mobile app updates are managed by your phone's app store.</p>
+            </div>
+            
+
+  `;
   private buttonConfig:FormPageButtonConfig= {
-      text: 'Enable/Disable Auto updates for Immich backend',
+      text: this.buttonText,
       disabled: false,
       submit: true,
       class: 'omv-background-color-pair-primary',
@@ -54,7 +97,7 @@ export class AppsPhotosUpdateFormPageComponent extends BaseFormPageComponent {
           task: false,
           progressMessage: 'Updating auto-update settings...',
           successNotification: 'Successfully updated auto-update settings',
-          successUrl: '/startconfiguration/apps/photos'
+          successUrl: '/startconfiguration/apps/photos/access'
         }
       }
   };
@@ -64,30 +107,12 @@ export class AppsPhotosUpdateFormPageComponent extends BaseFormPageComponent {
       service: 'Homecloud',
       get: {
         method: 'immich_check_version'
+       
       },
     },
     fields: [
 
-      {
-        type: 'paragraph',
-        title: gettext('Immich community releases update to backend service and mobile app. Mobile app updates are pushed to your phone via app store or playstore.')
-      },
-
-      {
-        type: 'paragraph',
-        title: gettext('Software updates are directly downloaded from community repositories and are not tested by Homecloud product team.')
-      },
-
-      {
-        type: 'paragraph',
-        title: gettext('Review release information before proceeding with update. Details available at:&nbsp;&nbsp;<a class="plainLink" href="https://github.com/immich-app/immich/releases" target="_blank">Review release informaton</a> ')
-      },
-
-      {
-        type: 'paragraph',
-        title: gettext('Take Immich backup before proceeding further. Go to Photos -> backup page for taking backup')
-      },
-
+      
       {
         type: 'textInput',
         name: 'status',
@@ -107,67 +132,64 @@ export class AppsPhotosUpdateFormPageComponent extends BaseFormPageComponent {
       {
         type: 'textInput',
         name: 'available_version',
-        label: gettext('Latest version available'),
-        hint: gettext('Immich backend service latest version available'),
+        label: gettext('Version available'),
+        hint: gettext('Latest version that is known to work on Homecloud'),
         value: '',
         readonly: true
       },
+      
       {
         type: 'checkbox',
         name: 'updateConfirmation',
         label: gettext('Yes,I want to update'),
-        hint: gettext('By checking this box, you agree to update the immich app to latest version'),
+        hint: gettext('By checking this box, you agree to update Immich to selected version'),
         value: '',
         readonly: false
       }
     ],
+   
     buttons: [
       {
         template: 'submit',
-        text:'Update to Latest Version',
-        confirmationDialogConfig:{
+        text: 'Update to Latest Version',
+        //disabled: true,
+        confirmationDialogConfig: {
           template: 'confirmation',
           message: gettext(
             'Please review the release documentation before updating. Do you want to continue?'
           )
         },
         execute: {
-            type: 'taskDialog',
-            taskDialog: {
-              config: {
-                title: gettext('Message'),
-                autoScroll: true,
-                startOnInit: true,
-                buttons: {
-                  start: {
-                    hidden: true
-                  },
-                  stop: {
-                    hidden: true
-                  },
-                  close:{
-                    hidden: false,
-                    disabled: false,
-                    autofocus: false,
-                    dialogResult: true
-                  }
-
-                },
-                request: {
-                  service: 'Homecloud',
-                  method: 'immich_update_version',
-                  params:{
-                    version:'{{ available_version }}',
-                  }
-
+          type: 'taskDialog',
+          taskDialog: {
+            config: {
+              title: gettext('Message'),
+              autoScroll: true,
+              startOnInit: true,
+              buttons: {
+                start: { hidden: true },
+                stop: { hidden: true },
+                close: {
+                  hidden: false,
+                  disabled: false,
+                  autofocus: false,
+                  dialogResult: true
                 }
               },
-            successUrl:'/startconfiguration/apps/photos/access'
-            }
+              request: {
+                service: 'Homecloud',
+                method: 'immich_update_version',
+                params: {
+                  version: '{{ available_version }}'
+                }
+              }
+            },
+            successUrl: '/startconfiguration/apps/photos/access'
+          }
         }
       }
-
     ]
+    
 
   };
 
@@ -200,58 +222,40 @@ export class AppsPhotosUpdateFormPageComponent extends BaseFormPageComponent {
 
   constructor(private rpcService: RpcService, private sanitizer: DomSanitizer){
     super();
-    
-    this.config.fields[2].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[2].title) as unknown as string;
+    //Sanitize html
+    this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);
+    this.safeHtmlContent1 = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent1);
+   
   }
-  // Add this method to your component
-  getParams() {
-    return {
-      appname: 'immich',
-      action: this.statustosend
-    };
-  }
-
-  ngAfterViewInit(): void {
-    // Delay the operation to ensure the view is fully rendered
-    setTimeout(() => {
-      
-
-      // Select all paragraph elements (assuming they are rendered as `photos-update-form omv-form-paragraph` elements)
-        const paragraphs = document.querySelectorAll('#photos-update-form .omv-form-paragraph');
-
-        // Inject the sanitized HTML into the correct paragraph element
-        paragraphs[2].innerHTML =
-        (this.config.fields[2].title as any).changingThisBreaksApplicationSecurity ||
-        this.config.fields[2].title?.toString();
-
-               
-    }, 100); // Timeout ensures it happens after the view has rendered
-  }
-
-
+  
+  
+ 
   ngOnInit():void{
     this.rpcService.request('Homecloud', 'appAutoUpdates',{
       appname: 'immich',
       action: 'status'
     }).subscribe(response => {
       this.statustosend = response.status === 'enabled' ? 'disable' : 'enable';
+      this.buttonText = response.status === 'enabled' ? 'Disable Auto updates for Immich backend' : 'Enable Auto updates for Immich backend';
       // Set the button config after we have the status
       this.buttonConfig.execute.request.params.action = this.statustosend;
+      this.buttonConfig.text = this.buttonText;
       this.config2.buttons = [this.buttonConfig];
     });
     this.fetchStatusAndUpdateFields();  //get hostname value and update in link
   }
-  
+
   fetchStatusAndUpdateFields(): void {
     this.rpcService.request('Homecloud', 'immich_check_version').subscribe(response => {
       const status = response.status;
-      console.log('status',status);
+      //console.log('status',status);
       this.updateFieldColors(status);     //Update colors based on status
       this.updateFieldVisibility(status); //Hide or show the checkbox for updates based on status     
         
     });
   }
  
+  
   updateFieldColors(status:string):void{
     const element = document.querySelector('omv-photos-update-page omv-form-text-input:nth-of-type(1) .mat-form-field input');
     if(element){
@@ -264,9 +268,10 @@ export class AppsPhotosUpdateFormPageComponent extends BaseFormPageComponent {
       }
     }
   }
+  
 
   updateFieldVisibility(status:string):void{
-    const checkbox=document.querySelector('omv-photos-update-page omv-form-checkbox mat-checkbox');
+    const checkbox=document.querySelector('omv-photos-update-page omv-form-checkbox');
     const updateButton = document.querySelector('omv-photos-update-page omv-submit-button button');
     if(status !== 'Update-Available'){
       checkbox.classList.add('hidden');
@@ -294,4 +299,5 @@ export class AppsPhotosUpdateFormPageComponent extends BaseFormPageComponent {
     }
 
   }
+
 }

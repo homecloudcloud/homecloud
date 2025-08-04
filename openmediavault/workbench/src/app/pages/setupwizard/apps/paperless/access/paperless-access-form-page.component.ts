@@ -21,7 +21,7 @@ import * as _ from 'lodash';
 import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
 import { BaseFormPageComponent } from '~/app/pages/base-page-component';
 import { ViewEncapsulation } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer,SafeHtml } from '@angular/platform-browser';
 import { RpcService } from '~/app/shared/services/rpc.service';
 
 
@@ -30,8 +30,16 @@ import { RpcService } from '~/app/shared/services/rpc.service';
   //template: '<omv-intuition-form-page [config]="this.config"></omv-intuition-form-page>',
   template: `
   <omv-logo-header></omv-logo-header>
-  <omv-intuition-form-page id="paperless-access-form1" [config]="this.config"></omv-intuition-form-page>
-  <omv-intuition-form-page id="paperless-access-form2" [config]="this.config2"></omv-intuition-form-page>
+  <div id="mainContainer">
+    <div id="paperless-access-form1">
+      <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
+    </div>
+    <!--removing funnel from setupwizard-->
+    <!--div id="paperless-access-form2">
+      <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent1"></div>
+    </div>
+    <omv-intuition-form-page id="paperless-access-form3" [config]="this.config2"></omv-intuition-form-page-->
+  </div>
   <omv-intuition-form-page id="navButtons" [config]="this.navConfig"></omv-intuition-form-page>
   `,
   styleUrls: ['./paperless-access-form-page.component.scss'],
@@ -43,90 +51,12 @@ import { RpcService } from '~/app/shared/services/rpc.service';
 export class AppsPaperlessAccessComponent extends BaseFormPageComponent {
   private hostname: string = '';
   private paperlessStatus: string = '';
-  public config: FormPageConfig = {
-    request: {
-      service: 'Homecloud',
-      get: {
-        method: 'getPaperlessServiceStatus'
-      }
-    },
-    fields: [
-      
-      {
-        type: 'paragraph',
-        title: gettext('Paperless-ngx Backend service runs on Homecloud and stores saved data.')
-      },
-      {
-        type: 'textInput',
-        name: 'status',
-        label: gettext('Paperless-ngx backend service status'),
-        hint: gettext('If status is "Not deployed" , go to Documents page and deploy it first. If status is "Down", go to status page and restart the service.'),
-        value: '',
-        readonly: true
-      },
-      {
-        type:'container',
-        fields:[
-          {
-            type: 'paragraph',
-            title: gettext('There are two methods to access Paperless-ngx: ')
-          },
-          {
-            type: 'paragraph',
-            title: gettext('1. WebBrowser: Used for initial setup, administrative  tasks like permissions, sharing and regular on-going access')
-          },
-          {
-            type: 'paragraph',
-            title: gettext('')
-          },
-          {
-            type: 'paragraph',
-            title: gettext('')
-          },
-          {
-            type: 'paragraph',
-            title: gettext('')
-          },
-          {
-            type: 'paragraph',
-            title: gettext(`2. Mobile App installed on your access devices: phones and WebApp for computers. Install app from below links. Open app . Paste the below URL to begin:`)
-          },
-          {
-            type: 'paragraph',
-            title: gettext(`<a href="https://play.google.com/store/apps/details?id=de.astubenbord.paperless_mobile" target="_blank"><img src="/assets/images/immich-google-play-badge.png" style="width:50%;"/></a>`)
-          },
-          {
-            type: 'paragraph',
-            title: gettext(`<a href="https://apps.apple.com/us/app/swift-paperless/id6448698521" target="_blank"><img src="/assets/images/immich-ios-app-store.png" style="width:50%;margin:-1%;"/></a>`)
-          },
-          {
-            type: 'paragraph',
-            title: gettext(`Native WebApp is a good alternative that can be used on all devices `)
-          },
-          {
-            type: 'paragraph',
-            title: gettext(`Open the installed app`)
-          },
-          {
-            type: 'textInput',
-            name: 'api_endpoint',
-            label: gettext('Paperless-ngx Endpoint URL'),
-            hint: gettext('Paste this in Mobile App when prompted to access Paperless-ngx'),
-            value: '',
-            readonly: true,
-            hasCopyToClipboardButton: true
-          },
-          {
-            type: 'paragraph',
-            title: gettext(`To know more features and how to use read documentation at:&nbsp;&nbsp; <a class="plainLink" href="https://docs.paperless-ngx.com/#features" target="_blank">Features</a>`)
-          }
-
-        ]
-      }
-      
-      
-    ]
-  };
+  public safeHtmlContent: SafeHtml;
+  public safeHtmlContent1: SafeHtml;
+  
+  private htmlContent = '';
+  private htmlContent1='';
+  
 
   public config2: FormPageConfig = {
     request: {
@@ -139,10 +69,7 @@ export class AppsPaperlessAccessComponent extends BaseFormPageComponent {
       }   
     },
     fields: [  
-      {
-        type: 'paragraph',
-        title: gettext('You can also share your documents with friends, family that are not on your family tailscale VPN. This is enabled via Tailscale funnel service. This enables Immich app to be accessed from Internet without needing VPN connectivity. This comes with security risks so only use it for limited time. Before enabling make sure you are using strong passwords for paperless-ngx.')
-      },
+
       {
         type: 'textInput',
         name: 'status',
@@ -154,15 +81,16 @@ export class AppsPaperlessAccessComponent extends BaseFormPageComponent {
       {
         type: 'textInput',
         name: 'url',
-        label: gettext('Internet access link'),
-        hint: gettext('This is the link to access Immich over internet without VPN. Only visible if status is Enabled.'),
+        label: gettext('Internet access link for non-VPN users'),
+        hasCopyToClipboardButton:true,
+        hint: gettext('This is the link to access paperless-ngx over internet for non-VPN users. Only visible if status is Enabled.'),
         value: '',
         readonly: true
       }
     ],
     buttons: [
       {
-        text: 'Enable sharing Paperless-ngx on public Internet for external users)',
+        text: 'Enable sharing Paperless-ngx on public Internet for non-VPN users)',
         disabled:false,
         submit:true,
         class:'omv-background-color-pair-primary',
@@ -172,18 +100,37 @@ export class AppsPaperlessAccessComponent extends BaseFormPageComponent {
           message: 'CAUTION! This may increase risk of unauthorized access as Homecloud will become accessible from Internet without VPN. Do you really want to continue? '
         },
         execute: {
-          type: 'request',
-          request: {
-            service: 'Homecloud',
-            method: 'createTailscaleFunnel',
-            params:{
-              source_port: 8443,
-              destination_port: 8000
+          type: 'taskDialog',
+          taskDialog: {
+            config: {
+              title: gettext('Message'),
+              autoScroll: true,
+              startOnInit: true,
+              buttons: {
+                start: {
+                  hidden: true
+                },
+                stop: {
+                  hidden: true
+                },
+                close:{
+                  hidden: false,
+                  disabled: false,
+                  autofocus: false,
+                  dialogResult: true
+                }
+
+              },
+              request: {
+                service: 'Homecloud',
+                method: 'createTailscaleFunnel',
+                params:{
+                  source_port: 8443,
+                  destination_port: 8000
+                }
+              }
             },
-            task: false, // Set to true if this is a long-running task
-            progressMessage: 'Enabling direct Internet access for Paperless-ngx App',
-            successNotification: 'Paperless-ngx can be now accessed without VPN from Public Internet',
-            successUrl: '/startconfiguration/apps/paperless'
+          successUrl:'/setupwizard/apps/paperless'
           }
         }
       },
@@ -193,18 +140,36 @@ export class AppsPaperlessAccessComponent extends BaseFormPageComponent {
         submit:true,
         class:'omv-background-color-pair-primary',
         execute: {
-          type: 'request',
-          request: {
-            service: 'Homecloud',
-            method: 'disableTailscaleFunnel',
-            params:{
-              source_port: 8443,
-              destination_port: 8000
+          type: 'taskDialog',
+          taskDialog: {
+            config: {
+              title: gettext('Message'),
+              autoScroll: true,
+              startOnInit: true,
+              buttons: {
+                start: {
+                  hidden: true
+                },
+                stop: {
+                  hidden: true
+                },
+                close:{
+                  hidden: false,
+                  disabled: false,
+                  autofocus: false,
+                  dialogResult: true
+                }
+              },
+              request: {
+                service: 'Homecloud',
+                method: 'disableTailscaleFunnel',
+                params:{
+                  source_port: 8443,
+                  destination_port: 8000
+                }
+              }
             },
-            task: false, // Set to true if this is a long-running task
-            progressMessage: 'Disable direct Internet access',
-            successNotification: 'Disabled direct internet access',
-            successUrl: '/startconfiguration/apps/paperless'
+          successUrl:'/setupwizard/apps/paperless'
           }
         }
       },
@@ -216,6 +181,8 @@ export class AppsPaperlessAccessComponent extends BaseFormPageComponent {
   constructor(private sanitizer: DomSanitizer, private rpcService: RpcService) {
     super();
     
+      
+    
   }
   
   ngOnInit(){
@@ -226,75 +193,141 @@ export class AppsPaperlessAccessComponent extends BaseFormPageComponent {
     this.rpcService.request('Homecloud', 'getPaperlessServiceStatus').subscribe(response => {
       this.paperlessStatus = response.status;
       this.hostname = response.hostname; // Adjust based on API response structure
-      
 
-      this.updateFieldColors(this.paperlessStatus);  //Update colors based on status
+      this.htmlContent = `
+        <div>
+          <h1>Access Your App</h1>
+          <div class="status-field ${this.paperlessStatus !== 'Running' ? '' : 'hidden'}">
+            <label>Paperless-ngx backend service status:</label>
+            <span class="status-value ${this.paperlessStatus !== 'Running' ? 'status-error' : 'status-success'}">${this.paperlessStatus}</span>
+          </div>
+          <div class="status-message ${this.paperlessStatus !== 'Running' ? '' : 'hidden'}">
+            <span class="status-deploy-message ${this.paperlessStatus !== 'Not deployed' ? 'hidden' : ''}" >App is not deployed. Go to <a class="plainLink" href="#/setupwizard/apps/paperless">Paperless main page</a> to deploy the app. </span>
+            <span class="status-not-running-message ${this.paperlessStatus !== 'Running' && this.paperlessStatus !== 'Not deployed' ? '' : 'hidden'}" >App is not running currently.</span>
+          </div>
+          <div class="access-info ${this.paperlessStatus !== 'Running' ? 'hidden' : ''}">
+            <p>
+              You can access the  app from any device (phone, tablet, or computer) that's either:
+              <ul>
+                    <li>
+                      Connected to the <strong>same VPN account</strong> as your Homecloud
+                      <ul>
+                        <li>Go to <a class="plainLink" href="#/setupwizard/vpn/status">VPN status page</a></li>
+                        <li>Verify that VPN is configured and status is <strong>"Up"</strong> on your Homecloud server.</li>
+                        <li>Verify that your access device(phone/laptop) is in the device list on this page.</li>
+                        <li>If present, your access device is connected to VPN.</li>
+                        <p> Note: If VPN is configured and status is <strong>"Up"</strong> on Homecloud server, all access devices should also be connected to VPN.
+                      </ul>
+                    </li>
+                    <li>On the <strong>same local network</strong>(If VPN not configured or status is <strong>"Down"</strong>) as your Homecloud device</li>
+              </ul>
+            </p>
 
-      //Update title with hostname
-      this.config.fields[2].fields[2].title=`If accessing first time start here (User: admin, Password: shown during deployment. If forgotten reset from Password page.) <a class="paperless-btn" href="${this.hostname}" target="_blank"> &nbsp;&nbsp;Access Paperless-ngx WebApp</a>`;
+            <h3>🌐 Access via Web</h3>
+            <p>
+              Simply click the button below: <br>
+              <a class="app-btn ${this.paperlessStatus !== 'Running' ? 'disabled-btn' : ''}" href="${this.hostname}" target="_blank">Access Paperless-ngx WebApp</a>
+            </p>
+
+            <h3>📱 Access via Mobile App</h3>
+            <p>
+              To use the Paperless app on your phone or tablet:
+            </p>
+            <ol>
+              <li>Download the Paperless mobile app:</li>
+                <div class="mobile-app-links">
+                  <a href="https://play.google.com/store/apps/details?id=de.astubenbord.paperless_mobile" target="_blank">
+                    <img src="/assets/images/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play" height="50">
+                  </a>
+                
+              
+                  <a href="https://apps.apple.com/us/app/swift-paperless/id6448698521" target="_blank">
+                    <img src="/assets/images/download-on-the-app-store.svg" alt="Download on the App Store" height="50">
+                  </a>
+                </div>
+              </li>
+              <li>Open the app after installation.</li>
+              <li>When prompted, enter the following server URL:</li>
+              <div class="hostURL">
+                <p><strong>${this.hostname}</strong>
+                <span onclick="navigator.clipboard.writeText('${this.hostname}')" 
+                      title="Copy to clipboard" 
+                      style="cursor: pointer; margin-left: 8px;">📋
+                </span>
+                </p>
+
+              </div>
+
+            </ol>
+          </div>
+      </div>
+      `;
+      this.htmlContent1=`
+                    <div class="sharing-info ${this.paperlessStatus !== 'Running' ? 'hidden' : ''}">
+                      <h2>🔗 Share Documents Outside Your VPN</h2>
+                       <p>
+                          You can <strong>share your documents</strong> with users who are not connected to your 
+                          <strong> Tailscale VPN</strong>. This is made possible using the <strong>Tailscale Funnel</strong> service.
+                       </p>
+                       <p>
+                          🌐 This allows the <strong>Paperless-NGX</strong> application to be securely accessed from the Internet
+                          <strong> without requiring VPN connectivity</strong>.
+                       </p>
+                       <h3>⚠️ Use With Caution</h3>
+                       <p>
+                        Enabling public access introduces <strong>potential security risks</strong>. It is recommended to:
+                       </p>
+                       <ul>
+                        <li>🔒 Use <strong>strong, unique passwords</strong> before enabling public access.</li>
+                        <li>👤➕ Create a dedicated user via the <strong>administration page</strong>(Webapp) and share credentials securely.</li>
+                        <li>📤 To share a specific document, use the <strong>Send</strong> button within the interface.</li>
+                        <li>⏳ <strong>Limit the time</strong> that public access remains enabled.</li>
+                       </ul>
+                    </div>
+
+ 
+ 
+ 
+  `;
+      // Sanitize the HTML content 
+      this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);
+      this.safeHtmlContent1 = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent1);
+
+
+   
+    //Hide Internet sharing section if paperless is not running
+    const internetShareSection=document.querySelector('#paperless-access-form3');
+    if(internetShareSection){
+        if(this.paperlessStatus !== 'Running'){    
+        
+            internetShareSection.classList.add('hidden');
+          
+        }
+        else{
+          
+            internetShareSection.classList.remove('hidden');
+          
+        }
+    }
+    
       
-      //Disable button if status is "Down" or "Starting"
-      if(this.paperlessStatus !== 'Running'){
-        this.config.fields[2].fields[2].title=`If accessing first time start here (User: admin, Password: shown during deployment. If forgotten reset from Password page.) <a class="paperless-btn disabled-btn" href="${this.hostname}" target="_blank"> &nbsp;&nbsp;Access Paperless-ngx WebApp</a>`;
-      }
-      
-      // Sanitize the title 
-      this.config.fields[2].fields[2].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[2].fields[2].title) as unknown as string;
-      this.config.fields[2].fields[6].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[2].fields[6].title) as unknown as string;
-      this.config.fields[2].fields[7].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[2].fields[7].title) as unknown as string;
-      this.config.fields[2].fields[11].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[2].fields[11].title) as unknown as string;
-      this.addSanitizedHtml();
-      this.updateFieldVisibility(this.paperlessStatus);
     });
-  }
-  addSanitizedHtml(){
-     // Select all paragraph elements (assuming they are rendered as `ios-drive-form1 omv-form-paragraph` elements)
-     const paragraphs = document.querySelectorAll('#paperless-access-form1 .omv-form-container .omv-form-paragraph');
 
-     // Inject the sanitized HTML into the correct paragraph element
-     paragraphs[2].innerHTML =
-     (this.config.fields[2].fields[2].title as any).changingThisBreaksApplicationSecurity ||
-     this.config.fields[2].fields[2].title?.toString();
-     paragraphs[6].innerHTML =
-     (this.config.fields[2].fields[6].title as any).changingThisBreaksApplicationSecurity ||
-     this.config.fields[2].fields[6].title?.toString();
-     paragraphs[7].innerHTML =
-     (this.config.fields[2].fields[7].title as any).changingThisBreaksApplicationSecurity ||
-     this.config.fields[2].fields[7].title?.toString();
-     paragraphs[10].innerHTML =
-     (this.config.fields[2].fields[11].title as any).changingThisBreaksApplicationSecurity ||
-     this.config.fields[2].fields[11].title?.toString();
-
-  }
-  updateFieldColors(status:string):void{
-    console.log('updating field colors');
-    const element = document.querySelector('#paperless-access-form1 omv-form-text-input:nth-of-type(1) .mat-form-field input');
-    if(element){
-      console.log('element found', element);
-      if(status === 'Running'){
-        console.log('Adding green removing red');
-        element.classList.add('greenpaperlessstatus');
-        element.classList.remove('redpaperlessstatus');
-      }else{
-        console.log('Adding red removing green');
-        element.classList.add('redpaperlessstatus');
-        element.classList.remove('greenpaperlessstatus');
-        
+      // Fetch Internet sharing status
+    this.rpcService.request('Homecloud', 'getFunnelStatus', { appname: 'paperless-ngx' }).subscribe(funnelResponse => {
+      const internetSharingStatus = funnelResponse.status;
+      
+      // Update button configuration based on Internet sharing status
+      if (internetSharingStatus === 'Enabled') {
+        // Show only disable button
+        this.config2.buttons = [this.config2.buttons[1]]; // Keep only disable button
+      } else {
+        // Show only enable button
+        this.config2.buttons = [this.config2.buttons[0]]; // Keep only enable button
       }
-    }
-  }
-  updateFieldVisibility(status:string):void{
-    console.log('updating field visibility');
-    const container = document.querySelector('#paperless-access-form1 .omv-form-container');
-    if(container){
-      console.log('container found', container);
-      if(status === 'Not deployed'){
-        container.classList.add('hidden');
-      }else{
-      container.classList.remove('hidden');
-        
-      }
-    }
+      
+      
+    });
   }
   
   public navConfig: FormPageConfig = {
@@ -305,13 +338,30 @@ export class AppsPaperlessAccessComponent extends BaseFormPageComponent {
     buttons: [
       
       {template:'submit',
-        text:'<< Go Back: Docs app Set Up',
+        text:'< Prev: Documents app Setup',
         execute:
         {
           type:'url',
           url:'/setupwizard/apps/paperless'
         }
         
+      },
+      
+      {template:'submit',
+        text:'Next: Notes app Setup >',
+        execute: {
+          type: 'request',        
+          request:{
+            service: 'Flags',
+            task:false,
+            method: 'saveLastCompletedStep',
+            params:{
+              'lastCompletedStepName':'appsPaperlessAccess'
+            },
+            successUrl:'/setupwizard/apps/notes',
+          }
+        }
+
       }
     ]
 

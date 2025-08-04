@@ -4,6 +4,35 @@
                    [hasMargin]="false">
     <span [innerHTML]="notConfiguredMessage | transloco | sanitizeHtml"></span>
   </omv-alert-panel>
+
+
+
+
+  <!--div class="hotspot-status-container" *ngIf="hotspotActive">
+    <div class="hotspot-status">
+      <span class="status-label">Hotspot status</span>
+      <span class="status-value active">{{hotspotStatus}}</span>
+    </div>
+  </div-->
+  
+    <div class="hotspot-status-container" *ngIf="hotspotActive">
+      <div class="omv-dashboard-widget-container">
+        <mat-card class="mat-card mat-focus-indicator"><!---->
+          <mat-card-title-group class="mat-card-title-group ng-star-inserted">
+            <div><mat-card-title class="mat-card-title">Hotspot status</mat-card-title></div>
+          </mat-card-title-group><!---->
+          <mat-card-content class="mat-card-content">
+            <span class="hotspotStatus">{{hotspotStatus}}</span> 
+            <br>    
+            <span>To configure Wi-Fi, go to <a class="plainLink" (click)="navigateToNetworkConfig($event)">Network Configuration</a></span>
+          </mat-card-content>         
+        </mat-card>
+        
+      </div>
+    </div>
+              
+
+
   <div class="widgets-container">
     <div *ngFor="let widget of widgets">
       <ng-container [ngTemplateOutlet]="renderWidget"

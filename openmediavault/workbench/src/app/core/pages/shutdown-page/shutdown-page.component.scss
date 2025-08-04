@@ -1,13 +1,16 @@
 @use 'sass:color';
 @use 'scss/defaults/colors' as dc;
+@import '../../../../assets/colors.scss';
 
 :host {
   .background {
-    content: url('^./assets/images/server.jpg');
-    object-fit: cover;
+    content: url('^./assets/images/Homecloud_front.png');
+    object-fit: contain;
+    margin-top:18vh;
   }
 
   .topbar {
+    height:18vh!important;  //Home cloud changes
     background-color: hsla(
       color.hue(dc.$omv-color-corporate-default),
       color.saturation(dc.$omv-color-corporate-default),
@@ -21,6 +24,17 @@
       width: auto;
       height: auto;
     }
+    /**Home cloud changes start */
+    .title{
+      margin-left:10px!important;
+      font-size:1.5em!important;
+      font-weight:bold!important;
+      color:$blue!important;
+      font-family:sans-serif!important;
+      
+    }       
+    
+    /**Home cloud changes end */
   }
 
   .icon,

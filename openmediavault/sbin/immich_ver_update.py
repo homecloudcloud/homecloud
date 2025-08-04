@@ -10,6 +10,11 @@ from pathlib import Path
 import shutil
 from datetime import datetime
 import yaml
+import urllib3
+
+
+# Disable SSL warnings
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 def get_env_version():
     """Get IMMICH_VERSION from .env file"""
@@ -129,6 +134,7 @@ def check_and_create_systemd_service():
     
     try:
         if not os.path.exists(service_file):
+            print(f"create service file")
             service_content = """[Unit]
 Description=Starts docker container for immich service 
 After=network.target
@@ -163,6 +169,8 @@ docker compose -f /etc/immich/docker-compose.yml down
                 f.write(stop_script_content)
             os.chmod(stop_script, 0o755)
             
+            return True
+        else:
             return True
     except Exception:
         return False
@@ -216,6 +224,20 @@ def update_db_password(env_file, password):
     except Exception:
         return False
 
+def check_internet_connectivity():
+    """Check internet connectivity using OMV RPC"""
+    try:
+        result = subprocess.run(['omv-rpc', '-u', 'admin', 'Homecloud', 'enumeratePhysicalNetworkDevices'],
+                              capture_output=True, text=True, check=True)
+        devices = json.loads(result.stdout)
+        
+        for device in devices:
+            if device.get('devicename') == 'internet0':
+                return device.get('state', False)
+        return False
+    except Exception:
+        return False
+
 def run_docker_pull():
     """Run docker compose pull with live output"""
     try:
@@ -252,6 +274,12 @@ def main():
         sys.exit(1)
 
     try:
+        # Check internet connectivity
+        print_status("Checking internet connectivity...")
+        if not check_internet_connectivity():
+            print_status("Not connected to Internet. Check your network connectivity", error=True)
+            sys.exit(0)
+        
         # Check deployment status
         print_status("Checking deployment status...")
         result = subprocess.run(['omv-rpc', '-u', 'admin', 'Homecloud', 'getImmichServiceStatus'],
@@ -318,9 +346,9 @@ def main():
             current_ver = current_version.lstrip('v')
             
             target_ver = target_version.lstrip('v')
-            if current_ver >= target_ver:
-                print_status(f"Target version {target_version} is not greater than current version {current_version}", error=True)
-                sys.exit(1)
+            #if current_ver >= target_ver:
+            #    print_status(f"Target version {target_version} is not greater than current version {current_version}", error=True)
+            #    sys.exit(1)
 
 
 
@@ -407,9 +435,18 @@ def main():
         except Exception as e:
             print(f"Warning: Failed to setup firewall: {str(e)}")
 
-        # Start service
-        print_status("Starting immich service...")
-        subprocess.run(['systemctl', 'start', 'immich.service'], check=True)
+        # Enable, unmask and start service
+        print_status("Enabling and starting immich service...")
+        try:
+            # Enable the service
+            subprocess.run(['systemctl', 'enable', 'immich.service'], check=False)
+            # Unmask the service
+            subprocess.run(['systemctl', 'unmask', 'immich.service'], check=False)
+            # Start the service
+            subprocess.run(['systemctl', 'start', 'immich.service'], check=True)
+        except Exception as e:
+            print_status(f"Warning: Issue with service operations: {str(e)}", error=True)
+            # Continue execution despite errors
 
          # Remove old images if this was an update
         if old_images:

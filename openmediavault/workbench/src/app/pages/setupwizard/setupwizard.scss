@@ -1,7 +1,44 @@
+//Home cloud changes new component
 @import '../../../assets/colors.scss';
 
+.omv-dark-theme{
+  omv-setupwizard-page{
+
+        #mainContainer{
+              h1,h2,h3{color:$lightblue !important;}
+              p,li{color:#ffffff !important;}
+              .plainLink:hover,.plainLink:focus{
+                  background-color:$lightblue;           
+              }
+
+              .app-list p{
+                color:#000000!important;
+              }
+             
+          }
+       
+          
+          #navButtons{
+              .mat-card{
+                    background-color:$lightblue!important;
+              }
+              .mat-card-actions{
+                    button{
+                      border:1px solid #ffffff!important;
+                    
+                    }
+                    button:hover,button:focus{
+                      background-color:#ffffff!important;
+                      color:$lightblue!important;
+                    }
+              }
+          }
+          
+         
+    }
+  }   
 omv-setupwizard-page {
-    
+
     omv-top-bar-wizard .omv-top-bar{
         background:transparent!important;
         position: absolute;
@@ -13,77 +50,131 @@ omv-setupwizard-page {
         top:0;
         left:0;
         z-index:100;
+    }
+    #mainContainer{
+
+      
+      margin-top:20vh;
+              overflow-y:auto;
+              height:70vh;     
+              scrollbar-color:$lightblue transparent;
+              --scrollbar-border-radius: 0 !important;
+              --scrollbar-thumb-color:red !important;
+              --scrollbar-thumb-hover-color: var(--scrollbar-thumb-color) !important;
+             
+      #setupwizard-main-form1{
+        .omv-form-paragraph{
+          padding:2rem;
+          line-height:1.5rem;
+        }
       }
-    #mainContent{
-
-        .mat-card{
-            margin-top:20vh!important;
-
-            omv-form-paragraph{
-                justify-content: center;
-            }
-            .omv-form-paragraph{
-                font-size:var(--mat-font-size-subheading-2);
-                font-weight:var(--mat-font-weight-subheading-2);
-            }
-    
+      .omv-form-paragraph,h2,p,li,h3 {
+          font-size: var(--mat-font-size-subheading-2) !important;
+        
         }
-        /*img{
-            max-width: 100%;
-            height: auto;
-            touch-action: manipulation;
-            overflow: visible;
-            -webkit-overflow-scrolling: touch;
+        .omv-form-paragraph,p,li {
+          font-size: var(--mat-font-size-subheading-2) !important;
+          font-weight:var(--mat-font-weight-subheading-2) !important;
+        }
+        h1{
+          font-size: var(--mat-font-size-headline) !important;
+        
+        }
+       
+        h2,h1,h3 {
+          color:$blue;
+        }
+  
+        
+        
+        ul {
+          list-style-type: none;
+          margin-left: 20px;
+        }
+  
+        .hidden{
+          display:none !important;
+        }
+        .plainLink{
+          font-weight:bold;
+        }
+        .plainLink:hover,.plainLink:focus{
+          background-color:$lightblue;
+          color:white;
+          padding:10px;
+          text-decoration: none;
+          font-weight:bold;
+        }
+        .container{
+          display: flex;
+          justify-content: center;
+          text-align:center;
+          flex-direction: column;
+
+          h2{font-size:1.5em!important;}
+
+        }
+        .setupSteps p{
+        padding:1rem;
+        border-radius: 4px;
+        background-color: $lightblue;
+        }
+
+        .app-list{
+            background-color: $yellow;
+            padding:0.25rem 1rem;
+            margin-top:-1rem;
+            border-radius: 4px;
+
+            p{
+                background-color:#ffffff;
+                padding:0.25rem;
+            }
+        }
+       
+        @media screen and (min-width: 768px) {
+            h1{font-size:2.5em!important;}
             
-        }
-        */
-        omv-intuition-form omv-form-paragraph:nth-of-type(3) .omv-form-paragraph
-        {
-            content: url('^./assets/images/homecloud_with_cable_edited.jpg');
-            background-size: cover;
-            background-position: center;
-            width: 60%;
-            height: auto;
-        }
-        @media screen and (max-width: 768px) {
-            omv-intuition-form omv-form-paragraph:nth-of-type(3) .omv-form-paragraph
-            {
-              
-                width: 100%!important;
-            
+            .setupSteps{
+              margin-left:20%;
+              margin-right:20%;
+
             }
+            .info{
+                margin-left:20%;
+                margin-right:20%;
+            }
+          
+          
         }
-        omv-intuition-form omv-form-paragraph:nth-of-type(3) .omv-form-paragraph
-        {
-            content: url('^./assets/images/homecloud_with_cable_edited.jpg');
-            background-size: cover;
-            background-position: center;
-            width: 60%;
-            height: auto;
-        }
-
-
-    } 
-    
-
-    #navButtons{
-
-        .mat-card{
-            background-color:$blue!important;
-        }
-        mat-card-content{
-            display:none!important;
-        }
-        @media screen and (max-width: 600px) {
+       
+       
+      
+        
+    }
+ 
+   #navButtons{
+            position:fixed;
+            width:100%;
+            bottom:0;
+          
+            .mat-card{
+                background-color:$blue!important;
+            }
+            mat-card-content{
+                display:none!important;
+            }
             .mat-card-actions{
-              flex-direction:column-reverse!important;
-              align-items:center!important;
-              justify-content:center!important;
-              row-gap:20px;
+                justify-content:center!important;
+                button{
+                  border:1px solid #ffffff!important;
+                
+                }
+                button:hover,button:focus{
+                  background-color:#ffffff!important;
+                  color:$lightblue!important;
+                }
             }
-        }
+          
     } 
-
-     
 }
-

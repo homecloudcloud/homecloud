@@ -1,50 +1,52 @@
 @import '../../../../../../assets/colors.scss';
 
-.omv-form-paragraph {
-  font-size: var(--mat-font-size-subheading-2) !important;
-}
-#drive-users omv-form-paragraph:nth-of-type(2) .omv-form-paragraph
-{
-  content: url('^./assets/images/Drive-shares.png')!important;
-  background-size: cover !important;
-  background-position: center !important;
-  width: 55% !important;
-  height: 20% !important;
+.omv-dark-theme{
+  h1,h2,h3{
+        color:$lightblue !important;
+    }
 }
 
+omv-drive-users-page{
+  #drive-users-form1{
+    margin-bottom:-3rem;
 
-@media only screen and (max-width: 767px){
-#drive-users omv-form-paragraph:nth-of-type(3) .omv-form-paragraph
-{
-  width: 100% !important;
-  height: 20% !important;
-}
-}
+     .omv-form-paragraph{
+        padding:2rem;
+        line-height:1.5rem;
+      }
 
-#password-manager-main-form1 a.plainLink{
-  font-weight:bold;
-}
-#paperless-main-form1 a.plainLink:hover,#paperless-main-form1 a.plainLink:focus{
-  background-color:$lightblue;
-  color:white;
-  padding:10px;
-  text-decoration: none;
-  font-weight:bold;
-}
-
-#paperless-main-form3 .mat-form-field input{
-  background-color: $lightgreen;
-  width:50px !important;
-}
-.red{
-  background-color:$lightred !important;
+  }
   
-}
-.white{
-  color: white !important;
-}
-.hidden{
-  display: none !important;
+      .omv-form-paragraph,h2,p,li,h3 {
+        font-size: var(--mat-font-size-subheading-2) !important;
+      }
+      .omv-form-paragraph,p,li {
+        font-size: var(--mat-font-size-subheading-2) !important;
+        font-weight:var(--mat-font-weight-subheading-2) !important;
+      }
+      h1{
+        font-size: var(--mat-font-size-headline) !important;
+      
+      }
+ 
+      h2,h1,h3 {
+        color:$blue;
+      }
+      li {
+        margin-bottom: 10px;
+      }
+    
+    .plainLink{
+      font-weight:bold;
+    }
+    .plainLink:hover,.plainLink:focus{
+      background-color:$lightblue;
+      color:white;
+      padding:10px;
+      text-decoration: none;
+      font-weight:bold;
+    }
+
 }
 
 

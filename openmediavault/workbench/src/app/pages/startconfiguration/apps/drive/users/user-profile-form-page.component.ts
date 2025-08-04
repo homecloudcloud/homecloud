@@ -48,7 +48,7 @@ export class UserProfileFormPageComponent extends BaseFormPageComponent {
         readonly: true
       },
       {
-        type: 'textInput',
+        type: 'hidden',
         name: 'email',
         label: gettext('Email'),
         value: '',

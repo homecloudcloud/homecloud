@@ -14,6 +14,7 @@ import { JoplinModule } from './notes/joplin.module';
 import { JellyfinModule } from './media/jellyfin.module';
 import { PagesModule } from '~/app/core/pages/pages.module';
 import { CoreModule } from '~/app/core/core.module';
+import { AppsMainComponent } from './apps-main-page.component';
 
 /*const routes: Routes = [
   { path: 'drive/windows', component: AppsDriveWindowsComponent }
@@ -22,6 +23,7 @@ import { CoreModule } from '~/app/core/core.module';
 
 @NgModule({
   declarations: [
+    AppsMainComponent
     
   ],
   imports: [
@@ -35,6 +37,7 @@ import { CoreModule } from '~/app/core/core.module';
     JellyfinModule,
     PagesModule,
     CoreModule
+    
   //  RouterModule.forChild(routes)
   ],
   exports:[

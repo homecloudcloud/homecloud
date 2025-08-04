@@ -73,7 +73,7 @@ export class AppsPasswordManagerBackupComponent extends BaseFormPageComponent {
   public config1: DatatablePageConfig = {
   
     stateId: '66d9d3ca-2fag-11ea-3326-e3ebl1cd8f79',
-    autoReload: 10000,
+    autoReload: false,
     remoteSorting: true,
     remotePaging: true,
     sorters: [

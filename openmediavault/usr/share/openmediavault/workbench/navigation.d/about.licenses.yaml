@@ -2,7 +2,7 @@ version: "1.0"
 type: navigation-item
 data:
   path: "about.licenses"
-  position: 20
+  position: 90
   text: _("Licenses")
   icon: licenses
   url: "/about/licenses"

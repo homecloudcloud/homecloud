@@ -1,4 +1,40 @@
 @import '../../../../../../assets/colors.scss';
+.omv-dark-theme{
+  omv-setupwizard-photos-access-page{
+
+        #mainContainer{
+          //    scrollbar-color:$lightblue transparent;
+              h1,h2,h3{color:$lightblue !important;}
+              p,li,.omv-form-paragraph{color:#ffffff !important;}
+              .plainLink:hover,.plainLink:focus{
+                  background-color:$lightblue;           
+              }
+              .hostURL p{
+                color: black !important;
+              }
+          }
+       
+          
+          #navButtons{
+              .mat-card{
+                    background-color:$lightblue!important;
+              }
+              .mat-card-actions{
+                    button{
+                      border:1px solid #ffffff!important;
+                    
+                    }
+                    button:hover,button:focus{
+                      background-color:#ffffff!important;
+                      color:$lightblue!important;
+                    }
+              }
+          }
+          
+         
+    }
+  }   
+
 omv-setupwizard-photos-access-page{
   omv-top-bar-wizard .omv-top-bar{
     background:transparent!important;
@@ -12,88 +48,149 @@ omv-setupwizard-photos-access-page{
     left:0;
     z-index:100;
   }
+  #mainContainer{
+              margin-top:20vh;
+              overflow-y:auto;
+              height:70vh;     
+              scrollbar-color:$lightblue transparent;
+              --scrollbar-border-radius: 0 !important;
+              --scrollbar-thumb-color:red !important;
+              --scrollbar-thumb-hover-color: var(--scrollbar-thumb-color) !important;
+               #photos-access-form2{
+                margin-top:-2rem;
+                margin-bottom:-2rem;
+              }
 
-  #photos-config-form1{
-    .mat-card{
-      margin-top:12rem;
-    }
-  }
-  #photos-config-form2{
-    .mat-card{
-      position:relative;
-      z-index:1;
-    }
-  }
+              @media screen and (max-width: 768px) {
+
+
+                #photos-access-form3 .mat-card-actions button{
+                
+                text-wrap: wrap;
+                line-height: 1.5rem;
+                padding: 0.5rem;
+              }
+          
+              }
+              .omv-form-paragraph{
+                padding:2rem;
+                line-height:1.5rem;
+              }
+              .omv-form-paragraph,h2,p,li,h3 {
+                font-size: var(--mat-font-size-subheading-2) !important;
+              }
+              .omv-form-paragraph,p,li {
+                font-size: var(--mat-font-size-subheading-2) !important;
+                font-weight:var(--mat-font-weight-subheading-2) !important;
+              }
+              h1{
+                font-size: var(--mat-font-size-headline) !important;
+              
+              }
+        
+              h2,h1,h3 {
+                color:$blue;
+              }
+              li {
+                margin-bottom: 10px;
+              }
+            
+              .app-btn {
+                margin-top: 10px;
+                margin-bottom: 5px;
+                background-color:$lightblue;
+                color: white;
+                font-weight: bold;
+                padding: 15px 30px;
+                justify-content: center;
+                align-items: center;
+                border: 1px solid $lightblue;
+                border-radius: 10px;
+                display: flex;
+                width: 16rem;
+                height: 1rem;
+                cursor: pointer;
+                text-decoration: none;
+            }
+            .app-btn:hover,.app-btn:focus{
+              background-color: #ffffff;
+              color:$lightblue;
+            }
+
+            .mobile-app-links{
+              display: flex;
+              gap:20px;
+              flex-direction: row;
+            }
+            @media screen and (max-width: 768px) {
+              .mobile-app-links{
+              
+                flex-direction: column;
+              }
+              
+            }
+
+            .disabled-btn{
+              pointer-events:none;
+              background-color:$grey;
+            }
+            .status-error{
+              background-color: $lightred !important;
+              width:100px !important;
+            }
+            
+            .hidden{
+              display: none!important;
+            } 
+            .plainLink{
+              font-weight:bold;
+            }
+            .plainLink:hover,.plainLink:focus{
+              background-color:$lightblue;
+              color:white;
+              padding:10px;
+              text-decoration: none;
+              font-weight:bold;
+            }
+            .hostURL{
+              background-color: $yellow;
+              display: inline-block;
+            }
+          }
   
-
-  .omv-form-paragraph {
-    font-size: var(--mat-font-size-subheading-2) !important;
-  }
-
-  .immich-btn {
-    margin-top: 10px;
-    margin-bottom: 5px;
-    background-color:$lightblue;
-    color: white;
-    font-weight: bold;
-    padding: 15px 30px;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid $lightblue;
-    border-radius: 10px;
-    display: flex;
-    width: 14rem;
-    height: 1rem;
-    cursor: pointer;
-    text-decoration: none;
-  }
-
-
-  .disabled-btn{
-    pointer-events:none;
-    background-color:$grey;
-  }
-  .redimmichstatus{
-    background-color: $lightred !important;
-    width:100px !important;
-  }
-  .greenimmichstatus{
-    background-color: $lightgreen !important;
-    width:100px !important;
-  }
-  .omv-form-container omv-form-text-input .mat-form-field input{
-    background-color: $lightblue !important;
-  }
-  .plainLink{
-    font-weight:bold;
-  }
-  .plainLink:hover,omv-photos-config-page .plainLink:focus{
-    background-color:$lightblue;
-    color:white;
-    padding:10px;
-    text-decoration: none;
-    font-weight:bold;
-  }
-  .hidden{
-    display: none!important;
-  } 
-  #photos-config-form1 .omv-form-container{
-    display:flex;
-    flex-direction: column!important;
-  }
-  .omv-form-container .omv-form-container-item{
-    width:100%;
-  }
   #navButtons{
-    .mat-card{
-        background-color:$blue!important;
-    }
-    mat-card-content{
-        display:none!important;
-    }
-    .mat-card-actions{
-        justify-content:flex-end!important;          
+            position:fixed;
+            width:100%;
+            bottom:0;
+          
+            .mat-card{
+                background-color:$blue!important;
+            }
+            mat-card-content{
+                display:none!important;
+            }
+            .mat-card-actions{
+                justify-content:space-between!important;
+                flex-direction:row-reverse!important;
+                button{
+                  border:1px solid #ffffff!important;
+                
+                }
+                button:hover,button:focus{
+                  background-color:#ffffff!important;
+                  color:$lightblue!important;
+                }
+            }
+            @media screen and (max-width: 768px) {
+              .mat-card-actions{
+                flex-direction:column-reverse!important;
+                align-items:center!important;
+                justify-content:center!important;
+                row-gap:20px;
+              }
+            }
     } 
-  } 
+  
 }
+
 

@@ -1,19 +1,46 @@
 @import '../../../../../../assets/colors.scss';
 
-
-.omv-form-paragraph {
-  font-size: var(--mat-font-size-subheading-2) !important;
-}
-omv-drive-backup-page omv-intuition-form omv-form-paragraph:nth-of-type(2) .omv-form-paragraph  
-{
-  content: url('^./assets/images/drive-backup-1.png');
-  background-size: cover;
-  background-position: center;
-  width: 70%;
-  height: 70%;
+.omv-dark-theme{
+  h1,h2,h3{
+        color:$lightblue !important;
+    }
 }
 
-omv-drive-backup-page .datatable-header{
-  background-color:$lightblue !important;
-  
+
+omv-drive-backup-page {
+
+      #drive-backup-form1{
+        margin-bottom:-2rem;
+      }
+
+      .backupSize{
+        background-color: $lightblue;
+        padding:0.5rem;
+      }
+
+      .omv-form-paragraph{
+        padding:2rem;
+        line-height:1.5rem;
+      }
+
+      .omv-form-paragraph,h2,p,li,h3 {
+        font-size: var(--mat-font-size-subheading-2) !important;
+      
+      }
+      .omv-form-paragraph,p,li {
+        font-size: var(--mat-font-size-subheading-2) !important;
+        font-weight:var(--mat-font-weight-subheading-2) !important;
+      }
+      h1{
+        font-size: var(--mat-font-size-headline) !important;
+        line-height:2rem;
+      
+      }
+    
+      
+      h2,h1,h3 {
+        color:$blue;
+      }
+
+
 }

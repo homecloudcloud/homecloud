@@ -1,0 +1,8 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "startconfiguration.vpn.securebrowse"
+  position: 80
+  text: _("Secure Browsing")
+  icon: password
+  url: "/startconfiguration/vpn/securebrowse"

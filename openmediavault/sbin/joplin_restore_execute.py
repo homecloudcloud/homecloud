@@ -15,6 +15,7 @@ import stat
 import errno
 from datetime import datetime
 
+
 class JoplinRestore:
     def __init__(self, backup_path):
         self.backup_path = Path(backup_path)
@@ -210,15 +211,27 @@ class JoplinRestore:
             joplin_data_path.mkdir(parents=True, exist_ok=True)
             
             # Handle /var/lib/joplin symlink
-            if var_lib_joplin.is_symlink():
-                var_lib_joplin.unlink()
-            elif var_lib_joplin.exists():
-                shutil.rmtree(var_lib_joplin)
+            #if var_lib_joplin.is_symlink():
+            #    var_lib_joplin.unlink()
+            #elif var_lib_joplin.exists():
+            #    shutil.rmtree(var_lib_joplin)
+            
+
+            if var_lib_joplin.exists():
+                # empty the contents of directory but do not delete directory itself
+                for entry in os.listdir(var_lib_joplin):
+                    entry_path = os.path.join(var_lib_joplin, entry)
+                    if os.path.isfile(entry_path) or os.path.islink(entry_path):
+                        os.unlink(entry_path)  # remove file or symlink
+                    elif os.path.isdir(entry_path):
+                        shutil.rmtree(entry_path)  # remove subdirectory and its contents
+
+
             
             # Create the symlink
-            os.symlink(str(joplin_data_path), str(var_lib_joplin))
+            #os.symlink(str(joplin_data_path), str(var_lib_joplin))
             
-            self.logger.info(f"Created symlink: {var_lib_joplin} -> {joplin_data_path}")
+            #self.logger.info(f"Created symlink: {var_lib_joplin} -> {joplin_data_path}")
             return True
         except Exception as e:
             self.logger.error(f"Failed to prepare directories: {str(e)}")
@@ -268,7 +281,7 @@ class JoplinRestore:
             self.logger.info("Pulling Docker images...")
             
             # First get the list of services from docker-compose.yml
-            with open('etc/joplin/docker-compose.yml', 'r') as f:
+            with open('/etc/joplin/docker-compose.yml', 'r') as f:
                 compose_data = yaml.safe_load(f)
                 services = compose_data.get('services', {}).keys()
 
@@ -278,7 +291,7 @@ class JoplinRestore:
                 
                 pull_cmd = [
                     'docker', 'compose',
-                    '-f', 'etc/joplin/docker-compose.yml',
+                    '-f', '/etc/joplin/docker-compose.yml',
                     'pull',
                     service
                 ]

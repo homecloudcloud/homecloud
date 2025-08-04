@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, ROUTES, Routes } from '@angular/router';
 import { marker as gettext } from '@ngneat/transloco-keys-manager/marker';
 
-import { NavigationPageComponent } from '~/app/core/pages/navigation-page/navigation-page.component';
+//import { NavigationPageComponent } from '~/app/core/pages/navigation-page/navigation-page.component';
 import { RouteConfigService } from '~/app/core/services/route-config.service';
 /*import { FirewallRuleFormPageComponent } from '~/app/pages/network/firewall/rules/firewall-rule-form-page.component';
 import { FirewallRuleInetDatatablePageComponent } from '~/app/pages/network/firewall/rules/firewall-rule-inet-datatable-page.component';
@@ -22,60 +22,64 @@ import { IsDirtyGuardService } from '~/app/shared/services/is-dirty-guard.servic
 import { TailscaleConfigFormPageComponent } from './vpn/tailscaleconfig/tailscale-config-form-page.component';
 import { TailscaleStatusComponent } from './vpn/tailscale-status/tailscale-status-form-page.component';
 import { TailscaleAccessComponent } from './vpn/tailscale-access/tailscale-access-form-page.component';
-import { AppsDriveWindowsComponent } from '~/app/pages/setupwizard/apps/drive/windows/drive-access-form-page.component';
+import { TailscaleTermsFormPageComponent } from './vpn/tailscale-terms/tailscale-terms-form-page.component';
+//import { AppsDriveWindowsComponent } from '~/app/pages/setupwizard/apps/drive/windows/drive-access-form-page.component';
 import { AppsDriveMainComponent } from '~/app/pages/setupwizard/apps/drive/drive-form-page.component';
-import { AppsDriveAccessComponent } from '~/app/pages/setupwizard/apps/drive/iPhone/drive-access-form-page.component';
-import { AppsDrivemacOSComponent } from '~/app/pages/setupwizard/apps/drive/macos/drive-access-form-page.component';
-import { AppsDriveandroidComponent } from '~/app/pages/setupwizard/apps/drive/android/drive-access-form-page.component';
-import {AppsDriveBackupComponent} from '~/app/pages/setupwizard/apps/drive/backup/drive-backup-page.component';
-import {AppsDriveRestoreComponent} from '~/app/pages/setupwizard/apps/drive/restore/drive-restore-page.component';
+import { AppsDriveAccessComponent } from '~/app/pages/setupwizard/apps/drive/access/drive-access-form-page.component';
+//import { AppsDrivemacOSComponent } from '~/app/pages/setupwizard/apps/drive/macos/drive-access-form-page.component';
+//import { AppsDriveandroidComponent } from '~/app/pages/setupwizard/apps/drive/android/drive-access-form-page.component';
+//import {AppsDriveBackupComponent} from '~/app/pages/setupwizard/apps/drive/backup/drive-backup-page.component';
+//import {AppsDriveRestoreComponent} from '~/app/pages/setupwizard/apps/drive/restore/drive-restore-page.component';
 import {UserDatatablePageComponent} from '~/app/pages/setupwizard/apps/drive/users/user-datatable-page.component';
 import {UserFormPageComponent} from '~/app/pages/setupwizard/apps/drive/users/user-form-page.component';
-import {UserImportFormPageComponent} from '~/app/pages/setupwizard/apps/drive/users/user-import-form-page.component';
-import {UserSharedFolderPermissionsDatatablePageComponent} from '~/app/pages/setupwizard/apps/drive/users/user-shared-folder-permissions-datatable-page.component';
-import {SharedFolderDatatablePageComponent} from '~/app/pages/setupwizard/apps/drive/shares/shared-folder-datatable-page.component';
-import {SharedFolderFormPageComponent} from '~/app/pages/setupwizard/apps/drive/shares/shared-folder-form-page.component';
-import {SharedFolderPermissionsDatatablePageComponent} from '~/app/pages/setupwizard/apps/drive/shares/shared-folder-permissions-datatable-page.component';
+//import {UserImportFormPageComponent} from '~/app/pages/setupwizard/apps/drive/users/user-import-form-page.component';
+//import {UserSharedFolderPermissionsDatatablePageComponent} from '~/app/pages/setupwizard/apps/drive/users/user-shared-folder-permissions-datatable-page.component';
+//import {SharedFolderDatatablePageComponent} from '~/app/pages/setupwizard/apps/drive/shares/shared-folder-datatable-page.component';
+//import {SharedFolderFormPageComponent} from '~/app/pages/setupwizard/apps/drive/shares/shared-folder-form-page.component';
+//import {SharedFolderPermissionsDatatablePageComponent} from '~/app/pages/setupwizard/apps/drive/shares/shared-folder-permissions-datatable-page.component';
 import { AppsPhotosMainComponent } from './apps/photos/photos-form-main-page.component';
 import { AppsPhotosConfigComponent } from './apps/photos/access/photos-form-page.component';
-import { AppsPhotosRestartComponent } from './apps/photos/restart/photos-restart-page.component';
-import { AppsPhotosDBResetComponent } from './apps/photos/reset/photos-db_reset-page.component';
-import { AppsPhotosBackupComponent } from './apps/photos/backup/photos-backup-page.component';
-import { AppsPhotosPasswordResetComponent } from './apps/photos/password/photos-password-page.component';
-import { AppsPhotosPasswordResetDisplayComponent } from './apps/photos/password/photos-password-display-page.component';
-import { AppsPhotosUpdateFormPageComponent } from './apps/photos/update/photos-update-form-page.component';
-import { AppsPhotosRestoreComponent} from './apps/photos/restore/photos-restore-page.component';
+//import { AppsPhotosRestartComponent } from './apps/photos/restart/photos-restart-page.component';
+//import { AppsPhotosDBResetComponent } from './apps/photos/reset/photos-db_reset-page.component';
+//import { AppsPhotosBackupComponent } from './apps/photos/backup/photos-backup-page.component';
+//import { AppsPhotosPasswordResetComponent } from './apps/photos/password/photos-password-page.component';
+//import { AppsPhotosPasswordResetDisplayComponent } from './apps/photos/password/photos-password-display-page.component';
+//import { AppsPhotosUpdateFormPageComponent } from './apps/photos/update/photos-update-form-page.component';
+//import { AppsPhotosRestoreComponent} from './apps/photos/restore/photos-restore-page.component';
 import { AppsPasswordManagerMainComponent } from './apps/password-manager/password-manager-main-page.component';
 import {AppsPasswordManagerConfigComponent} from './apps/password-manager/access/password-manager-form-page.component';
-import {AppsPasswordManagerBackupComponent} from './apps/password-manager/backup/password-manager-backup-page.component';
-import {AppsPasswordManagerUpdateFormPageComponent} from './apps/password-manager/update/password-manager-update-form-page.component';
-import {AppsPasswordManagerDBResetComponent} from './apps/password-manager/reset/password-manager-db_reset-page.component';
-import {AppsPasswordManagerRestartComponent} from './apps/password-manager/restart/password-manager-restart-page.component';
-import {AppsPasswordManagerRestoreComponent} from './apps/password-manager/restore/password-manager-restore-page.component';
+//import {AppsPasswordManagerBackupComponent} from './apps/password-manager/backup/password-manager-backup-page.component';
+//import {AppsPasswordManagerUpdateFormPageComponent} from './apps/password-manager/update/password-manager-update-form-page.component';
+//import {AppsPasswordManagerDBResetComponent} from './apps/password-manager/reset/password-manager-db_reset-page.component';
+//import {AppsPasswordManagerRestartComponent} from './apps/password-manager/restart/password-manager-restart-page.component';
+//import {AppsPasswordManagerRestoreComponent} from './apps/password-manager/restore/password-manager-restore-page.component';
 import {AppsPaperlessMainComponent} from './apps/paperless/paperless-main-page.component';
 import {AppsPaperlessAccessComponent } from './apps/paperless/access/paperless-access-form-page.component';
-import {AppsPaperlessPasswordResetComponent} from './apps/paperless/password/paperless-password-page.component';
-import {AppsPaperlessBackupComponent} from './apps/paperless/backup/paperless-backup-page.component';
-import {AppsPaperlessRestartComponent} from './apps/paperless/restart/paperless-restart-page.component';
-import {AppsPaperlessUpdateFormPageComponent} from './apps/paperless/update/paperless-update-form-page.component';
-import {AppsPaperlessDBResetComponent} from './apps/paperless/reset/paperless-db_reset-page.component';
-import {AppsPaperlessRestoreComponent} from './apps/paperless/restore/paperless-restore-page.component';
+//import {AppsPaperlessPasswordResetComponent} from './apps/paperless/password/paperless-password-page.component';
+//import {AppsPaperlessBackupComponent} from './apps/paperless/backup/paperless-backup-page.component';
+//import {AppsPaperlessRestartComponent} from './apps/paperless/restart/paperless-restart-page.component';
+//import {AppsPaperlessUpdateFormPageComponent} from './apps/paperless/update/paperless-update-form-page.component';
+//import {AppsPaperlessDBResetComponent} from './apps/paperless/reset/paperless-db_reset-page.component';
+//import {AppsPaperlessRestoreComponent} from './apps/paperless/restore/paperless-restore-page.component';
 import {AppsJoplinMainComponent} from './apps/notes/joplin-main-page.component';
 import {AppsJoplinAccessComponent} from './apps/notes/access/joplin-access-form-page.component';
-import {AppsJoplinBackupComponent} from './apps/notes/backup/joplin-backup-page.component';
-import {AppsJoplinPasswordResetComponent} from './apps/notes/password/joplin-password-page.component';
-import {AppsJoplinRestartComponent} from './apps/notes/restart/joplin-restart-page.component';
-import {AppsJoplinUpdateFormPageComponent} from './apps/notes/update/joplin-update-form-page.component';
-import {AppsJoplinRestoreComponent} from './apps/notes/restore/joplin-restore-page.component';
+//import {AppsJoplinBackupComponent} from './apps/notes/backup/joplin-backup-page.component';
+//import {AppsJoplinPasswordResetComponent} from './apps/notes/password/joplin-password-page.component';
+//import {AppsJoplinRestartComponent} from './apps/notes/restart/joplin-restart-page.component';
+//import {AppsJoplinUpdateFormPageComponent} from './apps/notes/update/joplin-update-form-page.component';
+//import {AppsJoplinRestoreComponent} from './apps/notes/restore/joplin-restore-page.component';
 import {AppsJellyfinMainComponent} from './apps/media/jellyfin-main-page.component';
 import {AppsJellyfinAccessComponent} from './apps/media/access/jellyfin-access-form-page.component';
-import {AppsJellyfinBackupComponent} from './apps/media/backup/jellyfin-backup-page.component';
-import {AppsJellyfinRestartComponent } from './apps/media/restart/jellyfin-restart-page.component';
-import {AppsJellyfinUpdateFormPageComponent} from './apps/media/update/jellyfin-update-form-page.component';
+//import {AppsJellyfinBackupComponent} from './apps/media/backup/jellyfin-backup-page.component';
+//import {AppsJellyfinRestartComponent } from './apps/media/restart/jellyfin-restart-page.component';
+//import {AppsJellyfinUpdateFormPageComponent} from './apps/media/update/jellyfin-update-form-page.component';
 import {DateTimeFormPageComponent} from './date-time/date-time-form-page.component';
 import {NotificationSettingsFormPageComponent} from './notification/notification-settings-form-page.component';
 import {SetupWizardComponent} from './setupwizard';
 import { CompletePageComponent } from './complete/complete';
+import { NetworkMainComponent } from './networkconfig/network-main-page.component';
+import { VPNMainComponent } from './vpn/vpn-main-page.component';
+import { AppsMainComponent } from './apps/apps-main-page.component';
 
 const routes: Routes = [
   {
@@ -105,7 +109,7 @@ const routes: Routes = [
     children:[
       {
         path: '',
-        component: NavigationPageComponent
+        component: NetworkMainComponent
       },
       {
         path: 'interfaces',
@@ -125,6 +129,16 @@ const routes: Routes = [
               title: gettext('Edit'),
               editing: true,
               notificationTitle: gettext('Updated wired network connection "{{ devicename }}".')
+            }
+          },
+          {
+            path: 'wifi/create',
+            component: InterfaceWifiFormPageComponent,
+            canDeactivate: [IsDirtyGuardService],
+            data: {
+              title: gettext('Create'),
+              editing: false,
+              notificationTitle: gettext('Created wireless network connection.')
             }
           },
           {
@@ -150,7 +164,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: NavigationPageComponent
+        component: VPNMainComponent
       },
       {
         path: 'tailscaleconfig',
@@ -177,6 +191,15 @@ const routes: Routes = [
           editing: true
         }
       }
+      ,
+      {
+        path: 'terms',
+        component: TailscaleTermsFormPageComponent,
+        data: { 
+          title: gettext('Tailscale terms'),
+          editing: true
+        }
+      }
     ]
   },
   {
@@ -185,7 +208,8 @@ const routes: Routes = [
       children: [
         {
           path: '',
-          component: NavigationPageComponent
+      //    component: NavigationPageComponent
+          component: AppsMainComponent
         },
         {
           path: 'drive',
@@ -196,15 +220,7 @@ const routes: Routes = [
               path: '',
               component: AppsDriveMainComponent,
             },
-            {
-              path: 'windows',
-              component: AppsDriveWindowsComponent,
-              //canDeactivate: [IsDirtyGuardService],
-              data: {
-                title: gettext('Windows'),
-                editing: true
-              }
-            },
+            
             {
               path: 'access',
               component: AppsDriveAccessComponent,
@@ -214,42 +230,7 @@ const routes: Routes = [
                 editing: true
               }
             },
-            {
-              path: 'macos',
-              component: AppsDrivemacOSComponent,
-              //canDeactivate: [IsDirtyGuardService],
-              data: {
-                title: gettext('macOS'),
-                editing: true
-              }
-            },
-            {
-              path: 'android',
-              component: AppsDriveandroidComponent,
-              //canDeactivate: [IsDirtyGuardService],
-              data: {
-                title: gettext('Android'),
-                editing: true
-              }
-            },
-            {
-              path: 'backup',
-              component: AppsDriveBackupComponent,
-              //canDeactivate: [IsDirtyGuardService],
-              data: {
-                title: gettext('Backup'),
-                editing: true
-              }
-            },
-            {
-              path: 'restore',
-              component: AppsDriveRestoreComponent,
-              //canDeactivate: [IsDirtyGuardService],
-              data: {
-                title: gettext('Restore'),
-                editing: true
-              }
-            },
+            
             {
               path: 'users',
               data: { title: gettext('Users') },
@@ -266,12 +247,6 @@ const routes: Routes = [
                   }
                 },
                 {
-                  path: 'import',
-                  component: UserImportFormPageComponent,
-                  canDeactivate: [IsDirtyGuardService],
-                  data: { title: gettext('Import'), notificationTitle: gettext('Imported users.') }
-                },
-                {
                   path: 'edit/:name',
                   component: UserFormPageComponent,
                   canDeactivate: [IsDirtyGuardService],
@@ -280,59 +255,9 @@ const routes: Routes = [
                     editing: true,
                     notificationTitle: gettext('Updated user "{{ name }}".')
                   }
-                },
-                {
-                  path: 'permissions/:name',
-                  component: UserSharedFolderPermissionsDatatablePageComponent,
-                  data: {
-                    title: gettext('Permissions'),
-                    breadcrumb: {
-                      text: '{{ "Permissions" | translate }} @ {{ _routeParams.name }}'
-                    },
-                    notificationTitle: gettext('Updated permissions of user "{{ name }}".')
-                  }
                 }
               ]
-            },
-            {
-                path: 'shares',
-                data: { title: gettext('Shares') },
-                children: [
-                  { path: '', component: SharedFolderDatatablePageComponent },
-                  {
-                    path: 'create',
-                    component: SharedFolderFormPageComponent,
-                    canDeactivate: [IsDirtyGuardService],
-                    data: { title: gettext('Create'), editing: false }
-                  },
-                  {
-                    path: 'edit/:uuid',
-                    component: SharedFolderFormPageComponent,
-                    canDeactivate: [IsDirtyGuardService],
-                    data: {
-                      title: gettext('Edit'),
-                      editing: true,
-                      notificationTitle: gettext('Updated shares.')
-                    }
-                  },
-                  {
-                    path: 'permissions/:uuid',
-                    component: SharedFolderPermissionsDatatablePageComponent,
-                    data: {
-                      title: gettext('Permissions'),
-                      breadcrumb: {
-                        text: '{{ "Permissions" | translate }} @ {{ name }}',
-                        request: {
-                          service: 'ShareMgmt',
-                          method: 'get',
-                          params: { uuid: '{{ _routeParams.uuid }}' }
-                        }
-                      },
-                      notificationTitle: gettext('Updated permissions of shares.')
-                    }
-                  }
-                ]
-              }
+            }
           ]
         },
         {
@@ -354,7 +279,10 @@ const routes: Routes = [
                 title: gettext('Access'),
                 editing: true
               }
-            },
+            }
+            /*
+            ,
+          
             {
               path: 'restart',
               component: AppsPhotosRestartComponent,
@@ -418,6 +346,7 @@ const routes: Routes = [
                 editing: true
               }
             }
+            */
           ]
         },
         {
@@ -439,7 +368,10 @@ const routes: Routes = [
                 title: gettext('Access'),
                 editing: true
               }
-            },
+            }
+            /*
+            ,
+            
             {
               path: 'backup',
               component: AppsPasswordManagerBackupComponent,
@@ -480,6 +412,7 @@ const routes: Routes = [
                 editing: true
               }
             }
+            */
           ]
         },
         {
@@ -500,7 +433,10 @@ const routes: Routes = [
               data: {
                 editing: true
               }
-            },
+            }
+            /*
+            ,
+            
             {
               path: 'password',
               component: AppsPaperlessPasswordResetComponent,
@@ -548,6 +484,7 @@ const routes: Routes = [
                 editing: true
               }
             }
+              */
           ]
         },
         {
@@ -568,7 +505,10 @@ const routes: Routes = [
               data: {
                 editing: true
               }
-            },
+            }
+            /*
+            ,
+
             {
               path: 'backup',
               component: AppsJoplinBackupComponent,
@@ -607,6 +547,7 @@ const routes: Routes = [
                 editing: true
               }
             }
+              */
           ]
         },
         {
@@ -627,7 +568,9 @@ const routes: Routes = [
               data: {
                 editing: true
               }
-            },
+            }
+            /*
+            ,
             {
               path: 'backup',
               component: AppsJellyfinBackupComponent,
@@ -649,6 +592,7 @@ const routes: Routes = [
                 editing: true
               }
             }
+            */
           ]
         }
       ]
@@ -658,8 +602,8 @@ const routes: Routes = [
       component: CompletePageComponent,
       data: { title: gettext('Complete') }
     }
-];
-
+  ];
+ 
 @NgModule({
   exports: [RouterModule],
   imports: [RouterModule.forChild(routes)],

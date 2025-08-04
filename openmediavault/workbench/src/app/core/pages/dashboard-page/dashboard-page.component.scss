@@ -1,4 +1,7 @@
 @use 'scss/defaults/variables' as dv;
+@import '../../../../assets/colors.scss';
+
+
 
 .omv-dashboard-page-container {
   margin: dv.$omv-margin;
@@ -26,4 +29,37 @@
       column-count: 4;
     }
   }
+
+  .hotspot-status-container{
+    margin-bottom:1rem;
+    width:50%;
+    .mat-card-title-group{
+      justify-content: flex-start;
+    }
+    .hotspotStatus{
+      background-color: $lightgreen;
+      width:40%;
+    }
+  }
+  @media only screen and (max-width: 768px) {
+    .hotspot-status-container {
+      width: 100%;
+    }
+  }
+   .plainLink{
+    font-weight:bold;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  .plainLink:hover,.plainLink:focus{
+    background-color:$lightblue;
+    color:white;
+    padding:10px;
+    text-decoration: none;
+    font-weight:bold;
+
+  }
+  
+
+
 }

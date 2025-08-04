@@ -1,0 +1,25 @@
+networks:
+  home_network:
+    name: home_network
+services:
+  traefik:
+    image: traefik:v2.11
+    network_mode: host
+    command:
+    - --providers.file.directory=/etc/traefik/dynamic
+    ports:
+    - 80:80
+    - 443:443
+    restart: unless-stopped
+    volumes:
+    - source: /etc/traefik/traefik.yaml
+      target: /etc/traefik/traefik.yaml
+      type: bind
+    - source: /etc/ssl
+      target: /etc/ssl
+      type: bind 
+    - ./traefik/data:/data
+    - /var/run/docker.sock:/var/run/docker.sock
+    - source: /etc/traefik/config.yaml
+      target: /config.yaml
+      type: bind

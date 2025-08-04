@@ -71,7 +71,7 @@ export class SystemInformationService implements OnDestroy {
     // Poll the system system-information every 5 seconds. Continue, even
     // if there is a connection problem AND do not display an error
     // notification.
-    this.subscription = timer(0, 5000)
+    this.subscription = timer(0, 10000)
       .pipe(
         // Do not request system information if user is not logged in.
         //filter(() => this.authService.isLoggedIn()),

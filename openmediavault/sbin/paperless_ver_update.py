@@ -11,6 +11,11 @@ import string
 import time
 from typing import Dict, Optional
 from datetime import datetime
+import urllib3
+
+
+# Disable SSL warnings
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 def wait_for_service_ready(timeout=300, interval=10) -> bool:
@@ -58,6 +63,21 @@ def get_service_status() -> Dict[str, str]:
         pass
     
     return default_status
+
+
+def check_internet_connectivity():
+    """Check internet connectivity using OMV RPC"""
+    try:
+        result = subprocess.run(['omv-rpc', '-u', 'admin', 'Homecloud', 'enumeratePhysicalNetworkDevices'],
+                              capture_output=True, text=True, check=True)
+        devices = json.loads(result.stdout)
+        
+        for device in devices:
+            if device.get('devicename') == 'internet0':
+                return device.get('state', False)
+        return False
+    except Exception:
+        return False
 
 def validate_version(version: str) -> bool:
     """Validate version against GitHub tags"""
@@ -230,6 +250,10 @@ def update_env_file(user: str = None, password: str = None) -> bool:
 def deploy_paperless(version: str, user: str = None, password: str = None) -> str:
     """Main deployment function"""
     try:
+        # Check internet connectivity
+        if not check_internet_connectivity():
+            return "error: Not connected to Internet. Check your network connectivity"
+            
         if version.startswith('v'):
             return "error: Version should not start with 'v'"
             
@@ -276,8 +300,8 @@ def deploy_paperless(version: str, user: str = None, password: str = None) -> st
         else:
             # Version update
             current_version = get_current_version()
-            if current_version and current_version >= version:
-                return "error: Target version must be greater than current version"
+            #if current_version and current_version >= version:
+            #    return "error: Target version must be greater than current version"
 
             # Stop service
             subprocess.run(['systemctl', 'stop', 'paperless.service'], check=False)
@@ -311,14 +335,12 @@ def deploy_paperless(version: str, user: str = None, password: str = None) -> st
 
         # Start service
         subprocess.run(['systemctl', 'start', 'paperless.service'], check=True)
-        
          
         # For new deployment, wait for service to be ready and reset password
         if is_new_deployment:
             print(f"Deployed successfully. Go to Access page to login") 
             print(f"Login with User: {user}, Password: {password}")
             print(f"If previous installation exist i.e. App not reset then use previous login details. You may also reset admin password from Password page")
-
         else:
             print ("Deployed successfully. Go to Access page to login") 
             

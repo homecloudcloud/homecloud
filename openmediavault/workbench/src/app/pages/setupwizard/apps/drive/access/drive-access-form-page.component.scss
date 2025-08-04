@@ -1,0 +1,210 @@
+@import '../../../../../../assets/colors.scss';
+
+.omv-dark-theme{
+  omv-setupwizard-drive-access-page{
+
+        #mainContainer{
+              
+              h1,h2,h3{color:$lightblue !important;}
+              p,li{color:#ffffff !important;}
+              .plainLink:hover,.plainLink:focus{
+                  background-color:$lightblue;           
+              }
+              .hostURL p{
+                color:black !important;
+              }
+          }
+       
+          
+          #navButtons{
+              .mat-card{
+                    background-color:$lightblue!important;
+              }
+              .mat-card-actions{
+                    button{
+                      border:1px solid #ffffff!important;
+                    
+                    }
+                    button:hover,button:focus{
+                      background-color:#ffffff!important;
+                      color:$lightblue!important;
+                    }
+              }
+          }
+          
+         
+    }
+  }   
+
+omv-setupwizard-drive-access-page{
+   omv-top-bar-wizard .omv-top-bar{
+    background:transparent!important;
+    position: absolute;
+    left:80vw;
+  }
+  omv-logo-header{
+    position:fixed;
+    height:20vh;
+    top:0;
+    left:0;
+    z-index:100;
+  }
+
+  #mainContainer{
+              margin-top:20vh;
+              overflow-y:auto;
+              height:70vh;     
+              scrollbar-color:$lightblue transparent;
+              --scrollbar-border-radius: 0 !important;
+              --scrollbar-thumb-color:red !important;
+              --scrollbar-thumb-hover-color: var(--scrollbar-thumb-color) !important;
+      /*Video formatting*/
+      #contentAp,#contentAn,#contentW{
+        width:50%;
+        height:40vh;
+      }
+
+      #titleAp,#titleAn,#titleW{
+        width:50%;
+        padding:0.5rem;
+        background-color: $lightblue;
+        cursor: pointer;
+        color: white;
+        font-weight: bold;
+      }
+
+      
+      @media (max-width: 768px) {
+
+        #titleAp,#titleAn,#titleW{
+        width:100%;
+        
+        }
+        #contentAp,#contentAn,#contentW{
+        width:100%;
+        
+      }
+  
+      }
+
+      
+
+    #drive-access-form1{  
+      .omv-form-paragraph{
+        padding:2rem;
+        line-height:1.5rem;
+      }
+    }
+      .omv-form-paragraph,h2,p,li,h3 {
+        font-size: var(--mat-font-size-subheading-2) !important;
+      }
+      .omv-form-paragraph,p,li {
+        font-size: var(--mat-font-size-subheading-2) !important;
+        font-weight:var(--mat-font-weight-subheading-2) !important;
+      }
+      h1{
+        font-size: var(--mat-font-size-headline) !important;
+      
+      }
+ 
+      h2,h1,h3 {
+        color:$blue;
+      }
+      li {
+        margin-bottom: 10px;
+      }
+    
+      .app-btn {
+        margin-top: 10px;
+        margin-bottom: 5px;
+        background-color:$lightblue;
+        color: white;
+        font-weight: bold;
+        padding: 15px 30px;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid $lightblue;
+        border-radius: 10px;
+        display: flex;
+        width: 16rem;
+        height: 1rem;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .app-btn:hover,.app-btn:focus{
+      background-color: #ffffff;
+      color:$lightblue;
+    }
+
+    .mobile-app-links{
+      display: flex;
+      gap:20px;
+      flex-direction: row;
+    }
+
+
+    .disabled-btn{
+      pointer-events:none;
+      background-color:$grey;
+    }
+    .status-error{
+      background-color: $lightred !important;
+      width:100px !important;
+    }
+    
+    .hidden{
+      display: none!important;
+    } 
+    .plainLink{
+      font-weight:bold;
+    }
+    .plainLink:hover,.plainLink:focus{
+      background-color:$lightblue;
+      color:white;
+      padding:10px;
+      text-decoration: none;
+      font-weight:bold;
+    }
+    .hostURL{
+      background-color: $yellow;
+      display: inline-block;
+
+    }
+  }
+    #navButtons{
+            position:fixed;
+            width:100%;
+            bottom:0;
+          
+            .mat-card{
+                background-color:$blue!important;
+            }
+            mat-card-content{
+                display:none!important;
+            }
+            .mat-card-actions{
+                justify-content:space-between!important;
+                flex-direction:row-reverse!important;
+                button{
+                  border:1px solid #ffffff!important;
+                
+                }
+                button:hover,button:focus{
+                  background-color:#ffffff!important;
+                  color:$lightblue!important;
+                }
+            }
+            @media screen and (max-width: 768px) {
+              .mat-card-actions{
+                flex-direction:column-reverse!important;
+                align-items:center!important;
+                justify-content:center!important;
+                row-gap:20px;
+              }
+            }
+    } 
+  
+
+}
+

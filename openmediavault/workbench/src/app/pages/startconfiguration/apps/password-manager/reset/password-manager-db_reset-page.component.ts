@@ -21,6 +21,7 @@ import * as _ from 'lodash';
 import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
 import { BaseFormPageComponent } from '~/app/pages/base-page-component';
 import { ViewEncapsulation } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 
 
 
@@ -30,19 +31,40 @@ import { ViewEncapsulation } from '@angular/core';
   selector:'omv-password-manager-db_reset-page', //Home cloud changes
   //template: '<omv-intuition-form-page [config]="this.config"></omv-intuition-form-page>',
   template: `
-  <omv-intuition-form-page id="password-manager-db_reset-form1" [config]="this.config"></omv-intuition-form-page>
+  <omv-intuition-form-page id="password-manager-reset-form1" [config]="this.config"></omv-intuition-form-page>
   `,
   styleUrls: ['./password-manager-db_reset-page.component.scss'],
   encapsulation: ViewEncapsulation.None  // This will disable view encapsulation
 })
 
 export class AppsPasswordManagerDBResetComponent extends BaseFormPageComponent {
+  private htmlContent=`<div class="container">
+                        <h1>🧹 Reset Vaultwarden</h1>
+                        <p>
+                        Need a fresh start? This will reset your <strong>Vaultwarden backend</strong> and remove all stored data as well as app.
+                        </p>
+
+                        <div class="warning">
+                        ⚠️ <strong>WARNING:</strong><br />
+                        This will <strong>DELETE ALL Vaultwarden users and data</strong>, including:
+                        <ul>
+                        <li>🔐 Passwords</li>
+                        <li>💳 Cards</li>
+                        <li>🗂️ Other saved info from the Bitwarden app</li>
+                        </ul>
+                        🚫 <strong>This cannot be undone!</strong>
+                        </div>
+
+                        <p class="backup-tip">💾 Please take a <strong>Vaultwarden backup</strong> before proceeding 🛡️</p>
+
+                      
+                        </div>`;
 
   public config: FormPageConfig = {
     
     fields: [
       
-      {
+   /*   {
         type: 'paragraph',
         title: gettext('Reset Vaultwarden backend to fresh state')
       },
@@ -58,10 +80,11 @@ export class AppsPasswordManagerDBResetComponent extends BaseFormPageComponent {
         type: 'paragraph',
         title: gettext('')
       }
+    */
     ],
     buttons: [
       {
-        text: 'Delete ALL Vaultwarden users and their stored passwords and data',
+        text: gettext(`🔁 Reset Vaultwarden`),
         disabled:false,
         submit:true,
        // class:'omv-background-color-pair-primary',
@@ -86,6 +109,37 @@ export class AppsPasswordManagerDBResetComponent extends BaseFormPageComponent {
     ],
     buttonAlign: 'start' // You can adjust the alignment to 'start', 'center', or 'end'
   };
+  constructor(private sanitizer: DomSanitizer) {
+          super();
+         
+           
+          this.config.fields = [
+            {
+              type: 'paragraph',
+              title: this.htmlContent
+            }
+          ];
+          // Sanitize the HTML content once during construction
+          this.config.fields[0].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[0].title) as unknown as string;
+          
+        
+        
+      }
+  
+      ngAfterViewInit() {
+        setTimeout(() => {
+  
+          // Select all paragraph elements 
+          const paragraphs = document.querySelectorAll('omv-password-manager-db_reset-page omv-form-paragraph .omv-form-paragraph');
+       
+          // Inject the sanitized HTML into the correct paragraph element       
+          paragraphs[0].innerHTML =
+          (this.config.fields[0].title as any).changingThisBreaksApplicationSecurity ||
+          this.config.fields[0].title?.toString();
+          
+         
+        }, 100);
+    }
   
 
 

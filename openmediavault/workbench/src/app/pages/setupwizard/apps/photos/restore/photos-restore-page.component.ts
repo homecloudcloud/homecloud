@@ -71,7 +71,7 @@ export class AppsPhotosRestoreComponent extends BaseFormPageComponent {
   public config1: DatatablePageConfig = {
   
     stateId: '63a9d3ca-2fee-11ea-9065-e3epl1sd8f79',
-    autoReload: 10000,
+    autoReload: false,
     remoteSorting: true,
     remotePaging: true,
     sorters: [

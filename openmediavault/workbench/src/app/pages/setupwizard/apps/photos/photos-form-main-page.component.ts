@@ -21,7 +21,7 @@ import * as _ from 'lodash';
 import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
 import { BaseFormPageComponent } from '~/app/pages/base-page-component';
 import { ViewEncapsulation } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer,SafeHtml} from '@angular/platform-browser';
 import { RpcService } from '~/app/shared/services/rpc.service';
 
 
@@ -31,9 +31,14 @@ import { RpcService } from '~/app/shared/services/rpc.service';
   //template: '<omv-intuition-form-page [config]="this.config"></omv-intuition-form-page>',
   template: `
   <omv-logo-header></omv-logo-header>
-  <omv-intuition-form-page id="photos-main-form1" [config]="this.config"></omv-intuition-form-page>
-  <omv-intuition-form-page id="photos-main-form2" [config]="this.config2"></omv-intuition-form-page>
-  <omv-intuition-form-page id="photos-main-form3" [config]="this.config3"></omv-intuition-form-page>
+  <div id="mainContainer">
+    <div id="photos-main-form1">
+      <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
+    </div>
+    <omv-intuition-form-page id="photos-main-form2" [config]="this.config2"></omv-intuition-form-page>
+    <omv-intuition-form-page id="photos-main-form3" [config]="this.config3"></omv-intuition-form-page>
+  </div>
+  
   <omv-intuition-form-page id="navButtons" [config]="this.navconfig"></omv-intuition-form-page>
   `,
   styleUrls: ['./photos-form-main-page.component.scss'],
@@ -43,6 +48,69 @@ import { RpcService } from '~/app/shared/services/rpc.service';
 })
 
 export class AppsPhotosMainComponent extends BaseFormPageComponent {
+  public safeHtmlContent: SafeHtml;
+  
+  private htmlContent = `
+    <div class="content-wrapper">
+      <div class="left-column">
+        <div class="immich-logo"></div>
+        <p class="intro-text">
+          Immich is a free, open source self-hosted photo and video management solution. It helps you browse, search and organize your photos and videos with ease, without sacrificing your privacy. All your photos and videos are stored on Homecloud device that is in your complete physical and logical control.
+        </p>
+        <h2>Key Features:</h2>
+        <ul>
+          <li><strong>Automatic Backup</strong><br>
+            Immich supports uploading photos and videos from your mobile device to Homecloud automatically.
+          </li>
+
+          <li><strong>Multi-user support and sharing</strong><br>
+            Immich allows multiple users to have their own private library and let them selectively share it with other users.
+          </li>
+
+          <li><strong>Facial recognition</strong><br>
+            Immich recognizes faces in your photos and videos and groups them together into people. You can then assign names to these people and search for them.
+          </li>
+
+          <li><strong>Access photos and videos stored on USB Disks</strong><br>
+            Immich can access photos and videos stored on USB disks connected to Homecloud. 
+          </li>
+
+        </ul>
+
+        <h2>How It Works</h2>
+        <p><strong>Immich has two components:</strong></p>
+
+        <h3>1. Backend (Runs on Homecloud)</h3>
+        <ul>
+          <li>It stores and indexes photos uploaded by frontend.</li>
+        </ul>
+
+        <h3>2. Frontend (Mobile App & Web App)</h3>
+        <ul>
+          <li>Users can upload photos and videos to backend.</li>
+          <li>Frontend app is available for iOS and Android devices. Other devices can access Immich via web browser</li>
+          <li>A Web Clipper, to save web pages and screenshots from your browser, is also available for Firefox and Chrome.</li>
+          <li>Share specific notes securely with family or friends — they can create their own accounts on your Joplin instance. They would need to access your Tailscale VPN to connect to Homecloud.</li>
+        </ul>
+
+        <h2>Deployment Notice</h2>
+        <p>
+          Immich is an open-source third-party application. Before deploying, please read more about it here:<br> 
+          <a href="https://immich.app/" class="plainLink" target="_blank">https://immich.app/</a>
+        </p>
+
+        <h2>Getting Started</h2>
+        <p>Follow below instructions for deployment.</p>
+        <p>After deploying, go to the <a class="plainLink" href="#/setupwizard/apps/photos/access">access page</a> to start using the app.</p>
+      </div>
+
+      <div class="right-column">
+        <img src="/assets/images/Immich_image.webp" alt="Immich dashboard image">
+      </div>
+    </div>
+
+    
+`;
   public config: FormPageConfig = {
     request: {
       service: 'Homecloud',
@@ -59,35 +127,10 @@ export class AppsPhotosMainComponent extends BaseFormPageComponent {
         type: 'paragraph',
         title: gettext('Immich helps you browse, search and organize your photos and videos with ease, without sacrificing your privacy. All your photos and videos are stored on Homecloud device that is in your complete physical and logical control.')
       },
-      {
-        type: 'paragraph',
-        title: gettext('')
-      },
-      {
-        type: 'paragraph',
-        title: gettext('Immich has two components: 1. Backend service that runs on Homecloud. It stores and indexes photos uploaded by frontend.')
-      },
-      {
-        type: 'paragraph',
-        title: gettext('2.Frontend which is either mobile app or webapp is used to upload photos, videos to backend.')
-      },
-      {
-        type: 'paragraph',
-        title: gettext('Frontend app is available for iOS and Android devices. Other devices can access Immich via web browser.')
-      },
+     
     
-      {
-        type: 'paragraph',
-        title: gettext(``)
-      },
-      {
-        type: 'paragraph',
-        title: gettext(`This is an open source 3rd party software. By clicking deploy you agree to terms and conditions enter link here.`)
-      },
-      {
-        type: 'paragraph',
-        title: gettext(`To learn more about Immich visit open source project at:&nbsp;&nbsp; <a class="plainLink" href="https://immich.app/" target="_blank">Learn more about Immich </a>`)
-      }
+    
+     
     ]
   };
 
@@ -107,7 +150,12 @@ export class AppsPhotosMainComponent extends BaseFormPageComponent {
         value: '',
         readonly: true
       },
-      
+      {
+        type: 'textInput',
+        name: 'message',
+        value: '',
+        readonly: true
+      },
       {
         type: 'checkbox',
         name: 'deployConfirmation',
@@ -158,7 +206,7 @@ export class AppsPhotosMainComponent extends BaseFormPageComponent {
 
                 }
               },
-            successUrl:'/startconfiguration/apps/photos/access'
+            successUrl:'/setupwizard/apps/photos/access'
             }
         }
       }
@@ -182,18 +230,20 @@ export class AppsPhotosMainComponent extends BaseFormPageComponent {
         hint: gettext('Immich backend service version in-use'),
         value: '',
         readonly: true
-      },
+      }
+      /*,
       
-      /*{
+      {
         type: 'checkbox',
         name: 'removeConfirmation',
         label: gettext('Yes,I want to remove Immich'),
         hint: gettext('By checking this box, you agree to remove the immich app from homecloud'),
         value: false,
         readonly: false
-      }*/
+      }
+        */
     ],
-   /* buttons:[
+    /*buttons:[
       {
         template: 'submit',
         text:'Remove Immich from Homecloud',
@@ -231,37 +281,22 @@ export class AppsPhotosMainComponent extends BaseFormPageComponent {
 
                 }
               },
-            successUrl:'/startconfiguration/apps'
+            successUrl:'/setupwizard/apps'
             }
         }
       }
-    ]*/
+    ]
+      */
   };
 
 
-  constructor(private rpcService: RpcService,private sanitizer: DomSanitizer) {
-  
+ constructor(private rpcService: RpcService,private sanitizer: DomSanitizer) {
     super();
-    // Sanitize the title 
-       
-        this.config.fields[8].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[8].title) as unknown as string;
+     // Sanitize the HTML content once during construction
+    this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);
 
   }
 
-  ngAfterViewInit(): void {
-        
-    // Delay the operation to ensure the view is fully rendered
-    setTimeout(() => {
-      this.enableNavButtons();
-      
-      // Select all paragraph elements (assuming they are rendered as `photos-main-form1 omv-form-paragraph` elements)
-      const paragraphs = document.querySelectorAll('#photos-main-form1 .omv-form-paragraph');
-      paragraphs[8].innerHTML =
-      (this.config.fields[8].title as any).changingThisBreaksApplicationSecurity ||
-      this.config.fields[8].title?.toString();
-    
-    }, 100); // Timeout ensures it happens after the view has rendered
-  }
   ngOnInit(){
     this.fetchStatusAndUpdateFields();  //get hostname value and update in link
     
@@ -276,60 +311,90 @@ export class AppsPhotosMainComponent extends BaseFormPageComponent {
   }
  
 
+
+
+
+
+
   updateFieldVisibility(status:string):void{
-    console.log('deploy status',status);
-    const checkboxDeploy=document.querySelector('omv-setupwizard-photos-main-page #photos-main-form2 omv-form-checkbox mat-checkbox');
-    const checkboxRemove=document.querySelector('omv-setupwizard-photos-main-page #photos-main-form3 omv-form-checkbox mat-checkbox');
+  //  console.log('deploy status',status);
+    const checkboxDeploy=document.querySelector('omv-setupwizard-photos-main-page #photos-main-form2 omv-form-checkbox');
+    const checkboxRemove=document.querySelector('omv-setupwizard-photos-main-page #photos-main-form3 omv-form-checkbox');
     const deployButton = document.querySelector('omv-setupwizard-photos-main-page  #photos-main-form2 omv-submit-button button');
-    const removeButton = document.querySelector('omv-setupwizard-photos-main-page  #photos-main-form3 omv-submit-button button');
+    
     const photosMainForm2=document.querySelector('omv-setupwizard-photos-main-page #photos-main-form2');
     const photosMainForm3=document.querySelector('omv-setupwizard-photos-main-page #photos-main-form3');
    
     if(status === 'Not deployed'){
       
+     // console.log('status is not deployed');
       photosMainForm3.classList.add('hidden');
       checkboxDeploy.classList.remove('hidden');
-      checkboxDeploy.addEventListener('click', () => {
-        // Add a small delay to ensure class changes are applied
-        setTimeout(() => {
-            const isChecked = checkboxDeploy.classList.contains('mat-checkbox-checked');
-            console.log('Checkbox checked status:', isChecked);
-            
-            if (isChecked) {
-                deployButton.classList.remove('mat-button-disabled');
-                console.log('Deploy button enabled - classes:', deployButton.className);
-            } else {
-                deployButton.classList.add('mat-button-disabled');
-                console.log('Deploy button disabled - classes:', deployButton.className);
-            }
-        }, 0);
-    });
+      this.rpcService.request('Homecloud', 'immich_get_latest_version').subscribe(response => {
+        const version = response.version;
+        if (!version || version.trim() === '') {
+          // Version is null, undefined, empty, or contains only spaces
+          deployButton.classList.add('mat-button-disabled');
+          checkboxDeploy.classList.add('hidden');
+        }
+        else{
+           this.checkboxDeployListener();
+        }
+      });     
      
-    }else{
-      console.log('status is deployed');
+    }
+    else{
+    //  console.log('status is deployed');
       photosMainForm2.classList.add('hidden');
       checkboxRemove.classList.remove('hidden');
-      checkboxRemove.addEventListener('click', () => {
+      this.checkboxRemoveListener();
+     
+    }
+  }
+
+  checkboxDeployListener(){
+    const checkboxDeploy=document.querySelector('omv-setupwizard-photos-main-page #photos-main-form2 omv-form-checkbox mat-checkbox');
+    const deployButton = document.querySelector('omv-setupwizard-photos-main-page  #photos-main-form2 omv-submit-button button');
+     checkboxDeploy.addEventListener('click', () => {
+            // Add a small delay to ensure class changes are applied
+            setTimeout(() => {
+                const isChecked = checkboxDeploy.classList.contains('mat-checkbox-checked');
+            //   console.log('Checkbox checked status:', isChecked);
+                
+                if (isChecked) {
+                    deployButton.classList.remove('mat-button-disabled');
+              //     console.log('Deploy button enabled - classes:', deployButton.className);
+                } else {
+                    deployButton.classList.add('mat-button-disabled');
+            //       console.log('Deploy button disabled - classes:', deployButton.className);
+                }
+            }, 0);
+      });
+
+  }
+
+  checkboxRemoveListener(){
+    const removeButton = document.querySelector('omv-setupwizard-photos-main-page  #photos-main-form3 omv-submit-button button');
+    const checkboxRemove=document.querySelector('omv-setupwizard-photos-main-page #photos-main-form3 omv-form-checkbox mat-checkbox');
+    checkboxRemove.addEventListener('click', () => {
         // Add a small delay to ensure class changes are applied
         setTimeout(() => {
             const isChecked = checkboxRemove.classList.contains('mat-checkbox-checked');
-         
+            console.log('Checkbox checked status:', isChecked);
             
             if (isChecked) {
                 removeButton.classList.remove('mat-button-disabled');
                 removeButton.classList.add('red', 'white');
-           
+          //      console.log('Remove button enabled - classes:', removeButton.className);
             } else {
                 removeButton.classList.add('mat-button-disabled');
                 removeButton.classList.remove('red', 'white');
-             
+          //      console.log('Remove button disabled - classes:', removeButton.className);
             }
         }, 0);
     });
-      
-     
-    }
   }
+
   public navconfig: FormPageConfig = {
 
     fields:[
@@ -338,17 +403,17 @@ export class AppsPhotosMainComponent extends BaseFormPageComponent {
     buttons: [
       
       {template:'submit',
-        text:'< Prev: Drive Setup',
+        text:'< Prev: Drive Access',
         execute:
         {
           type:'url',
-          url:'/setupwizard/apps/drive'
+          url:'/setupwizard/apps/drive/access'
         }
         
       },
       
       {template:'submit',
-        text:'Next: Documents app Setup >',
+        text:'Next: Photos app Access >',
         execute: {
           type: 'request',
           request:{
@@ -356,14 +421,15 @@ export class AppsPhotosMainComponent extends BaseFormPageComponent {
             method:'checkPhotosAppDeployForWizard',
             task:false,
             progressMessage:gettext('Please wait, checking photos app setup ...'),
-            successUrl:'/setupwizard/apps/paperless',
+            successNotification: gettext('Photos app is deployed successfully.'),
+            successUrl:'/setupwizard/apps/photos/access',
             
           }
         }
       },
       //Set this step as last complete step if skipped
       {template:'submit',
-        text:'Skip this step',
+        text:'Skip photos app Setup',
         /*confirmationDialogConfig:{
           template: 'confirmation',
           title: '',
@@ -377,7 +443,7 @@ export class AppsPhotosMainComponent extends BaseFormPageComponent {
             task:false,
             method: 'saveLastCompletedStep',
             params:{
-              'lastCompletedStepName':'appsPhotos'
+              'lastCompletedStepName':'appsPhotosAccess'
             },
             successUrl:'/setupwizard/apps/paperless',
           }
@@ -400,8 +466,12 @@ export class AppsPhotosMainComponent extends BaseFormPageComponent {
    });
 
   }
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.enableNavButtons();
+    }, 100); // Use setTimeout to ensure the DOM is fully loaded before enabling buttons
 
-  
+  }
 
   
 }

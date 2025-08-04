@@ -20,19 +20,31 @@ import { marker as gettext } from '@ngneat/transloco-keys-manager/marker';
 import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
 import { DatatablePageConfig } from '~/app/core/components/intuition/models/datatable-page-config.type';
 import { ViewEncapsulation } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'omv-setupwizard-drive-user-datatable-page',
   template: `<omv-logo-header></omv-logo-header>
-             <omv-intuition-form-page id="drive-users" [config]="this.config2"></omv-intuition-form-page>
-             <omv-intuition-datatable-page id="datatable-users" [config]="this.config"></omv-intuition-datatable-page>
+              <div id="mainContainer">
+                  <div id="drive-users-form1">
+                    <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
+                  </div>
+                  <omv-intuition-datatable-page [config]="this.config"></omv-intuition-datatable-page>
+              </div>
              <omv-intuition-form-page [config]="this.navconfig" id="navButtons"></omv-intuition-form-page>`,
              styleUrls: ['./user-page.component.scss'],
              
              encapsulation: ViewEncapsulation.None
 })
 export class UserDatatablePageComponent {
-  public config2: FormPageConfig = {
+   public safeHtmlContent:SafeHtml
+  private htmlContent=`<div class="container">
+                      <h1>👥Manage users for Drive access below</h1>
+                      <p>🗂️ Each user gets a <strong>private Drive share</strong> upon creation — only they can access it.</p>
+                      <p>⚙️ You can <strong>create, update, or delete users and update their passwords</strong> directly in the table.</p>
+                      <p>🚀 Once your account is ready, head over to the <a href="#/setupwizard/apps/drive/access" class="plainLink"><strong>Access page</strong></a> to connect and start using your Drive from your phone or computer 📱💻.</p>
+                      </div>`;
+  /*public config2: FormPageConfig = {
       fields: [
         {
           type: 'paragraph',
@@ -51,6 +63,7 @@ export class UserDatatablePageComponent {
         }
       ]
   };
+  */
   public config: DatatablePageConfig = {
     stateId: '9dd2c07e-4572-4112-9de7-c3ccad5ef52e',
     autoReload: false,
@@ -76,7 +89,7 @@ export class UserDatatablePageComponent {
         sortable: true,
         hidden: true
       },
-      { name: gettext('Email'), prop: 'email', flexGrow: 1, sortable: true },
+      { name: gettext('Email'), prop: 'email', flexGrow: 1, sortable: true, hidden: true },
       {
         name: gettext('Groups'),
         prop: 'groups',
@@ -155,6 +168,10 @@ export class UserDatatablePageComponent {
       }
     ]
   };
+  constructor(private sanitizer:DomSanitizer){
+    // Sanitize the HTML content 
+    this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);
+  }
   public navconfig: FormPageConfig = {
 
     fields:[
@@ -163,13 +180,52 @@ export class UserDatatablePageComponent {
     buttons: [
       
       {template:'submit',
-        text:'<< Go Back: Drive Set Up',
+        text:'< Prev: Drive Setup',
         execute:
         {
           type:'url',
           url:'/setupwizard/apps/drive'
         }
         
+      },
+      
+      {template:'submit',
+        text:'Next: Drive Access >',
+        execute: {
+          type: 'request',
+          request:{
+            service:'Homecloud',
+            method:'checkDriveUserSetupForWizard',
+            params:{"start":0,"limit":-1},
+            task:false,
+            progressMessage:gettext('Please wait, checking user setup for drive ...'),
+            successNotification: gettext('User setup for Drive is complete.'),
+            successUrl:'/setupwizard/apps/drive/access',
+            
+          }
+        }
+      },
+      //Set this step as last complete step if skipped
+      {template:'submit',
+        text:'Skip this step',
+        confirmationDialogConfig:{
+          template: 'confirmation',
+          title: '',
+          message: 'If Users are not created, you will not be able to access Drive. Do you still want to skip?<b>Note:</b> You can also create users later from Homecloud Dashboard.'
+        },
+        
+        execute: {
+          type: 'request',        
+          request:{
+            service: 'Flags',
+            task:false,
+            method: 'saveLastCompletedStep',
+            params:{
+              'lastCompletedStepName':'appsDriveUsers'
+            },
+            successUrl:'/setupwizard/apps/drive/access',
+          }
+        }
       }
     ]
 

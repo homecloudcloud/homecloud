@@ -1,0 +1,17 @@
+services:
+  jellyfin:
+    container_name: jellyfin
+    environment:
+    - JELLYFIN_PublishedServerUrl=https://homecloud.tail1f689.ts.net:8097/
+    - JELLYFIN_DATA_DIR=/config
+    - JELLYFIN_CACHE_DIR=/cache
+    - JELLYFIN_MEDIA_DIRS:/media
+    image: jellyfin/jellyfin:10.10.6
+#    network_mode: host
+    ports:
+    - 8096:8096
+    restart: unless-stopped
+    user: admin:users
+    volumes:
+    - /var/lib/jellyfin/cache:/cache
+    - /var/lib/jellyfin/config:/config

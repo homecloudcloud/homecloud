@@ -1,7 +1,41 @@
 //Home cloud changes new component
 @import '../../../../assets/colors.scss';
 
+.omv-dark-theme{
+  omv-landing-page{
 
+        #mainContainer{
+              h1,h2,h3{color:$lightblue !important;}
+              p,li{color:#ffffff !important;}
+              .plainLink:hover,.plainLink:focus{
+                  background-color:$lightblue;           
+              }
+             
+              .info-box p{
+                color:#000000!important;
+              }
+          }
+       
+          
+          #navButtons{
+              .mat-card{
+                    background-color:$lightblue!important;
+              }
+              .mat-card-actions{
+                    button{
+                      border:1px solid #ffffff!important;
+                    
+                    }
+                    button:hover,button:focus{
+                      background-color:#ffffff!important;
+                      color:$lightblue!important;
+                    }
+              }
+          }
+          
+         
+    }
+  }   
 omv-landing-page {
 
     omv-top-bar-wizard .omv-top-bar{
@@ -16,35 +50,133 @@ omv-landing-page {
         left:0;
         z-index:100;
     }
-   
-    #mainContent {
+    #mainContainer{
 
-      .mat-card{
-        margin-top:20vh!important;
-
-        omv-form-paragraph{
-            display: flex;
-            justify-content: center;
+      
+      margin-top:20vh;
+              overflow-y:auto;
+              height:70vh;     
+              scrollbar-color:$lightblue transparent;
+              --scrollbar-border-radius: 0 !important;
+              --scrollbar-thumb-color:red !important;
+              --scrollbar-thumb-hover-color: var(--scrollbar-thumb-color) !important;
+             
+      #landing-main-form1{
+        .omv-form-paragraph{
+          padding:2rem;
+          line-height:1.5rem;
         }
-        .omv-form-paragraph:nth-of-type(1){
+      }
+      .omv-form-paragraph,h2,p,li,h3 {
+          font-size: var(--mat-font-size-subheading-2) !important;
+        
+        }
+        .omv-form-paragraph,p,li {
+          font-size: var(--mat-font-size-subheading-2) !important;
+          font-weight:var(--mat-font-weight-subheading-2) !important;
+        }
+        h1{
+          font-size: var(--mat-font-size-headline) !important;
+        
+        }
+       
+        h2,h1,h3 {
+          color:$blue;
+        }
+  
+        
+        
+        ul {
+          list-style-type: disc;
+          margin-left: 20px;
+        }
+  
+        .hidden{
+          display:none !important;
+        }
+        .plainLink{
           font-weight:bold;
         }
+        .plainLink:hover,.plainLink:focus{
+          background-color:$lightblue;
+          color:white;
+          padding:10px;
+          text-decoration: none;
+          font-weight:bold;
+        }
+        .container{
+          display: flex;
+          justify-content: center;
+          text-align:center;
+          flex-direction: column;
+        }
+        .info-box{
+        background-color: $yellow;
+        padding:2rem;
+        display: flex;
+        flex-direction: column;
+        margin-top:2rem;
+        border-radius: 4px;
+        }
+       
+        @media screen and (min-width: 768px) {
+            h1{font-size:2.5em!important;}
+            .info-box{
+              margin-left:30%;
+              margin-right:30%;
+            }
+            .features{
+              margin-left:30%;
+              margin-right:30%;
 
-        omv-form-text-input{
-          display:flex;
+            }
+            #mainContent .mat-card{
+              width:40%;
+            }
+        }
+        @media screen and (max-width: 768px) {
+           
+            #mainContent .mat-card{
+              width:100%;
+            }
+        }
+        #mainContent{
+          display: flex;
           justify-content: center;
 
+          .mat-card{
+
+            .mat-form-field{
+              text-align: center;
+            }
+          }
         }
       
-       
-      }
+        
     }
  
-    #navButtons{
-      .mat-card-actions{
-        display:flex;
-        justify-content: center;
-      }
-    }
-  
+   #navButtons{
+            position:fixed;
+            width:100%;
+            bottom:0;
+          
+            .mat-card{
+                background-color:$blue!important;
+            }
+            mat-card-content{
+                display:none!important;
+            }
+            .mat-card-actions{
+                justify-content:center!important;
+                button{
+                  border:1px solid #ffffff!important;
+                
+                }
+                button:hover,button:focus{
+                  background-color:#ffffff!important;
+                  color:$lightblue!important;
+                }
+            }
+          
+    } 
 }

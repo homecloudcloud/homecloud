@@ -25,12 +25,45 @@ import { ViewEncapsulation } from '@angular/core';
 @Component({
   selector:'omv-setupwizard-drive-user-form-page',
   template: `<omv-logo-header></omv-logo-header> 
+            <div id="mainContainer">
              <omv-intuition-form-page [config]="this.config" id="mainContent"></omv-intuition-form-page>
+            </div>
              <omv-intuition-form-page [config]="this.navconfig" id="navButtons"></omv-intuition-form-page>`,
   
   styles: [`
     @import '../../../../../../assets/colors.scss';
+    .omv-dark-theme{
+    omv-setupwizard-drive-user-form-page{
 
+        #mainContainer{
+              scrollbar-color:$lightblue transparent;
+              h1,h2,h3{color:$lightblue !important;}
+              p,li{color:#ffffff !important;}
+              .plainLink:hover,.plainLink:focus{
+                  background-color:$lightblue;           
+              }
+          }
+       
+          
+          #navButtons{
+              .mat-card{
+                    background-color:$lightblue!important;
+              }
+              .mat-card-actions{
+                    button{
+                      border:1px solid #ffffff!important;
+                    
+                    }
+                    button:hover,button:focus{
+                      background-color:#ffffff!important;
+                      color:$lightblue!important;
+                    }
+              }
+          }
+          
+         
+    }
+  }   
     omv-setupwizard-drive-user-form-page{
       omv-top-bar-wizard .omv-top-bar{
         background:transparent!important;
@@ -46,22 +79,138 @@ import { ViewEncapsulation } from '@angular/core';
           z-index:100;
         }
 
-        #mainContent{
-          .mat-card{
-            margin-top:12rem;
-          }
-        }
+        #mainContainer{
+              margin-top:20vh;
+              overflow-y:auto;
+              height:70vh;     
+              scrollbar-color:#ffffff transparent;
+              --scrollbar-border-radius: 0 !important;
+              --scrollbar-thumb-color:red !important;
+              --scrollbar-thumb-hover-color: var(--scrollbar-thumb-color) !important;
+              #drive-main-form1{
+
+                .omv-form-paragraph{
+                  padding:2rem;
+                  line-height: 1.5rem;
+                }
+
+              }
+               
+
+                .omv-form-paragraph,h2,p,li,h3 {
+                  font-size: var(--mat-font-size-subheading-2) !important;
+                
+                }
+                .omv-form-paragraph,p,li {
+                  font-size: var(--mat-font-size-subheading-2) !important;
+                  font-weight:var(--mat-font-weight-subheading-2) !important;
+                }
+                h1{
+                  font-size: var(--mat-font-size-headline) !important;
+                
+                }
+              
+                
+                h2,h1,h3 {
+                  color:$blue;
+                }
+
+                ul {
+                  list-style-type: disc;
+                  margin-left: 20px;
+                }
+              
+              a.plainLink{
+                  font-weight:bold;
+                }
+              a.plainLink:hover,a.plainLink:focus{
+                  background-color:$lightblue;
+                  color:white;
+                  padding:10px;
+                  text-decoration: none;
+                  font-weight:bold;
+                }
+
+                .content-wrapper {
+                  display: flex;
+                  gap: 20px;
+                  margin-top:10px;
+                  margin-bottom: 20px;
+                  flex-direction: row; /* Default direction for larger screens */
+                }
+
+                .left-column {
+                  width: 40%;
+                  min-width: 300px;
+                  padding-right: 20px;
+                }
+
+                .intro-text {
+                  margin-top: 0;
+                
+                }
+                li {
+                  margin-bottom: 10px;
+                }
+                .right-column {
+                  width: 60%;
+                  min-width: 300px;
+                }
+
+                .right-column img {
+                  width: 100%;
+                  height: auto;
+                }
+                /* Mobile Responsive CSS */
+                @media (max-width: 768px) {
+                  
+                  .content-wrapper {
+                    flex-direction: column;
+                    align-items: center;
+                  }
+
+                  .left-column, .right-column {
+                    width: 100%;
+                    padding-right: 0;
+                  }
+
+                
+                }
+
+  }
         #navButtons{
-          .mat-card{
-              background-color:$blue!important;
-          }
-          mat-card-content{
-              display:none!important;
-          }
-          .mat-card-actions{
-              justify-content:flex-end!important;          
-          } 
-        } 
+            position:fixed;
+            width:100%;
+            bottom:0;
+          
+            .mat-card{
+                background-color:$blue!important;
+            }
+            mat-card-content{
+                display:none!important;
+            }
+            .mat-card-actions{
+                justify-content:space-between!important;
+                flex-direction:row-reverse!important;
+                button{
+                  border:1px solid #ffffff!important;
+                
+                }
+                button:hover,button:focus{
+                  background-color:#ffffff!important;
+                  color:$lightblue!important;
+                }
+            }
+            @media screen and (max-width: 600px) {
+              .mat-card-actions{
+                flex-direction:column-reverse!important;
+                align-items:center!important;
+                justify-content:center!important;
+                row-gap:20px;
+              }
+            }
+    } 
+
     }
     `],
   
@@ -96,7 +245,7 @@ export class UserFormPageComponent extends BaseFormPageComponent {
         }
       },
       {
-        type: 'textInput',
+        type: 'hidden',
         name: 'email',
         label: gettext('Email'),
         value: '',
@@ -223,14 +372,14 @@ export class UserFormPageComponent extends BaseFormPageComponent {
         template: 'submit',
         execute: {
           type: 'url',
-          url: '/setupwizard/apps/drive/users'
+          url: '/startconfiguration/apps/drive/users'
         }
       },
       {
         template: 'cancel',
         execute: {
           type: 'url',
-          url: '/setupwizard/apps/drive/users'
+          url: '/startconfiguration/apps/drive/users'
         }
       }
     ]
@@ -243,11 +392,11 @@ export class UserFormPageComponent extends BaseFormPageComponent {
     buttons: [
       
       {template:'submit',
-        text:'<< Go Back: Drive Set Up',
+        text:'<< Go Back: Drive User Set Up',
         execute:
         {
           type:'url',
-          url:'/setupwizard/apps/drive'
+          url:'/setupwizard/apps/drive/users'
         }
         
       }

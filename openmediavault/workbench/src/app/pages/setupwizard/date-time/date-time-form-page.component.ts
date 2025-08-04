@@ -22,16 +22,56 @@ import { FormPageConfig } from '~/app/core/components/intuition/models/form-page
 import { BaseFormPageComponent } from '~/app/pages/base-page-component';
 import { ViewEncapsulation } from '@angular/core';
 //import { ViewChild, ElementRef } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   template: `<omv-logo-header></omv-logo-header>
-             <omv-intuition-form-page [config]="this.config" id="mainContent"></omv-intuition-form-page>
+            <div id="mainContainer">
+              <div id="mainContent">
+                      <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
+              </div>
+              <omv-intuition-form-page [config]="this.config" id="mainContent1"></omv-intuition-form-page>
+            </div>
              <omv-intuition-form-page [config]="this.navconfig" id="navButtons">
              </omv-intuition-form-page>`,
-  selector:'omv-date-time-form-page',  //Home cloud changes
+  selector:'omv-setupwizard-date-time-form-page',  //Home cloud changes
   styles: [`
     @import '../../../../assets/colors.scss';
-    omv-date-time-form-page{
+
+  
+    .omv-dark-theme{
+       omv-setupwizard-date-time-form-page{
+          #mainContainer{
+          //  scrollbar-color:$lightblue transparent;
+            --scrollbar-thumb-color:$lightblue !important;
+            h1,h2,h3{color:$lightblue !important;}
+            p,li{color:#ffffff !important;}
+            .plainLink:hover,.plainLink:focus{
+            background-color:$lightblue;
+           
+            }
+          }
+          
+          #navButtons{
+              .mat-card{
+                    background-color:$lightblue!important;
+              }
+              .mat-card-actions{
+                    button{
+                      border:1px solid #ffffff!important;
+                    
+                    }
+                    button:hover,button:focus{
+                      background-color:#ffffff!important;
+                      color:$lightblue!important;
+                    }
+              }
+          }
+          
+          
+       }
+      }     
+    omv-setupwizard-date-time-form-page{
 
       omv-top-bar-wizard .omv-top-bar{
         background:transparent!important;
@@ -45,14 +85,69 @@ import { ViewEncapsulation } from '@angular/core';
         left:0;
         z-index:100;
       }
+
+      #mainContainer{
+          margin-top:20vh!important;
+          overflow-y:auto;
+          height:70vh;     
+          scrollbar-color:$lightblue transparent;
+          --scrollbar-border-radius: 0 !important;
+          --scrollbar-thumb-color:#ffffff !important;
+          --scrollbar-thumb-hover-color: var(--scrollbar-thumb-color) !important;
+      }
       #mainContent{
-          
-        .mat-card{
-            margin-top:20vh!important;
+        
+         margin-bottom:-3rem;
+          .omv-form-paragraph{
+          padding:2rem;
+          line-height: 1.5rem;
 
         }
       }
+      .omv-form-paragraph,h2,p,li,h3 {
+          font-size: var(--mat-font-size-subheading-2) !important;
+        
+        }
+        .omv-form-paragraph,p,li {
+          font-size: var(--mat-font-size-subheading-2) !important;
+          font-weight:var(--mat-font-weight-subheading-2) !important;
+        }
+        h1{
+          font-size: var(--mat-font-size-headline) !important;
+        
+        }
+      
+        
+        h2,h1,h3 {
+          color:$blue;
+        }
+  
+        
+        
+        ul {
+          list-style-type: disc;
+          margin-left: 20px;
+        }
+  
+        .hidden{
+          display:none !important;
+        }
+        .plainLink{
+          font-weight:bold;
+        }
+        .plainLink:hover,.plainLink:focus{
+          background-color:$lightblue;
+          color:white;
+          padding:10px;
+          text-decoration: none;
+          font-weight:bold;
+        }
+
       #navButtons{
+        position:fixed;
+        width:100%;
+        bottom:0;
+        
         .mat-card{
             background-color:$blue!important;
         }
@@ -62,6 +157,14 @@ import { ViewEncapsulation } from '@angular/core';
         .mat-card-actions{
             justify-content:space-between!important;
             flex-direction:row-reverse!important;
+            button{
+              border:1px solid #ffffff!important;
+            
+            }
+            button:hover,button:focus{
+              background-color:#ffffff!important;
+              color:$lightblue!important;
+            }
         }
         @media screen and (max-width: 600px) {
           .mat-card-actions{
@@ -79,89 +182,104 @@ import { ViewEncapsulation } from '@angular/core';
 export class DateTimeFormPageComponent extends BaseFormPageComponent {
 
   
-  //@ViewChild('navButton') navButton!: ElementRef;
- 
-
-  public config: FormPageConfig = {
-    request: {
-      service: 'System',
-      get: {
-        method: 'getTimeSettings'
+  public safeHtmlContent: SafeHtml;
+    private htmlContent=`<h1>🌍 Set Your Timezone</h1>
+                        <p>
+                        Choose the <strong>timezone</strong> where your <strong>Homecloud</strong> is deployed ⏰.<br/>
+                        This ensures accurate time tracking for logs, schedules, and backups.
+                        </p>`;
+    public config: FormPageConfig = {
+      request: {
+        service: 'System',
+        get: {
+          method: 'getTimeSettings'
+        },
+        post: {
+          method: 'setTimeSettings'
+        }
       },
-      post: {
-        method: 'setTimeSettings'
-      }
-    },
-    fields: [
-      {
-        type: 'select',
-        name: 'timezone',
-        label: gettext('Time zone'),
-        store: {
-          proxy: {
-            service: 'System',
-            get: {
-              method: 'getTimeZoneList'
+      fields: [
+        {
+          type: 'select',
+          name: 'timezone',
+          label: gettext('Time zone'),
+          store: {
+            proxy: {
+              service: 'System',
+              get: {
+                method: 'getTimeZoneList'
+              }
             }
+          },
+          textField: 'value',
+          value: 'UTC'
+        },
+        {
+          type: 'checkbox',
+          name: 'ntpenable',
+          label: gettext('Use NTP server'),
+          //value: false
+          value: true,
+          disabled: true,
+          submitValue: true
+        },
+        {
+          type: 'textInput',
+          name: 'ntptimeservers',
+          label: gettext('Time servers'),
+          value: 'pool.ntp.org',
+          modifiers: [
+            {
+              //type: 'enabled',
+              type: 'disabled',
+              constraint: { operator: 'truthy', arg0: { prop: 'ntpenable' } }
+            }
+          ],
+          validators: {
+            requiredIf: { operator: 'truthy', arg0: { prop: 'ntpenable' } },
+            patternType: 'domainNameIpList'
           }
         },
-        textField: 'value',
-        value: 'UTC'
-      },
-      {
-        type: 'checkbox',
-        name: 'ntpenable',
-        label: gettext('Use NTP server'),
-        value: false
-      },
-      {
-        type: 'textInput',
-        name: 'ntptimeservers',
-        label: gettext('Time servers'),
-        value: 'pool.ntp.org',
-        modifiers: [
-          {
-            type: 'enabled',
-            constraint: { operator: 'truthy', arg0: { prop: 'ntpenable' } }
+        {
+          type: 'textInput',
+          name: 'ntpclients',
+          label: gettext('Allowed clients'),
+          hint: gettext(
+            'IP addresses in CIDR notation or host names of clients that are allowed to access the NTP server.'
+          ),
+          value: '',
+          modifiers: [
+            {
+              type: 'hidden'
+              //constraint: { operator: 'falsy', arg0: { prop: 'ntpenable' } }
+            }
+          ],
+          validators: {
+            patternType: 'hostNameIpNetCidrList'
+          } 
+        }
+      ],
+      buttons: [
+        {
+          template: 'submit'
+        }
+        /*,
+        {
+          template: 'cancel',
+          execute: {
+            type: 'url',
+            url: '/startconfiguration'
           }
-        ],
-        validators: {
-          requiredIf: { operator: 'truthy', arg0: { prop: 'ntpenable' } },
-          patternType: 'domainNameIpList'
         }
-      },
-      {
-        type: 'textInput',
-        name: 'ntpclients',
-        label: gettext('Allowed clients'),
-        hint: gettext(
-          'IP addresses in CIDR notation or host names of clients that are allowed to access the NTP server.'
-        ),
-        value: '',
-        modifiers: [
-          {
-            type: 'disabled',
-            constraint: { operator: 'falsy', arg0: { prop: 'ntpenable' } }
-          }
-        ],
-        validators: {
-          patternType: 'hostNameIpNetCidrList'
-        }
-      }
-    ],
-    buttons: [
-      {
-        template: 'submit'
-      },
-      {
-        template: 'cancel',
-        execute: {
-          type: 'url',
-          url: '/setupwizard/datetime'
-        }
-      }
-    ]
-  };
+        */
+      ]
+    };
+  constructor(private sanitizer: DomSanitizer) {
+          super();
+         
+              // Sanitize the HTML content once during construction
+              this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);
+  }
 
   public navconfig: FormPageConfig = {
 
@@ -171,12 +289,12 @@ export class DateTimeFormPageComponent extends BaseFormPageComponent {
     buttons: [
       
       {template:'submit',
-        text:'< Prev: VPN Set Up',
+        text:'< Prev: VPN Access',
         disabled:false,
         execute:
         {
           type:'url',
-          url:'/setupwizard/vpn/tailscaleconfig'
+          url:'/setupwizard/vpn/access'
         }
         
       },
@@ -204,6 +322,7 @@ export class DateTimeFormPageComponent extends BaseFormPageComponent {
 
   };
   ngAfterViewInit() {
+    
     setTimeout(() => {
       const buttons = document.querySelectorAll('#navButtons omv-submit-button button');
        // Loop through all buttons and remove disabled class
@@ -216,6 +335,18 @@ export class DateTimeFormPageComponent extends BaseFormPageComponent {
     }, 100);
   }
 
+ 
+   ngOnInit(): void {
+    console.log('NotificationSettings initialized');
+    const innerElement = document.querySelector('#mainContainer') as HTMLElement;
+    console.log('scrolltop before:',innerElement.scrollTop);
+    
+    console.log('Inner Element:', innerElement);
+    if (innerElement) {
+      innerElement.scrollTop = 0; // Ensure the scroll position is at the top
+    }
+    console.log('scrolltop now:',innerElement.scrollTop);
+  }
   
 
 }

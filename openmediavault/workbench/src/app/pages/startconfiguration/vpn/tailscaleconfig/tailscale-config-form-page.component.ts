@@ -22,17 +22,38 @@ import { FormPageConfig } from '~/app/core/components/intuition/models/form-page
 import { BaseFormPageComponent } from '~/app/pages/base-page-component';
 import { ViewEncapsulation } from '@angular/core';
 import { RpcService } from '~/app/shared/services/rpc.service';
+import { DomSanitizer,SafeHtml } from '@angular/platform-browser';
+import { ModalDialogComponent } from '~/app/shared/components/modal-dialog/modal-dialog.component';
+import { DialogService } from '~/app/shared/services/dialog.service';
+import { AuthSessionService } from '~/app/shared/services/auth-session.service';
 
 
 @Component({
   selector:'omv-tailscale-startconfig-page', //Home cloud changes
-  template: '<omv-intuition-form-page [config]="this.config"></omv-intuition-form-page>',
+  template: `
+            <div id="tailscale-config-form1">
+                <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
+            </div>
+            <omv-intuition-form-page [config]="this.config"></omv-intuition-form-page>
+            `,
   styleUrls: ['./tailscale-config-form-page.component.scss'],
   encapsulation: ViewEncapsulation.None  // This will disable view encapsulation
 })
 
 
 export class TailscaleConfigFormPageComponent extends BaseFormPageComponent {
+  public safeHtmlContent:SafeHtml;
+  private htmlContent=`<h1>🛠️ VPN Configuration</h2>
+                      <p>
+                        The VPN enables you to access Homecloud securely over the Internet from any location. 
+                        Homecloud will only be accessible from your devices that are connected to the same VPN service and from allowed accounts.
+                      </p>
+                      <p>
+                        ✅ <strong>If VPN status is <em>Up</em>, no action is required.</strong>
+                      </p>`;
+  private licenseTermsRead:boolean = false; // Flag to track if license terms are read
+  private tailscaleTermsVersion:string='';
+  private tailscaleTermsArray:any = [];
   public config: FormPageConfig = {
     request: {
       service: 'Homecloud',
@@ -41,16 +62,6 @@ export class TailscaleConfigFormPageComponent extends BaseFormPageComponent {
       }
     },
     fields: [
-
-      {
-        type: 'paragraph',
-        title: gettext('VPN enables you to access Homecloud securely over Internet from any location. Homecloud would be accessible only from your devices that are connected to same VPN service and allowed accounts.')
-      },
-
-      {
-        type: 'paragraph',
-        title: gettext('If VPN Status is Up then no action is required.')
-      },
 
       {
         type: 'textInput',
@@ -93,7 +104,8 @@ export class TailscaleConfigFormPageComponent extends BaseFormPageComponent {
       },
       {
         type: 'divider',
-        title: gettext('Reconfigure'),
+      //  title: gettext('Reconfigure'),
+        title: gettext(' VPN'),
         name:'containerHeader'
       },
       {
@@ -110,7 +122,7 @@ export class TailscaleConfigFormPageComponent extends BaseFormPageComponent {
           },
           {
             type: 'paragraph',
-            title: gettext('Step 1. Sign-up for Tailscale VPN service on: https://login.tailscale.com/')
+            title: gettext(`Step 1. Sign-up for Tailscale VPN service on: <a class="plainLink" href="https://login.tailscale.com/" target="_blank">https://login.tailscale.com/</a>`)
           },
     
           {
@@ -176,7 +188,6 @@ export class TailscaleConfigFormPageComponent extends BaseFormPageComponent {
               ]
             }
           },
-    
           {
             type: 'textInput',
             name: 'tailnetname',
@@ -204,27 +215,34 @@ export class TailscaleConfigFormPageComponent extends BaseFormPageComponent {
           },
           {
             type: 'paragraph',
+            title: gettext(`Step 3. Go to DNS Tab located on top of the page, scroll down till HTTPS Certificates section and press Enable HTTPS.`)
+          },
+          {
+            type: 'checkbox',
+            name: 'vpntermsFlag',
+           // hint: gettext('You must agree to Tailscale terms to use this service.'),
+            label: gettext(`I confirm that I have read the tailscale terms <a onclick="window.onVpnTermsClicked()" class="plainLink" href="/#/startconfiguration/vpn/terms">here</a> and agree to that`),
+            autofocus: true,
+            validators: {
+              required: true
+            },
+            value:false,
+            modifiers:[{type:'unchecked'}]
+           
+          },
+          {
+            type: 'paragraph',
             title: gettext('Press Submit button below.')
           },
+          
           {
             type: 'paragraph',
-            title: gettext('Step 3. After successful configuration go to Tailscale admin console: https://login.tailscale.com/admin/machines >> In the list of machines find homecloud >> on the right side press three dots ...  >> Edit route settings >> Enable Use as exit node >> Save')
-          },
-          {
-            type: 'paragraph',
-            title: gettext('')
-          },
-          {
-            type: 'paragraph',
-            title: gettext('')
-          },
-          {
-            type: 'paragraph',
-            title: gettext('Step 4. Configure Tailscale on your access devices - phone, computer to access Homecloud. For device specific setup instructions go to VPN >> Access page')
+            title: gettext(`Step 4. Configure Tailscale on your access devices - phone, computer to access Homecloud. For device specific setup instructions go to VPN >> <a class="plainLink" href="/#/startconfiguration/vpn/access">Access page</a>`)
           }
 
         ]
       }
+
 
     ],
     buttons: [
@@ -257,9 +275,12 @@ export class TailscaleConfigFormPageComponent extends BaseFormPageComponent {
                   service: 'TailscaleConfig',
                   method: 'generateAccessToken',
                   params:{
-                    clientid:'{{ clientid }}',
-                    clientsecret:'{{ clientsecret }}',
-                    tailnetname:'{{ tailnetname }}'
+                    tailscaleClientData:{                                          
+                      clientid:'{{ clientid }}',
+                      clientsecret:'{{ clientsecret }}',
+                      tailnetname:'{{ tailnetname }}'
+                    },
+                    tailscaleTermsData:this.tailscaleTermsArray
 
 
                   }
@@ -275,16 +296,86 @@ export class TailscaleConfigFormPageComponent extends BaseFormPageComponent {
 
   };
 
-  constructor(private rpcService: RpcService){
+  constructor(private sanitizer: DomSanitizer,
+                private rpcService: RpcService,
+                private dialogService: DialogService,
+                private authSessionService: AuthSessionService) 
+  {
     super();
+    // Sanitize the title 
+  
+    this.config.fields[4].fields[2].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[4].fields[2].title) as unknown as string;
+    this.config.fields[4].fields[10].label = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[4].fields[10].label) as unknown as string;
+    this.config.fields[4].fields[12].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[4].fields[12].title) as unknown as string;
+    //this.config.fields[6].fields[14].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[6].fields[14].title) as unknown as string;
+   
+    
+    // Sanitize the HTML content once during construction
+    this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);
+
+
   }
   ngOnInit(){
+    this.checkInternetStatus();
     this.fetchStatusAndUpdateFields();  //get hostname value and update in link
+     // Make the function globally accessible
+    (window as any).onVpnTermsClicked = this.onVpnTermsClicked.bind(this);
+     // Check if terms have been read before
+    this.licenseTermsRead = localStorage.getItem('tailscaleTermsRead') === 'true';
+    //console.log('terms read',this.licenseTermsRead);
+    // Restore form values from localStorage
+    const clientId = localStorage.getItem('tailscale_clientid');
+    const clientSecret = localStorage.getItem('tailscale_clientsecret');
+    const tailnetName = localStorage.getItem('tailscale_tailnetname');
+    // Update the form fields if values exist
+    if (clientId) {
+      const clientIdField = this.config.fields[4].fields.find(field => field.name === 'clientid');
+      if (clientIdField) clientIdField.value = clientId;
+    }
+    
+    if (clientSecret) {
+      const clientSecretField = this.config.fields[4].fields.find(field => field.name === 'clientsecret');
+      if (clientSecretField) clientSecretField.value = clientSecret;
+    }
+    
+    if (tailnetName) {
+      const tailnetNameField = this.config.fields[4].fields.find(field => field.name === 'tailnetname');
+      if (tailnetNameField) tailnetNameField.value = tailnetName;
+    }
+
+    // Update the checkbox field's validators
+    const checkboxField = this.config.fields[4].fields.find(field => field.name === 'vpntermsFlag');
+    if (checkboxField) {
+      // Remove the custom validator if terms have been read
+      if (this.licenseTermsRead) {
+        checkboxField.validators = {
+          required: true
+        };
+        this.buildTailscaleTermsArray(); // Build the Tailscale terms array
+        this.config.buttons[0].execute.taskDialog.config.request.params.tailscaleTermsData = this.tailscaleTermsArray; // Update the request params with the terms array
+      } else {
+        // Add a validator that prevents checking if terms haven't been read
+        checkboxField.validators = {
+          required: true,
+          custom: [
+            {
+              constraint: {
+                operator: 'eq',
+                arg0: { value: false },  // Always validate to false if terms not read
+                arg1: true
+              },
+              errorData: gettext('You must read the Tailscale terms before agreeing to them.')
+            }
+          ]
+        };
+      }
+    }
+    
   }
   fetchStatusAndUpdateFields(): void {
     this.rpcService.request('Homecloud', 'getTailscaleStatus').subscribe(response => {
       const status = response.status;
-      console.log('status',status);
+     // console.log('status',status);
       this.updateFieldColors(status);     //Update colors based on status
       this.collapseContainerWithSubmitBtn(status);     //collapse/expand container based on status
         
@@ -298,27 +389,32 @@ export class TailscaleConfigFormPageComponent extends BaseFormPageComponent {
     const dividerc = document.querySelector('omv-tailscale-startconfig-page .omv-form-divider');
     const container = document.querySelector('omv-tailscale-startconfig-page .omv-form-container');
     const submitButton = document.querySelector('omv-tailscale-startconfig-page .mat-card-actions');
-   
-
-    //console.log('divider:',divider);
-    //console.log('container:',container);
+    
     //Hide container by default
     if (container && divider) {   
-        if (container instanceof HTMLElement && divider instanceof HTMLElement) {
+    //if (container) {   
+       if (container instanceof HTMLElement && divider instanceof HTMLElement) {
+        container.classList.add('hidden');
+        submitButton.classList.add('hidden');
+    //   if (container instanceof HTMLElement) {
           if(status === 'Up'){
-            container.classList.add('hidden');
-            divider.classList.remove('hidden');
-            submitButton.classList.add('hidden');
+          //  container.classList.add('hidden');
+          //  divider.classList.remove('hidden');
+            divider.classList.remove('configure');
+            divider.classList.add('reconfigure');                                                                           
+      //    submitButton.classList.add('hidden');
             
           }
           else{
-            container.classList.remove('hidden');
-            divider.classList.add('hidden');
-            submitButton.classList.remove('hidden');
+          //  container.classList.remove('hidden');
+           // divider.classList.add('hidden');
+            divider.classList.remove('reconfigure');
+            divider.classList.add('configure');
+      //    submitButton.classList.remove('hidden');
           }
           
         }
-        if(status === 'Up'){
+       // if(status === 'Up'){
           divider.addEventListener('click', () => {            
             container.classList.toggle('hidden');
             submitButton.classList.toggle('hidden');
@@ -328,12 +424,13 @@ export class TailscaleConfigFormPageComponent extends BaseFormPageComponent {
             }
           });
 
-        }
+      //  }
+      
     }
 
     
    
-  }   
+  } 
    
 
 
@@ -349,4 +446,167 @@ export class TailscaleConfigFormPageComponent extends BaseFormPageComponent {
       }
     }
   }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.addcheckboxListener(); // Add listener for checkbox
+      this.addInputChangeListeners(); // Add listeners for input changes
+      // Select all paragraph elements 
+      const paragraphs = document.querySelectorAll('omv-tailscale-startconfig-page .omv-form-container .omv-form-paragraph');
+      const checkboxLabel=document.querySelector('omv-tailscale-startconfig-page .omv-form-container omv-form-checkbox .mat-checkbox-label');
+      // Inject the sanitized HTML into the correct paragraph element
+      
+      paragraphs[2].innerHTML =
+      (this.config.fields[4].fields[2].title as any).changingThisBreaksApplicationSecurity ||
+      this.config.fields[4].fields[2].title?.toString();
+      paragraphs[8].innerHTML =
+      (this.config.fields[4].fields[12].title as any).changingThisBreaksApplicationSecurity ||
+      this.config.fields[4].fields[12].title?.toString();
+      /*paragraphs[10].innerHTML =
+      (this.config.fields[6].fields[14].title as any).changingThisBreaksApplicationSecurity ||
+      this.config.fields[6].fields[14].title?.toString();
+      */
+
+      checkboxLabel.innerHTML=(this.config.fields[4].fields[10].label as any).changingThisBreaksApplicationSecurity ||
+      this.config.fields[4].fields[10].label?.toString();
+
+      document.querySelector('meta[name="viewport"]').setAttribute("content", "width=device-width, initial-scale=1.0, user-scalable=yes");
+      
+    }, 100);
+  }
+
+  addcheckboxListener() { 
+      const checkbox = document.querySelector('omv-tailscale-startconfig-page omv-form-checkbox input[type="checkbox"]');
+      const tailscaleButton = document.querySelector('omv-tailscale-startconfig-page  omv-submit-button button');
+      
+      if (checkbox) {
+        checkbox.addEventListener('change', (event: Event) => {
+          const target = event.target as HTMLInputElement;
+  
+          if(target.checked){
+  
+            if(!this.licenseTermsRead) {
+              
+              // Show dialog
+              this.dialogService.open(ModalDialogComponent, {
+                data: {
+                  template: 'information',
+                  title: gettext('Click on the link and read the tailscale terms'),
+                  message: gettext('You must read the Tailscale terms before agreeing to them.')
+                }
+              });
+              tailscaleButton.classList.add('mat-button-disabled'); //disable if terms not read
+              
+            }
+            else{
+              tailscaleButton.classList.remove('mat-button-disabled'); //enable if checkbox checked and terms read
+            }
+  
+          }
+          else{
+            tailscaleButton.classList.add('mat-button-disabled'); //disable if checkbox not checked
+          }
+                  
+      
+        });
+      }
+    }
+    
+  
+    addInputChangeListeners() {
+      //console.log('Adding input change listeners');
+      
+      // Get the input elements by position
+      const textInputs = document.querySelectorAll('omv-tailscale-startconfig-page .omv-form-container omv-form-text-input');
+      
+      // Client ID is the first text input (index 0)
+      const clientIdInput = textInputs[0]?.querySelector('input') as HTMLInputElement;
+      
+      // Client Secret is the second text input (index 1)
+      const clientSecretInput = textInputs[1]?.querySelector('input') as HTMLInputElement;
+      
+      // Tailnet Name is the third text input (index 2)
+      const tailnetNameInput = textInputs[2]?.querySelector('input') as HTMLInputElement;
+  
+      // Add change and input event listeners to save values as they change
+      if (clientIdInput) {
+        clientIdInput.addEventListener('change', () => {
+          localStorage.setItem('tailscale_clientid', clientIdInput.value);
+        });
+      }
+      
+      if (clientSecretInput) {
+        clientSecretInput.addEventListener('change', () => {
+          localStorage.setItem('tailscale_clientsecret', clientSecretInput.value);
+        });
+      }
+      
+      if (tailnetNameInput) {
+        tailnetNameInput.addEventListener('change', () => {
+          localStorage.setItem('tailscale_tailnetname', tailnetNameInput.value);
+        });
+      }
+    }
+    
+    
+    
+    
+  
+    onVpnTermsClicked(){
+    
+      this.licenseTermsRead = true; // Set the flag to true when terms are read
+      // Save to localStorage
+      localStorage.setItem('tailscaleTermsRead', 'true');
+      // Update the checkbox field's validators
+      const checkboxField = this.config.fields[4].fields.find(field => field.name === 'vpntermsFlag');
+      if (checkboxField) {
+        // Remove the custom validator now that terms have been read
+        checkboxField.validators = {
+          required: true
+        };
+      }
+      
+    }
+  
+  
+    buildTailscaleTermsArray() {
+        console.log('Building Tailscale terms array');
+        const username = this.authSessionService.getUsername();
+        const accepted =  true;
+        const acceptedDate = new Date().toISOString(); // Gets current timestamp in milliseconds
+        const comment='';
+        // Get the Tailscale terms version from localStorage
+        this.tailscaleTermsVersion = localStorage.getItem('tailscaleTermsVersion');
+        this.tailscaleTermsArray={
+          'tailscaleTermsVersion':this.tailscaleTermsVersion,
+          'user':username,
+          'accepted':accepted,
+          'accepted-date':acceptedDate,
+          'comment':comment}
+    }
+   
+    checkInternetStatus(){
+     // console.log('checking internet status');
+      this.rpcService.request('Homecloud', 'checkInternetStatusForWizard').subscribe(response => {
+        //console.log('response',response);
+        if (response.internetConnected !== true) { //Internet down
+         // console.log('internet down');
+          const tailscaleButton=document.querySelector('omv-tailscale-startconfig-page omv-submit-button button');
+          const tailscaleCheckbox=document.querySelector('omv-tailscale-startconfig-page omv-form-checkbox');
+          const tailscaleConfigContainer=document.querySelector('omv-tailscale-startconfig-page .omv-form-container');
+          //console.log('tailscaleButton', tailscaleButton);
+          if(tailscaleButton && tailscaleCheckbox){
+                tailscaleButton.classList.add('mat-button-disabled');
+               // tailscaleCheckbox.classList.add('hidden');
+                tailscaleConfigContainer.classList.add('hidden');
+                //tailscaleCheckbox.insertAdjacentHTML('afterend','<br><span class="internetError">Homecloud is not connected to Internet.Go to <a class="plainLink" href="#/setupwizard/networkconfig/interfaces">Network Interfaces</a> page to check the status. Connect Homecloud to Internet and try again');
+                tailscaleConfigContainer.insertAdjacentHTML('afterend','<br><span class="internetError">Homecloud is not connected to Internet.Go to <a class="plainLink" href="#/setupwizard/networkconfig/interfaces">Network Interfaces</a> page to check the status. Connect Homecloud to Internet and try again');
+                
+          }
+          
+        } 
+       
+    });
+    }
+    
 }

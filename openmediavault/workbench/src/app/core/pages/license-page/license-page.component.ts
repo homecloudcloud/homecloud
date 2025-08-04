@@ -169,7 +169,7 @@ export class LicensePageComponent implements OnInit {
       const username = this.authSessionService.getUsername();
       const isAdmin = this.authSessionService.hasAdminRole();
       const accepted=values.licenseFlag
-      const acceptedDate = Date.now(); // Gets current timestamp in milliseconds
+      const acceptedDate = new Date().toISOString(); // Gets current timestamp in milliseconds
       const comment='';
       const licenseArray={
         'licenseVersion':this.licenseVersion,
@@ -244,7 +244,7 @@ export class LicensePageComponent implements OnInit {
   }
 
 
-  ngAfterViewInit() {
+  /*ngAfterViewInit() {
     setTimeout(() => {
       const textarea = document.querySelector('#licenseFlag .omv-form-paragraph');
       if (textarea) {
@@ -267,6 +267,7 @@ export class LicensePageComponent implements OnInit {
       }
     }, 100);
   }
+  */
  
   //Check if textarea scrolled to bottom
   private isTextareaAtBottom(textarea: HTMLTextAreaElement): boolean {

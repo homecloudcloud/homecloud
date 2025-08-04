@@ -1,0 +1,125 @@
+#!/bin/bash
+set -e
+
+
+# Copy hostapd.conf to /etc/hostapd
+if [ -f /etc/homecloud/hostapd.conf ]; then
+    mkdir -p /etc/hostapd  # Ensure directory exists
+
+    # Create backup of original file if it exists
+    if [ -f /etc/hostapd/hostapd.conf ]; then
+        cp -f /etc/hostapd/hostapd.conf /etc/hostapd/hostapd.conf.bak
+    fi
+
+    cp -f /etc/homecloud/hostapd.conf /etc/hostapd/hostapd.conf
+    chmod 644 /etc/hostapd/hostapd.conf
+
+    systemctl is-active --quiet hostapd && systemctl restart hostapd || true
+fi
+
+cp -f /opt/homecloud/docker-compose.yml /etc/password-reset/docker-compose.yml
+cp -f /etc/dnsmasq.conf.orig /etc/dnsmasq.conf
+cp -f /etc/homecloud/logrotate.conf /etc/logrotate.conf
+cp -f /etc/homecloud/journald.conf /etc/systemd/journald.conf
+cp -f /etc/homecloud/95openmediavault-unattended-upgrades /etc/apt/apt.conf.d/95openmediavault-unattended-upgrades
+cp -f /etc/homecloud/sources.list /etc/apt/sources.list
+cp -f /etc/homecloud/docker.list /etc/apt/sources.list.d/docker.list
+cp -f /etc/homecloud/raspi.list /etc/apt/sources.list.d/raspi.list
+
+# Copy systemd-udevd.service to /etc/systemd/system
+if [ -f /etc/homecloud/systemd-udevd.service ]; then
+    mkdir -p /etc/systemd/system  # Ensure directory exists
+
+    if [ -f /etc/systemd/system/systemd-udevd.service ]; then
+        cp -f /etc/systemd/system/systemd-udevd.service /etc/systemd/system/systemd-udevd.service.bak
+    fi
+
+    cp -f /etc/homecloud/systemd-udevd.service /etc/systemd/system/systemd-udevd.service
+    chmod 644 /etc/systemd/system/systemd-udevd.service
+
+    systemctl is-active --quiet systemd-udevd && systemctl restart systemd-udevd || true
+fi
+
+
+# Check if /opt/homecloud/etc-systemd-logind.conf exists and copy it to /etc/systemd/logind.conf
+if [ -f /opt/homecloud/etc-systemd-logind.conf ]; then
+    cp -f /opt/homecloud/etc-systemd-logind.conf /etc/systemd/logind.conf
+    chmod 644 /etc/systemd/logind.conf
+    systemctl is-active --quiet systemd-logind  && systemctl restart systemd-logind || true
+fi
+
+# Reload systemd in case new services are added or changed
+systemctl daemon-reload || true
+# Enable and start required services
+for svc in openmediavault-engined.service \
+           oled-display-disk.service \
+           watchdog-eye.service \
+           check_certificates.service \
+           traefik.service \
+           password-reset.service \
+           init-display.service; do
+    systemctl enable "$svc"
+    systemctl unmask "$svc"
+    systemctl start "$svc"
+done
+
+# Delete all existing firewall rules first
+EXISTING_RULES=$(omv-rpc -u admin 'Iptables' 'getRules')
+echo "$EXISTING_RULES" | jq -r '.[].uuid' | while read uuid; do
+    omv-rpc -u admin 'Iptables' 'deleteRule' "{\"uuid\":\"$uuid\"}"
+done
+
+# Read the JSON file and create firewall rules
+JSON_FILE="/opt/homecloud/firewall/firewall_rules_full.json"
+
+# Build the rules array
+RULES_JSON="["
+FIRST_RULE=true
+
+while IFS= read -r line; do
+    # Extract rule data from JSON
+    RULENUM=$(echo "$line" | jq -r '.rulenum')
+    CHAIN=$(echo "$line" | jq -r '.chain')
+    ACTION=$(echo "$line" | jq -r '.action')
+    SOURCE=$(echo "$line" | jq -r '.source')
+    SPORT=$(echo "$line" | jq -r '.sport')
+    DESTINATION=$(echo "$line" | jq -r '.destination')
+    DPORT=$(echo "$line" | jq -r '.dport')
+    PROTOCOL=$(echo "$line" | jq -r '.protocol')
+    EXTRAOPTIONS=$(echo "$line" | jq -r '.extraoptions')
+    COMMENT=$(echo "$line" | jq -r '.comment')
+    
+    # Generate new UUID for each rule
+    OMV_FIREWALL_UUID=$(/usr/sbin/omv-env get OMV_CONFIGOBJECT_NEW_UUID | cut -d= -f2)
+    
+    # Add comma separator for subsequent rules
+    if [ "$FIRST_RULE" = false ]; then
+        RULES_JSON="$RULES_JSON,"
+    fi
+    FIRST_RULE=false
+    
+    # Build rule JSON
+    RULES_JSON="$RULES_JSON{
+  \"uuid\": \"$OMV_FIREWALL_UUID\",
+  \"family\": \"inet\",
+  \"rulenum\": $RULENUM,
+  \"chain\": \"$CHAIN\",
+  \"action\": \"$ACTION\",
+  \"source\": \"$SOURCE\",
+  \"sport\": \"$SPORT\",
+  \"destination\": \"$DESTINATION\",
+  \"dport\": \"$DPORT\",
+  \"protocol\": \"$PROTOCOL\",
+  \"extraoptions\": \"$EXTRAOPTIONS\",
+  \"comment\": \"$COMMENT\"
+}"
+
+done < <(jq -c '.[]' "$JSON_FILE")
+
+RULES_JSON="$RULES_JSON]"
+
+# Apply all rules at once
+omv-rpc -u admin 'Iptables' 'setRules' "$RULES_JSON"
+omv-salt deploy run iptables
+
+exit 0

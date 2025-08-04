@@ -57,12 +57,25 @@ def get_available_version() -> Optional[str]:
 def compare_versions(deployed: str, available: str) -> str:
     """Compare versions and return status"""
     try:
-        if version.parse(available) > version.parse(deployed):
+        # Extract version numbers, removing architecture prefixes
+        def extract_version(version_str):
+            # Remove architecture prefix (e.g., "arm64-" or "amd64-")
+            if '-' in version_str:
+                parts = version_str.split('-', 1)
+                if len(parts) > 1:
+                    return parts[1]  # Return version part after first dash
+            return version_str
+        
+        deployed_clean = extract_version(deployed)
+        available_clean = extract_version(available)
+        
+        if version.parse(available_clean) > version.parse(deployed_clean):
             return "Update-Available"
         return "No-Updates"
     except Exception as e:
         print(f"Error comparing versions: {e}")
         return "Error"
+
 
 def main():
     result = {

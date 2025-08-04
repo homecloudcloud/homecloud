@@ -1,0 +1,8 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "advancedsettings.ssh"
+  position: 40
+  text: _("Console Access")
+  icon: ssh
+  url: "/advancedsettings/ssh"

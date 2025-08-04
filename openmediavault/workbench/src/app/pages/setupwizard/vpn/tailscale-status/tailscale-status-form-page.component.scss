@@ -1,21 +1,147 @@
-@import '../../../../../assets/colors.scss';
 
-.hidden{
-    display:none!important;
+
+  @import '../../../../../assets/colors.scss';
+  .omv-dark-theme{
+  omv-tailscale-setupwizard-status-page{
+
+        #mainContainer{
+              
+              h1,h2,h3{color:$lightblue !important;}
+              p,li{color:#ffffff !important;}
+              .plainLink:hover,.plainLink:focus{
+                  background-color:$lightblue;           
+              }
+          }
+       
+          
+          #navButtons{
+              .mat-card{
+                    background-color:$lightblue!important;
+              }
+              .mat-card-actions{
+                    button{
+                      border:1px solid #ffffff!important;
+                    
+                    }
+                    button:hover,button:focus{
+                      background-color:#ffffff!important;
+                      color:$lightblue!important;
+                    }
+              }
+          }
+          
+         
+    }
   }
-  #data-message-form omv-form-paragraph:nth-of-type(1) .omv-form-paragraph{
-    font-size:var(--mat-font-size-subheading-2) !important;
-    font-weight:var(--mat-font-weight-subheading-2) !important;
-  }
-  .greenstatus{
-    background-color:$lightgreen !important;
-    width:30px !important;
-  }
-  .redstatus{
-    background-color:$lightred !important;
-    width:50px !important;
-  }
-  #data-table-form .datatable-header{
-    background-color:$lightblue !important;
+
+  omv-tailscale-setupwizard-status-page{
+
+    omv-top-bar-wizard .omv-top-bar{
+        background:transparent!important;
+        position: absolute;
+        left:80vw;
+    }
     
+
+    omv-logo-header{
+        position:fixed;
+        height:20vh;
+        top:0;
+        left:0;
+        z-index:100;
+    }
+
+    #mainContainer{
+              margin-top:20vh;
+              overflow-y:auto;
+              height:70vh;     
+              scrollbar-color:$lightblue transparent;
+              --scrollbar-border-radius: 0 !important;
+              --scrollbar-thumb-color:red !important;
+              --scrollbar-thumb-hover-color: var(--scrollbar-thumb-color) !important;
+              #tailscale-status-form1,#tailscale-status-form2{
+                margin-bottom:-3rem;
+              }
+              .omv-form-paragraph{
+                padding:2rem;
+                line-height: 1.5rem;
+              }
+
+              .omv-form-paragraph,h2,p,li,h3 {
+                font-size: var(--mat-font-size-subheading-2) !important;
+              
+              }
+              .omv-form-paragraph,p,li {
+                font-size: var(--mat-font-size-subheading-2) !important;
+                font-weight:var(--mat-font-weight-subheading-2) !important;
+              }
+              h1{
+                font-size: var(--mat-font-size-headline) !important;
+              
+              }
+            
+              
+              h2,h1,h3 {
+                color:$blue;
+              }
+
+              
+              
+              ul {
+                list-style-type: disc;
+                margin-left: 20px;
+              }
+
+              .hidden{
+                display:none!important;
+              }
+              #data-message-form omv-form-paragraph:nth-of-type(1) .omv-form-paragraph{
+                font-size:var(--mat-font-size-subheading-2) !important;
+                font-weight:var(--mat-font-weight-subheading-2) !important;
+              }
+              .greenstatus{
+                background-color:$lightgreen !important;
+                width:30px !important;
+              }
+              .redstatus{
+                background-color:$lightred !important;
+                width:50px !important;
+              }
+    }
+
+
+
+    #navButtons{
+            position:fixed;
+            width:100%;
+            bottom:0;
+          
+            .mat-card{
+                background-color:$blue!important;
+            }
+            mat-card-content{
+                display:none!important;
+            }
+            .mat-card-actions{
+                justify-content:space-between!important;
+                flex-direction:row-reverse!important;
+                button{
+                  border:1px solid #ffffff!important;
+                
+                }
+                button:hover,button:focus{
+                  background-color:#ffffff!important;
+                  color:$lightblue!important;
+                }
+            }
+            @media screen and (max-width: 768px) {
+              .mat-card-actions{
+                flex-direction:column-reverse!important;
+                align-items:center!important;
+                justify-content:center!important;
+                row-gap:20px;
+              }
+            }
+    } 
+
   }

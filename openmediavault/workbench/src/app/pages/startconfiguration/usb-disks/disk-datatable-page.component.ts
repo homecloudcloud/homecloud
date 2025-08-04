@@ -27,16 +27,43 @@ import { ModalDialogComponent } from '~/app/shared/components/modal-dialog/modal
 import { TaskDialogComponent } from '~/app/shared/components/task-dialog/task-dialog.component';
 import { Datatable } from '~/app/shared/models/datatable.interface';
 import { DialogService } from '~/app/shared/services/dialog.service';
-import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
+import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
+import { ViewEncapsulation } from '@angular/core';
+//import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
 
 @Component({
+   selector:'omv-usb-disk-main-page',
   template: `
-  <omv-intuition-form-page [config]="this.config2"></omv-intuition-form-page>
+  <div id="usb-disk-main-form-1">
+    <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
+  </div>
   <omv-intuition-datatable-page [config]="this.config"></omv-intuition-datatable-page>
-  <omv-intuition-form-page [config]="this.config3"></omv-intuition-form-page>
-  `
+  <omv-navigation-page></omv-navigation-page>>
+  
+  `,
+  styleUrls: ['./disk-datatable-page.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class DiskDatatablePageComponent {
+  public safeHtmlContent: SafeHtml;
+  private htmlContent =`
+    <div class="usb-info">
+        <h1>🖴 Access USB Drives from Homecloud</h1>
+
+        <p>🔌 Simply plug your USB drives into Homecloud to access them over your network.</p>
+
+        <p>🔢 You can connect <strong>up to 4 USB drives</strong>:</p>
+        <ul>
+        <li>2 × USB 2.0 ports</li>
+        <li>2 × USB 3.0 (blue) high-speed ports</li>
+        </ul>
+        <img src="assets/images/usb-ports.png" alt="USB Ports" class="usb-ports-image">
+        <p>⚠️ Please check your USB drive compatibility and plug it into the appropriate port.</p>
+
+        <p>📂 After connecting, your drives will appear in the table below. Visit the <a class="plainLink" href="#/startconfiguration/usb-disks/filesystems"><strong>Filesystems page</strong></a> to verify that the drive is detected and ready to use.</p>
+        <p>❗ Before unplugging a drive, always use the <strong>Safe Remove</strong> option to prevent data loss.</p>
+  </div>
+  `;
   public config: DatatablePageConfig = {
     stateId: 'c2d59665-d12a-4166-91fc-bdf4707ee539',
     autoReload: false,
@@ -184,24 +211,12 @@ export class DiskDatatablePageComponent {
     ]
   };
 
-  public config2: FormPageConfig = {
-    fields: [
-      {
-        type: 'paragraph',
-        title: gettext('USB drives connected to Homecloud will appear here. To avoid data loss, always use the safe remove option before disconnecting a drive.')
-      }
-    ]
-  };
-  public config3: FormPageConfig = {
-    fields: [
-      {
-        type: 'paragraph',
-        title: gettext('USB drives formatted with popular file systems—NTFS (Windows), EXT4 (Linux), HFS+ (Mac), and FAT — are automatically detected and accessible through the Drive app. If your drive is new (unformatted), recently wiped, visit the Filesystems page to set it up.')
-      }
-    ]
-  };
+ 
   //constructor(private dialogService: DialogService, private router: Router) {}
-  constructor(private dialogService: DialogService) {}
+  constructor(private dialogService: DialogService, private sanitizer:DomSanitizer) {
+    //Sanitize html
+      this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);
+  }
   /*
   onEdit(action: DatatablePageActionConfig, table: Datatable) {
     const selected = table.selection.first();

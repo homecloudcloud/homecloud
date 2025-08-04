@@ -1,0 +1,1 @@
+deb [arch=arm64 signed-by=/usr/share/keyrings/homecloud.gpg] http://repo/repository_dir stable main

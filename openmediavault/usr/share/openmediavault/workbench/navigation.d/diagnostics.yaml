@@ -2,7 +2,7 @@ version: "1.0"
 type: navigation-item
 data:
   path: "diagnostics"
-  position: 70
+  position: 80
   text: _("Diagnostics")
   icon: heartPulse
   url: "/diagnostics"

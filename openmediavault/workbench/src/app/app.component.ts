@@ -15,7 +15,10 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  */
-import { Component, Renderer2 } from '@angular/core';
+import { Component, Inject, Renderer2 } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
+import { DOCUMENT } from '@angular/common';
 
 import {
   PrefersColorScheme,
@@ -28,9 +31,10 @@ import {
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  constructor(
+  constructor(@Inject(DOCUMENT) private document: Document,
     private prefersColorSchemeService: PrefersColorSchemeService,
-    private renderer2: Renderer2
+    private renderer2: Renderer2,
+    private router: Router //Homecloud changes
   ) {
     this.prefersColorSchemeService.change$.subscribe(
       (prefersColorScheme: PrefersColorScheme): void => {
@@ -42,4 +46,44 @@ export class AppComponent {
       }
     );
   }
+
+  //Homecloud changes start
+  ngOnInit() {
+    console.log('AppComponent initialized');
+    // Listen to route changes
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      // Slight delay to allow DOM updates
+      setTimeout(() => this.checkAndUpdateBackgroundColor(), 0);
+    });
+    
+    
+    //this.checkAndUpdateBackgroundColor();
+    
+  }
+  ngAfterViewInit() {
+    console.log('Afterview Init called');
+    // Initial call to set the background color when the component loads
+    setTimeout(() => {
+      this.checkAndUpdateBackgroundColor();
+    },0);   
+  }
+  // Function to check for dark mode (omv-dark-mode) and mainContainer, then update the background color
+  checkAndUpdateBackgroundColor() {
+    const isDarkMode = this.document.body.classList.contains('omv-dark-mode');
+    const mainContainer = this.document.getElementById('mainContainer');
+    //console.log('isDarkMode:', isDarkMode);
+    //console.log('mainContainer:', mainContainer);
+
+    if (!isDarkMode){
+      if (mainContainer) {
+      this.document.documentElement.style.setProperty('--mat-background-color-body', '#FFFFFF');
+      }
+      else{
+        this.document.documentElement.style.setProperty('--mat-background-color-body', '#5dacdf');
+      }
+    } 
+  }
+  //Homecloud changes end
 }

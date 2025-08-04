@@ -15,6 +15,12 @@ import openmediavault.net
 import openmediavault.rpc
 import openmediavault.stringutils
 import openmediavault
+import urllib3
+
+
+# Disable SSL warnings
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
 
 internal_storage_disk_name = "dm"
 
@@ -94,6 +100,7 @@ def get_disk_uuid():
     except Exception as e:
         print(f"Error getting disk UUID: {str(e)}")
         return None
+        
 def check_and_create_share():
     try:
         # Get disk UUID for internal storage
@@ -102,12 +109,11 @@ def check_and_create_share():
             raise Exception("Failed to get disk UUID")
 
         # Check if jellyfin_media_share exists
+        jellyfin_share = None
         existing_shares = get_existing_shared_folders()
-        if not existing_shares:
-            raise Exception("Failed to get existing shares")
-
-        jellyfin_share = next((share for share in existing_shares 
-                             if share['name'] == 'jellyfin_media_share'), None)
+        if existing_shares:
+            jellyfin_share = next((share for share in existing_shares 
+                                if share['name'] == 'jellyfin_media_share'), None)
         
         if not jellyfin_share:
             # Get new UUID for share
@@ -287,6 +293,21 @@ def validate_version(target_version):
         print(f"Error validating version: {str(e)}")
         return False
 
+def check_internet_connectivity():
+    """Check internet connectivity using OMV RPC"""
+    try:
+        result = subprocess.run(['omv-rpc', '-u', 'admin', 'Homecloud', 'enumeratePhysicalNetworkDevices'],
+                              capture_output=True, text=True, check=True)
+        devices = json.loads(result.stdout)
+        
+        for device in devices:
+            if device.get('devicename') == 'internet0':
+                return device.get('state', False)
+        return False
+    except Exception:
+        return False
+
+
 def create_systemd_service():
     service_content = """[Unit]
 Description=Jellyfin
@@ -297,6 +318,7 @@ After=docker.service
 Type=simple
 Restart=always
 RestartSec=10
+ExecStartPre=/bin/chown -R admin:users /var/lib/jellyfin/
 ExecStart=/usr/bin/docker compose -f /etc/jellyfin/docker-compose.yml up 
 ExecStop=/usr/bin/docker compose -f /etc/jellyfin/docker-compose.yml down
 
@@ -393,6 +415,12 @@ def main():
         print(f"Error getting service status: {str(e)}")
         sys.exit(1)
     
+    # Check internet connectivity
+    print("Checking internet connectivity...")
+    if not check_internet_connectivity():
+        print("Not connected to Internet. Check your network connectivity")
+        sys.exit(0)
+
     # Check/create share and get share path
     jellyfin_share = check_and_create_share()
     if not jellyfin_share:
@@ -420,6 +448,9 @@ def main():
         # Update YAML configuration
         update_yaml_config(share_path, target_version)
         
+        
+
+        
     else:
         # Version update
         print("Performing version update...")
@@ -430,9 +461,9 @@ def main():
         deployed_version = json.loads(version_cmd.stdout)['deployed_version']
         
         # Compare versions
-        if version.parse(target_version) <= version.parse(deployed_version):
-            print(f"Error: Target version {target_version} is not greater than deployed version {deployed_version}")
-            sys.exit(1)
+        #if version.parse(target_version) <= version.parse(deployed_version):
+        #    print(f"Error: Target version {target_version} is not greater than deployed version {deployed_version}")
+        #    sys.exit(1)
         
         # Validate version
         if not validate_version(target_version):
@@ -442,6 +473,16 @@ def main():
         update_yaml_config(share_path, target_version)
     
     # Common steps for both paths
+    # check /var/lib/jellyfin exists
+    if os.path.exists('/var/lib/jellyfin'):
+        if not os.path.exists('/var/lib/jellyfin/config'):
+            os.makedirs('/var/lib/jellyfin/config', mode=0o755)
+            print(f"creating config directory")
+        if not os.path.exists('/var/lib/jellyfin/cache'):
+            os.makedirs('/var/lib/jellyfin/cache', mode=0o755)
+            print(f"creating cache directory")
+        # change ownership of all sub-directories and files to user admin and group admin
+        subprocess.run(['chown', '-R', 'admin:users', '/var/lib/jellyfin'])
     # Pull new image
     subprocess.run(['docker', 'pull', f'jellyfin/jellyfin:{target_version}'])
     

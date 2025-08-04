@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 //import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '~/app/shared/shared.module';
 import { AppsPhotosMainComponent } from './photos-form-main-page.component';
-import {AppsPhotosConfigComponent} from '~/app/pages/startconfiguration/apps/photos/access/photos-form-page.component';
+import {AppsPhotosAccessComponent} from '~/app/pages/startconfiguration/apps/photos/access/photos-access-form-page.component';
 import { AppsPhotosRestartComponent } from './restart/photos-restart-page.component';
 import { AppsPhotosDBResetComponent } from './reset/photos-db_reset-page.component';
 import { PagesModule } from '~/app/core/pages/pages.module';
@@ -15,6 +15,8 @@ import { AppsPhotosPasswordResetComponent } from './password/photos-password-pag
 import {AppsPhotosPasswordResetDisplayComponent} from './password/photos-password-display-page.component'
 import {AppsPhotosUpdateFormPageComponent} from './update/photos-update-form-page.component'
 import {AppsPhotosRestoreComponent} from './restore/photos-restore-page.component'
+import {AppsPhotosExternalStorageComponent} from './external-storage/photos-external-storage-page.component'
+
 
 /*const routes: Routes = [
   { path: 'windows', component: AppsDriveWindowsComponent }
@@ -24,14 +26,15 @@ import {AppsPhotosRestoreComponent} from './restore/photos-restore-page.componen
 @NgModule({
   declarations: [
     AppsPhotosMainComponent,
-    AppsPhotosConfigComponent,
+    AppsPhotosAccessComponent,
     AppsPhotosRestartComponent,
     AppsPhotosDBResetComponent,
     AppsPhotosBackupComponent,
     AppsPhotosPasswordResetComponent,
     AppsPhotosPasswordResetDisplayComponent,
     AppsPhotosUpdateFormPageComponent,
-    AppsPhotosRestoreComponent
+    AppsPhotosRestoreComponent,
+    AppsPhotosExternalStorageComponent
   ],
   imports: [
     CommonModule,
@@ -42,14 +45,15 @@ import {AppsPhotosRestoreComponent} from './restore/photos-restore-page.componen
   ],
   exports:[
     AppsPhotosMainComponent,
-    AppsPhotosConfigComponent,
+    AppsPhotosAccessComponent,
     AppsPhotosRestartComponent,
     AppsPhotosDBResetComponent,
     AppsPhotosBackupComponent,
     AppsPhotosPasswordResetComponent,
     AppsPhotosPasswordResetDisplayComponent,
     AppsPhotosUpdateFormPageComponent,
-    AppsPhotosRestoreComponent
+    AppsPhotosRestoreComponent,
+    AppsPhotosExternalStorageComponent
   ],
 })
 export class PhotosModule { }

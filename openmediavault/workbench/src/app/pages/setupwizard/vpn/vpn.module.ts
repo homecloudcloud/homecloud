@@ -8,6 +8,7 @@ import { SharedModule } from '~/app/shared/shared.module';
 import { TailscaleStatusComponent } from '~/app/pages/setupwizard/vpn/tailscale-status/tailscale-status-form-page.component';
 import { TailscaleConfigFormPageComponent} from '~/app/pages/setupwizard/vpn/tailscaleconfig/tailscale-config-form-page.component';
 import { TailscaleAccessComponent } from '~/app/pages/setupwizard/vpn/tailscale-access/tailscale-access-form-page.component';
+import { TailscaleTermsFormPageComponent } from '~/app/pages/setupwizard/vpn/tailscale-terms/tailscale-terms-form-page.component'; // Assuming this component is also part of the VPN module
 
 const routes: Routes = [
   { path: 'status', component: TailscaleStatusComponent },
@@ -19,7 +20,8 @@ const routes: Routes = [
   declarations: [
     TailscaleStatusComponent,
     TailscaleConfigFormPageComponent,
-    TailscaleAccessComponent
+    TailscaleAccessComponent,
+    TailscaleTermsFormPageComponent // Assuming this component is also part of the VPN module
   ],
   imports: [
     CommonModule,
@@ -29,7 +31,8 @@ const routes: Routes = [
   exports:[
     TailscaleStatusComponent,
     TailscaleConfigFormPageComponent,
-    TailscaleAccessComponent
+    TailscaleAccessComponent,
+    TailscaleTermsFormPageComponent
   ],
 })
 export class VpnModule { }

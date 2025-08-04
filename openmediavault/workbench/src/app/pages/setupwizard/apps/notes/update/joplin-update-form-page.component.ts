@@ -82,7 +82,7 @@ export class AppsJoplinUpdateFormPageComponent extends BaseFormPageComponent {
 
       {
         type: 'paragraph',
-        title: gettext('Review release information before proceeding with update. Details available at:&nbsp;&nbsp;<a class="plainLink" href="https://github.com/etechonomy/joplin-server" target="_blank">Review release informaton</a> ')
+        title: gettext('Review release information before proceeding with update. Details available at:&nbsp;&nbsp;<a class="plainLink" href="https://github.com/laurent22/joplin" target="_blank">Review release informaton</a> ')
       },
 
       {

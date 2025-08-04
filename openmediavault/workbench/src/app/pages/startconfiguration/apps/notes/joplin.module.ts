@@ -13,6 +13,7 @@ import {AppsJoplinPasswordResetComponent} from './password/joplin-password-page.
 import {AppsJoplinRestartComponent} from './restart/joplin-restart-page.component'
 import {AppsJoplinUpdateFormPageComponent} from './update/joplin-update-form-page.component'
 import {AppsJoplinRestoreComponent} from './restore/joplin-restore-page.component'
+import { AppsJoplinResetComponent } from './reset/joplin_reset-page.component';
 
 /*const routes: Routes = [
   { path: 'windows', component: AppsDriveWindowsComponent }
@@ -27,7 +28,8 @@ import {AppsJoplinRestoreComponent} from './restore/joplin-restore-page.componen
     AppsJoplinPasswordResetComponent,
     AppsJoplinRestartComponent,
     AppsJoplinUpdateFormPageComponent,
-    AppsJoplinRestoreComponent
+    AppsJoplinRestoreComponent,
+    AppsJoplinResetComponent
   ],
   imports: [
     CommonModule,
@@ -42,7 +44,8 @@ import {AppsJoplinRestoreComponent} from './restore/joplin-restore-page.componen
     AppsJoplinPasswordResetComponent,
     AppsJoplinRestartComponent,
     AppsJoplinUpdateFormPageComponent,
-    AppsJoplinRestoreComponent
+    AppsJoplinRestoreComponent,
+    AppsJoplinResetComponent
   ]
 })
 export class JoplinModule { }

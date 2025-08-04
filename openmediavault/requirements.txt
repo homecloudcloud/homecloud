@@ -1,0 +1,17 @@
+Adafruit_SSD1306==1.6.2
+board==1.0
+docker_py==1.10.6
+Flask==3.1.1
+flask_cors==6.0.1
+flask_limiter==3.12
+natsort==8.4.0
+netifaces==0.11.0
+packaging==21.3
+Pillow==11.2.1
+psutil==5.9.0
+PyYAML==6.0.2
+Requests==2.32.4
+systemd==0.17.1
+urllib3==1.26.15
+waitress==3.0.2
+watchdog==6.0.0

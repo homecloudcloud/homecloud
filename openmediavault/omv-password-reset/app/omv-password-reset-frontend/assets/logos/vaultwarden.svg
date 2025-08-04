@@ -1,0 +1,58 @@
+<svg width="1365.826" height="280.489" viewBox="0 0 1365.825 280.489" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <mask id="b">
+            <path fill="#fff" d="M-60-60H60V60H-60z"/>
+            <circle id="a" cy="-40" r="3"/>
+            <use transform="rotate(72)" xlink:href="#a"/>
+            <use transform="rotate(144)" xlink:href="#a"/>
+            <use transform="rotate(216)" xlink:href="#a"/>
+            <use transform="rotate(-72)" xlink:href="#a"/>
+        </mask>
+    </defs>
+    <text transform="translate(-10.708 -9.297)" x="286.592" y="223.436" font-family="'Open Sans'" font-size="200" style="line-height:1.25" xml:space="preserve"><tspan x="286.592" y="223.436"><tspan font-weight="bold">ault</tspan>warden</tspan></text>
+    <g mask="url(#b)" transform="matrix(2.67128 0 0 2.67128 140.242 140.242)">
+        <path d="m-31.172-33.813 26.496 74.189h9.352l26.496-74.19h-9.767l-16.73 47.59Q3.014 18.348 1.87 22.4.727 26.348 0 29.985q-.727-3.637-1.87-7.689-1.143-4.052-2.806-8.728L-21.3-33.813z" stroke="#000" stroke-width="4.512"/>
+        <circle transform="scale(-1 1)" r="43" fill="none" stroke="#000" stroke-width="9"/>
+        <g transform="scale(-1 1)">
+            <path id="c" stroke="#000" stroke-linejoin="round" stroke-width="3" d="M46-3v6l5-3z"/>
+            <use transform="rotate(11.25)" xlink:href="#c"/>
+            <use transform="rotate(22.5)" xlink:href="#c"/>
+            <use transform="rotate(33.75)" xlink:href="#c"/>
+            <use transform="rotate(45)" xlink:href="#c"/>
+            <use transform="rotate(56.25)" xlink:href="#c"/>
+            <use transform="rotate(67.5)" xlink:href="#c"/>
+            <use transform="rotate(78.75)" xlink:href="#c"/>
+            <use transform="rotate(90)" xlink:href="#c"/>
+            <use transform="rotate(101.25)" xlink:href="#c"/>
+            <use transform="rotate(112.5)" xlink:href="#c"/>
+            <use transform="rotate(123.75)" xlink:href="#c"/>
+            <use transform="rotate(135)" xlink:href="#c"/>
+            <use transform="rotate(146.25)" xlink:href="#c"/>
+            <use transform="rotate(157.5)" xlink:href="#c"/>
+            <use transform="rotate(168.75)" xlink:href="#c"/>
+            <use transform="scale(-1)" xlink:href="#c"/>
+            <use transform="rotate(191.25)" xlink:href="#c"/>
+            <use transform="rotate(202.5)" xlink:href="#c"/>
+            <use transform="rotate(213.75)" xlink:href="#c"/>
+            <use transform="rotate(225)" xlink:href="#c"/>
+            <use transform="rotate(236.25)" xlink:href="#c"/>
+            <use transform="rotate(247.5)" xlink:href="#c"/>
+            <use transform="rotate(258.75)" xlink:href="#c"/>
+            <use transform="rotate(-90)" xlink:href="#c"/>
+            <use transform="rotate(-78.75)" xlink:href="#c"/>
+            <use transform="rotate(-67.5)" xlink:href="#c"/>
+            <use transform="rotate(-56.25)" xlink:href="#c"/>
+            <use transform="rotate(-45)" xlink:href="#c"/>
+            <use transform="rotate(-33.75)" xlink:href="#c"/>
+            <use transform="rotate(-22.5)" xlink:href="#c"/>
+            <use transform="rotate(-11.25)" xlink:href="#c"/>
+        </g>
+        <g transform="scale(-1 1)">
+            <path id="d" stroke="#000" stroke-linejoin="round" stroke-width="6" d="M7-42H-7l7 7z"/>
+            <use transform="rotate(72)" xlink:href="#d"/>
+            <use transform="rotate(144)" xlink:href="#d"/>
+            <use transform="rotate(216)" xlink:href="#d"/>
+            <use transform="rotate(-72)" xlink:href="#d"/>
+        </g>
+    </g>
+</svg>

@@ -36,7 +36,7 @@ import {
   SystemInformationService
 } from '~/app/shared/services/system-information.service';
 
-import { HttpClient,HttpHeaders } from '@angular/common/http';
+//import { HttpClient,HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'omv-apply-config-panel',
@@ -60,7 +60,7 @@ export class ApplyConfigPanelComponent {
    /**home cloud changes start */
   public textMessage="";
 
-  public httpOptions = {
+  /*public httpOptions = {
     headers: new HttpHeaders({
     'Content-Type' : 'application/json',
       'Access-Control-Allow-Origin':window.location.hostname
@@ -70,7 +70,7 @@ export class ApplyConfigPanelComponent {
     observe:'response',
     responseType:'json'
   };
-
+*/
    /**home cloud changes end */
   constructor(
     private blockUiService: BlockUiService,
@@ -80,7 +80,7 @@ export class ApplyConfigPanelComponent {
     private router: Router,
     private rpcService: RpcService,
     private systemInformationService: SystemInformationService,
-    private http: HttpClient  /**home cloud changes */
+    //private http: HttpClient  /**home cloud changes */
 
 
   ) {
@@ -90,7 +90,7 @@ export class ApplyConfigPanelComponent {
         this.dirtyModules = _.get(res, 'dirtyModules', {});
       /**home cloud changes start */
 
-        this.textMessage=Array.prototype.hasOwnProperty.call(this.dirtyModules,"systemd-networkd")?'Do you really want to apply the configuration changes? \n\n If configuration is correct - switch your laptop/phone to WiFi "PICK SSID FROM  WHAT USER ENTERED':'Do you really want to apply the configuration changes?';
+        this.textMessage=Array.prototype.hasOwnProperty.call(this.dirtyModules,"systemd-networkd")?`Do you really want to apply the configuration changes? <br><br> If you lose connectivity after this change, check the messages on the Homecloud display for further instructions.`:'Do you really want to apply the configuration changes?';
 
       /**home cloud changes end */
         this.cd.markForCheck();
@@ -126,6 +126,7 @@ export class ApplyConfigPanelComponent {
           template: 'confirmation-danger',
           title: gettext('Apply'),
           message:
+          //gettext('Do you really want to apply the configuration changes?') 
           //gettext('Do you really want to apply the configuration changes? After applying these changes, network will be broken.Please check device display to get details to connect again')   /**home cloud changes */
           gettext(this.textMessage)   /**home cloud changes */
         }
@@ -133,7 +134,7 @@ export class ApplyConfigPanelComponent {
       .afterClosed()
       .subscribe((res) => {
         if (res) {
-          /**home cloud changes start */
+          /**home cloud changes start
           this.http.post<any>('https://'+window.location.hostname+':5000/display?line1=Changes%20in&line2=Process&type=once&msg_req=add&msg_id=0&time_to_display=10','testdata',
           {headers: new HttpHeaders({
             'Content-Type' : 'application/json',
@@ -142,7 +143,7 @@ export class ApplyConfigPanelComponent {
           withCredentials: true,
           responseType:'json'
           });
-
+          */
 
           /**home cloud changes end */
           this.blockUiService.start(

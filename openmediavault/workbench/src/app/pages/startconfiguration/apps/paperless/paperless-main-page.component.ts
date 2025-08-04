@@ -21,7 +21,7 @@ import * as _ from 'lodash';
 import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
 import { BaseFormPageComponent } from '~/app/pages/base-page-component';
 import { ViewEncapsulation } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer,SafeHtml } from '@angular/platform-browser';
 import { RpcService } from '~/app/shared/services/rpc.service';
 
 
@@ -29,7 +29,10 @@ import { RpcService } from '~/app/shared/services/rpc.service';
   selector:'omv-paperless-main-page', //Home cloud changes
   //template: '<omv-intuition-form-page [config]="this.config"></omv-intuition-form-page>',
   template: `
-  <omv-intuition-form-page id="paperless-main-form1" [config]="this.config"></omv-intuition-form-page>
+   <div id="paperless-main-form1">
+    <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
+  </div>
+  
   <omv-intuition-form-page id="paperless-main-form2" [config]="this.config2"></omv-intuition-form-page>
   <omv-intuition-form-page id="paperless-main-form3" [config]="this.config3"></omv-intuition-form-page>
   <omv-navigation-page></omv-navigation-page>
@@ -41,52 +44,81 @@ import { RpcService } from '~/app/shared/services/rpc.service';
 })
 
 export class AppsPaperlessMainComponent extends BaseFormPageComponent {
-  public config: FormPageConfig = {
-    request: {
-      service: 'Homecloud',
-      get: {
-        method: 'getPaperlessServiceStatus'
-      }
-    },
-    fields: [
-      {
-        type: 'paragraph',
-        title: gettext('Homecloud supports opensource Document manager: Paperless-ngx.')
-      },
-      {
-        type: 'paragraph',
-        title: gettext('Paperless-ngx is a document management system that transforms your physical documents into a searchable online archive so you can keep, well, less paper.')
-      },
-      {
-        type: 'paragraph',
-        title: gettext('')
-      },
-      {
-        type: 'paragraph',
-        title: gettext('All your private personal documents are transformed using optical character recognition (OCR) to searchable archive accessible on any device. All data resides on Homecloud in your physical and logical control giving you privacy and control.')
-      },
-      {
-        type: 'paragraph',
-        title: gettext('')
-      },
-      {
-        type: 'paragraph',
-        title: gettext('Paperless has two components: 1. Backend service that runs on Homecloud. It stores and transforms your documents into searchable archive It supports many formats including pdf, Office formats like doc, xls and even images like JPEG, PNG and more.')
-      },
-      {
-        type: 'paragraph',
-        title: gettext('2.Frontend which is a mobile app, webapp that can be used to scan new documents using camera or search, access existing documents.')
-      },
-      {
-        type: 'paragraph',
-        title: gettext('You can also selectively share documents with your family, friends who also can create account on Paperless app deployed on your Homecloud')
-      },
-      {
-        type: 'paragraph',
-        title: gettext(` This is an open source 3rd party software. By clicking deploy you agree to terms and conditions enter link here. To learn more about Vaultwarden visit open source project at:&nbsp;&nbsp; <a class="plainLink" href="https://github.com/paperless-ngx/paperless-ngx" target="_blank">Learn more about Paperless-ngx </a> `)
-      }
-    ]
-  };
+
+  public safeHtmlContent: SafeHtml;
+  
+  private htmlContent = `
+  <div class="content-wrapper">
+  <div class="left-column">
+    <div class="paperless-logo"></div>
+    <p class="intro-text">
+      Paperless-ngx is a community-supported open-source document management system that transforms your physical documents into a searchable online archive, allowing you to keep less paper.
+    </p>
+    <h2>Key Features:</h2>
+    <ul>
+      <li><strong>Organize & Index Your Documents:</strong><br>
+        Tag and categorize your scanned documents with smart metadata — including tags, correspondents, document types, and more.
+      </li>
+
+      <li><strong>Privacy First:</strong><br>
+        All data is stored <strong>locally</strong> on your Homecloud. Your documents are <strong>never transmitted or shared</strong> outside your personal network.
+      </li>
+
+      <li><strong>AI-Powered Automation:</strong><br>
+        Automatically detects and assigns tags, correspondents, and document types using built-in machine learning.
+      </li>
+
+      <li><strong>Email Processing:</strong><br>
+        Automatically import documents from your email accounts.<br>
+        - Configure multiple accounts with custom rules for each.<br>
+        - Automatically perform actions on messages after processing (e.g., mark as read, delete, and more).
+      </li>
+
+      <li><strong>Wide Format Support:</strong><br>
+        Supports PDFs, images (JPEG, PNG), plain text files, and Office documents (Word, Excel, PowerPoint, LibreOffice, etc.).
+      </li>
+    </ul>
+
+    <h2>How It Works</h2>
+    <p><strong>Paperless has two components:</strong></p>
+
+    <h3>1. Backend (Runs on Homecloud)</h3>
+    <ul>
+      <li>Stores and organizes your documents into a searchable archive.</li>
+      <li>Supports many formats including PDFs, Office docs, and images.</li>
+      <li>Performs automatic tagging and classification.</li>
+    </ul>
+
+    <h3>2. Frontend (Mobile App & Web App)</h3>
+    <ul>
+      <li>Scan documents directly using your phone camera.</li>
+      <li>Search and access your document archive on the go.</li>
+      <li>Share specific documents securely with family or friends — they can create their own accounts on your Paperless instance. They would need to access your Tailscale VPN to connect to Homecloud.</li>
+    </ul>
+
+    <h2>Deployment Notice</h2>
+    <p>
+      Paperless is an open-source third-party application. Before deploying, please read more about it here:<br> 
+      <a href="https://docs.paperless-ngx.com/" class="plainLink" target="_blank">https://docs.paperless-ngx.com/</a>
+    </p>
+
+    <h2>Getting Started</h2>
+    <ul>
+      <li>Go to deploy section below to deploy the app.</li>
+      <li class="init-login-info">Make sure to note down the username and password displayed at the end of the deployment. If you miss to do that, go to <a class="plainLink" href="#/startconfiguration/apps/paperless/password">password page</a> to reset the password.</li>
+      <li>After deploying, go to the <a class="plainLink" href="#/startconfiguration/apps/paperless/access">access page</a> to start using the app.</li>
+    </ul>
+    </div>
+
+  <div class="right-column">
+    <img src="/assets/images/paperless-dark.png" alt="Paperless dashboard image">
+  </div>
+</div>
+
+    
+`;
+
+ 
 
   public config2: FormPageConfig = {
       request: {
@@ -101,6 +133,12 @@ export class AppsPaperlessMainComponent extends BaseFormPageComponent {
         name: 'version',
         label: gettext('Latest Paperless-ngx version available to deploy'),
         hint: gettext('This version will be deployed'),
+        value: '',
+        readonly: true
+      },
+      {
+        type: 'textInput',
+        name: 'message',
         value: '',
         readonly: true
       },
@@ -153,7 +191,7 @@ export class AppsPaperlessMainComponent extends BaseFormPageComponent {
                   }
                 }
               },
-            successUrl:'/startconfiguration/apps/paperless'
+            successUrl:'/startconfiguration/apps/paperless/access'
             }
         }
       }
@@ -235,28 +273,11 @@ export class AppsPaperlessMainComponent extends BaseFormPageComponent {
   };
   constructor(private rpcService: RpcService,private sanitizer: DomSanitizer) {
     super();
-    // Sanitize the title 
-    this.config.fields[7].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[7].title) as unknown as string;
-
+     // Sanitize the HTML content once during construction
+    this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);
 
   }
 
-  ngAfterViewInit(): void {
-        
-    // Delay the operation to ensure the view is fully rendered
-    setTimeout(() => {
-      
-      // Select all paragraph elements 
-      const paragraphs = document.querySelectorAll('#paperless-main-form1 .omv-form-paragraph');
-      
-
-
-      paragraphs[7].innerHTML =
-      (this.config.fields[7].title as any).changingThisBreaksApplicationSecurity ||
-      this.config.fields[7].title?.toString();
-      
-    }, 100); // Timeout ensures it happens after the view has rendered
-  }
   ngOnInit(){
     this.fetchStatusAndUpdateFields();  //get hostname value and update in link
     
@@ -264,45 +285,73 @@ export class AppsPaperlessMainComponent extends BaseFormPageComponent {
   fetchStatusAndUpdateFields(): void {
     this.rpcService.request('Homecloud', 'getPaperlessServiceStatus').subscribe(response => {
       const status = response.status;
-      console.log('status',status);
+      //console.log('status',status);
       this.updateFieldVisibility(status); //Hide or show the checkbox for updates based on status     
         
     });
   }
 
   updateFieldVisibility(status:string):void{
-    console.log('deploy status',status);
-    const checkboxDeploy=document.querySelector('omv-paperless-main-page #paperless-main-form2 omv-form-checkbox mat-checkbox');
-    const checkboxRemove=document.querySelector('omv-paperless-main-page #paperless-main-form3 omv-form-checkbox mat-checkbox');
+  //  console.log('deploy status',status);
+    const checkboxDeploy=document.querySelector('omv-paperless-main-page #paperless-main-form2 omv-form-checkbox');
+    const checkboxRemove=document.querySelector('omv-paperless-main-page #paperless-main-form2 omv-form-checkbox');
     const deployButton = document.querySelector('omv-paperless-main-page  #paperless-main-form2 omv-submit-button button');
-    const removeButton = document.querySelector('omv-paperless-main-page  #paperless-main-form3 omv-submit-button button');
-    const paperlessMainForm2=document.querySelector('omv-paperless-main-page #paperless-main-form2');
-    const paperlessMainForm3=document.querySelector('omv-paperless-main-page #paperless-main-form3');
+    
+    const photosMainForm2=document.querySelector('omv-paperless-main-page #paperless-main-form2');
+    const photosMainForm3=document.querySelector('omv-paperless-main-page #paperless-main-form3');
    
     if(status === 'Not deployed'){
-      console.log('status is not deployed');
-      paperlessMainForm3.classList.add('hidden');
+      
+     // console.log('status is not deployed');
+      photosMainForm3.classList.add('hidden');
       checkboxDeploy.classList.remove('hidden');
-      checkboxDeploy.addEventListener('click', () => {
-        // Add a small delay to ensure class changes are applied
-        setTimeout(() => {
-            const isChecked = checkboxDeploy.classList.contains('mat-checkbox-checked');
-            console.log('Checkbox checked status:', isChecked);            
-            if (isChecked) {
-                deployButton.classList.remove('mat-button-disabled');
-                console.log('Deploy button enabled - classes:', deployButton.className);
-            } else {
-                deployButton.classList.add('mat-button-disabled');
-                console.log('Deploy button disabled - classes:', deployButton.className);
-            }
-        }, 0);
-    });
+      this.rpcService.request('Homecloud', 'paperless_get_latest_version').subscribe(response => {
+        const version = response.version;
+        if (!version || version.trim() === '') {
+          // Version is null, undefined, empty, or contains only spaces
+          deployButton.classList.add('mat-button-disabled');
+          checkboxDeploy.classList.add('hidden');
+        }
+        else{
+           this.checkboxDeployListener();
+        }
+      });     
      
-    }else{
-      console.log('status is deployed');
-      paperlessMainForm2.classList.add('hidden');
+    }
+    else{
+    //  console.log('status is deployed');
+      photosMainForm2.classList.add('hidden');
       checkboxRemove.classList.remove('hidden');
-      checkboxRemove.addEventListener('click', () => {
+      this.checkboxRemoveListener();
+     
+    }
+  }
+
+  checkboxDeployListener(){
+    const checkboxDeploy=document.querySelector('omv-paperless-main-page #paperless-main-form2 omv-form-checkbox mat-checkbox');
+    const deployButton = document.querySelector('omv-paperless-main-page  #paperless-main-form2 omv-submit-button button');
+     checkboxDeploy.addEventListener('click', () => {
+            // Add a small delay to ensure class changes are applied
+            setTimeout(() => {
+                const isChecked = checkboxDeploy.classList.contains('mat-checkbox-checked');
+            //   console.log('Checkbox checked status:', isChecked);
+                
+                if (isChecked) {
+                    deployButton.classList.remove('mat-button-disabled');
+              //     console.log('Deploy button enabled - classes:', deployButton.className);
+                } else {
+                    deployButton.classList.add('mat-button-disabled');
+            //       console.log('Deploy button disabled - classes:', deployButton.className);
+                }
+            }, 0);
+      });
+
+  }
+
+  checkboxRemoveListener(){
+    const removeButton = document.querySelector('omv-paperless-main-page  #paperless-main-form3 omv-submit-button button');
+    const checkboxRemove=document.querySelector('omv-paperless-main-page #paperless-main-form3 omv-form-checkbox mat-checkbox');
+    checkboxRemove.addEventListener('click', () => {
         // Add a small delay to ensure class changes are applied
         setTimeout(() => {
             const isChecked = checkboxRemove.classList.contains('mat-checkbox-checked');
@@ -311,16 +360,14 @@ export class AppsPaperlessMainComponent extends BaseFormPageComponent {
             if (isChecked) {
                 removeButton.classList.remove('mat-button-disabled');
                 removeButton.classList.add('red', 'white');
-                console.log('Remove button enabled - classes:', removeButton.className);
+          //      console.log('Remove button enabled - classes:', removeButton.className);
             } else {
                 removeButton.classList.add('mat-button-disabled');
                 removeButton.classList.remove('red', 'white');
-                console.log('Remove button disabled - classes:', removeButton.className);
+          //      console.log('Remove button disabled - classes:', removeButton.className);
             }
         }, 0);
     });
-     
-    }
   }
 
 }

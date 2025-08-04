@@ -1,0 +1,15 @@
+services:
+  vaultwarden:
+    container_name: vaultwarden1
+    environment:
+    - DOMAIN=
+    - INVITATIONS_ALLOWED=false
+    - SIGNUPS_ALLOWED=true
+    - SIGNUPS_VERIFY=false
+    image: vaultwarden/server:1.33.2
+    ports:
+    - :80
+    restart: always
+    user: 109:985
+    volumes:
+    - /var/lib/vwdata/:/data/

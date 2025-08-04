@@ -5,12 +5,12 @@ import { CommonModule } from '@angular/common';
 //import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '~/app/shared/shared.module';
 import {AppsDriveMainComponent} from '~/app/pages/setupwizard/apps/drive/drive-form-page.component'
-import {AppsDriveWindowsComponent} from '~/app/pages/setupwizard/apps/drive/windows/drive-access-form-page.component';
-import {AppsDriveAccessComponent} from '~/app/pages/setupwizard/apps/drive/iPhone/drive-access-form-page.component';
-import {AppsDrivemacOSComponent} from '~/app/pages/setupwizard/apps/drive/macos/drive-access-form-page.component';
-import {AppsDriveandroidComponent} from '~/app/pages/setupwizard/apps/drive/android/drive-access-form-page.component';
-import {AppsDriveBackupComponent} from '~/app/pages/setupwizard/apps/drive/backup/drive-backup-page.component';
-import {AppsDriveRestoreComponent} from '~/app/pages/setupwizard/apps/drive/restore/drive-restore-page.component';
+//import {AppsDriveWindowsComponent} from '~/app/pages/setupwizard/apps/drive/windows/drive-access-form-page.component';
+import {AppsDriveAccessComponent} from '~/app/pages/setupwizard/apps/drive/access/drive-access-form-page.component';
+//import {AppsDrivemacOSComponent} from '~/app/pages/setupwizard/apps/drive/macos/drive-access-form-page.component';
+//import {AppsDriveandroidComponent} from '~/app/pages/setupwizard/apps/drive/android/drive-access-form-page.component';
+//import {AppsDriveBackupComponent} from '~/app/pages/setupwizard/apps/drive/backup/drive-backup-page.component';
+//import {AppsDriveRestoreComponent} from '~/app/pages/setupwizard/apps/drive/restore/drive-restore-page.component';
 import {UserDatatablePageComponent} from '~/app/pages/setupwizard/apps/drive/users/user-datatable-page.component';
 import {UserFormPageComponent} from '~/app/pages/setupwizard/apps/drive/users/user-form-page.component';
 import {UserImportFormPageComponent} from '~/app/pages/setupwizard/apps/drive/users/user-import-form-page.component';
@@ -30,13 +30,13 @@ import { CoreModule } from '~/app/core/core.module';
 
 @NgModule({
   declarations: [
-    AppsDriveWindowsComponent,
+  //  AppsDriveWindowsComponent,
     AppsDriveAccessComponent,
-    AppsDrivemacOSComponent,
-    AppsDriveandroidComponent,
+  //  AppsDrivemacOSComponent,
+  //  AppsDriveandroidComponent,
     AppsDriveMainComponent,
-    AppsDriveBackupComponent,
-    AppsDriveRestoreComponent,
+  //  AppsDriveBackupComponent,
+  //  AppsDriveRestoreComponent,
     UserDatatablePageComponent,
     UserFormPageComponent,
     UserImportFormPageComponent,
@@ -53,13 +53,13 @@ import { CoreModule } from '~/app/core/core.module';
     //RouterModule.forChild(routes)
   ],
   exports:[
-    AppsDriveWindowsComponent,
+  //  AppsDriveWindowsComponent,
     AppsDriveAccessComponent,
-    AppsDrivemacOSComponent,
-    AppsDriveandroidComponent,
+  //  AppsDrivemacOSComponent,
+  //  AppsDriveandroidComponent,
     AppsDriveMainComponent,
-    AppsDriveBackupComponent,
-    AppsDriveRestoreComponent,
+  //  AppsDriveBackupComponent,
+  //  AppsDriveRestoreComponent,
     UserDatatablePageComponent,
     UserFormPageComponent,
     UserImportFormPageComponent,

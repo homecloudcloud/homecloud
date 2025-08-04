@@ -17,23 +17,29 @@
  */
 import { Component } from '@angular/core';
 import { marker as gettext } from '@ngneat/transloco-keys-manager/marker';
-import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
+//import { FormPageConfig } from '~/app/core/components/intuition/models/form-page-config.type';
 import { DatatablePageConfig } from '~/app/core/components/intuition/models/datatable-page-config.type';
 import { ViewEncapsulation } from '@angular/core';
+import { DomSanitizer,SafeHtml } from '@angular/platform-browser';
 
 @Component({
-  template: `<omv-intuition-form-page id="drive-users"[config]="this.config2"></omv-intuition-form-page>
+  selector:'omv-drive-users-page',
+  template: `<div id="drive-users-form1">
+                <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
+             </div>
              <omv-intuition-datatable-page [config]="this.config"></omv-intuition-datatable-page>`,
              styleUrls: ['./user-page.component.scss'],
-             styles: [`
-              .omv-form-paragraph {
-                font-size: var(--mat-font-size-subheading-2) !important;
-              }
-            `],
              encapsulation: ViewEncapsulation.None
 })
 export class UserDatatablePageComponent {
-  public config2: FormPageConfig = {
+  public safeHtmlContent:SafeHtml
+  private htmlContent=`<div class="container">
+                      <h1>👥Manage users for Drive access below</h1>
+                      <p>🗂️ Each user gets a <strong>private Drive share</strong> upon creation — only they can access it.</p>
+                      <p>⚙️ You can <strong>create, update, or delete users and update their passwords</strong> directly in the table.</p>
+                      <p>🚀 Once your account is ready, head over to the <a href="#/startconfiguration/apps/drive/access" class="plainLink"><strong>Access page</strong></a> to connect and start using your Drive from your phone or computer 📱💻.</p>
+                      </div>`;
+  /*public config2: FormPageConfig = {
       fields: [
         {
           type: 'paragraph',
@@ -52,6 +58,7 @@ export class UserDatatablePageComponent {
         }
       ]
   };
+  */
   public config: DatatablePageConfig = {
     stateId: '9dd2c07e-4572-4112-9de7-c3ccad5ef52e',
     autoReload: false,
@@ -77,7 +84,7 @@ export class UserDatatablePageComponent {
         sortable: true,
         hidden: true
       },
-      { name: gettext('Email'), prop: 'email', flexGrow: 1, sortable: true },
+      { name: gettext('Email'), prop: 'email', flexGrow: 1, sortable: true, hidden: true },
       {
         name: gettext('Groups'),
         prop: 'groups',
@@ -156,4 +163,8 @@ export class UserDatatablePageComponent {
       }
     ]
   };
+  constructor(private sanitizer:DomSanitizer){
+    // Sanitize the HTML content 
+    this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);
+  }
 }

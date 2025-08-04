@@ -13,7 +13,8 @@ import shutil
 class DriveBackup:
     def __init__(self, backup_path):
         self.backup_path = Path(backup_path)
-        self.source_dir = Path('/home/')
+        # Will be set dynamically in validate_paths
+        self.source_dir = None
         self.timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M")
         self.backup_directory = None
         
@@ -43,6 +44,17 @@ class DriveBackup:
     def validate_paths(self):
         """Validate backup path and source directory"""
         self.logger.info("Validating paths...")
+        
+        # Find mount point for DATA_VOL-home_dirs
+        mount_cmd = "df -P /dev/mapper/DATA_VOL-home_dirs | tail -1 | awk '{print $NF}'"
+        mount_point = self.run_command(mount_cmd, shell=True)
+        
+        if not mount_point:
+            self.logger.error("Could not find mount point for DATA_VOL-home_dirs")
+            return False
+            
+        self.source_dir = Path(mount_point)
+        self.logger.info(f"Found source directory: {self.source_dir}")
         
         # Check backup path exists and is writable
         if not self.backup_path.exists():
@@ -117,19 +129,26 @@ class DriveBackup:
         self.logger.info("Starting backup process...")
         
         # Build rsync command with full permissions preservation
-        # Add exclude option for /home/admin
+        # Add exclude options for specified directories and files
         rsync_cmd = [
             'rsync', 
-            '-a', 
-            '--progress', 
-            '--exclude=admin',  # Exclude the admin directory
+            '-a',  # Archive mode (preserves permissions, timestamps, etc.)
+            '--progress',
+            '--exclude=homes/admin',
+            '--exclude=vwdata',
+            '--exclude=immich',
+            '--exclude=paperless',
+            '--exclude=joplin',
+            '--exclude=jellyfin',
+            '--exclude=lost+found',
+            '--exclude=aquota.*',
             str(self.source_dir) + '/', 
             str(self.backup_directory)
         ]
         
         # Execute rsync with real-time progress
         self.logger.info("Running rsync with full permission preservation")
-        self.logger.info(f"Excluding directory: /home/admin")
+        self.logger.info(f"Excluding directories: home/admin, vwdata, immich, paperless, joplin, jellyfin, lost+found, aquota.*")
         
         try:
             # Use Popen to capture output in real-time
@@ -163,13 +182,69 @@ class DriveBackup:
             self.logger.error(f"Backup failed: {str(e)}")
             return False
 
+
+    def backup_user_list(self):
+            """Backup list of non-system users with UID, GID, group memberships and password hashes"""
+            self.logger.info("Backing up list of non-system users with UID, GID, group memberships and password hashes...")
+            
+            try:
+                # Get list of non-system users (UID >= 1000) excluding admin and nobody
+                cmd = "awk -F: '$3 >= 1000 && $1 != \"admin\" && $1 != \"nobody\" {print $1}' /etc/passwd"
+                users_output = self.run_command(cmd, shell=True)
+                
+                if not users_output:
+                    self.logger.info("No non-system users found")
+                    return True
+                
+                users = users_output.strip().split('\n')
+                user_data = []
+                
+                # For each user, get their UID, GID, group memberships and password hash
+                for user in users:
+                    # Get user ID
+                    uid_cmd = f"id -u {user}"
+                    uid = self.run_command(uid_cmd, shell=True)
+                    
+                    # Get primary group ID
+                    gid_cmd = f"id -g {user}"
+                    gid = self.run_command(gid_cmd, shell=True)
+                    
+                    # Get all groups with GIDs
+                    groups_cmd = f"id -G {user}"
+                    group_ids = self.run_command(groups_cmd, shell=True)
+                    
+                    # Get group names
+                    group_names_cmd = f"id -Gn {user}"
+                    group_names = self.run_command(group_names_cmd, shell=True)
+                    
+                    # Get password hash from /etc/shadow
+                    passwd_cmd = f"sudo grep '^{user}:' /etc/shadow | cut -d: -f2"
+                    password_hash = self.run_command(passwd_cmd, shell=True)
+                    
+                    # Format: username:uid:gid:group_ids:group_names:password_hash
+                    user_data.append(f"{user}:{uid}:{gid}:{group_ids}:{group_names}:{password_hash}")
+                
+                # Write user data to .users file in backup directory
+                users_file = self.backup_directory / ".users"
+                with open(users_file, 'w') as f:
+                    f.write('\n'.join(user_data))
+                
+                self.logger.info(f"User list with UID, GID, group memberships and password hashes backed up to {users_file}")
+                return True
+            
+            except Exception as e:
+                self.logger.error(f"Failed to backup user list: {str(e)}")
+                return False
+
+
     def run(self):
         """Main backup process"""
         try:
             steps = [
                 (self.validate_paths, "Path validation"),
                 (self.prepare_backup_directory, "Backup directory preparation"),
-                (self.perform_backup, "Backup execution")
+                (self.perform_backup, "Backup execution"),
+                (self.backup_user_list, "User list backup")
             ]
 
             for step_func, step_name in steps:
@@ -194,6 +269,7 @@ class DriveBackup:
                 "message": f"Unexpected error: {str(e)}"
             }))
             return False
+
 
 def main():
     if len(sys.argv) != 2:

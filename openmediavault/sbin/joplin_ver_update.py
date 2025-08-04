@@ -9,6 +9,11 @@ import yaml
 import requests
 from packaging import version
 from typing import Dict, Tuple, Optional
+import urllib3
+
+
+# Disable SSL warnings
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 def run_command(cmd: list) -> Tuple[int, str, str]:
     """Run command and return returncode, stdout, stderr"""
@@ -36,10 +41,25 @@ def get_service_status() -> Dict:
         print(f"Error getting service status: {e}")
         sys.exit(1)
 
+
+def check_internet_connectivity():
+    """Check internet connectivity using OMV RPC"""
+    try:
+        result = subprocess.run(['omv-rpc', '-u', 'admin', 'Homecloud', 'enumeratePhysicalNetworkDevices'],
+                              capture_output=True, text=True, check=True)
+        devices = json.loads(result.stdout)
+        
+        for device in devices:
+            if device.get('devicename') == 'internet0':
+                return device.get('state', False)
+        return False
+    except Exception:
+        return False
+
 def validate_version(target_version: str) -> bool:
     """Validate version against GitHub tags"""
     try:
-        url = "https://api.github.com/repos/etechonomy/joplin-server/tags"
+        url = "https://api.github.com/repos/laurent22/joplin/tags"
         response = requests.get(url)
         response.raise_for_status()
         tags = response.json()
@@ -53,7 +73,7 @@ def create_directories() -> None:
     """Create required directories"""
     directories = [
         "/etc/joplin",
-        "/var/lib/joplin",
+        #"/var/lib/joplin",
         "/var/lib/joplin/postgres"
     ]
     try:
@@ -142,6 +162,11 @@ def main():
         print("Usage: joplin_version_update.py <version>")
         print("Example: joplin_version_update.py 2.11.2")
         sys.exit(1)
+    
+    print("Checking internet connectivity...")
+    if not check_internet_connectivity():
+        print("Not connected to Internet. Check your network connectivity")
+        sys.exit(0)
 
     # Add 'v' prefix to version if not present
     target_version = sys.argv[1]
@@ -186,6 +211,8 @@ def main():
 
         subprocess.run(["docker", "compose", "-f" , "/etc/joplin/docker-compose.yml", "pull"])
         subprocess.run(["systemctl", "start", "joplin.service"])
+        print(f"Success: App deployed successfully.")
+
     else:
         # Version update
         deployed_version = get_deployed_version()
@@ -195,9 +222,9 @@ def main():
             deployed_version = f"v{deployed_version}"
         
         # Compare versions
-        if version.parse(target_version.lstrip('v')) <= version.parse(deployed_version.lstrip('v')):
-            print(f"Error: Target version {target_version} is not greater than deployed version {deployed_version}")
-            sys.exit(1)
+        #if version.parse(target_version.lstrip('v')) <= version.parse(deployed_version.lstrip('v')):
+        #    print(f"Error: Target version {target_version} is not greater than deployed version {deployed_version}")
+        #    sys.exit(1)
         
         # Stop service
         subprocess.run(["systemctl", "stop", "joplin.service"])
@@ -224,6 +251,8 @@ def main():
 
         subprocess.run(["docker", "compose", "-f" , "/etc/joplin/docker-compose.yml", "pull"])
         subprocess.run(["systemctl", "start", "joplin.service"])
+        print(f"Success: App version updated successfully.")
+
 
 if __name__ == "__main__":
     main()

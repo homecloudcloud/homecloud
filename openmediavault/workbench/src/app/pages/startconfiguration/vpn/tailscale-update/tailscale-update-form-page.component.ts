@@ -22,13 +22,16 @@ import { FormPageConfig } from '~/app/core/components/intuition/models/form-page
 import { BaseFormPageComponent } from '~/app/pages/base-page-component';
 import { ViewEncapsulation } from '@angular/core';
 import { RpcService } from '~/app/shared/services/rpc.service';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer,SafeHtml } from '@angular/platform-browser';
 import { FormPageButtonConfig } from '~/app/core/components/intuition/models/form-page-config.type';
 
 
 @Component({
   selector:'omv-tailscale-update-page', //Home cloud changes
-  template: `<omv-intuition-form-page id="tailscale-update-form"[config]="this.config"></omv-intuition-form-page>
+  template: `<div id="tailscale-update-form1">
+                <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
+             </div>
+  <omv-intuition-form-page id="tailscale-update-form"[config]="this.config"></omv-intuition-form-page>
              <omv-intuition-form-page id="tailscale-update-form"[config]="this.config2"></omv-intuition-form-page>`,
   styleUrls: ['./tailscale-update-form-page.component.scss'],
   encapsulation: ViewEncapsulation.None  // This will disable view encapsulation
@@ -36,9 +39,20 @@ import { FormPageButtonConfig } from '~/app/core/components/intuition/models/for
 
 
 export class TailscaleUpdateFormPageComponent extends BaseFormPageComponent {
+  private htmlContent=`
+            <h1>🔒 Tailscale VPN Client Updates</h1>
+            <p> Tailscale releases updates for VPN client on Homecloud, Compuaters and phones.</p>
+            <p>📱 <strong>Phone updates</strong> are distributed via the App Store (iOS) and Play Store (Android).</p>
+            <p>💻 <strong>Computer updates</strong> must be downloaded and installed manually.</p>
+            <p>🌐 <strong>Software updates</strong> are downloaded directly from Tailscale’s official repositories and are <strong>not tested or validated by the Homecloud product team</strong>.</p>
+            <p>⚠️ <strong>Before proceeding with any update, please review the release information</strong> available at:  
+<a class="plainLink" href="https://tailscale.com/kb/1168/versions" target="_blank">🔍 Review release information</a></p> 
+  `;
+  public safeHtmlContent: SafeHtml;
   private statustosend:string='';
+  private buttonText:string='';
   private buttonConfig:FormPageButtonConfig= {
-      text: 'Enable/Disable Auto updates for Tailscale VPN client',
+      text: '',
       disabled: false,
       submit: true,
       class: 'omv-background-color-pair-primary',
@@ -69,26 +83,6 @@ export class TailscaleUpdateFormPageComponent extends BaseFormPageComponent {
       
     },
     fields: [
-
-      {
-        type: 'paragraph',
-        title: gettext('Tailscale releases updates for VPN client on Homecloud, Compuaters and phones. Phone updates are pushed via app store or playstore. Computer app need to be manually updated')
-      },
-
-      {
-        type: 'paragraph',
-        title: gettext('Software updates are directly downloaded from Tailscale repositories and are not tested by Homecloud product team.')
-      },
-
-      {
-        type: 'paragraph',
-        title: gettext('Review release information before proceeding with update. Details available at:&nbsp;&nbsp;<a class="plainLink" href="https://tailscale.com/kb/1168/versions" target="_blank">Review release informaton</a> ')
-      },
-
-      {
-        type: 'paragraph',
-        title: gettext('')
-      },
 
       {
         type: 'textInput',
@@ -202,27 +196,12 @@ export class TailscaleUpdateFormPageComponent extends BaseFormPageComponent {
 
   constructor(private rpcService: RpcService, private sanitizer: DomSanitizer){
     super();
+    // Sanitize the HTML content once during construction
+    this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);
     
-    this.config.fields[2].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[2].title) as unknown as string;
   }
 
-  ngAfterViewInit(): void {
-    // Delay the operation to ensure the view is fully rendered
-    setTimeout(() => {
-      
-
-      // Select all paragraph elements (assuming they are rendered as `photos-update-form omv-form-paragraph` elements)
-        const paragraphs = document.querySelectorAll('#tailscale-update-form .omv-form-paragraph');
-
-        // Inject the sanitized HTML into the correct paragraph element
-        paragraphs[2].innerHTML =
-        (this.config.fields[2].title as any).changingThisBreaksApplicationSecurity ||
-        this.config.fields[2].title?.toString();
-
-               
-    }, 100); // Timeout ensures it happens after the view has rendered
-  }
-
+  
 
   ngOnInit():void{
     this.rpcService.request('Homecloud', 'appAutoUpdates',{
@@ -230,7 +209,9 @@ export class TailscaleUpdateFormPageComponent extends BaseFormPageComponent {
       action: 'status'
     }).subscribe(response => {
       this.statustosend = response.status === 'enabled' ? 'disable' : 'enable';
+      this.buttonText = response.status === 'enabled' ? 'Disable Auto updates for Tailscale VPN client' : 'Enable Auto updates for Tailscale VPN client';
       // Set the button config after we have the status
+      this.buttonConfig.text = this.buttonText;
       this.buttonConfig.execute.request.params.action = this.statustosend;
       this.config2.buttons = [this.buttonConfig];
     });
@@ -239,7 +220,7 @@ export class TailscaleUpdateFormPageComponent extends BaseFormPageComponent {
   fetchStatusAndUpdateFields(): void {
     this.rpcService.request('Homecloud', 'tailscale_check_version').subscribe(response => {
       const status = response.status;
-      console.log('status',status);
+      //console.log('status',status);
       this.updateFieldColors(status);     //Update colors based on status
       this.updateFieldVisibility(status); //Hide or show the checkbox for updates based on status     
         
@@ -260,7 +241,7 @@ export class TailscaleUpdateFormPageComponent extends BaseFormPageComponent {
   }
 
   updateFieldVisibility(status:string):void{
-    const checkbox=document.querySelector('omv-tailscale-update-page omv-form-checkbox mat-checkbox');
+    const checkbox=document.querySelector('omv-tailscale-update-page omv-form-checkbox');
     const updateButton = document.querySelector('omv-tailscale-update-page omv-submit-button button');
     if(status !== 'Update-Available'){
       checkbox.classList.add('hidden');
@@ -273,14 +254,14 @@ export class TailscaleUpdateFormPageComponent extends BaseFormPageComponent {
         // Add a small delay to ensure class changes are applied
         setTimeout(() => {
             const isChecked = checkbox.classList.contains('mat-checkbox-checked');
-            console.log('Checkbox checked status:', isChecked);
+            //console.log('Checkbox checked status:', isChecked);
             
             if (isChecked) {
                 updateButton.classList.remove('mat-button-disabled');
                 console.log('Update button enabled - classes:', updateButton.className);
             } else {
                 updateButton.classList.add('mat-button-disabled');
-                console.log('Update button disabled - classes:', updateButton.className);
+                //console.log('Update button disabled - classes:', updateButton.className);
             }
         }, 0);
     });

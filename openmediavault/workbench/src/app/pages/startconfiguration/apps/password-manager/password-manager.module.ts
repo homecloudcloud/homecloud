@@ -13,6 +13,7 @@ import {AppsPasswordManagerUpdateFormPageComponent} from './update/password-mana
 import {AppsPasswordManagerDBResetComponent} from './reset/password-manager-db_reset-page.component'
 import {AppsPasswordManagerRestartComponent} from './restart/password-manager-restart-page.component'
 import {AppsPasswordManagerRestoreComponent} from './restore/password-manager-restore-page.component'
+import {AppsPasswordManagerPasswordResetComponent} from './password/password-manager-password-page.component'
 
 /*const routes: Routes = [
   { path: 'windows', component: AppsDriveWindowsComponent }
@@ -27,7 +28,8 @@ import {AppsPasswordManagerRestoreComponent} from './restore/password-manager-re
     AppsPasswordManagerUpdateFormPageComponent,
     AppsPasswordManagerDBResetComponent,
     AppsPasswordManagerRestartComponent,
-    AppsPasswordManagerRestoreComponent
+    AppsPasswordManagerRestoreComponent,
+    AppsPasswordManagerPasswordResetComponent
   ],
   imports: [
     CommonModule,

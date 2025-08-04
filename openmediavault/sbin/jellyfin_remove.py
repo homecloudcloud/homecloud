@@ -3,7 +3,13 @@
 import os
 import yaml
 import subprocess
+import requests
+import urllib3
 from typing import List
+
+
+# Disable SSL warnings
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 def run_command(cmd: List[str], ignore_errors: bool = True) -> None:
     """Run command and optionally ignore errors"""
@@ -77,9 +83,11 @@ def main():
             verify=False,
             timeout=30
         )
-        if response.status_code != 200:
-            print("Warning: Failed to update firewall rules")
-
+        if response.status_code == 200:
+            print("Firewall rules updated successfully")
+        else:
+            print(f"Warning: Failed to update firewall rules - HTTP {response.status_code}")
+        
         print("Jellyfin removal completed successfully")
         
     except Exception as e:
