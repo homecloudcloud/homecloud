@@ -1,8 +1,0 @@
-version: "1.0"
-type: navigation-item
-data:
-  path: "services.clamav.onaccess-scans"
-  text: _("On Access Scans")
-  position: 20
-  icon: "mdi:file-eye"
-  url: "/services/clamav/onaccess-scans"

@@ -1,8 +1,0 @@
-version: "1.0"
-type: navigation-item
-data:
-  path: "services.clamav.settings"
-  text: _("Settings")
-  position: 10
-  icon: "tune"
-  url: "/services/clamav/settings"

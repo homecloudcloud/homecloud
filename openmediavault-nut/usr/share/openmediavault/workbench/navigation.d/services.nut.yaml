@@ -1,7 +1,0 @@
-version: "1.0"
-type: navigation-item
-data:
-  path: "services.nut"
-  text: _("UPS")
-  icon: "mdi:car-battery"
-  url: "/services/nut"

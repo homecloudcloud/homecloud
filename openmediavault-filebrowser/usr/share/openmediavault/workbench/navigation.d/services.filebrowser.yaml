@@ -1,7 +1,0 @@
-version: "1.0"
-type: navigation-item
-data:
-  path: "services.filebrowser"
-  text: _("File Browser")
-  icon: "mdi:floppy"
-  url: "/services/filebrowser"

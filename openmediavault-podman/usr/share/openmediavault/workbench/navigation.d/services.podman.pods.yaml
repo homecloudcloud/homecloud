@@ -1,8 +1,0 @@
-version: "1.0"
-type: navigation-item
-data:
-  path: "services.podman.pods"
-  position: 40
-  text: _("Pods")
-  icon: "mdi:card-multiple"
-  url: "/services/podman/pods"

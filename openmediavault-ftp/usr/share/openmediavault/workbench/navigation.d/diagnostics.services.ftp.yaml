@@ -1,7 +1,0 @@
-version: "1.0"
-type: navigation-item
-data:
-  path: "diagnostics.services.ftp"
-  text: _("FTP")
-  icon: ftp
-  url: "/diagnostics/services/ftp"
