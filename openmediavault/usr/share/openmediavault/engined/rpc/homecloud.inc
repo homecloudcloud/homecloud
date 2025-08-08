@@ -2576,7 +2576,10 @@ public function getHotspotStatus($params, $context) {
 		}
         
 		$user->changePassword($params['password']);
-        $this->setPasswordByContextSmb($user->getName(),$params['password']);
+        // Skip SMB password change for admin user as admin does not have SMB access
+        if ($user->getName() !== 'admin') {
+            $this->setPasswordByContextSmb($user->getName(),$params['password']);
+        }
 
 		// Notify configuration changes if the given user exists in the
 		// database. System users like 'admin' are ignored.

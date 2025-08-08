@@ -1,10 +1,10 @@
 Source: openmediavault
 Section: admin
 Priority: optional
-Maintainer: Volker Theile <volker.theile@openmediavault.org>
+Maintainer: Libernest Technologies <support@homecloud.cloud> 
 Build-Depends: debhelper (>= 12), gettext, doxygen, make, npm
 Standards-Version: 3.9.6
-Homepage: http://www.openmediavault.org
+Homepage: http://homecloud.cloud
 
 Package: openmediavault
 Architecture: all

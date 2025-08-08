@@ -44,6 +44,7 @@ class TailscaleConfig extends \OMV\Rpc\ServiceAbstract {
 		$this->registerMethod("DisconnectVPN");
 		$this->registerMethod("ConnectVPN");
 		$this->registerMethod("savetailscaleTermsFlag");
+		$this->registerMethod("LogoutVPN");
 
 	}
 
@@ -105,6 +106,31 @@ class TailscaleConfig extends \OMV\Rpc\ServiceAbstract {
 				throw $e;
 			}
 
+		}
+
+		public function LogoutVPN($params, $context) {
+		$this->validateMethodContext($context, [
+			"role" => OMV_ROLE_ADMINISTRATOR
+			]);
+
+			// Get the output from the tailscale status script
+			try {
+				$cmd = new \OMV\System\Process("/sbin/tailscale_logout.sh");
+				$cmd->setEnv("SHELL", "/bin/sh");
+				$output = [];
+				$result = (int) $cmd->execute($output);
+				if ($result !== 0) {
+					throw new \RuntimeException(sprintf(
+						"Failed to execute. Error: %d",
+						implode("\n", $output),$result
+					));
+				}
+				return "Successfully logged out from VPN";
+			}catch (\Exception $e) {
+				// Log and rethrow exceptions for further handling
+				error_log("Error executing VPN logout");
+				throw $e;
+			}
 
 		}
 

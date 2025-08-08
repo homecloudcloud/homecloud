@@ -23,9 +23,10 @@ import { BaseFormPageComponent } from '~/app/pages/base-page-component';
 
 import { DomSanitizer,SafeHtml } from '@angular/platform-browser';
 import { ViewEncapsulation } from '@angular/core';
+import { RpcService } from '~/app/shared/services/rpc.service';
 
 @Component({
-  template: `<omv-logo-header></omv-logo-header>
+  template: `<omv-complete-logo-header></omv-complete-logo-header>
             <div id="mainContainer">
               <div id="notification-form1">
                       <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
@@ -73,7 +74,7 @@ import { ViewEncapsulation } from '@angular/core';
       }   
     omv-setupwizard-notification-settings-form-page{
 
-          omv-top-bar-wizard .omv-top-bar{
+          /*omv-top-bar-wizard .omv-top-bar{
             background:transparent!important;
             position: absolute;
             left:80vw;
@@ -84,7 +85,23 @@ import { ViewEncapsulation } from '@angular/core';
             top:0;
             left:0;
             z-index:100;
-          }
+          }*/
+          omv-top-bar-wizard .omv-top-bar{
+          background:transparent!important;
+          position: absolute;
+          left:80vw;
+            }
+
+          omv-complete-logo-header{
+              position:fixed;
+              height:20vh;
+              top:0;
+              left:0;
+              z-index:100;
+              omv-apply-config-panel{
+                  margin-top:2rem!important;
+              }
+            }
           #mainContainer{
               margin-top:20vh;
               overflow-y:auto;
@@ -93,6 +110,12 @@ import { ViewEncapsulation } from '@angular/core';
               --scrollbar-border-radius: 0 !important;
               --scrollbar-thumb-color:red !important;
               --scrollbar-thumb-hover-color: var(--scrollbar-thumb-color) !important;
+
+              p.internetError{
+                color:$lightred;
+                font-weight:bold;
+                padding:2rem;
+              }
 
               #notification-form1{            
                   margin-bottom:-3rem;
@@ -438,7 +461,7 @@ export class NotificationSettingsFormPageComponent extends BaseFormPageComponent
 
   };
   
- constructor(private sanitizer: DomSanitizer) {
+ constructor(private sanitizer: DomSanitizer,private rpcService:RpcService) {
     super();
     //this.config.fields[2].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[2].title) as unknown as string;   
      // Sanitize the HTML content once during construction
@@ -458,10 +481,27 @@ export class NotificationSettingsFormPageComponent extends BaseFormPageComponent
         this.config.fields[2].title?.toString();  
         */
         this.enableNavButtons();
+        this.checkInternetStatus();
+
      
     
     }, 100); // Timeout ensures it happens after the view has rendered
   }
+  checkInternetStatus(){
+      const notificationForm = document.querySelector('omv-setupwizard-notification-settings-form-page #email-notification-form');
+      
+      this.rpcService.request('Homecloud', 'checkInternetStatusForWizard').subscribe(response => {
+        if (response.internetConnected !== true) { //Internet down
+          
+          if(notificationForm){
+            notificationForm.classList.add('hidden');
+            notificationForm.insertAdjacentHTML('afterend','<br><p class="internetError">Homecloud is not connected to Internet.Go to <a class="plainLink" href="#/setupwizard/networkconfig/interfaces">Network Interfaces</a> page to check the status. Connect Homecloud to Internet and try again</p>');
+          }
+                   
+        } 
+      
+    });
+    }
 
   enableNavButtons() {
     const buttons = document.querySelectorAll('#navButtons omv-submit-button button');
@@ -476,15 +516,15 @@ export class NotificationSettingsFormPageComponent extends BaseFormPageComponent
   }
 
    ngOnInit(): void {
-    console.log('NotificationSettings initialized');
+   // console.log('NotificationSettings initialized');
     const innerElement = document.querySelector('#mainContainer') as HTMLElement;
-    console.log('scrolltop before:',innerElement.scrollTop);
+    //console.log('scrolltop before:',innerElement.scrollTop);
     
-    console.log('Inner Element:', innerElement);
+    //console.log('Inner Element:', innerElement);
     if (innerElement) {
       innerElement.scrollTop = 0; // Ensure the scroll position is at the top
     }
-    console.log('scrolltop now:',innerElement.scrollTop);
+    //console.log('scrolltop now:',innerElement.scrollTop);
   }
 
 }

@@ -98,7 +98,7 @@ export class AppsJellyfinUpdateFormPageComponent extends BaseFormPageComponent {
           task: false,
           progressMessage: 'Updating auto-update settings...',
           successNotification: 'Successfully updated auto-update settings',
-          successUrl: '/startconfiguration/apps/media'
+          successUrl: '/startconfiguration/apps/media/access'
         }
       }
   };

@@ -29,17 +29,29 @@ import { RpcService } from '~/app/shared/services/rpc.service';
   selector:'omv-password-manager-backup-page', //Home cloud changes
   //template: '<omv-intuition-form-page [config]="this.config"></omv-intuition-form-page>',
   template: `
-  <div id="password-manager-backup-form1">
-    <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
+  <div *ngIf="isLoading" class="loader-container">
+    <div class="spinner"></div>
+    <p>Loading backup information...</p>
   </div>
-  <omv-intuition-datatable-page id="password-manager-backup-data-form" [config]="this.config1"></omv-intuition-datatable-page>
-
+  
+  <div *ngIf="!isLoading">
+    <div id="password-manager-backup-form1">
+      <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
+    </div>
+    <omv-intuition-datatable-page 
+      *ngIf="isForm1Loaded" 
+      id="password-manager-backup-data-form" 
+      [config]="this.config1">
+    </omv-intuition-datatable-page>
+  </div>
   `,
   styleUrls: ['./password-manager-backup-page.component.scss'],
   encapsulation: ViewEncapsulation.None  // This will disable view encapsulation
 })
 
 export class AppsPasswordManagerBackupComponent extends BaseFormPageComponent {
+  public isForm1Loaded = false;
+  public isLoading = true;
 
   private totalGb:number=0.0;
   public safeHtmlContent: SafeHtml;
@@ -188,6 +200,8 @@ export class AppsPasswordManagerBackupComponent extends BaseFormPageComponent {
 
       //Sanitize html
       this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);
+      this.isForm1Loaded = true; // Show datatable after form1 is ready
+      this.isLoading = false;
       
     });
   }

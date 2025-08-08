@@ -183,6 +183,7 @@ export class AppsJellyfinMainComponent extends BaseFormPageComponent {
                 }
               },
             successUrl:'/setupwizard/apps/media/access'
+            //successUrl:window.location.pathname
             }
         }
       }

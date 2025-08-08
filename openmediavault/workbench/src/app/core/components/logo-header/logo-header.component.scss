@@ -7,7 +7,8 @@
 
 :host {
   .background {
-    background-color: dc.$omv-color-corporate-light;
+    //background-color: dc.$omv-color-corporate-light;
+    background-color: $lightblue;
     object-fit: cover;
   }
 
@@ -15,13 +16,15 @@
   .topbar {
     position:fixed;
     height:18vh!important; //Home cloud changes
-    background-color: hsla(
+    /*background-color: hsla(
       color.hue(dc.$omv-color-corporate-default),
       color.saturation(dc.$omv-color-corporate-default),
       color.lightness(dc.$omv-color-corporate-default),
       100%
     );
-    backdrop-filter: blur(4px);
+    */
+    background-color: $lightblue;
+    //backdrop-filter: blur(4px);
 
     .logo {
       content: url('^./assets/images/logo.svg');   //Home cloud changes

@@ -194,6 +194,7 @@ export class AppsPaperlessMainComponent extends BaseFormPageComponent {
                 }
               },
             successUrl:'/setupwizard/apps/paperless/access'
+            //successUrl:window.location.pathname
             }
         }
       }

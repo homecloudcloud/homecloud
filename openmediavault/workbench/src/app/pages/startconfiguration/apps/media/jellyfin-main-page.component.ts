@@ -251,7 +251,7 @@ export class AppsJellyfinMainComponent extends BaseFormPageComponent {
 
                 }
               },
-            successUrl:'/startconfiguration/apps'
+            successUrl:'/startconfiguration/apps/media/access'
             }
         }
       }

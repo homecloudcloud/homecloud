@@ -180,6 +180,7 @@ export class AppsPasswordManagerMainComponent extends BaseFormPageComponent {
                 }
               },
             successUrl:'/setupwizard/apps/password-manager/access'
+            //successUrl:window.location.pathname
             }
         }
       }

@@ -97,7 +97,7 @@ export class AppsJoplinUpdateFormPageComponent extends BaseFormPageComponent {
           task: false,
           progressMessage: 'Updating auto-update settings...',
           successNotification: 'Successfully updated auto-update settings',
-          successUrl: '/startconfiguration/apps/notes'
+          successUrl: '/startconfiguration/apps/notes/access'
         }
       }
   };

@@ -207,6 +207,7 @@ export class AppsPhotosMainComponent extends BaseFormPageComponent {
                 }
               },
             successUrl:'/setupwizard/apps/photos/access'
+            //successUrl:window.location.pathname
             }
         }
       }
@@ -298,6 +299,7 @@ export class AppsPhotosMainComponent extends BaseFormPageComponent {
   }
 
   ngOnInit(){
+   
     this.fetchStatusAndUpdateFields();  //get hostname value and update in link
     
   }

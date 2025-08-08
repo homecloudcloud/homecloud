@@ -20,23 +20,33 @@
 @import '../../../../assets/colors.scss';
 :host {
   .background {
-    background-color: dc.$omv-color-corporate-light;
+    //background-color: dc.$omv-color-corporate-light;
     /*content: url('^./assets/images/harddisk_on_circuit.jpg');*/  //Home cloud changes
+    //object-fit: cover;
+    background: url(/assets/images/Homecloud.png);
     object-fit: cover;
+    object-fit: contain;
+    background-repeat: no-repeat;
+    backdrop-filter: brightness(0.1);
+    background-position-x: center;
+    background-position-y: 60%;
+    background-size: 90%;
   }
-  omv-green-rain {
+  /*omv-green-rain {
     font-family: theme.$omv-font-family-monospace !important;
     font-size: 14px;
-  }
+  }*/
   .topbar {
     height:18vh!important;  //Home cloud changes
-    background-color: hsla(
+    background-color: $lightblue;
+    /*background-color: hsla(
       color.hue(dc.$omv-color-corporate-default),
       color.saturation(dc.$omv-color-corporate-default),
       color.lightness(dc.$omv-color-corporate-default),
       54%
     );
     backdrop-filter: blur(4px);
+    */
     .logo {
       content: url('^./assets/images/logo.svg'); //Home cloud changes
       width: auto;
@@ -60,6 +70,10 @@
       display: flex;
       justify-content: center;
       margin-bottom:1rem;
+      color:#ffffff!important;
+      a:hover{
+          color:$lightblue!important;
+      }
     }
     
     omv-intuition-form-page {
@@ -80,8 +94,11 @@
           font-size:var(--mat-font-weight-subheading-2)!important;
           font-weight:var(--mat-font-weight-subheading-2)!important;
         }
-        a:hover{
+        /*a:hover{
           color:theme.$omv-color-primary;
+        }*/
+        a:hover{
+          color:$lightblue;
         }
         .mat-form-field {
           .mat-input-element {

@@ -98,7 +98,7 @@ export class AppsPaperlessUpdateFormPageComponent extends BaseFormPageComponent 
           task: false,
           progressMessage: 'Updating auto-update settings...',
           successNotification: 'Successfully updated auto-update settings',
-          successUrl: '/startconfiguration/apps/paperless'
+          successUrl: '/startconfiguration/apps/paperless/access'
         }
       }
   };

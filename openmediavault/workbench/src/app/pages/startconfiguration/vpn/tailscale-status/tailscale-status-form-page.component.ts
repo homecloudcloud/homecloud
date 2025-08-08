@@ -205,6 +205,31 @@ export class TailscaleStatusComponent extends BaseFormPageComponent {
             successUrl: '/startconfiguration/vpn'
           }
         }
+      },
+      {
+        text: 'Logout VPN',
+        disabled:false,
+        submit:true,
+        class:'omv-background-color-pair-primary',
+        confirmationDialogConfig:{
+          template: 'confirmation',
+          title: '',
+          message: gettext("Warning: Logging out will require VPN re-configuration and"+"<br><br>"+
+                   "1. Access to HomeCloud over VPN will get disabled.You can still connect to HomeCloud using the IP address shown on the HomeCloud display but only if you are on your local network."+"<br><br>"+
+                   "2. All app users will be logged out. Additionally, devices will require reconfiguration of the apps."+"<br><br>"+
+                   "Are you sure you want to logout?")
+        },
+        execute: {
+          type: 'request',
+          request: {
+            service: 'tailscaleconfig',
+            method: 'LogoutVPN',
+            task: false, // Set to true if this is a long-running task
+            progressMessage: 'Logging out from VPN...',
+            successNotification: 'Successfully logged out from VPN',
+            successUrl: '/startconfiguration/vpn'
+          }
+        }
       }
     ],
     

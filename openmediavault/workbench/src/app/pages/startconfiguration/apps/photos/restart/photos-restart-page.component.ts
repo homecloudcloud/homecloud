@@ -34,10 +34,10 @@ import { RpcService } from '~/app/shared/services/rpc.service';
               <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent"></div>
             </div>
   <omv-intuition-form-page id="photos-restart-form1" [config]="this.config"></omv-intuition-form-page>
-            <div id="photos-restart-form3">
+            <!--div id="photos-restart-form3">
                         <div class="omv-form-paragraph" [innerHTML]="safeHtmlContent1"></div>
-                      </div>
-  <omv-intuition-form-page id="photos-restart-form2" [config]="this.config2"></omv-intuition-form-page>
+                      </div-->
+  <!--omv-intuition-form-page id="photos-restart-form2" [config]="this.config2"></omv-intuition-form-page-->
   `,
   styleUrls: ['./photos-restart-page.component.scss'],
   encapsulation: ViewEncapsulation.None  // This will disable view encapsulation
@@ -47,8 +47,8 @@ export class AppsPhotosRestartComponent extends BaseFormPageComponent {
   //private hostname: string = '';
   private immichStatus: string = '';
   public safeHtmlContent:SafeHtml;
-  public safeHtmlContent1:SafeHtml;
-  private htmlContent1=`<h2>Immich Not Starting Due to Full Internal Storage?</h2>`;
+ // public safeHtmlContent1:SafeHtml;
+  //private htmlContent1=`<h2>Immich Not Starting Due to Full Internal Storage?</h2>`;
   private htmlContent=`<h1>Immich Status</h1>
                        <p>Immich backend service runs on Homecloud and is required to be running for Immich mobile or web app to work.</p>`;
   public config: FormPageConfig = {
@@ -90,7 +90,7 @@ export class AppsPhotosRestartComponent extends BaseFormPageComponent {
     ]
   };
 
-  public config2: FormPageConfig = {
+  /*public config2: FormPageConfig = {
     fields: [
       
       {
@@ -123,12 +123,12 @@ export class AppsPhotosRestartComponent extends BaseFormPageComponent {
       },
     ]
   };
-
+*/
   constructor(private sanitizer: DomSanitizer, private rpcService: RpcService) {
     super();   
     //Sanitize the HTML content once during construction
     this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);
-    this.safeHtmlContent1 = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent1);
+    //this.safeHtmlContent1 = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent1);
 
   }
   ngOnInit(){

@@ -21,7 +21,9 @@ omv-tailscale-startconfig-page{
                 color:$lightred;
                 font-weight:bold;
   }
-  
+  .disabled .omv-form-divider .title{
+                background-color: $grey!important;
+  }
   .omv-form-paragraph,h2,p,li,h3 {
     font-size: var(--mat-font-size-subheading-2) !important;
    

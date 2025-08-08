@@ -75,7 +75,7 @@ export class AppsJellyfinAccessComponent extends BaseFormPageComponent {
             </div>
             <div class="status-message ${this.jellyfinStatus !== 'Running' ? '' : 'hidden'}">
               <span class="status-deploy-message ${this.jellyfinStatus !== 'Not deployed' ? 'hidden' : ''}" >App is not deployed. Go to <a class="plainLink" href="#/setupwizard/apps/media">Jellyfin main page</a> to deploy the app. </span>
-              <span class="status-not-running-message ${this.jellyfinStatus !== 'Running' && this.jellyfinStatus !== 'Not deployed' ? '' : 'hidden'}" >App is not running currently.</span>
+              <span class="status-not-running-message ${this.jellyfinStatus !== 'Running' && this.jellyfinStatus !== 'Not deployed' ? '' : 'hidden'}" >App is not running currently. It may take a while for the app to start. Refresh the page to check status.</span>
             </div>
             <div class="access-info ${this.jellyfinStatus !== 'Running' ? 'hidden' : ''}">
               <p>

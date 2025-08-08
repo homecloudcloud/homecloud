@@ -139,7 +139,7 @@ export class TailscaleConfigFormPageComponent extends BaseFormPageComponent {
           },
           {
             type: 'paragraph',
-            title: gettext('Copy/Paste generated values to below fields and press Submit button below.')
+            title: gettext('Copy/Paste generated values to below fields.')
           },
           {
             type: 'textInput',
@@ -292,7 +292,7 @@ export class TailscaleConfigFormPageComponent extends BaseFormPageComponent {
 
                 }
               },
-            successUrl:'/setupwizard/vpn'
+            successUrl:'/setupwizard/vpn/tailscaleconfig'
             }
         }
       }
@@ -320,7 +320,6 @@ export class TailscaleConfigFormPageComponent extends BaseFormPageComponent {
 
   }
   ngOnInit(){
-    this.checkInternetStatus();
     this.fetchStatusAndUpdateFields();  //get hostname value and update in link
      // Make the function globally accessible
     (window as any).onVpnTermsClicked = this.onVpnTermsClicked.bind(this);
@@ -376,69 +375,38 @@ export class TailscaleConfigFormPageComponent extends BaseFormPageComponent {
     }
     
   }
+  
   fetchStatusAndUpdateFields(): void {
     this.rpcService.request('Homecloud', 'getTailscaleStatus').subscribe(response => {
       const status = response.status;
-     // console.log('status',status);
       this.updateFieldColors(status);     //Update colors based on status
-      this.collapseContainerWithSubmitBtn(status);     //collapse/expand container based on status
+      this.updateFieldNames(status);     //collapse/expand container based on status
         
     });
   }
   
+  updateFieldNames(status:string):void{
 
-  collapseContainerWithSubmitBtn(status:string):void {
-    //Logic for collapsible container
     const divider = document.querySelector('omv-tailscale-setupwizard-config-page omv-form-divider');
-   // const dividerc = document.querySelector('omv-tailscale-setupwizard-config-page .omv-form-divider');
-    const container = document.querySelector('omv-tailscale-setupwizard-config-page .omv-form-container');
-    const submitButton = document.querySelector('omv-tailscale-setupwizard-config-page .mat-card-actions');
     
-    //Hide container by default
-    if (container && divider) {   
-    //if (container) {   
-       if (container instanceof HTMLElement && divider instanceof HTMLElement) {
-        container.classList.add('hidden');
-        submitButton.classList.add('hidden');
-    //   if (container instanceof HTMLElement) {
+    if (divider) {   
+  
+       if (divider instanceof HTMLElement) {
           if(status === 'Up'){
-          //  container.classList.add('hidden');
-          //  divider.classList.remove('hidden');
             divider.classList.remove('configure');
-            divider.classList.add('reconfigure');                                                                           
-      //    submitButton.classList.add('hidden');
+            divider.classList.add('reconfigure');                                                                                
             
           }
           else{
-          //  container.classList.remove('hidden');
-           // divider.classList.add('hidden');
             divider.classList.remove('reconfigure');
             divider.classList.add('configure');
-      //    submitButton.classList.remove('hidden');
           }
           
         }
-       // if(status === 'Up'){
-       /*
-          divider.addEventListener('click', () => {            
-            container.classList.toggle('hidden');
-            submitButton.classList.toggle('hidden');
-            if(dividerc){
-              dividerc.classList.toggle('expanded');
-        
-            }
-          });
-        */
-
-      //  }
-      
+     
     }
-
-    
-   
-  } 
-   
-
+  }
+  
 
   updateFieldColors(status:string):void{
     const element = document.querySelector('omv-tailscale-setupwizard-config-page omv-form-text-input:nth-of-type(1) .mat-form-field input');
@@ -456,6 +424,7 @@ export class TailscaleConfigFormPageComponent extends BaseFormPageComponent {
   ngAfterViewInit() {
     setTimeout(() => {
       this.enableNavButtons();
+      this.checkInternetStatus();
       this.addcheckboxListener(); // Add listener for checkbox
       this.addInputChangeListeners(); // Add listeners for input changes
       // Select all paragraph elements 
@@ -469,10 +438,6 @@ export class TailscaleConfigFormPageComponent extends BaseFormPageComponent {
       paragraphs[8].innerHTML =
       (this.config.fields[4].fields[12].title as any).changingThisBreaksApplicationSecurity ||
       this.config.fields[4].fields[12].title?.toString();
-      /*paragraphs[10].innerHTML =
-      (this.config.fields[6].fields[14].title as any).changingThisBreaksApplicationSecurity ||
-      this.config.fields[6].fields[14].title?.toString();
-      */
 
       checkboxLabel.innerHTML=(this.config.fields[4].fields[10].label as any).changingThisBreaksApplicationSecurity ||
       this.config.fields[4].fields[10].label?.toString();
@@ -481,7 +446,56 @@ export class TailscaleConfigFormPageComponent extends BaseFormPageComponent {
       
     }, 100);
   }
+  checkInternetStatus(){
+      const container = document.querySelector('omv-tailscale-setupwizard-config-page .omv-form-container');
+      const divider=document.querySelector('omv-tailscale-setupwizard-config-page omv-form-divider');
+      const submitButton = document.querySelector('omv-tailscale-setupwizard-config-page .mat-card-actions');
+      this.rpcService.request('Homecloud', 'checkInternetStatusForWizard').subscribe(response => {
+        if (response.internetConnected !== true) { //Internet down
+          
+          if(submitButton){
+            submitButton.classList.add('hidden');
+          }
 
+          if(divider){
+            divider.classList.add('disabled');
+          }
+          if(container){
+              
+                container.classList.add('hidden');             
+                container.insertAdjacentHTML('afterend','<br><span class="internetError">Homecloud is not connected to Internet.Go to <a class="plainLink" href="#/setupwizard/networkconfig/interfaces">Network Interfaces</a> page to check the status. Connect Homecloud to Internet and try again');
+               
+          }
+                   
+        } 
+        else{
+          this.collapseContainerWithSubmitBtn();
+        }
+       
+    });
+    }
+    collapseContainerWithSubmitBtn():void {
+    //Logic for collapsible container
+    const divider = document.querySelector('omv-tailscale-setupwizard-config-page omv-form-divider');
+    const dividerc = document.querySelector('omv-tailscale-setupwizard-config-page .omv-form-divider');
+    const container = document.querySelector('omv-tailscale-setupwizard-config-page .omv-form-container');
+    const submitButton = document.querySelector('omv-tailscale-setupwizard-config-page .mat-card-actions');
+    
+   
+    if (container && divider) {   
+       if (container instanceof HTMLElement && divider instanceof HTMLElement) {
+        container.classList.add('hidden');  //Hide container by default
+        submitButton.classList.add('hidden'); //Hide button by default
+        divider.addEventListener('click', () => {            
+            container.classList.toggle('hidden');
+            submitButton.classList.toggle('hidden');
+            if(dividerc){
+              dividerc.classList.toggle('expanded');      
+            }
+        });
+       }
+    }  
+  } 
   addcheckboxListener() { 
       const checkbox = document.querySelector('omv-tailscale-setupwizard-config-page omv-form-checkbox input[type="checkbox"]');
       const tailscaleButton = document.querySelector('omv-tailscale-setupwizard-config-page  omv-submit-button button');
@@ -521,8 +535,7 @@ export class TailscaleConfigFormPageComponent extends BaseFormPageComponent {
     
   
     addInputChangeListeners() {
-      //console.log('Adding input change listeners');
-      
+    
       // Get the input elements by position
       const textInputs = document.querySelectorAll('omv-tailscale-setupwizard-config-page .omv-form-container omv-form-text-input');
       
@@ -592,44 +605,7 @@ export class TailscaleConfigFormPageComponent extends BaseFormPageComponent {
           'comment':comment}
     }
    
-    checkInternetStatus(){
-     // console.log('checking internet status');
-      this.rpcService.request('Homecloud', 'checkInternetStatusForWizard').subscribe(response => {
-        //console.log('response',response);
-        if (response.internetConnected !== true) { //Internet down
-         // console.log('internet down');
-          //const tailscaleButton=document.querySelector('omv-tailscale-setupwizard-config-page omv-submit-button button');
-          //const tailscaleCheckbox=document.querySelector('omv-tailscale-setupwizard-config-page omv-form-checkbox');
-          const tailscaleConfigContainer=document.querySelector('omv-tailscale-setupwizard-config-page .omv-form-container');
-          //console.log('tailscaleButton', tailscaleButton);
-          if(tailscaleConfigContainer){
-              //  tailscaleButton.classList.add('mat-button-disabled');
-               // tailscaleCheckbox.classList.add('hidden');
-                tailscaleConfigContainer.classList.add('hidden');
-                //tailscaleCheckbox.insertAdjacentHTML('afterend','<br><span class="internetError">Homecloud is not connected to Internet.Go to <a class="plainLink" href="#/setupwizard/networkconfig/interfaces">Network Interfaces</a> page to check the status. Connect Homecloud to Internet and try again');
-                tailscaleConfigContainer.insertAdjacentHTML('afterend','<br><span class="internetError">Homecloud is not connected to Internet.Go to <a class="plainLink" href="#/setupwizard/networkconfig/interfaces">Network Interfaces</a> page to check the status. Connect Homecloud to Internet and try again');
-                
-          }
-          
-          
-        } 
-        else{
-          const divider = document.querySelector('omv-tailscale-setupwizard-config-page omv-form-divider');
-          const dividerc = document.querySelector('omv-tailscale-setupwizard-config-page .omv-form-divider');
-          const container = document.querySelector('omv-tailscale-setupwizard-config-page .omv-form-container');
-          //const submitButton=document.querySelector('omv-tailscale-setupwizard-config-page omv-submit-button button');
-          divider.addEventListener('click', () => {            
-            container.classList.toggle('hidden');
-           // submitButton.classList.toggle('hidden');
-            if(dividerc){
-              dividerc.classList.toggle('expanded');
-        
-            }
-          });
-        }
-       
-    });
-    }
+    
 
   enableNavButtons() {
 
@@ -645,9 +621,6 @@ export class TailscaleConfigFormPageComponent extends BaseFormPageComponent {
   }
 
    
-   
-    
-
     public navconfig: FormPageConfig = {
 
     fields:[

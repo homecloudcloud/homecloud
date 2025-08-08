@@ -180,6 +180,7 @@ export class AppsJoplinMainComponent extends BaseFormPageComponent {
                 }
               },
             successUrl:'/setupwizard/apps/notes/access'
+            //successUrl:window.location.pathname
             }
         }
       }
@@ -379,7 +380,7 @@ export class AppsJoplinMainComponent extends BaseFormPageComponent {
       },
       
       {template:'submit',
-        text:'Next: Password manager app Setup >',
+        text:'Next: Notes app access >',
         execute: {
           type: 'request',
           request:{
@@ -387,7 +388,7 @@ export class AppsJoplinMainComponent extends BaseFormPageComponent {
             method:'checkNotesAppDeployForWizard',
             task:false,
             progressMessage:gettext('Please wait, checking Notes app setup ...'),
-            successUrl:'/setupwizard/apps/password-manager',
+            successUrl:'/setupwizard/apps/notes/access',
             
           }
         }

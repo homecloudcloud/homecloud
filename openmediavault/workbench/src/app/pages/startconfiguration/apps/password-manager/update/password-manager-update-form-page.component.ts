@@ -97,7 +97,7 @@ export class AppsPasswordManagerUpdateFormPageComponent extends BaseFormPageComp
           task: false,
           progressMessage: 'Updating auto-update settings...',
           successNotification: 'Successfully updated auto-update settings',
-          successUrl: '/startconfiguration/apps/password-manager'
+          successUrl: '/startconfiguration/apps/password-manager/access'
         }
       }
   };

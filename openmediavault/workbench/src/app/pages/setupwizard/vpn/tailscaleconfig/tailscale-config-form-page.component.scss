@@ -62,7 +62,7 @@ omv-tailscale-setupwizard-config-page{
                 color:$lightred;
                 font-weight:bold;
               }
-              .disabled{
+              .disabled .omv-form-divider .title{
                 background-color: $grey!important;
               }
               #tailscale-config-form1{

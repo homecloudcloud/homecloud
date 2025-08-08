@@ -202,7 +202,7 @@ export class AppsPhotosConfigComponent extends BaseFormPageComponent {
           </div>
           <div class="status-message ${this.photosStatus !== 'Running' ? '' : 'hidden'}">
             <span class="status-deploy-message ${this.photosStatus !== 'Not deployed' ? 'hidden' : ''}" >App is not deployed. Go to <a class="plainLink" href="#/setupwizard/apps/photos">photos main page</a> to deploy the app. </span>
-            <span class="status-not-running-message ${this.photosStatus !== 'Running' && this.photosStatus !== 'Not deployed' ? '' : 'hidden'}" >App is not running currently.</span>
+            <span class="status-not-running-message ${this.photosStatus !== 'Running' && this.photosStatus !== 'Not deployed' ? '' : 'hidden'}" >App is not running currently. It may take a while for the app to start. Refresh the page to check status.</span>
           </div>
           <div class="access-info ${this.photosStatus !== 'Running' ? 'hidden' : ''}">
             <p>

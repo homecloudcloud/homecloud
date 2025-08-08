@@ -1,3 +1,23 @@
+openmediavault (7.1.0-9) stable; urgency=high
+  * Success URL  
+ -- Libernest Technologies <support@homecloud.cloud>  Tue, 05 Aug 2025 13:15:00 +0530 
+
+openmediavault (7.1.0-8) stable; urgency=high
+  * Success URL fix for Wizard 
+ -- Libernest Technologies <support@homecloud.cloud>  Tue, 05 Aug 2025 12:59:00 +0530 
+
+openmediavault (7.1.0-7) stable; urgency=high
+  * Joplin setup wizard link fix 
+ -- Libernest Technologies <support@homecloud.cloud>  Tue, 05 Aug 2025 12:00:00 +0530 
+
+openmediavault (7.1.0-6) stable; urgency=high
+  * Logout VPN option
+ -- Libernest Technologies <support@homecloud.cloud>  Tue, 05 Aug 2025 11:10:00 +0530 
+
+openmediavault (7.1.0-5) stable; urgency=high
+  * Logout VPN option
+ -- Libernest Technologies <support@homecloud.cloud>  Tue, 04 Aug 2025 11:59:00 +0530 
+
 openmediavault (7.1.0-4) stable; urgency=high
   * Fix check_immich.py to check tailscale status properly
 

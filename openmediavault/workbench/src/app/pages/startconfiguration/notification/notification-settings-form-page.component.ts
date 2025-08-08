@@ -23,6 +23,7 @@ import { BaseFormPageComponent } from '~/app/pages/base-page-component';
 
 import { DomSanitizer,SafeHtml } from '@angular/platform-browser';
 import { ViewEncapsulation } from '@angular/core';
+import { RpcService } from '~/app/shared/services/rpc.service';
 
 @Component({
   template: `<div id="notification-form1">
@@ -40,6 +41,11 @@ import { ViewEncapsulation } from '@angular/core';
          
       }
         omv-notification-settings-form-page{
+          p.internetError{
+                color:$lightred;
+                font-weight:bold;
+                padding:2rem;
+              }
             #notification-form1{
               margin-bottom:-3rem;
               .omv-form-paragraph{
@@ -306,28 +312,34 @@ export class NotificationSettingsFormPageComponent extends BaseFormPageComponent
       }
     ]
   };
-  constructor(private sanitizer: DomSanitizer) {
+  constructor(private sanitizer: DomSanitizer,private rpcService:RpcService) {
     super();
     //this.config.fields[2].title = this.sanitizer.bypassSecurityTrustHtml(this.config.fields[2].title) as unknown as string;   
      // Sanitize the HTML content once during construction
     this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);
   }
 
-  /*ngAfterViewInit(): void {
+  ngAfterViewInit(): void {
      
     // Delay the operation to ensure the view is fully rendered
     setTimeout(() => {
-
-      // Select all paragraph elements (assuming they are rendered as `window-drive-form1 omv-form-paragraph` elements)
-        const paragraphs = document.querySelectorAll('omv-notification-settings-form-page #email-notification-form omv-form-paragraph');
-
-        // Inject the sanitized HTML into the correct paragraph element
-        paragraphs[1].innerHTML =
-        (this.config.fields[2].title as any).changingThisBreaksApplicationSecurity ||
-        this.config.fields[2].title?.toString();  
-     
+      this.checkInternetStatus();  
     
     }, 100); // Timeout ensures it happens after the view has rendered
   }
-    */
+  checkInternetStatus(){
+      const notificationForm = document.querySelector('omv-notification-settings-form-page #email-notification-form');
+      
+      this.rpcService.request('Homecloud', 'checkInternetStatusForWizard').subscribe(response => {
+        if (response.internetConnected !== true) { //Internet down
+          
+          if(notificationForm){
+            notificationForm.classList.add('hidden');
+            notificationForm.insertAdjacentHTML('afterend','<br><p class="internetError">Homecloud is not connected to Internet.Go to <a class="plainLink" href="#/startconfiguration/networkconfig/interfaces">Network Interfaces</a> page to check the status. Connect Homecloud to Internet and try again</p>');
+          }
+                   
+        } 
+      
+    });
+    }
 }

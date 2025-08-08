@@ -372,14 +372,14 @@ export class UserFormPageComponent extends BaseFormPageComponent {
         template: 'submit',
         execute: {
           type: 'url',
-          url: '/startconfiguration/apps/drive/users'
+          url: '/setupwizard/apps/drive/users'
         }
       },
       {
         template: 'cancel',
         execute: {
           type: 'url',
-          url: '/startconfiguration/apps/drive/users'
+          url: '/setupwizard/apps/drive/users'
         }
       }
     ]

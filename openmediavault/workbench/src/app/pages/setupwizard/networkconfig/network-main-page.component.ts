@@ -81,7 +81,7 @@ export class NetworkMainComponent extends BaseFormPageComponent implements After
       </li>
       <li><strong>Access the Setup Page:</strong> The display will show a URL (e.g., <code>https://172.31.1.1</code>). Open this in your browser.</li><br>
       <li><strong>Login:</strong> Use the <strong>username and password</strong> provided in the Homecloud package.</li><br>
-      <li><strong>Configure Wi-Fi:</strong> Navigate to the <strong><a class="plainLink" href="/#/startconfiguration/networkconfig/interfaces">Network->Interfaces</strong></a> page and enter your Wi-Fi credentials.</li>
+      <li><strong>Configure Wi-Fi:</strong> Navigate to the <strong><a class="plainLink" href="/#/setupwizard/networkconfig/interfaces">Network->Interfaces</strong></a> page and enter your Wi-Fi credentials.</li>
     </ul>
   </div>`;
 
