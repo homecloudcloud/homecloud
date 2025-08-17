@@ -57,6 +57,9 @@ import hmac
 import hashlib
 import time
 import base64
+import tempfile
+import errno
+
 
 
 # Global variable to store the current TOTP and its expiration time
@@ -889,8 +892,9 @@ def update_paperless_ngx_config() -> bool:
             lines.append(f'PAPERLESS_URL={new_url}\n')
 
         # Write the updated config back
-        with open(config_file, 'w') as file:
-            file.writelines(lines)
+        #with open(config_file, 'w') as file:
+        #    file.writelines(lines)
+        safe_write_file(config_file, lines, mode="w", encoding="utf-8", lock_timeout=5.0, backup=True)
 
 
     except Exception as e:
@@ -963,6 +967,93 @@ def update_smtp_config():
 
 if __name__ == "__main__":
     update_smtp_config()
+
+
+class LockTimeoutError(Exception):
+    pass
+
+def _acquire_lock(lock_fh, timeout):
+    """Acquire exclusive flock with timeout."""
+    start = time.time()
+    while True:
+        try:
+            fcntl.flock(lock_fh.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+            return
+        except BlockingIOError:
+            if (time.time() - start) >= timeout:
+                raise LockTimeoutError(f"Timeout acquiring lock on {lock_fh.name}")
+            time.sleep(0.05)
+
+def _release_lock(lock_fh):
+    """Release the flock."""
+    fcntl.flock(lock_fh.fileno(), fcntl.LOCK_UN)
+
+def safe_write_file(path,
+                    data,
+                    mode="w",
+                    encoding=None,
+                    lock_timeout=10.0,
+                    backup=True,
+                    backup_suffix=".bak"):
+    """
+    Safely write to file with:
+      - Exclusive lock (flock)
+      - Temp file + atomic replace
+      - fsync on file and directory
+      - Optional backup
+
+    Args:
+        path (str): target file path
+        data (str|bytes|list): content to write
+        mode (str): file mode ('w','wb',etc.)
+        encoding (str|None): encoding for text mode
+        lock_timeout (float): seconds to wait for lock
+        backup (bool): whether to create backup of existing file
+        backup_suffix (str): suffix for backup file
+    """
+    dir_name = os.path.dirname(path) or "."
+    os.makedirs(dir_name, exist_ok=True)
+
+    lock_path = path + ".lock"
+
+    with open(lock_path, "w") as lock_fh:
+        _acquire_lock(lock_fh, timeout=lock_timeout)
+
+        fd, tmp_path = tempfile.mkstemp(dir=dir_name)
+        try:
+            with os.fdopen(fd, mode, encoding=encoding) as tmp_file:
+                if isinstance(data, list):
+                    tmp_file.writelines(data)
+                else:
+                    tmp_file.write(data)
+                tmp_file.flush()
+                os.fsync(tmp_file.fileno())
+
+            if backup and os.path.exists(path):
+                backup_path = path + backup_suffix
+                with open(path, "rb") as orig, open(backup_path, "wb") as bkp:
+                    for chunk in iter(lambda: orig.read(8192), b""):
+                        bkp.write(chunk)
+                    bkp.flush()
+                    os.fsync(bkp.fileno())
+
+            os.replace(tmp_path, path)
+
+            try:
+                dir_fd = os.open(dir_name, os.O_DIRECTORY)
+                os.fsync(dir_fd)
+                os.close(dir_fd)
+            except Exception:
+                pass  # Directory fsync is best-effort
+
+        except Exception:
+            try:
+                os.remove(tmp_path)
+            except FileNotFoundError:
+                pass
+            raise
+        finally:
+            _release_lock(lock_fh)
 
 
 
@@ -1052,9 +1143,11 @@ def update_photoprism_YAML(**kwargs): # updates YAML config
 
             #with semaphore_file_YAML:
             #semaphore_file_YAML.acquire()
-            with open(jellyfin_yaml, 'w') as file:
-                yaml.dump(jellyfin_data, file, default_flow_style=False)
-            file.close()
+            #with open(jellyfin_yaml, 'w') as file:
+            #    yaml.dump(jellyfin_data, file, default_flow_style=False)
+            #file.close()
+            yaml_content = yaml.safe_dump(jellyfin_data, default_flow_style=False)
+            safe_write_file(jellyfin_yaml, yaml_content, mode="w", encoding="utf-8", lock_timeout=5.0, backup=True)
             #semaphore_file_YAML.release()
 
 
@@ -1087,9 +1180,12 @@ def update_photoprism_YAML(**kwargs): # updates YAML config
 
             #with semaphore_file_YAML:
             #semaphore_file_YAML.acquire()
-            with open(joplin_yaml, 'w') as file:
-                yaml.dump(joplin_data, file, default_flow_style=False)
-            file.close()
+            #with open(joplin_yaml, 'w') as file:
+            #    yaml.dump(joplin_data, file, default_flow_style=False)
+            #file.close()
+            yaml_content = yaml.safe_dump(joplin_data, default_flow_style=False)
+            safe_write_file(joplin_yaml, yaml_content, mode="w", encoding="utf-8", lock_timeout=5.0, backup=True)
+
             #semaphore_file_YAML.release()
 
         if (os.path.exists(joplin_env)):
@@ -1105,9 +1201,11 @@ def update_photoprism_YAML(**kwargs): # updates YAML config
                         if line.startswith('APP_BASE_URL='):
                             lines[i] = (f"APP_BASE_URL=https://{hostname}:22302/\n")
             file.close()
-            with open(joplin_env, 'w') as file:
-                file.writelines(lines)
-            file.close()
+            #with open(joplin_env, 'w') as file:
+            #    file.writelines(lines)
+            #file.close()
+            safe_write_file(joplin_env, lines, mode="w", encoding="utf-8", lock_timeout=5.0, backup=True)
+
 
 
         if (os.path.exists(paperless_yaml)):
@@ -1138,9 +1236,12 @@ def update_photoprism_YAML(**kwargs): # updates YAML config
 
             #with semaphore_file_YAML:
             #semaphore_file_YAML.acquire()
-            with open(paperless_yaml, 'w') as file:
-                yaml.dump(paperless_data, file, default_flow_style=False)
-            file.close()
+            #with open(paperless_yaml, 'w') as file:
+            #    yaml.dump(paperless_data, file, default_flow_style=False)
+            #file.close()
+            yaml_content = yaml.safe_dump(paperless_data, default_flow_style=False)
+            safe_write_file(paperless_yaml, yaml_content, mode="w", encoding="utf-8", lock_timeout=5.0, backup=True)
+
             #semaphore_file_YAML.release()
         
         
@@ -1190,9 +1291,11 @@ def update_photoprism_YAML(**kwargs): # updates YAML config
                         if not any(line.startswith('PAPERLESS_CONSUMER_POLLING=') for line in lines):
                             lines.append(f'PAPERLESS_CONSUMER_POLLING=600\n')
             file.close()
-            with open(paperless_env, 'w') as file:
-                file.writelines(lines)
-            file.close()
+            #with open(paperless_env, 'w') as file:
+            #    file.writelines(lines)
+            #file.close()
+            safe_write_file(paperless_env, lines, mode="w", encoding="utf-8", lock_timeout=5.0, backup=True)
+
             update_paperless_ngx_config()
 
         # check if these files exist otherwise return
@@ -1250,12 +1353,14 @@ def update_photoprism_YAML(**kwargs): # updates YAML config
                             lines[i] = f'TZ={timezone}\n'
                 file.close()
             # write the changes to file
-                with open('/etc/immich/.env', 'w') as file:
-                    file.writelines(lines)
-                file.close()
-                #print(f"immich_data: {immich_data}")
+                #with open('/etc/immich/.env', 'w') as file:
+                #    file.writelines(lines)
+                #file.close()
+                safe_write_file(env_file, lines, mode="w", encoding="utf-8", lock_timeout=5.0, backup=True)
 
-            #print(f"writing immich file2")
+                
+
+            
            
 
         if (os.path.exists(vaultwarden_yaml)):
@@ -1304,9 +1409,12 @@ def update_photoprism_YAML(**kwargs): # updates YAML config
                 if domain_found == 0:
                     # Append with correct format without newline
                     vaultwarden_data['services']['vaultwarden']['environment'].append(f'DOMAIN=https://{hostname}/passwords/')
-            with open(vaultwarden_yaml, 'w') as file:
-                yaml.dump(vaultwarden_data, file, default_flow_style=False)
-            file.close()
+            #with open(vaultwarden_yaml, 'w') as file:
+            #    yaml.dump(vaultwarden_data, file, default_flow_style=False)
+            #file.close()
+            yaml_content = yaml.safe_dump(vaultwarden_data, default_flow_style=False)
+            safe_write_file(vaultwarden_yaml, yaml_content, mode="w", encoding="utf-8", lock_timeout=5.0, backup=True)
+
         #print(f"Checkpoint 1 --------------------------------------")
         #print(f"IN UPDATE YAML:")
         #if (INDEXING_SCHEDULE != None):
@@ -1372,103 +1480,106 @@ def update_photoprism_YAML(**kwargs): # updates YAML config
         #with open('/etc/filebrowser/docker-compose.yml', 'w') as file:
         #    yaml.dump(data, file, default_flow_style=False)
         #file.close()
-        if (os.path.exists(immich_yaml)):
-            with open(immich_yaml, 'w') as file:
-                print(f"writing immich file3 {file}")
-                yaml.dump(immich_data, file, default_flow_style=False)
-            file.close()
-            update_immich_config()
-        #semaphore_file_YAML.release()
-        # code to remove in YAML based on deletions in mountpoint list
-            with open(immich_yaml, 'r') as file:
-                data1 = yaml.safe_load(file)
-            file.close()
-            mount = ""
-            volume = ""
-            ### changes for filebrowser - filebrowser should show all external mounted disks and /home/family home directory
-            #volumes_fbrowser = ""
-            volumes = data1['services']['immich-server']['volumes']
-            #print(f"volumes: {volumes}")
-            for i, volume in enumerate(volumes):
-                #print(f"volume name is {volume}")
-                if i == 0: # first line in volumes is for cache storage so we skip it
-                    continue
-                if i == 1: # first line in volumes is for internal storage dummy directory so we skip it - this is to make sure external disks links are not in family home directory
-                    continue
-                if i == 2: # first line in volumes is for internal storage home directory so we skip it
-                    continue
-                found = 0
-                if (mountpoints):
-                    for mount in mountpoints:
-                        if (mount in volume):
-                            found = 1
-                            continue
-            # print(f"found: {found}")
-                if (found == 0): # need this volume string to be deleted from YAML
-                    mountpoint_tba.append(volume)
-                # print(f"mountpoint_tba: {mountpoint_tba}")
-                    change_in_disks = 1
-        #  print (f"to be deleted: {mountpoint_tba}")
-        # print(f"mountpoint_tba: {mountpoint_tba}")
-            #with semaphore_file_YAML:
-            #semaphore_file_YAML.acquire()
-            if (len(mountpoint_tba)>0):
-                for i, volume in enumerate(mountpoint_tba):
-                    #print (f"volume is: {volume}")
-                    for z, volume_to_delete in enumerate(data1['services']['immich-server']['volumes']):
-                        if (volume == volume_to_delete ):
-                            #print(f"found {volume} to be deleted")
-                            del data1['services']['immich-server']['volumes'][z]
-                            #print(f"CALLING REMOVE STALE DISKS - disk to delete is {volume}")
-            with open(immich_yaml, 'w') as file:
-                print(f"writing to immich docker file 4")
-                yaml.dump(data1, file, default_flow_style=False)
-            file.close()
-        #semaphore_file_YAML.release()
-       
-
+        #if (os.path.exists(immich_yaml)):
+        #    with open(immich_yaml, 'w') as file:
+        #        print(f"writing immich file3 {file}")
+        #        yaml.dump(immich_data, file, default_flow_style=False)
+        #    file.close()
+        yaml_content = yaml.safe_dump(immich_data, default_flow_style=False)
+        safe_write_file(immich_yaml, yaml_content, mode="w", encoding="utf-8", lock_timeout=5.0, backup=True)
+        update_immich_config()
+    #semaphore_file_YAML.release()
+    # code to remove in YAML based on deletions in mountpoint list
+        with open(immich_yaml, 'r') as file:
+            data1 = yaml.safe_load(file)
+        file.close()
+        mount = ""
+        volume = ""
         ### changes for filebrowser - filebrowser should show all external mounted disks and /home/family home directory
-        #mountpoint_tba = []
-        #with open('/etc/filebrowser/docker-compose.yml', 'r') as file:
-        #    data1 = yaml.safe_load(file)
-        #file.close()
-
-        #volumes_fbrowser = data1['services']['filebrowser']['volumes']
-        #for i, volume in enumerate(volumes_fbrowser):
-        #    if i <= 2: # first 3 lines in volumes is for settings etc so we skip
-        #        continue
-        #    found = 0
-        #    for mount in mountpoints:
-        #        if (mount in volume):
-        #            found = 1
-        #            continue
-        #    if (found == 0): # need this volume string to be deleted from YAML
-        #        mountpoint_tba.append(volume)
-        #        change_in_disks = 1
-        #print (f"to be deleted: {mountpoint_tba}")
-
+        #volumes_fbrowser = ""
+        volumes = data1['services']['immich-server']['volumes']
+        #print(f"volumes: {volumes}")
+        for i, volume in enumerate(volumes):
+            #print(f"volume name is {volume}")
+            if i == 0: # first line in volumes is for cache storage so we skip it
+                continue
+            if i == 1: # first line in volumes is for internal storage dummy directory so we skip it - this is to make sure external disks links are not in family home directory
+                continue
+            if i == 2: # first line in volumes is for internal storage home directory so we skip it
+                continue
+            found = 0
+            if (mountpoints):
+                for mount in mountpoints:
+                    if (mount in volume):
+                        found = 1
+                        continue
+        # print(f"found: {found}")
+            if (found == 0): # need this volume string to be deleted from YAML
+                mountpoint_tba.append(volume)
+            # print(f"mountpoint_tba: {mountpoint_tba}")
+                change_in_disks = 1
+    #  print (f"to be deleted: {mountpoint_tba}")
+    # print(f"mountpoint_tba: {mountpoint_tba}")
         #with semaphore_file_YAML:
         #semaphore_file_YAML.acquire()
-
-        #if (len(mountpoint_tba)>0):
-        #    for i, volume in enumerate(mountpoint_tba):
+        if (len(mountpoint_tba)>0):
+            for i, volume in enumerate(mountpoint_tba):
                 #print (f"volume is: {volume}")
-        #        for z, volume_to_delete in enumerate(data1['services']['filebrowser']['volumes']):
-        #           if (volume == volume_to_delete ):
+                for z, volume_to_delete in enumerate(data1['services']['immich-server']['volumes']):
+                    if (volume == volume_to_delete ):
                         #print(f"found {volume} to be deleted")
-        #                del data1['services']['filebrowser']['volumes'][z]
-
-        #with open('/etc/filebrowser/docker-compose.yml', 'w') as file:
+                        del data1['services']['immich-server']['volumes'][z]
+                        #print(f"CALLING REMOVE STALE DISKS - disk to delete is {volume}")
+        #with open(immich_yaml, 'w') as file:
+        #    print(f"writing to immich docker file 4")
         #    yaml.dump(data1, file, default_flow_style=False)
         #file.close()
-        #semaphore_file_YAML.release()
+        safe_write_file(immich_yaml, data1, mode="w", encoding="utf-8", lock_timeout=5.0, backup=True)
+    #semaphore_file_YAML.release()
+    
+
+    ### changes for filebrowser - filebrowser should show all external mounted disks and /home/family home directory
+    #mountpoint_tba = []
+    #with open('/etc/filebrowser/docker-compose.yml', 'r') as file:
+    #    data1 = yaml.safe_load(file)
+    #file.close()
+
+    #volumes_fbrowser = data1['services']['filebrowser']['volumes']
+    #for i, volume in enumerate(volumes_fbrowser):
+    #    if i <= 2: # first 3 lines in volumes is for settings etc so we skip
+    #        continue
+    #    found = 0
+    #    for mount in mountpoints:
+    #        if (mount in volume):
+    #            found = 1
+    #            continue
+    #    if (found == 0): # need this volume string to be deleted from YAML
+    #        mountpoint_tba.append(volume)
+    #        change_in_disks = 1
+    #print (f"to be deleted: {mountpoint_tba}")
+
+    #with semaphore_file_YAML:
+    #semaphore_file_YAML.acquire()
+
+    #if (len(mountpoint_tba)>0):
+    #    for i, volume in enumerate(mountpoint_tba):
+            #print (f"volume is: {volume}")
+    #        for z, volume_to_delete in enumerate(data1['services']['filebrowser']['volumes']):
+    #           if (volume == volume_to_delete ):
+                    #print(f"found {volume} to be deleted")
+    #                del data1['services']['filebrowser']['volumes'][z]
+
+    #with open('/etc/filebrowser/docker-compose.yml', 'w') as file:
+    #    yaml.dump(data1, file, default_flow_style=False)
+    #file.close()
+    #semaphore_file_YAML.release()
 
 
-        #print (f"change_in_disks: {change_in_disks}")
-      #  if (change_in_disks == 1): # avoid restart as this disk change may be due to usb errors
-      #      #restart_photoprism_and_index()
-      #      index_thread = threading.Thread(target=start_indexing_photoprism)
-      #      index_thread.start()
+    #print (f"change_in_disks: {change_in_disks}")
+    #  if (change_in_disks == 1): # avoid restart as this disk change may be due to usb errors
+    #      #restart_photoprism_and_index()
+    #      index_thread = threading.Thread(target=start_indexing_photoprism)
+    #      index_thread.start()
 
         return True
     except:
@@ -2460,7 +2571,7 @@ def update_traefik_config(cert_file_path: str, key_file_path: str) -> bool:
             raise FileNotFoundError(f"Key file not found: {key_file_path}")
             
         # Create backup of original config
-        backup_path = f"{config_path}.bak"
+        backup_path = f"{config_path}.bakup"
         shutil.copy2(config_path, backup_path)
         
         # Read existing config
@@ -2532,9 +2643,10 @@ def update_traefik_config(cert_file_path: str, key_file_path: str) -> bool:
 
         
         # Write updated config
-        with open(config_path, 'w') as f:
-            yaml.safe_dump(config, f, default_flow_style=False)
-            
+        #with open(config_path, 'w') as f:
+        #    yaml.safe_dump(config, f, default_flow_style=False)
+        yaml_content = yaml.safe_dump(config, default_flow_style=False)
+        safe_write_file(config_path, yaml_content, mode="w", encoding="utf-8", lock_timeout=5.0, backup=True)
         return True
         
     except Exception as e:

@@ -33,6 +33,8 @@ from pathlib import Path
 from pwd import getpwnam
 import json
 from typing import Optional, Dict, List
+import tempfile
+import errno
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -122,6 +124,93 @@ update_display_lock = threading.Lock()
 #args = parser.parse_args()
 #text = args.Text
 #draw_text(text)
+
+
+class LockTimeoutError(Exception):
+    pass
+
+def _acquire_lock(lock_fh, timeout):
+    """Acquire exclusive flock with timeout."""
+    start = time.time()
+    while True:
+        try:
+            fcntl.flock(lock_fh.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+            return
+        except BlockingIOError:
+            if (time.time() - start) >= timeout:
+                raise LockTimeoutError(f"Timeout acquiring lock on {lock_fh.name}")
+            time.sleep(0.05)
+
+def _release_lock(lock_fh):
+    """Release the flock."""
+    fcntl.flock(lock_fh.fileno(), fcntl.LOCK_UN)
+
+def safe_write_file(path,
+                    data,
+                    mode="w",
+                    encoding=None,
+                    lock_timeout=10.0,
+                    backup=True,
+                    backup_suffix=".bak"):
+    """
+    Safely write to file with:
+      - Exclusive lock (flock)
+      - Temp file + atomic replace
+      - fsync on file and directory
+      - Optional backup
+
+    Args:
+        path (str): target file path
+        data (str|bytes|list): content to write
+        mode (str): file mode ('w','wb',etc.)
+        encoding (str|None): encoding for text mode
+        lock_timeout (float): seconds to wait for lock
+        backup (bool): whether to create backup of existing file
+        backup_suffix (str): suffix for backup file
+    """
+    dir_name = os.path.dirname(path) or "."
+    os.makedirs(dir_name, exist_ok=True)
+
+    lock_path = path + ".lock"
+
+    with open(lock_path, "w") as lock_fh:
+        _acquire_lock(lock_fh, timeout=lock_timeout)
+
+        fd, tmp_path = tempfile.mkstemp(dir=dir_name)
+        try:
+            with os.fdopen(fd, mode, encoding=encoding) as tmp_file:
+                if isinstance(data, list):
+                    tmp_file.writelines(data)
+                else:
+                    tmp_file.write(data)
+                tmp_file.flush()
+                os.fsync(tmp_file.fileno())
+
+            if backup and os.path.exists(path):
+                backup_path = path + backup_suffix
+                with open(path, "rb") as orig, open(backup_path, "wb") as bkp:
+                    for chunk in iter(lambda: orig.read(8192), b""):
+                        bkp.write(chunk)
+                    bkp.flush()
+                    os.fsync(bkp.fileno())
+
+            os.replace(tmp_path, path)
+
+            try:
+                dir_fd = os.open(dir_name, os.O_DIRECTORY)
+                os.fsync(dir_fd)
+                os.close(dir_fd)
+            except Exception:
+                pass  # Directory fsync is best-effort
+
+        except Exception:
+            try:
+                os.remove(tmp_path)
+            except FileNotFoundError:
+                pass
+            raise
+        finally:
+            _release_lock(lock_fh)
 
 def monitor_tmp_directory():
     """
@@ -1350,8 +1439,11 @@ def update_vaultwarden_domain() -> bool:
             config['services']['vaultwarden']['environment'] = new_env
 
         # Write updated YAML back to file
-        with open(yaml_path, 'w') as file:
-            yaml.dump(config, file, default_flow_style=False)
+        #with open(yaml_path, 'w') as file:
+        #    yaml.dump(config, file, default_flow_style=False)
+        yaml_content = yaml.safe_dump(config, default_flow_style=False)
+        safe_write_file(yaml_path, yaml_content, mode="w", encoding="utf-8", lock_timeout=5.0, backup=True)
+
         
         return True
 
@@ -1406,8 +1498,11 @@ def update_jellyfin_domain() -> bool:
                 
 
         # Write updated YAML back to file
-        with open(yaml_path, 'w') as file:
-            yaml.dump(config, file, default_flow_style=False)
+        #with open(yaml_path, 'w') as file:
+        #    yaml.dump(config, file, default_flow_style=False)
+        yaml_content = yaml.safe_dump(config, default_flow_style=False)
+        safe_write_file(yaml_path, yaml_content, mode="w", encoding="utf-8", lock_timeout=5.0, backup=True)
+
         
         return True
 

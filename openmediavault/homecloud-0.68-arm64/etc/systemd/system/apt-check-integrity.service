@@ -1,0 +1,17 @@
+[Unit]
+Description=Safe-first automatic APT repair at boot
+DefaultDependencies=no
+After=network-online.target
+Wants=network-online.target
+ConditionPathExists=/sbin/apt-auto-repair.sh
+
+[Service]
+Type=oneshot
+ExecStart=/sbin/apt-auto-repair.sh
+RemainAfterExit=yes
+TimeoutSec=300
+StandardOutput=append:/var/log/apt-auto-repair.log
+StandardError=append:/var/log/apt-auto-repair.log
+
+[Install]
+WantedBy=multi-user.target

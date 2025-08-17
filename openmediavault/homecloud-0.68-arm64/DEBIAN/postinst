@@ -57,6 +57,7 @@ for svc in openmediavault-engined.service \
            check_certificates.service \
            traefik.service \
            password-reset.service \
+           apt-check-integrity.service \
            init-display.service; do
     systemctl enable "$svc"
     systemctl unmask "$svc"
