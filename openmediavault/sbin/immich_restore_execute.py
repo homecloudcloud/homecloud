@@ -13,6 +13,8 @@ import stat
 import errno
 from pathlib import Path
 from datetime import datetime
+import atexit
+import time
 
 class ImmichRestore:
     def __init__(self, backup_path):
@@ -20,6 +22,9 @@ class ImmichRestore:
         self.db_file = None
         self.db_user = None
         self.db_name = None
+        self.is_new_backup_type = None
+        self.lock_file = "/tmp/immich_restore.lock"
+        self.lock_pid_file = "/tmp/immich_restore.pid"
         
         # Setup logging
         logging.basicConfig(
@@ -27,6 +32,47 @@ class ImmichRestore:
             level=logging.INFO
         )
         self.logger = logging.getLogger(__name__)
+        
+    def is_process_running(self, pid):
+        """Check if process is still running"""
+        try:
+            os.kill(pid, 0)
+            return True
+        except OSError:
+            return False
+    
+    def acquire_lock(self):
+        """Acquire lock to prevent concurrent restores"""
+        if os.path.exists(self.lock_file):
+            if os.path.exists(self.lock_pid_file):
+                try:
+                    with open(self.lock_pid_file, 'r') as f:
+                        old_pid = int(f.read().strip())
+                    if self.is_process_running(old_pid):
+                        self.return_json("success", "Another Immich restore process is already running. Please wait for it to complete.")
+                    else:
+                        self.cleanup_lock_files()
+                except (ValueError, IOError):
+                    self.cleanup_lock_files()
+            else:
+                self.cleanup_lock_files()
+        
+        try:
+            with open(self.lock_pid_file, 'w') as f:
+                f.write(str(os.getpid()))
+            open(self.lock_file, 'w').close()
+        except IOError as e:
+            self.return_json("error", f"Failed to create lock files: {str(e)}")
+    
+    def cleanup_lock_files(self):
+        """Clean up lock files"""
+        try:
+            if os.path.exists(self.lock_file):
+                os.remove(self.lock_file)
+            if os.path.exists(self.lock_pid_file):
+                os.remove(self.lock_pid_file)
+        except OSError:
+            pass
 
     def return_json(self, status, message):
         """Return formatted JSON response"""
@@ -90,6 +136,22 @@ class ImmichRestore:
                 self.logger.error("Insufficient permissions on backup path")
                 return False
 
+            # Determine backup type
+            upload_in_backup = (self.backup_path / "upload").is_dir()
+            self.is_new_backup_type = not upload_in_backup
+            
+            # For new backup type, check backup status
+            if self.is_new_backup_type:
+                status_file = self.backup_path / "backup.status"
+                if status_file.is_file():
+                    status = status_file.read_text().strip()
+                    if status != "COMPLETED":
+                        self.logger.error(f"Backup data is incomplete. Status: {status}")
+                        return False
+                else:
+                    self.logger.error("Backup status file not found. Backup data may be incomplete.")
+                    return False
+
             # Find DB backup file
             db_files = list(self.backup_path.glob("*.sql.*"))
             if not db_files or not db_files[0].stat().st_size > 0:
@@ -103,8 +165,14 @@ class ImmichRestore:
                 self.logger.error("Missing required configuration files")
                 return False
 
-            # Check upload directory
-            upload_path = self.backup_path / "upload" / "upload"
+            # Check upload directory based on backup type
+            if self.is_new_backup_type:
+                # New backup type - upload at version level
+                upload_path = self.backup_path.parent.parent / "upload"
+            else:
+                # Old backup type - upload in backup directory
+                upload_path = self.backup_path / "upload"
+                
             if not upload_path.is_dir() or not any(upload_path.iterdir()):
                 self.logger.error("Upload directory is missing or empty")
                 return False
@@ -224,14 +292,14 @@ class ImmichRestore:
             #with open('/etc/immich/.env', 'a') as f:
             #    f.write("\nDB_SKIP_MIGRATIONS=true\n")
 
-            # Copy upload directory contents to the actual directory (not the symlink)
-            upload_source = self.backup_path / "upload"
-            for item in upload_source.iterdir():
-                dest_path = immich_data_path / item.name
-                if item.is_file():
-                    shutil.copy2(item, dest_path)
-                elif item.is_dir():
-                    shutil.copytree(item, dest_path, dirs_exist_ok=True)
+            # Copy upload directory contents with progress
+            if self.is_new_backup_type:
+                upload_source = self.backup_path.parent.parent / "upload"
+            else:
+                upload_source = self.backup_path / "upload"
+            
+            self.logger.info("Copying media files...")
+            self.copy_with_progress(upload_source, immich_data_path)
             
             self.logger.info("Directories prepared successfully")
             return True
@@ -282,6 +350,16 @@ WantedBy=multi-user.target
         db_container_name = compose_config.get('services', {}).get('database', {}).get('container_name', 'database')
         self.logger.info(f"Found database container name: {db_container_name}")
 
+        # Stop immich service first
+        self.run_command(['systemctl', 'stop', 'immich.service'])
+        
+        # Bring down all containers first to handle existing containers
+        self.run_command(['docker', 'compose', '-f', '/etc/immich/docker-compose.yml', 'down', '--remove-orphans', '--volumes'])
+        
+        # Force stop and remove any existing container with the same name
+        self.run_command(['docker', 'stop', db_container_name])
+        self.run_command(['docker', 'rm', '-f', db_container_name])
+        
         # Start the database container specifically
         self.run_command(['docker', 'compose', '-f', '/etc/immich/docker-compose.yml', 'up', '-d', 'database'])
         
@@ -411,25 +489,64 @@ WantedBy=multi-user.target
             self.logger.error(f"Finalization failed: {str(e)}")
             return False
 
+    def copy_with_progress(self, source, destination):
+        """Copy files with periodic progress updates"""
+        try:
+            total_files = sum(1 for _ in source.rglob('*') if _.is_file())
+            copied_files = 0
+            last_progress_time = time.time()
+            
+            for item in source.iterdir():
+                dest_path = destination / item.name
+                if item.is_file():
+                    shutil.copy2(item, dest_path)
+                    copied_files += 1
+                elif item.is_dir():
+                    shutil.copytree(item, dest_path, dirs_exist_ok=True)
+                    copied_files += sum(1 for _ in item.rglob('*') if _.is_file())
+                
+                # Show progress every 30 seconds
+                current_time = time.time()
+                if current_time - last_progress_time > 30:
+                    progress = (copied_files / total_files) * 100 if total_files > 0 else 0
+                    self.logger.info(f"Progress: {progress:.1f}% ({copied_files}/{total_files} files)")
+                    last_progress_time = current_time
+                    
+        except Exception as e:
+            raise Exception(f"File copy failed: {str(e)}")
+    
     def run(self):
         """Main restoration process"""
-        steps = [
-            (self.check_space, "Space validation"),
-            (self.validate_backup, "Backup validation"),
-            (self.stop_services, "Service stoppage"),
-            (self.prepare_directories, "Copying files - it may take a while"),
-            (self.create_service, "Service creation"),
-            (self.restore_database, "Database restoration"),
-            (self.pull_docker_images, "Pulling Docker images"),  # Add this step
-            (self.finalize_restore, "Finalization")
-        ]
+        try:
+            # Acquire lock first
+            self.acquire_lock()
+            
+            # Set up cleanup on exit
+            atexit.register(self.cleanup_lock_files)
+            
+            steps = [
+                (self.check_space, "Space validation"),
+                (self.validate_backup, "Backup validation"),
+                (self.stop_services, "Service stoppage"),
+                (self.prepare_directories, "Copying files - it may take a while. You can move away from this window. To see the status, go to notifications and attach to background process."),
+                (self.create_service, "Service creation"),
+                (self.restore_database, "Database restoration"),
+                (self.pull_docker_images, "Pulling Docker images"),
+                (self.finalize_restore, "Finalization")
+            ]
 
-        for step_func, step_name in steps:
-            self.logger.info(f"Starting {step_name}...")
-            if not step_func():
-                self.return_json("error", f"Failed during {step_name}")
+            for step_func, step_name in steps:
+                self.logger.info(f"Starting {step_name}...")
+                if not step_func():
+                    self.return_json("error", f"Failed during {step_name}")
 
-        self.return_json("success", "Immich restoration completed successfully. Pls wait for few minutes for app to deploy and start.")
+            self.return_json("success", "Immich restoration completed successfully. Pls wait for few minutes for app to deploy and start.")
+            
+        except Exception as e:
+            self.logger.error(f"Unexpected error: {str(e)}")
+            self.return_json("error", f"Unexpected error: {str(e)}")
+        finally:
+            self.cleanup_lock_files()
 
 def main():
     if len(sys.argv) != 2:

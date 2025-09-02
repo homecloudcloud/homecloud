@@ -1,5 +1,45 @@
 #!/bin/bash
 
+# Lock file for preventing concurrent backups
+LOCK_FILE="/tmp/paperless_backup.lock"
+LOCK_PID_FILE="/tmp/paperless_backup.pid"
+
+# Function to cleanup lock files
+cleanup_lock() {
+    rm -f "$LOCK_FILE" "$LOCK_PID_FILE"
+}
+
+# Function to check if process is still running
+is_process_running() {
+    local pid=$1
+    kill -0 "$pid" 2>/dev/null
+}
+
+# Function to acquire lock
+acquire_lock() {
+    # Check if lock file exists
+    if [ -f "$LOCK_FILE" ]; then
+        # Check if PID file exists and process is still running
+        if [ -f "$LOCK_PID_FILE" ]; then
+            local old_pid=$(cat "$LOCK_PID_FILE")
+            if is_process_running "$old_pid"; then
+                echo "{\"Status\": \"Success\", \"Message\": \"Another Paperless backup process is already running. Please wait for it to complete.\"}"
+                exit 0
+            else
+                # Stale lock, remove it
+                cleanup_lock
+            fi
+        else
+            # Lock file exists but no PID file, assume stale
+            cleanup_lock
+        fi
+    fi
+    
+    # Create lock file and PID file
+    echo $$ > "$LOCK_PID_FILE"
+    touch "$LOCK_FILE"
+}
+
 # Function to check if directory exists and is writable
 check_directory() {
     local dir="$1"
@@ -73,6 +113,12 @@ if [ $# -ne 3 ]; then
     echo "Usage: $0 backup_path username groupname"
     exit 1
 fi
+
+# Acquire lock to prevent concurrent backups
+acquire_lock
+
+# Set up cleanup on exit
+trap cleanup_lock EXIT INT TERM
 
 backup_path="$1"
 username="$2"

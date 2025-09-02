@@ -25,6 +25,8 @@ class PaperlessRestore:
         self.created_files = []
         self.service_was_running = False
         self.yaml_backup = None
+        self.lock_file = '/tmp/paperless_restore.lock'
+        self.pid_file = '/tmp/paperless_restore.pid'
         
         # Setup logging
         logging.basicConfig(
@@ -51,6 +53,29 @@ class PaperlessRestore:
             return True
         except Exception as e:
             self.logger.error(f"Failed to create user: {str(e)}")
+            return False
+
+    def acquire_lock(self):
+        """Acquire lock to prevent concurrent restores"""
+        try:
+            if os.path.exists(self.lock_file):
+                if os.path.exists(self.pid_file):
+                    with open(self.pid_file, 'r') as f:
+                        pid = int(f.read().strip())
+                    try:
+                        os.kill(pid, 0)
+                        return "already_running"
+                    except OSError:
+                        os.unlink(self.lock_file)
+                        os.unlink(self.pid_file)
+            
+            with open(self.lock_file, 'w') as f:
+                f.write(str(os.getpid()))
+            with open(self.pid_file, 'w') as f:
+                f.write(str(os.getpid()))
+            return True
+        except Exception as e:
+            self.logger.error(f"Failed to acquire lock: {str(e)}")
             return False
 
 
@@ -106,6 +131,15 @@ class PaperlessRestore:
             self.logger.error(f"Error removing user/group: {str(e)}")
 
         self.logger.info("Cleanup completed")
+        
+        # Release lock
+        try:
+            if os.path.exists(self.lock_file):
+                os.unlink(self.lock_file)
+            if os.path.exists(self.pid_file):
+                os.unlink(self.pid_file)
+        except Exception as e:
+            self.logger.error(f"Error releasing lock: {str(e)}")
 
 
     def run_command(self, command, shell=False, check=True):
@@ -470,6 +504,12 @@ WantedBy=multi-user.target
 
     def run(self):
         """Main restore process"""
+        lock_result = self.acquire_lock()
+        if lock_result == "already_running":
+            return {"success": True, "message": "Another restore process is already running. Go to Notifications and attach to Background task to see status."}
+        elif not lock_result:
+            return {"success": False, "message": "Failed to acquire lock"}
+        
         atexit.register(self.cleanup)
         self.cleanup_needed = True
         

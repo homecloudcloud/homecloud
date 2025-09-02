@@ -101,6 +101,13 @@ export class AppsPhotosBackupComponent extends BaseFormPageComponent {
         flexGrow: 1,
         sortable: true,
         
+      },
+      {
+        name: gettext('Filesystem'),
+        prop: 'filesystem',
+        flexGrow: 1,
+        sortable: true,
+      
       }
     ],
     actions: [
@@ -114,9 +121,9 @@ export class AppsPhotosBackupComponent extends BaseFormPageComponent {
           maxSelected: 1,
           constraint: [
             {
-              operator: 'gt',
-              arg0: { prop: 'available' },
-              arg1: this.totalGb
+              operator: 'in',
+              arg0: { prop: 'filesystem' },
+              arg1: ['ext4', 'ntfs']
             }
           ]
     
@@ -126,7 +133,6 @@ export class AppsPhotosBackupComponent extends BaseFormPageComponent {
           template: 'confirmation',
           message: gettext(
             'Backup will be stored in folder named immich_backup_timestamp in selected backup disk. Do you want to continue?'
- 
           )
         },
         execute: {
@@ -172,7 +178,7 @@ export class AppsPhotosBackupComponent extends BaseFormPageComponent {
   ngOnInit(): void {
     this.rpcService.request('Homecloud', 'get_backup_size_immich', {}).subscribe((data: any) => {
       this.totalGb = Number(data.total_gb);  // Make sure totalGb is a number
-      this.config1.actions[0].enabledConstraints.constraint[0].arg1 = this.totalGb; // Update the constraint with the totalGb value
+      //this.config1.actions[0].enabledConstraints.constraint[0].arg1 = this.totalGb; // Update the constraint with the totalGb value
       this.htmlContent= `
             <div class="backup-container">
               <h1 class="backup-heading">
@@ -186,7 +192,7 @@ export class AppsPhotosBackupComponent extends BaseFormPageComponent {
                 You can plug in a USB drive with enough free space to store your files. Homecloud will save a full backup to a folder called <code>homecloud-backups</code> on that drive.
                 </p>
                 <p class="icon-text">
-                🔄 Each time you run a backup, it makes a fresh full copy of your data. You can delete older backups anytime from the restore page.
+                🔄 Note: It will OVERWRITE any last backups taken on this drive.
                 </p>
                 <p class="icon-text">
                 🔓 Remember: backups are not encrypted. Make sure to keep your USB drive somewhere safe and private.
@@ -195,7 +201,10 @@ export class AppsPhotosBackupComponent extends BaseFormPageComponent {
                   📦 <strong class="backupSizeText">Estimated Immich backup size(in GB):</strong><span class="backupSize">${this.totalGb}</span>
                 </p>
                 <p class="icon-text">
-                  🖴 The table below shows the list of external disks currently connected and available for backup.
+                  📦 <strong class="backupSizeText">Actual space needed on USB drive depends on the number of files that have been changed/added since last backup stored on this drive, if any.</span>
+                </p>
+                <p class="icon-text">
+                  🖴 The table below shows the list of external disks currently connected and available for backup. Backup of Immich data is only supported on USB drives with Linux (EXT4) or Windows (NTFS) file systems. Go to Filesystems page to format USB drive with EXT4 filesystem.
                 </p>                              
               </div>
             </div> 

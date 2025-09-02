@@ -198,6 +198,97 @@ export class AppsPhotosRestoreComponent extends BaseFormPageComponent {
               },
               request: {
                 service: 'Homecloud',
+                method: 'deleteImmichBackup',
+                params:{
+                  mount_path: '{{ _selected[0].mount_path}}'
+                }
+
+              }
+            },
+          successUrl:'/startconfiguration/apps/photos'
+          }
+        }
+      }
+    ]
+  };
+
+  public config2: DatatablePageConfig = {
+  
+    stateId: '63e9b3ef-2fse-12ee-9065-e3epl1sd8f72',
+    autoReload: false,
+    remoteSorting: true,
+    remotePaging: true,
+    sorters: [
+      {
+        dir: 'asc',
+        prop: 'timestamp'
+      }
+    ],
+    store: {
+      proxy: {
+        service: 'Homecloud',
+        get: {
+          method: 'immich_find_uploadsBg',
+          task: true
+        }
+      }
+    },
+    rowId: 'name',
+    columns: [
+      {
+        name: gettext('Media_size GB'),
+        prop: 'size',
+        flexGrow: 1,
+        sortable: true
+      },
+      {
+        name: gettext('Disk'),
+        prop: 'disk',
+        flexGrow: 1,
+        sortable: true
+      }
+    ],
+    actions: [
+      {
+        type: 'iconButton',
+        text: gettext('Delete'),
+        icon: 'mdi:delete',
+        tooltip: gettext('Delete all media files.'),
+        enabledConstraints: {
+          minSelected: 1,
+          maxSelected: 1
+        },
+      
+          confirmationDialogConfig: {
+          template: 'confirmation',
+          message: gettext(
+            'This will permanently DELETE all media files in backup disk. You will NOT be able to restore Immich backup. You want to continue?'
+          )
+        },
+        execute: {
+          type: 'taskDialog',
+          taskDialog: {
+            config: {
+              title: gettext('Message'),
+              autoScroll: true,
+              startOnInit: true,
+              buttons: {
+                start: {
+                  hidden: true
+                },
+                stop: {
+                  hidden: true
+                },
+                close:{
+                  hidden: false,
+                  disabled: false,
+                  autofocus: false,
+                  dialogResult: true
+                }
+
+              },
+              request: {
+                service: 'Homecloud',
                 method: 'deleteBackup',
                 params:{
                   mount_path: '{{ _selected[0].mount_path}}'
@@ -247,11 +338,10 @@ export class AppsPhotosRestoreComponent extends BaseFormPageComponent {
                 </p>
 
                 <p class="info-text">
-                  The table below shows all backups found on connected USB drives.
+                  Size of backup includes the media (photos and videos) files. The table below shows all backups found on connected USB drives.
                 </p>
               </div>
             </div>
-
 
   `;
 

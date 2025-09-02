@@ -159,6 +159,9 @@ class Homecloud extends \OMV\Rpc\ServiceAbstract {
         $this->registerMethod("joplin_getusers");
         $this->registerMethod("getHostname");
         $this->registerMethod("immich_delete_thumbnails");
+        $this->registerMethod("immich_find_uploads");
+        $this->registerMethod("immich_find_uploadsBg");
+        $this->registerMethod("deleteImmichBackup");
     }
 
 
@@ -4650,6 +4653,48 @@ function enumerateConfiguredDevicesWithStatus($params, $context) {
     }
     
 
+    public function deleteImmichBackup($params, $context) {
+        // Validate the RPC caller context.
+        $this->validateMethodContext($context, [
+            "role" => OMV_ROLE_ADMINISTRATOR
+        ]);
+
+        $this->validateMethodParams($params, "rpc.homecloud.removeBackup");
+
+        return $this->execBgProc(function($bgStatusFilename, $bgOutputFilename)
+                use ($params) {
+
+            // Build the shell script
+            $mountPath = escapeshellarg(trim($params["mount_path"]));
+
+            $script = <<<EOT
+    echo "Deleting selected backup and all its contents..."
+    MOUNT_PATH=$mountPath
+    if [ -d "\$MOUNT_PATH" ]; then
+    if [ ! -d "\$MOUNT_PATH/upload" ]; then
+        echo "New backup type detected, deleting upload folder..."
+        UPLOAD_PATH="\$(dirname "\$(dirname "\$MOUNT_PATH")")/upload"
+        [ -d "\$UPLOAD_PATH" ] && rm -rf "\$UPLOAD_PATH"
+    fi
+    rm -rf "\$MOUNT_PATH" && echo "Successfully deleted selected backup."
+    else
+    echo "Error: Path \$MOUNT_PATH does not exist"; exit 1
+    fi
+    EOT;
+
+            // Run with sudo and sh -c
+            $cmd = new \OMV\System\Process("sudo", ["sh", "-c", $script]);
+            $cmd->setEnv("SHELL", "/bin/sh");
+            $cmd->setRedirect2to1();
+
+            if (0 !== ($exitStatus = $this->exec($cmd, $output,
+                $bgOutputFilename))) {
+                throw new \OMV\ExecException($cmd, $output, $exitStatus);
+            }
+            return $output;
+        });
+    }
+
 
     public function immich_backup_execute($params, $context) {
         $output_err = "";
@@ -5697,6 +5742,36 @@ public function joplin_backup_execute($params, $context) {
     }
 
 
+    public function immich_find_uploads($params, $context) {
+	    $output_err="";
+		$cmdArgs = [];
+
+        // Validate the RPC caller context.
+		$this->validateMethodContext($context, [
+			"role" => OMV_ROLE_ADMINISTRATOR
+		]);
+        #$this->validateMethodParams($params, "rpc.homecloud.restore_find_backups");
+
+        try {
+            $cmdArgs[]='sudo /sbin/immich_find_uploads.py';
+            $cmd = new \OMV\System\Process($cmdArgs);
+
+            $cmd->setEnv("SHELL", "/bin/sh");
+            $cmd->execute($output);
+            // Join the array elements to create a complete JSON string
+            $jsonString = implode("", $output);
+            $jsonData = json_decode($jsonString, true);
+            return $this->applyFilter($jsonData['data'], $params['start'],
+			$params['limit'], $params['sortfield'], $params['sortdir']);
+            //return $jsonData;
+
+        } catch (\Exception $e) {
+            error_log("Exception caught: " . $e->getMessage());
+            error_log("Stack trace: " . $e->getTraceAsString());
+            throw $e;
+        }
+    }
+
 
     public function get_external_disks($params, $context) {
 	    $output_err="";
@@ -6011,6 +6086,9 @@ public function joplin_backup_execute($params, $context) {
 	}
     public function restore_find_backupsBg($params, $context) {
 		return $this->callMethodBg("restore_find_backups", $params, $context);
+	}
+    public function immich_find_uploadsBg($params, $context) {
+		return $this->callMethodBg("immich_find_uploads", $params, $context);
 	}
 
 

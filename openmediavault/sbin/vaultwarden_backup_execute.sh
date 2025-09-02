@@ -11,6 +11,8 @@ import subprocess
 import glob
 import atexit
 import time
+import fcntl
+import signal
 
 class BackupError(Exception):
     """Custom exception for backup errors"""
@@ -25,6 +27,58 @@ class VaultwardenBackup:
         self.timestamp = None
         self.cleanup_needed = False
         self.service_was_running = False
+        self.lock_file = "/tmp/vaultwarden_backup.lock"
+        self.lock_pid_file = "/tmp/vaultwarden_backup.pid"
+        
+    def is_process_running(self, pid):
+        """Check if process is still running"""
+        try:
+            os.kill(pid, 0)
+            return True
+        except OSError:
+            return False
+    
+    def acquire_lock(self):
+        """Acquire lock to prevent concurrent backups"""
+        if os.path.exists(self.lock_file):
+            if os.path.exists(self.lock_pid_file):
+                try:
+                    with open(self.lock_pid_file, 'r') as f:
+                        old_pid = int(f.read().strip())
+                    if self.is_process_running(old_pid):
+                        print(json.dumps({
+                            "status": "success",
+                            "message": "Another Vaultwarden backup process is already running. Please wait for it to complete."
+                        }))
+                        sys.exit(0)
+                    else:
+                        self.cleanup_lock_files()
+                except (ValueError, IOError):
+                    self.cleanup_lock_files()
+            else:
+                self.cleanup_lock_files()
+        
+        try:
+            with open(self.lock_pid_file, 'w') as f:
+                f.write(str(os.getpid()))
+            
+            with open(self.lock_file, 'w') as f:
+                f.write("locked")
+            
+        except IOError as e:
+            raise BackupError(f"Failed to create lock files: {str(e)}")
+        except Exception as e:
+            raise BackupError(f"Unexpected error creating lock files: {str(e)}")
+    
+    def cleanup_lock_files(self):
+        """Clean up lock files"""
+        try:
+            if os.path.exists(self.lock_file):
+                os.remove(self.lock_file)
+            if os.path.exists(self.lock_pid_file):
+                os.remove(self.lock_pid_file)
+        except OSError:
+            pass
 
     def run_command(self, command, shell=False):
         """Execute system command and return output"""
@@ -42,6 +96,75 @@ class VaultwardenBackup:
 
     def cleanup(self):
         """Clean up backup directory on error and restart service if it was running"""
+        try:
+            if self.cleanup_needed and self.backup_directory and os.path.exists(self.backup_directory):
+                try:
+                    shutil.rmtree(self.backup_directory)
+                    print(json.dumps({
+                        "status": "cleanup",
+                        "message": f"Cleaned up incomplete backup: {self.backup_directory}"
+                    }))
+                except Exception as e:
+                    print(json.dumps({
+                        "status": "error",
+                        "message": f"Failed to cleanup directory {self.backup_directory}: {str(e)}"
+                    }))
+
+            # Restart service if it was running before
+            if self.service_was_running:
+                try:
+                    self.start_service()
+                except Exception as e:
+                    print(json.dumps({
+                        "status": "error",
+                        "message": f"Failed to restart service after cleanup: {str(e)}"
+                    }))
+            
+            # Clean up lock files
+            self.cleanup_lock_files()
+        except Exception as e:
+            print(json.dumps({
+                "status": "error",
+                "message": f"Cleanup failed: {str(e)}"
+            }))
+    
+    def run_backup(self):
+        """Main backup execution method"""
+        try:
+            # Acquire lock first
+            self.acquire_lock()
+            
+            # Set up cleanup on exit (but not lock cleanup)
+            atexit.register(self.cleanup_backup_only)
+            
+            print(json.dumps({"status": "info", "message": "Starting Vaultwarden backup..."}))
+            
+            self.validate_inputs()
+            self.create_backup_directory()
+            self.stop_service()
+            self.backup_database()
+            self.copy_files()
+            self.change_ownership()
+            self.start_service()
+            
+            self.cleanup_needed = False  # Successful backup, don't clean up
+            
+            print(json.dumps({
+                "status": "success",
+                "message": f"Vaultwarden backup completed successfully at {self.backup_directory}"
+            }))
+            
+        except BackupError as e:
+            print(json.dumps({"status": "error", "message": str(e)}))
+            sys.exit(1)
+        except Exception as e:
+            print(json.dumps({"status": "error", "message": f"Unexpected error: {str(e)}"}))
+            sys.exit(1)
+        finally:
+            self.cleanup_lock_files()
+    
+    def cleanup_backup_only(self):
+        """Clean up backup directory and restart service but not lock files"""
         try:
             if self.cleanup_needed and self.backup_directory and os.path.exists(self.backup_directory):
                 try:
@@ -299,9 +422,7 @@ def main():
         sys.exit(1)
 
     backup = VaultwardenBackup(sys.argv[1], sys.argv[2], sys.argv[3])
-    atexit.register(backup.cleanup)  # Register cleanup handler
-    success = backup.run()
-    sys.exit(0 if success else 1)
+    backup.run_backup()
 
 if __name__ == "__main__":
     main()

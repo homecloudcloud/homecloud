@@ -64,8 +64,36 @@ def collect_backup_data(app_name):
 
                         # Check if directory name matches the timestamp format (YYYY-MM-DD_HH-MM)
                         if os.path.isdir(timestamp_path) and bool(re.match(r"\d{4}-\d{2}-\d{2}_\d{2}-\d{2}", timestamp_dir)):
+                            # For immich, check backup type and status
+                            if app_name == "immich":
+                                # Determine backup type
+                                upload_in_backup = os.path.isdir(os.path.join(timestamp_path, "upload"))
+                                is_new_backup_type = not upload_in_backup
+                                
+                                # For new backup type, check completion status
+                                if is_new_backup_type:
+                                    status_file = os.path.join(timestamp_path, "backup.status")
+                                    if os.path.isfile(status_file):
+                                        with open(status_file, 'r') as f:
+                                            status = f.read().strip()
+                                        if status != "COMPLETED":
+                                            continue  # Skip incomplete backups
+                                    else:
+                                        continue  # Skip if no status file
+                                    
+                                    # Calculate size: timestamp_path + upload directory
+                                    upload_path = os.path.join(version_path, "..", "upload")
+                                    size = get_directory_size(timestamp_path)
+                                    if os.path.isdir(upload_path):
+                                        size += get_directory_size(upload_path)
+                                else:
+                                    # Old backup type - just timestamp directory
+                                    size = get_directory_size(timestamp_path)
+                            else:
+                                # Non-immich apps - use timestamp directory size
+                                size = get_directory_size(timestamp_path)
+                            
                             timestamp = datetime.strptime(timestamp_dir, "%Y-%m-%d_%H-%M")
-                            size = get_directory_size(timestamp_path)
 
                             # Include time (HH:MM) in timestamp
                             result_data.append({

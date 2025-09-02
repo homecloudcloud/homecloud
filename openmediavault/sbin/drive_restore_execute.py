@@ -6,6 +6,31 @@ import subprocess
 import shutil
 from pathlib import Path
 import pwd
+import atexit
+import time
+
+def acquire_lock():
+    """Acquire lock to prevent concurrent restores"""
+    lock_file = "/tmp/drive_restore.lock"
+    lock_pid_file = "/tmp/drive_restore.pid"
+    
+    if os.path.exists(lock_file) and os.path.exists(lock_pid_file):
+        try:
+            with open(lock_pid_file, 'r') as f:
+                old_pid = int(f.read().strip())
+            try:
+                os.kill(old_pid, 0)
+                print(json.dumps({"status": "success", "message": "Another Drive restore process is already running. Please wait for it to complete."}))
+                sys.exit(0)
+            except OSError:
+                pass
+        except (ValueError, IOError):
+            pass
+    
+    with open(lock_pid_file, 'w') as f:
+        f.write(str(os.getpid()))
+    open(lock_file, 'w').close()
+    atexit.register(lambda: [os.remove(f) for f in [lock_file, lock_pid_file] if os.path.exists(f)])
 
 def check_path_and_permissions(backup_path):
     """Validate path exists and has read permissions"""
@@ -71,37 +96,45 @@ def manage_smb_service(action):
 def copy_with_metadata(src, dst):
     """Copy directory recursively preserving metadata and fix ownership"""
     try:
-        # Create destination directory if it doesn't exist
         os.makedirs(dst, exist_ok=True)
         
-        # Use rsync to copy files, preserving metadata and overwriting existing files
         cmd = [
             "rsync", 
-            "-a",  # Archive mode (preserves permissions, timestamps, etc.)
-            "--ignore-errors",  # Ignore errors
-            src + "/",  # Source with trailing slash to copy contents
-            dst  # Destination
+            "-av",
+            "--progress",
+            "--ignore-errors",
+            src + "/",
+            dst
         ]
         
-        subprocess.run(cmd, check=True)
+        print(f"Copying {os.path.basename(src)}...")
+        process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True, bufsize=1)
         
-        # Fix ownership after copy by getting the directory name (username)
+        last_progress_time = time.time()
+        for line in process.stdout:
+            current_time = time.time()
+            if (current_time - last_progress_time > 30 and '%' in line) or 'sent' in line:
+                clean_line = line.strip()
+                if clean_line:
+                    print(f"Progress: {clean_line}")
+                    last_progress_time = current_time
+        
+        process.wait()
+        if process.returncode != 0:
+            print(f"Warning: rsync encountered errors (exit code: {process.returncode})")
+        
         username = os.path.basename(dst)
         try:
-            # Check if user exists
             pwd.getpwnam(username)
-            
-            # Fix ownership recursively
             chown_cmd = ["chown", "-R", f"{username}:users", dst]
             subprocess.run(chown_cmd, check=True)
             print(f"Fixed ownership for {dst} to {username}:users")
         except KeyError:
-            # User doesn't exist, skip ownership fix
             print(f"Warning: User {username} not found, skipping ownership fix")
         except subprocess.CalledProcessError as e:
             print(f"Warning: Failed to fix ownership: {e}")
-    except subprocess.CalledProcessError as e:
-        print(f"Warning: rsync encountered errors: {e}")
+    except Exception as e:
+        print(f"Warning: Copy operation encountered errors: {e}")
 
 def get_data_vol_mount_point():
     """Find mount point for DATA_VOL-home_dirs"""
@@ -312,6 +345,7 @@ def fix_ownership_after_restore(backup_path, destination_path):
         print(f"Warning: Error fixing ownership: {e}")
 
 def main():
+    acquire_lock()
     if len(sys.argv) != 2:
         print(json.dumps({
             "status": "error",

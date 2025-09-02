@@ -9,6 +9,8 @@ import logging
 from pathlib import Path
 from datetime import datetime
 import shutil
+import atexit
+import signal
 
 class DriveBackup:
     def __init__(self, backup_path):
@@ -17,6 +19,8 @@ class DriveBackup:
         self.source_dir = None
         self.timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M")
         self.backup_directory = None
+        self.lock_file = "/tmp/drive_backup.lock"
+        self.lock_pid_file = "/tmp/drive_backup.pid"
         
         # Setup logging
         logging.basicConfig(
@@ -24,6 +28,52 @@ class DriveBackup:
             level=logging.INFO
         )
         self.logger = logging.getLogger(__name__)
+        
+    def is_process_running(self, pid):
+        """Check if process is still running"""
+        try:
+            os.kill(pid, 0)
+            return True
+        except OSError:
+            return False
+    
+    def acquire_lock(self):
+        """Acquire lock to prevent concurrent backups"""
+        if os.path.exists(self.lock_file):
+            if os.path.exists(self.lock_pid_file):
+                try:
+                    with open(self.lock_pid_file, 'r') as f:
+                        old_pid = int(f.read().strip())
+                    if self.is_process_running(old_pid):
+                        print(json.dumps({
+                            "status": "success",
+                            "message": "Another Drive backup process is already running. Please wait for it to complete."
+                        }))
+                        sys.exit(0)
+                    else:
+                        self.cleanup_lock_files()
+                except (ValueError, IOError):
+                    self.cleanup_lock_files()
+            else:
+                self.cleanup_lock_files()
+        
+        try:
+            with open(self.lock_pid_file, 'w') as f:
+                f.write(str(os.getpid()))
+            open(self.lock_file, 'w').close()
+        except IOError as e:
+            self.logger.error(f"Failed to create lock files: {str(e)}")
+            sys.exit(1)
+    
+    def cleanup_lock_files(self):
+        """Clean up lock files"""
+        try:
+            if os.path.exists(self.lock_file):
+                os.remove(self.lock_file)
+            if os.path.exists(self.lock_pid_file):
+                os.remove(self.lock_pid_file)
+        except OSError:
+            pass
 
     def run_command(self, command, shell=False, check=True):
         """Execute system command and return output"""
@@ -182,106 +232,106 @@ class DriveBackup:
             self.logger.error(f"Backup failed: {str(e)}")
             return False
 
-
     def backup_user_list(self):
-            """Backup list of non-system users with UID, GID, group memberships and password hashes"""
-            self.logger.info("Backing up list of non-system users with UID, GID, group memberships and password hashes...")
+        """Backup list of non-system users with UID, GID, group memberships and password hashes"""
+        self.logger.info("Backing up list of non-system users with UID, GID, group memberships and password hashes...")
+        
+        try:
+            # Get list of non-system users (UID >= 1000) excluding admin and nobody
+            cmd = "awk -F: '$3 >= 1000 && $1 != \"admin\" && $1 != \"nobody\" {print $1}' /etc/passwd"
+            users_output = self.run_command(cmd, shell=True)
             
-            try:
-                # Get list of non-system users (UID >= 1000) excluding admin and nobody
-                cmd = "awk -F: '$3 >= 1000 && $1 != \"admin\" && $1 != \"nobody\" {print $1}' /etc/passwd"
-                users_output = self.run_command(cmd, shell=True)
-                
-                if not users_output:
-                    self.logger.info("No non-system users found")
-                    return True
-                
-                users = users_output.strip().split('\n')
-                user_data = []
-                
-                # For each user, get their UID, GID, group memberships and password hash
-                for user in users:
-                    # Get user ID
-                    uid_cmd = f"id -u {user}"
-                    uid = self.run_command(uid_cmd, shell=True)
-                    
-                    # Get primary group ID
-                    gid_cmd = f"id -g {user}"
-                    gid = self.run_command(gid_cmd, shell=True)
-                    
-                    # Get all groups with GIDs
-                    groups_cmd = f"id -G {user}"
-                    group_ids = self.run_command(groups_cmd, shell=True)
-                    
-                    # Get group names
-                    group_names_cmd = f"id -Gn {user}"
-                    group_names = self.run_command(group_names_cmd, shell=True)
-                    
-                    # Get password hash from /etc/shadow
-                    passwd_cmd = f"sudo grep '^{user}:' /etc/shadow | cut -d: -f2"
-                    password_hash = self.run_command(passwd_cmd, shell=True)
-                    
-                    # Format: username:uid:gid:group_ids:group_names:password_hash
-                    user_data.append(f"{user}:{uid}:{gid}:{group_ids}:{group_names}:{password_hash}")
-                
-                # Write user data to .users file in backup directory
-                users_file = self.backup_directory / ".users"
-                with open(users_file, 'w') as f:
-                    f.write('\n'.join(user_data))
-                
-                self.logger.info(f"User list with UID, GID, group memberships and password hashes backed up to {users_file}")
+            if not users_output:
+                self.logger.info("No non-system users found")
                 return True
             
-            except Exception as e:
-                self.logger.error(f"Failed to backup user list: {str(e)}")
-                return False
-
-
-    def run(self):
-        """Main backup process"""
+            users = users_output.strip().split('\n')
+            user_data = []
+            
+            # For each user, get their UID, GID, group memberships and password hash
+            for user in users:
+                # Get user ID
+                uid_cmd = f"id -u {user}"
+                uid = self.run_command(uid_cmd, shell=True)
+                
+                # Get primary group ID
+                gid_cmd = f"id -g {user}"
+                gid = self.run_command(gid_cmd, shell=True)
+                
+                # Get all groups with GIDs
+                groups_cmd = f"id -G {user}"
+                group_ids = self.run_command(groups_cmd, shell=True)
+                
+                # Store user data
+                user_data.append({
+                    'username': user,
+                    'uid': uid,
+                    'gid': gid,
+                    'group_ids': group_ids
+                })
+            
+            # Write user data to backup file
+            user_backup_file = self.backup_directory / 'users_backup.json'
+            with open(user_backup_file, 'w') as f:
+                json.dump(user_data, f, indent=2)
+            
+            self.logger.info(f"User backup completed: {len(users)} users backed up")
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"User backup failed: {str(e)}")
+            return False
+    
+    def run_backup(self):
+        """Main backup execution method"""
         try:
-            steps = [
-                (self.validate_paths, "Path validation"),
-                (self.prepare_backup_directory, "Backup directory preparation"),
-                (self.perform_backup, "Backup execution"),
-                (self.backup_user_list, "User list backup")
-            ]
-
-            for step_func, step_name in steps:
-                self.logger.info(f"Starting {step_name}...")
-                if not step_func():
-                    print(json.dumps({
-                        "status": "error",
-                        "message": f"Failed during {step_name}"
-                    }))
-                    return False
-
+            # Acquire lock first
+            self.acquire_lock()
+            
+            # Set up cleanup on exit
+            atexit.register(self.cleanup_lock_files)
+            
+            self.logger.info("Starting Drive backup...")
+            
+            if not self.validate_paths():
+                print(json.dumps({"status": "error", "message": "Path validation failed"}))
+                sys.exit(1)
+            
+            if not self.prepare_backup_directory():
+                print(json.dumps({"status": "error", "message": "Failed to prepare backup directory"}))
+                sys.exit(1)
+            
+            if not self.perform_backup():
+                print(json.dumps({"status": "error", "message": "Backup failed"}))
+                sys.exit(1)
+            
+            if not self.backup_user_list():
+                print(json.dumps({"status": "error", "message": "User backup failed"}))
+                sys.exit(1)
+            
             print(json.dumps({
                 "status": "success",
-                "message": f"Drive backup completed successfully to {self.backup_directory}",
-                "backup_directory": str(self.backup_directory)
+                "message": f"Drive backup completed successfully at {self.backup_directory}"
             }))
-            return True
-
+            
         except Exception as e:
-            print(json.dumps({
-                "status": "error",
-                "message": f"Unexpected error: {str(e)}"
-            }))
-            return False
-
+            self.logger.error(f"Unexpected error: {str(e)}")
+            print(json.dumps({"status": "error", "message": f"Unexpected error: {str(e)}"}))
+            sys.exit(1)
+        finally:
+            self.cleanup_lock_files()
 
 def main():
     if len(sys.argv) != 2:
         print(json.dumps({
             "status": "error",
-            "message": "Usage: drive_backup.py <backup_path>"
+            "message": "Usage: drive_backup_execute.py <backup_path>"
         }))
         sys.exit(1)
-
-    backup = DriveBackup(sys.argv[1])
-    success = backup.run()
-    sys.exit(0 if success else 1)
+    
+    backup_path = sys.argv[1]
+    backup = DriveBackup(backup_path)
+    backup.run_backup()
 
 if __name__ == "__main__":
     main()
