@@ -57,11 +57,23 @@ def get_paperless_users(container_name):
             ['docker', 'exec', container_name, 'python', 'manage.py', 'shell', '-c', python_cmd],
             capture_output=True, text=True, check=True
         )
-        return json.loads(result.stdout)
+        
+        # Find JSON array in output using regex
+        import re
+        json_match = re.search(r'(\[.*\])', result.stdout, re.DOTALL)
+        
+        if json_match:
+            json_text = json_match.group(1)
+            return json.loads(json_text)
+        else:
+            return {"error": f"No JSON found in output: {result.stdout}"}
+            
     except subprocess.CalledProcessError as e:
         return {"error": f"Command failed: {e.stderr}"}
-    except json.JSONDecodeError:
-        return {"error": "Failed to parse user data"}
+    except json.JSONDecodeError as e:
+        return {"error": f"JSON decode error: {str(e)}"}
+    except Exception as e:
+        return {"error": f"Unexpected error: {str(e)}"}
 
 def main():
     # Check if paperless service is active

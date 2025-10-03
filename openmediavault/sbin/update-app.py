@@ -80,7 +80,7 @@ def check_docker_status(app_name, previous_version):
 
 def check_and_update_app(app_name):
     # Validate app name
-    valid_apps = ['immich', 'paperless', 'joplin', 'jellyfin', 'vaultwarden', 'tailscale', 'traefik']
+    valid_apps = ['immich', 'paperless', 'joplin', 'jellyfin', 'vaultwarden', 'tailscale', 'traefik', 'duplicati']
     
     if app_name not in valid_apps:
         error_msg = {

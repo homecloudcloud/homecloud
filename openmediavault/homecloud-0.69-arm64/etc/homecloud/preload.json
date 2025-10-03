@@ -1,0 +1,8 @@
+{
+  "env": {
+    "server": {
+        "SETTINGS_ENCRYPTION_KEY": "+EdoVXjFcEIuOUH1svInD6xMECZWY7DNUwsUuvte3mmEUnGQkMkHp1qP8wax8cKj",
+        "DUPLICATI__WEBSERVICE_PASSWORD": "Duplicati@homecloud"
+    }
+  }
+}

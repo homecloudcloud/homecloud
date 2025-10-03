@@ -1,0 +1,14 @@
+[Unit]
+Description=Duplicati
+After=network.target docker.service openmediavault-engined.service oled-display-disk.service
+Requires=docker.service
+
+[Service]
+Type=simple
+Restart=always
+StandardOutput=journal
+ExecStart=/usr/bin/docker compose -f /etc/duplicati/docker-compose-duplicati.yaml up
+ExecStop=/usr/bin/docker compose -f /etc/duplicati/docker-compose-duplicati.yaml down
+
+[Install]
+WantedBy=multi-user.target

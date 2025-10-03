@@ -9,16 +9,18 @@ from urllib3.exceptions import InsecureRequestWarning
 # Disable SSL warnings
 requests.packages.urllib3.disable_warnings(category=InsecureRequestWarning)
 
-def check_service_status(service_name):
-    """Check if a systemd service exists and is running"""
+def check_service_exists(service_name):
+    """Check if a systemd service exists"""
     try:
-        # First check if service exists
-        exists = subprocess.run(['systemctl', 'list-unit-files', service_name],
+        result = subprocess.run(['systemctl', 'list-unit-files', service_name],
                               capture_output=True, text=True)
-        if exists.returncode != 0:
-            return False
-            
-        # If service exists, check if it's active
+        return result.returncode == 0
+    except Exception:
+        return False
+
+def check_service_status(service_name):
+    """Check if a systemd service is running"""
+    try:
         result = subprocess.run(['systemctl', 'is-active', service_name], 
                               capture_output=True, text=True)
         return result.stdout.strip() == 'active'
@@ -103,8 +105,8 @@ def check_url_status(url):
 
 def get_immich_status():
     """Determine immich status based on service and directories"""
-    # First check if service exists by checking service status
-    if not check_service_status('immich.service'):
+    # First check if service exists
+    if not check_service_exists('immich.service'):
         return "Not deployed"
         
     dirs_exist = check_directories()

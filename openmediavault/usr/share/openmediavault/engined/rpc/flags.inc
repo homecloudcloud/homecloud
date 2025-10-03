@@ -41,6 +41,7 @@ class Flags extends \OMV\Rpc\ServiceAbstract {
 	public function initialize() {
 		$this->registerMethod("saveLicenseFlag");
 		$this->registerMethod("readLicenseFlag");
+		$this->registerMethod("readLatestLicenseFlag");
 		$this->registerMethod("readLicenseText");
 		$this->registerMethod("getTailscaleTerms");
 		$this->registerMethod("readSetUpFlags");
@@ -146,6 +147,39 @@ class Flags extends \OMV\Rpc\ServiceAbstract {
 
 			}
 			
+			return $output;
+
+    }
+	public function readLatestLicenseFlag($params,$context){
+
+		// Validate the parameters of the RPC service method.
+		$this->validateMethodParams($params, "rpc.common.readlicenseflags");
+		$licenseData = $this->readLicenseText($params, $context);
+		$latestLicenseVersion = $licenseData['licenseVersion'];
+		//throw new \OMV\Exception("Latest License Version: " . $latestLicenseVersion);
+
+
+
+            $flagFile = "/var/flagsfile.json";
+			$flagArray=[];
+			$output["flagValue"]=false;
+			if (file_exists($flagFile)){
+
+				$flagArray=json_decode(file_get_contents($flagFile),true);
+				foreach ($flagArray as $entry) {
+					if (isset($entry['licenseVersion']) && isset($entry['user']) && isset($entry['licenseVersion']) && $entry['user'] === $params['username']) {
+						
+						if ($entry['accepted'] === true && $entry['licenseVersion']===$latestLicenseVersion) {
+							$output["flagValue"]=true;
+							break;
+						}
+						
+					}
+				}
+
+			}
+			//throw new \OMV\Exception("Output: " . json_encode($output));
+
 			return $output;
 
     }

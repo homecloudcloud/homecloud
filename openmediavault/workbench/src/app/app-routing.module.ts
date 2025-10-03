@@ -164,6 +164,11 @@ const routes: Routes = [
             {
               path: '',
               component: UpdateMainPageComponent,
+              data:{
+                editing:true
+
+              },
+              
               canActivate: [AuthGuardService],
               canActivateChild: [AuthGuardService]
               

@@ -1,0 +1,14 @@
+[Unit]
+Description=Run Homecloud Security Updates Once
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/sbin/homecloud-security-updates.sh
+RemainAfterExit=yes
+StandardOutput=journal+console
+StandardError=journal+console
+
+[Install]
+WantedBy=multi-user.target

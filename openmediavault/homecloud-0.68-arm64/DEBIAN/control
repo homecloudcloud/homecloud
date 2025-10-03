@@ -1,6 +1,0 @@
-Package: homecloud
-Version: 0.68
-Maintainer: Libernest Technologies Pvt Ltd
-Architecture: arm64
-Depends: expect, openmediavault (>=7.1.0-4)
-Description: Essential files for homecloud

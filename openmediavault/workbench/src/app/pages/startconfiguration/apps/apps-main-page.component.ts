@@ -60,7 +60,7 @@ export class AppsMainComponent extends BaseFormPageComponent implements AfterVie
     super();
     // Sanitize the HTML content once during construction
     this.safeHtmlContent = this.sanitizer.bypassSecurityTrustHtml(this.htmlContent);
-  }h
+  }
 
   ngAfterViewInit(): void {
     // No need for manual DOM manipulation anymore

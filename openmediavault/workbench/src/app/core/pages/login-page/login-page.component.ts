@@ -143,7 +143,8 @@ export class LoginPageComponent implements OnInit {
         //this.router.navigate([url]);
         this.readFlagService
         //  .readFlag('licenseFlag')
-          .readLicenseFlag(values.username)
+          //.readLicenseFlag(values.username)
+          .readLatestLicenseFlag(values.username)
           .subscribe((response)=>{
 
             this.licenseFlagVal=response.flagValue;

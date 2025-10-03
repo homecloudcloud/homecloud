@@ -603,5 +603,65 @@
 			}
 		}
 	}
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.duplicati_get_latest_version",
+    "params": {
+        "type": "object",
+        "properties": {
+            "version": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.getDuplicatiServiceStatus",
+    "params": {
+        "type": "object",
+        "properties": {
+            "status": {
+				"type": "string",
+				"required": true
+			},
+            "hostname": {
+				"type": "string",
+				"required": true
+			},
+            "api_endpoint": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.duplicati_update_version",
+    "params": {
+        "type": "object",
+        "properties": {
+            "version": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.systemAutoUpdates",
+    "params": {
+        "type": "object",
+        "properties": {
+            "action": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
 }
 ]

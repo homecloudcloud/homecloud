@@ -24,6 +24,12 @@ export class ReadFlagServiceService {
       });
 
   }
+  readLatestLicenseFlag(username:string):Observable<FlagData>{
+    return this.rpcService.request('Flags', 'readLatestLicenseFlag', {
+        username: username
+      });
+
+  }
   readSetUpFlags(flagName:string):Observable<FlagData>{
     console.log('readSetUpFlags called');
     return this.rpcService.request('Flags', 'readSetUpFlags', {

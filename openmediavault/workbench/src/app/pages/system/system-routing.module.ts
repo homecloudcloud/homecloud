@@ -247,8 +247,11 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        //component: NavigationPageComponent
-        component: UpdateMainPageComponent
+        component: UpdateMainPageComponent,
+        data: {
+            title: gettext(''),
+            editing: true
+        }
       },
       {
         path: 'updates',

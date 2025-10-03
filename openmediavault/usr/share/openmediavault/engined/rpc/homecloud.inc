@@ -162,6 +162,14 @@ class Homecloud extends \OMV\Rpc\ServiceAbstract {
         $this->registerMethod("immich_find_uploads");
         $this->registerMethod("immich_find_uploadsBg");
         $this->registerMethod("deleteImmichBackup");
+        $this->registerMethod("duplicati_get_latest_version");
+        $this->registerMethod("getDuplicatiServiceStatus");
+        $this->registerMethod("duplicati_check_version");
+        $this->registerMethod("duplicati_update_version");
+        $this->registerMethod("restart_duplicati");
+        $this->registerMethod("setDuplicatiPassword");
+        $this->registerMethod("duplicati_remove");
+        $this->registerMethod("systemAutoUpdates");
     }
 
 
@@ -2583,6 +2591,11 @@ public function getHotspotStatus($params, $context) {
         if ($user->getName() !== 'admin') {
             $this->setPasswordByContextSmb($user->getName(),$params['password']);
         }
+        
+        // Update Duplicati password for admin user
+        if ($user->getName() === 'admin') {
+            $this->setDuplicatiPassword($params['password']);
+        }
 
 		// Notify configuration changes if the given user exists in the
 		// database. System users like 'admin' are ignored.
@@ -3001,6 +3014,30 @@ public function getHotspotStatus($params, $context) {
         // Create command with parameters
         $cmd = new \OMV\System\Process("/sbin/app-auto-updates.py", [
             $appName,
+            $action
+        ]);
+        
+        $cmd->setEnv("SHELL", "/bin/sh");
+        $cmd->execute($output);
+        
+        // Since the script outputs JSON directly, just return the first line
+        return json_decode($output[0], true);
+    }
+
+
+
+    public function systemAutoUpdates($params, $context) {
+        // Validate the RPC caller context.
+        $this->validateMethodContext($context, [
+            "role" => OMV_ROLE_ADMINISTRATOR
+        ]);
+        $this->validateMethodParams($params, "rpc.homecloud.systemAutoUpdates");
+
+        // Extract parameters from the input
+        $action = $params['action'];
+
+        // Create command with parameters
+        $cmd = new \OMV\System\Process("/sbin/unattended_upgrades.sh", [
             $action
         ]);
         
@@ -3954,6 +3991,32 @@ function enumerateConfiguredDevicesWithStatus($params, $context) {
     });
     }
 
+    public function duplicati_remove($params, $context) {
+         // Validate the RPC caller context.
+		$this->validateMethodContext($context, [
+			"role" => OMV_ROLE_ADMINISTRATOR
+		]);
+
+        return $this->execBgProc(function($bgStatusFilename, $bgOutputFilename)
+				use ($params) {
+
+        
+	    $output_err="";
+		$cmdArgs = [];
+        $cmdArgs[]='echo "Removing Duplicati";';
+        $cmdArgs[]='/sbin/duplicati_remove.py';
+        $cmd = new \OMV\System\Process("sudo", $cmdArgs);
+			$cmd->setEnv("SHELL", "/bin/sh");
+			$cmd->setRedirect2to1();
+			if (0 !== ($exitStatus = $this->exec($cmd, $output,
+					$bgOutputFilename))) {
+				throw new \OMV\ExecException($cmd,$output, $exitStatus);
+			}
+
+		return $output;
+    });
+    }
+
     public function getTailscaleStatus($params, $context) {
         
 	    $output_err="";
@@ -3988,6 +4051,26 @@ function enumerateConfiguredDevicesWithStatus($params, $context) {
         // Get the output from the tailscale status script
         
         $cmd = new \OMV\System\Process("/sbin/check_latest_immich_version.py");
+        $cmd->setEnv("SHELL", "/bin/sh");
+        //$cmd->setRedirect2to1();
+        $cmd->execute($output);
+        // Since the script outputs JSON directly, just return the first line
+        return json_decode($output[0], true);
+    }
+
+    public function duplicati_get_latest_version($params, $context) {
+        
+	    $output_err="";
+		$cmdArgs = [];
+
+        // Validate the RPC caller context.
+		$this->validateMethodContext($context, [
+			"role" => OMV_ROLE_ADMINISTRATOR
+		]);
+
+        // Get the output from the tailscale status script
+        
+        $cmd = new \OMV\System\Process("/sbin/check_latest_duplicati_version.py");
         $cmd->setEnv("SHELL", "/bin/sh");
         //$cmd->setRedirect2to1();
         $cmd->execute($output);
@@ -4114,6 +4197,25 @@ function enumerateConfiguredDevicesWithStatus($params, $context) {
         return json_decode($output[0], true);
     }
 
+    public function duplicati_check_version($params, $context) {
+	    $output_err="";
+		$cmdArgs = [];
+
+        // Validate the RPC caller context.
+		$this->validateMethodContext($context, [
+			"role" => OMV_ROLE_ADMINISTRATOR
+		]);
+
+        // Get the output from the tailscale status script
+        
+        $cmd = new \OMV\System\Process("/sbin/check_duplicati_version.py");
+        $cmd->setEnv("SHELL", "/bin/sh");
+        //$cmd->setRedirect2to1();
+        $cmd->execute($output);
+        // Since the script outputs JSON directly, just return the first line
+        return json_decode($output[0], true);
+    }
+
     public function paperless_check_version($params, $context) {
 	    $output_err="";
 		$cmdArgs = [];
@@ -4231,6 +4333,35 @@ function enumerateConfiguredDevicesWithStatus($params, $context) {
         $cmdArgs[]='echo "starting Immich Update";';
 		$cmdArgs[]='export NEW_VERSON_ID='.escapeshellarg(trim($params["version"])).';';
         $cmdArgs[]='/sbin/immich_ver_update.py $NEW_VERSON_ID';
+        $cmd = new \OMV\System\Process("sudo", $cmdArgs);
+		$cmd->setEnv("SHELL", "/bin/sh");
+		$cmd->setRedirect2to1();
+		if (0 !== ($exitStatus = $this->exec($cmd, $output,
+			$bgOutputFilename))) {
+			//throw new \OMV\ExecException($cmd, $output, $exitStatus);
+			throw new \OMV\ExecException($cmd,$output, $exitStatus);
+		    }
+
+			return $output;
+    });
+    }
+
+    public function duplicati_update_version($params, $context) {
+         // Validate the RPC caller context.
+		$this->validateMethodContext($context, [
+			"role" => OMV_ROLE_ADMINISTRATOR
+		]);
+        $this->validateMethodParams($params, "rpc.homecloud.duplicati_update_version");
+
+        return $this->execBgProc(function($bgStatusFilename, $bgOutputFilename)
+				use ($params) {
+
+        
+	    $output_err="";
+		$cmdArgs = [];
+        $cmdArgs[]='echo "starting Duplicati Update";';
+		$cmdArgs[]='export NEW_VERSON_ID='.escapeshellarg(trim($params["version"])).';';
+        $cmdArgs[]='/sbin/duplicati_ver_update.py $NEW_VERSON_ID';
         $cmd = new \OMV\System\Process("sudo", $cmdArgs);
 		$cmd->setEnv("SHELL", "/bin/sh");
 		$cmd->setRedirect2to1();
@@ -5142,6 +5273,31 @@ public function joplin_backup_execute($params, $context) {
         return json_decode($output[0], true);
 
     }
+
+    public function getDuplicatiServiceStatus($params, $context) {
+        
+	    $output_err="";
+		$cmdArgs = [];
+
+        // Validate the RPC caller context.
+		$this->validateMethodContext($context, [
+			"role" => OMV_ROLE_ADMINISTRATOR
+		]);
+
+        // Validate the parameters of the RPC service method.
+		//$this->validateMethodParams($params, "rpc.homecloud.getImmichServiceStatus");
+
+        // Get the output from the tatus script
+        
+        $cmd = new \OMV\System\Process("/sbin/check_duplicati.py");
+        $cmd->setEnv("SHELL", "/bin/sh");
+        //$cmd->setRedirect2to1();
+        $cmd->execute($output);
+        // Since the script outputs JSON directly, just return the first line
+        return json_decode($output[0], true);
+
+    }
+
     public function get_backup_size_immich($params, $context) {
         
 	    $output_err="";
@@ -5344,6 +5500,27 @@ public function joplin_backup_execute($params, $context) {
         // Get the output from the tailscale status script
         
         $cmd = new \OMV\System\Process("/sbin/restart_immich.sh");
+        $cmd->setEnv("SHELL", "/bin/sh");
+        //$cmd->setRedirect2to1();
+        $cmd->execute($output);
+        // Since the script outputs JSON directly, just return the first line
+        return json_decode($output[0], true);
+
+    }
+    
+    public function restart_duplicati($params, $context) {
+        
+	    $output_err="";
+		$cmdArgs = [];
+
+        // Validate the RPC caller context.
+		$this->validateMethodContext($context, [
+			"role" => OMV_ROLE_ADMINISTRATOR
+		]);
+
+        // Get the output from the tailscale status script
+        
+        $cmd = new \OMV\System\Process("/sbin/restart_duplicati.sh");
         $cmd->setEnv("SHELL", "/bin/sh");
         //$cmd->setRedirect2to1();
         $cmd->execute($output);
@@ -6007,7 +6184,7 @@ public function joplin_backup_execute($params, $context) {
         return json_decode($output[0], true);
 
     }
-     public function paperless_reset_password($params, $context) {
+    public function paperless_reset_password($params, $context) {
 	    $output_err="";
 		$cmdArgs = [];
 
@@ -6058,6 +6235,31 @@ public function joplin_backup_execute($params, $context) {
         return json_decode($output[0], true);
 
     }
+
+    public function setDuplicatiPassword($password) {
+		try {
+			$filePath = '/etc/duplicati/preload.json';
+			
+			if (file_exists($filePath)) {
+				$jsonContent = file_get_contents($filePath);
+				$data = json_decode($jsonContent, true);
+				
+				if ($data !== null && isset($data['env']['server'])) {
+					// Update existing key or add if not present
+					if (isset($data['env']['server']['DUPLICATI__WEBSERVICE_PASSWORD'])) {
+						$data['env']['server']['DUPLICATI__WEBSERVICE_PASSWORD'] = $password;
+					} else {
+						$data['env']['server']['DUPLICATI__WEBSERVICE_PASSWORD'] = $password;
+					}
+					file_put_contents($filePath, json_encode($data, JSON_PRETTY_PRINT));
+				}
+			}
+		} catch (Exception $e) {
+			// Ignore all errors
+		}
+		
+		return true;
+	}
 
     /**
 	 * Execute the getList() RPC as background process.

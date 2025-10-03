@@ -96,6 +96,12 @@ import { VPNSecurebrowseComponent } from './vpn/tailscale-secure-browsing/tailsc
 import { AppsJellyfinResetComponent } from './apps/media/reset/jellyfin_reset-page.component';
 import { AppsJoplinResetComponent } from './apps/notes/reset/joplin_reset-page.component';
 import { AppsPasswordManagerPasswordResetComponent } from './apps/password-manager/password/password-manager-password-page.component';
+import { AppsCloudbackupMainComponent } from './apps/cloudbackup/cloudbackup-form-main-page.component';
+import { AppsCloudbackupAccessComponent } from './apps/cloudbackup/access/cloudbackup-access-form-page.component';
+import { AppsCloudbackupRestartComponent } from './apps/cloudbackup/restart/cloudbackup-restart-page.component';
+import { AppsCloudbackupPasswordResetComponent } from './apps/cloudbackup/password/cloudbackup-password-page.component';
+import { AppsCloudbackupPasswordResetDisplayComponent } from './apps/cloudbackup/password/cloudbackup-password-display-page.component';
+import { AppsCloudbackupUpdateFormPageComponent } from './apps/cloudbackup/update/cloudbackup-update-form-page.component';
 
 const routes: Routes = [
   {
@@ -855,6 +861,68 @@ const routes: Routes = [
             data: {
               title: gettext('Restore'),
               editing: true
+            }
+          }
+        ]
+      },
+      {
+        path: 'cloudbackup',
+        data: { title: gettext('Cloudbackup') },
+  //    component: ,
+        children: [
+          {
+            path: '',
+            component: AppsCloudbackupMainComponent,
+            data: {
+              editing: true
+            }
+          },
+          {
+            path: 'access',
+            component: AppsCloudbackupAccessComponent,
+            data: {
+              title: gettext('Access'),
+              editing: true
+            }
+          },
+          {
+            path: 'restart',
+            component: AppsCloudbackupRestartComponent,
+            data: {
+              title: gettext('Restart'),
+              editing: true
+            }
+          },
+          {
+            path: 'password',
+            data: { title: gettext('Password') },
+            //component: AppsPhotosPasswordResetComponent,
+            children: [
+              {
+                path: '',
+                component: AppsCloudbackupPasswordResetComponent,
+                data: {
+                 // title: gettext('Password'),
+                  editing: true
+                },
+              },
+              {
+                path: 'display',
+                component: AppsCloudbackupPasswordResetDisplayComponent,
+                data: {
+                  title: gettext('Display'),
+                  editing: true
+                }
+              }
+            ]
+          },
+          {
+            path: 'update',
+            component: AppsCloudbackupUpdateFormPageComponent,
+            data:{
+              title: gettext('Update'),
+              editing: true
+
             }
           }
         ]

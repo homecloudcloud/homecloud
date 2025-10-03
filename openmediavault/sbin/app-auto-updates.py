@@ -61,7 +61,7 @@ def find_existing_cron(app_name):
     return None
 
 def validate_app_name(app_name):
-    valid_apps = ['immich', 'paperless', 'joplin', 'jellyfin', 'vaultwarden', 'tailscale', 'traefik']
+    valid_apps = ['immich', 'paperless', 'joplin', 'jellyfin', 'vaultwarden', 'tailscale', 'traefik', 'duplicati']
     if app_name not in valid_apps:
         error_msg = {
             "error": "Invalid app name",

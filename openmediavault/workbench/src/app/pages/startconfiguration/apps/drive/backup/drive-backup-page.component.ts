@@ -122,17 +122,11 @@ export class AppsDriveBackupComponent extends BaseFormPageComponent {
           maxSelected: 1,
           constraint: [
             {
-              operator: 'gt',
-              arg0: { prop: 'available' },
-              arg1: this.totalGb
-            },
-            {
-              operator: 'eq',
+              operator: 'in',
               arg0: { prop: 'filesystem' },
               arg1: 'ext4'
             }
           ]
-    
         },
       
           confirmationDialogConfig: {

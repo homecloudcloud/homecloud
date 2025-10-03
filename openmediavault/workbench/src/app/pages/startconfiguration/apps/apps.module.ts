@@ -12,6 +12,7 @@ import { PasswordManagerModule } from './password-manager/password-manager.modul
 import { PaperlessModule } from './paperless/paperless.module';
 import { JoplinModule } from './notes/joplin.module';
 import { JellyfinModule } from './media/jellyfin.module';
+import { CloudbackupModule } from './cloudbackup/cloudbackup.module';
 import { PagesModule } from '~/app/core/pages/pages.module';
 import { CoreModule } from '~/app/core/core.module';
 import { AppsMainComponent } from './apps-main-page.component';
@@ -35,6 +36,7 @@ import { AppsMainComponent } from './apps-main-page.component';
     PaperlessModule,
     JoplinModule,
     JellyfinModule,
+    CloudbackupModule,
     PagesModule,
     CoreModule
     
@@ -46,7 +48,8 @@ import { AppsMainComponent } from './apps-main-page.component';
     PasswordManagerModule,
     PaperlessModule,
     JoplinModule,
-    JellyfinModule
+    JellyfinModule,
+    CloudbackupModule
   ],
 })
 export class AppsModule { }

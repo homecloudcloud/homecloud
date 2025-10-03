@@ -231,7 +231,7 @@ def create_funnel(source_port: int, destination_port: int) -> Dict[str, str]:
             return {
                 'status': 'Success',
                 'message': f'Funnel created.'
-                          f'Will take few minutes for app to be ready. Restart your Immich app installed on Phone. '
+                          f'When enabled first time: It can take up-to 30 minutes for app to be accessible on Internet. Restart your Immich app installed on Phone. '
             }
         else:
             # For non-immich ports, just return success for funnel creation
@@ -258,7 +258,7 @@ def create_funnel(source_port: int, destination_port: int) -> Dict[str, str]:
             return {
                 'status': 'Success',
                 'message': f'Funnel created.'
-                           f'Will take few minutes for app to be ready. Restart your paperless app installed on Phone. '
+                           f'When enabled first time: It can take up-to 30 minutes for app to be accessible on Internet. Restart your paperless app installed on Phone. '
             }
 
     except subprocess.CalledProcessError as e:
