@@ -63,8 +63,9 @@ export class SslCertificateImportFormPageComponent extends BaseFormPageComponent
       {
         type: 'tagInput',
         name: 'comment',
-        value: '',
+        value: 'BYOC',
         label: gettext('Tags'),
+        hint: gettext('Use BYOC tag for your own certificate to be used. If Tailscale VPN is Up then only Tailscale certificate will be used'),
         validators: {
           required: true
         }

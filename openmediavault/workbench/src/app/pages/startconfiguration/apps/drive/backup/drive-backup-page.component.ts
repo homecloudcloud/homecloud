@@ -124,7 +124,7 @@ export class AppsDriveBackupComponent extends BaseFormPageComponent {
             {
               operator: 'in',
               arg0: { prop: 'filesystem' },
-              arg1: 'ext4'
+              arg1: ['ext4', 'ext3']
             }
           ]
         },
@@ -176,7 +176,7 @@ export class AppsDriveBackupComponent extends BaseFormPageComponent {
   ngOnInit(): void {
     this.rpcService.request('Homecloud', 'get_backup_size_drive', {}).subscribe((data: any) => {
       this.totalGb = data.total_gb;
-      this.config1.actions[0].enabledConstraints.constraint[0].arg1 = this.totalGb; // Update the constraint with the totalGb value
+      //this.config1.actions[0].enabledConstraints.constraint[0].arg1 = this.totalGb; // Update the constraint with the totalGb value
       this.htmlContent= `
             <div class="backup-container">
               <h1 class="backup-heading">

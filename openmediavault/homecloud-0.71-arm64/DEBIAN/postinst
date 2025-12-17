@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+# Clean up any non-executable files in APT post-invoke directory
+if [ -d /etc/apt/post-invoke.d ]; then
+    find /etc/apt/post-invoke.d -type f ! -executable -delete 2>/dev/null || true
+fi
 
 # Copy hostapd.conf to /etc/hostapd
 if [ -f /etc/homecloud/hostapd.conf ]; then
@@ -145,6 +149,20 @@ systemctl enable security-updates.service || true
 # Run the service asynchronously without blocking dpkg
 systemd-run --unit=security-updates-run --no-block /sbin/homecloud-security-updates.sh
 
+# Migrate tailscale certificates if needed
+if [ -f /sbin/migrate_tailscale_certs.py ]; then
+    chmod +x /sbin/migrate_tailscale_certs.py
+    echo "Starting tailscale certificate migration..."
+    /usr/bin/python3 /sbin/migrate_tailscale_certs.py 2>&1 | tee -a /var/log/tailscale_migration.log || true
+    echo "Tailscale certificate migration completed."
+fi
 
+# Final cleanup of APT directories to prevent execution errors
+for dir in /etc/apt/post-invoke.d /etc/apt/pre-invoke.d /etc/apt/apt.conf.d; do
+    if [ -d "$dir" ]; then
+        find "$dir" -name "README*" -type f -delete 2>/dev/null || true
+        find "$dir" -type f ! -executable ! -name "*.conf" -delete 2>/dev/null || true
+    fi
+done
 
 exit 0

@@ -1,9 +1,9 @@
 Format: http://dep.debian.net/deps/dep5
-Upstream-Contact: Volker Theile <volker.theile@openmediavault.org>
-Source: http://www.openmediavault.org
+Upstream-Contact: Libernest Technologies <contact@homecloud.cloud>
+Source: http://homecloud.cloud
 
 Files: *
-Copyright: 2009-2024 Volker Theile <volker.theile@openmediavault.org>
+Copyright: 2009-2024 Libernest Technologies 
 License: GPL-3
 
 Files: /workbench/src/assets/images/harddisk_on_circuit.jpg

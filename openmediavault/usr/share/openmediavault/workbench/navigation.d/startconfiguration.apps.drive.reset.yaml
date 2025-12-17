@@ -1,0 +1,8 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "startconfiguration.apps.drive.reset"
+  position: 70
+  text: _("Reset")
+  icon: "mdi:delete-forever"
+  url: "/startconfiguration/apps/drive/reset"

@@ -131,7 +131,9 @@ export class SslCertificateDatatablePageComponent {
         enabledConstraints: {
           constraint: [
             // Disable button if a selected SSL certificate is in use.
-            { operator: 'falsy', arg0: { prop: '_used' } }
+            { operator: 'falsy', arg0: { prop: '_used' } },
+            // Disable button if comment contains Libernest.
+            { operator: 'not', arg0: { operator: 'regex', arg0: { prop: 'comment' }, arg1: 'Libernest' } }
           ]
         },
         execute: {

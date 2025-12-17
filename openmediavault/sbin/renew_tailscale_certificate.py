@@ -38,28 +38,111 @@ def renew_certificate(hostname):
         print(f"Error renewing certificate: {e}")
         return False
 
-def move_certificate_files(hostname):
+def get_environment_variable_uuid():
     try:
-        # Define paths
-        current_cert = f"{hostname}.crt"
-        current_key = f"{hostname}.key"
-        cert_dest = f"/etc/ssl/certs/{hostname}.crt"
-        key_dest = f"/etc/ssl/private/{hostname}.key"
-
-        # Move certificate and key files
-        shutil.move(current_cert, cert_dest)
-        shutil.move(current_key, key_dest)
-        return True
-    except Exception as e:
-        print(f"Error moving certificate files: {e}")
+        command = ['/usr/sbin/omv-env get OMV_CONFIGOBJECT_NEW_UUID']
+        process = subprocess.run(command, text=True, check=True, shell=True, capture_output=True)
+        if process.returncode != 0:
+            return None
+        else:
+            a = process.stdout.split("=")
+            uuid = a[1]
+            uuid = uuid.replace("\n", "")
+            return uuid
+    except:
         return False
 
-def update_traefik_config(hostname):
+def manage_omv_certificate(hostname):
+    try:
+        # Read certificate and private key files
+        with open(f"{hostname}.crt", 'r') as f:
+            cert_content = f.read()
+        with open(f"{hostname}.key", 'r') as f:
+            key_content = f.read()
+        
+        # Get list of existing certificates
+        cert_list_cmd = ['omv-rpc', '-u', 'admin', 'CertificateMgmt', 'getList', 
+                       '{"start":0,"limit":-1,"sortdir":"ASC"}']
+        cert_list_result = subprocess.run(cert_list_cmd, capture_output=True, text=True)
+        
+        if cert_list_result.returncode == 0:
+            cert_list_data = json.loads(cert_list_result.stdout)
+            
+            # Delete existing tailscale certificate if found
+            deleted_cert = False
+            for cert in cert_list_data.get('data', []):
+                if cert.get('comment') == 'tailscale':
+                    print(f"Deleting existing tailscale certificate: {cert['uuid']}")
+                    delete_cmd = ['omv-rpc', '-u', 'admin', 'CertificateMgmt', 'delete', 
+                                f'{{"uuid":"{cert["uuid"]}"}}']  
+                    subprocess.run(delete_cmd, check=True)
+                    deleted_cert = True
+            
+            if deleted_cert:
+                print("Applying certificate changes...")
+                subprocess.run(['omv-salt', 'deploy', 'run', 'certificates'], check=True)
+            
+            # Install new certificate
+            print("Installing new tailscale certificate")
+            new_uuid = get_environment_variable_uuid()
+            if not new_uuid:
+                print("Failed to generate UUID for certificate")
+                return False
+            
+            cert_data = {
+                "uuid": new_uuid,
+                "certificate": cert_content,
+                "privatekey": key_content,
+                "comment": "tailscale"
+            }
+            
+            install_cmd = ['omv-rpc', '-u', 'admin', 'CertificateMgmt', 'set', 
+                         json.dumps(cert_data)]
+            install_result = subprocess.run(install_cmd, capture_output=True, text=True)
+            
+            if install_result.returncode == 0:
+                print("Applying certificate changes...")
+                subprocess.run(['omv-salt', 'deploy', 'run', 'certificates'], check=True)
+                
+                # Verify certificate installation by getting updated list
+                verify_result = subprocess.run(cert_list_cmd, capture_output=True, text=True)
+                if verify_result.returncode == 0:
+                    verify_data = json.loads(verify_result.stdout)
+                    
+                    # Find the tailscale certificate in the updated list
+                    for cert in verify_data.get('data', []):
+                        if cert.get('comment') == 'tailscale':
+                            actual_uuid = cert['uuid']
+                            print(f"Certificate installed successfully with UUID: {actual_uuid}")
+                            
+                            # Clean up temporary certificate files
+                            os.remove(f"{hostname}.crt")
+                            os.remove(f"{hostname}.key")
+                            
+                            return actual_uuid
+                    
+                    print("Failed to verify certificate installation")
+                    return False
+                else:
+                    print("Failed to verify certificate installation")
+                    return False
+            else:
+                print(f"Failed to install certificate: {install_result.stderr}")
+                return False
+        else:
+            print(f"Failed to get certificate list: {cert_list_result.stderr}")
+            return False
+            
+    except Exception as e:
+        print(f"Error managing OMV certificate: {str(e)}")
+        return False
+
+def update_traefik_config(cert_uuid):
     try:
         url = "https://127.0.0.1:5000/update_traefik_config"
         params = {
-            "cert_file": f"/etc/ssl/certs/{hostname}.crt",
-            "key_file": f"/etc/ssl/private/{hostname}.key"
+            "cert_file": f"/etc/ssl/certs/openmediavault-{cert_uuid}.crt",
+            "key_file": f"/etc/ssl/private/openmediavault-{cert_uuid}.key"
         }
         response = requests.post(url, params=params, verify=False)
         response.raise_for_status()
@@ -80,42 +163,55 @@ def main():
         print("Hostname not found in Tailscale status")
         return
 
-    cert_path = f"/etc/ssl/certs/{hostname}.crt"
+    hostname = hostname.rstrip('.')
     
-    # Check if certificate exists
-    if not Path(cert_path).exists():
-        print(f"Certificate not found: {cert_path}")
-        should_renew = True
-    else:
-        # Check certificate expiry
-        days_remaining = check_certificate_expiry(cert_path)
-        if days_remaining is None:
-            print("Failed to check certificate expiry")
-            return
+    # Get OMV certificates and look for tailscale certificate
+    try:
+        cert_list_cmd = ['omv-rpc', '-u', 'admin', 'CertificateMgmt', 'getList', 
+                       '{"start":0,"limit":-1,"sortdir":"ASC"}']
+        cert_list_result = subprocess.run(cert_list_cmd, capture_output=True, text=True)
         
-        should_renew = days_remaining <= 15
-        if not should_renew:
-            print(f"Certificate is still valid for {days_remaining} days")
-            return
+        should_renew = True
+        if cert_list_result.returncode == 0:
+            cert_list_data = json.loads(cert_list_result.stdout)
+            
+            # Look for tailscale certificate that matches hostname
+            for cert in cert_list_data.get('data', []):
+                if (cert.get('comment') == 'tailscale' and 
+                    hostname in cert.get('name', '')):
+                    uuid = cert['uuid']
+                    cert_path = f"/etc/ssl/certs/openmediavault-{uuid}.crt"
+                    
+                    if os.path.exists(cert_path):
+                        # Check certificate expiry
+                        days_remaining = check_certificate_expiry(cert_path)
+                        if days_remaining is not None and days_remaining > 15:
+                            print(f"Certificate is still valid for {days_remaining} days")
+                            should_renew = False
+                        break
+        
+        if should_renew:
+            print("Renewing certificate...")
+            if not renew_certificate(hostname):
+                print("Failed to renew certificate")
+                return
 
-    # Renew certificate if needed
-    if should_renew:
-        print("Renewing certificate...")
-        if not renew_certificate(hostname):
-            print("Failed to renew certificate")
-            return
+            print("Managing OMV certificate...")
+            cert_uuid = manage_omv_certificate(hostname)
+            if not cert_uuid:
+                print("Failed to manage OMV certificate")
+                return
 
-        print("Moving certificate files...")
-        if not move_certificate_files(hostname):
-            print("Failed to move certificate files")
-            return
+            print("Updating Traefik configuration...")
+            if not update_traefik_config(cert_uuid):
+                print("Failed to update Traefik configuration")
+                return
 
-        print("Updating Traefik configuration...")
-        if not update_traefik_config(hostname):
-            print("Failed to update Traefik configuration")
-            return
-
-        print("Certificate renewal process completed successfully")
+            print("Certificate renewal process completed successfully")
+            
+    except Exception as e:
+        print(f"Error checking OMV tailscale certificate: {str(e)}")
+        return
 
 if __name__ == "__main__":
     main()

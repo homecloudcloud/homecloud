@@ -4,11 +4,29 @@ import json
 import sys
 import os
 import argparse
-import shutil
+import subprocess
+import urllib3
+
+# Disable SSL warnings
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 def error_exit(message):
     print(f"ERROR: {message}")
     sys.exit(0)
+
+def get_environment_variable_uuid():
+    try:
+        command = ['/usr/sbin/omv-env get OMV_CONFIGOBJECT_NEW_UUID']
+        process = subprocess.run(command, text=True, check=True, shell=True, capture_output=True)
+        if process.returncode != 0:
+            return None
+        else:
+            a = process.stdout.split("=")
+            uuid = a[1]
+            uuid = uuid.replace("\n", "")
+            return uuid
+    except:
+        return False
 
 def validate_input(param_name, param_value):
     if any(char in param_value for char in ['\'', '"', '`']):
@@ -143,33 +161,109 @@ def configure_tailscale(client_id, client_secret, tailnet_name):
                                                    capture_output=True, text=True)
                         if cert_result.returncode == 0:
                             try:
-                                # Move certificates using shutil.move
-                                print("Moving certificates to system directories...")
-                                shutil.move(f"{domain_name}.key", f"/etc/ssl/private/{domain_name}.key")
-                                shutil.move(f"{domain_name}.crt", f"/etc/ssl/certs/{domain_name}.crt")
+                                # Read certificate and private key files
+                                with open(f"{domain_name}.crt", 'r') as f:
+                                    cert_content = f.read()
+                                with open(f"{domain_name}.key", 'r') as f:
+                                    key_content = f.read()
                                 
-                                # Set proper permissions
-                                os.chmod(f"/etc/ssl/private/{domain_name}.key", 0o600)
-                                os.chmod(f"/etc/ssl/certs/{domain_name}.crt", 0o644)
+                                # Get list of existing certificates
+                                cert_list_cmd = ['omv-rpc', '-u', 'admin', 'CertificateMgmt', 'getList', 
+                                               '{"start":0,"limit":-1,"sortdir":"ASC"}']
+                                cert_list_result = subprocess.run(cert_list_cmd, capture_output=True, text=True)
                                 
-                                print("Certificate setup completed successfully")
-                                
-                                # Update Traefik configuration
-                                traefik_url = f"https://127.0.0.1:5000/update_traefik_config"
-                                traefik_params = {
-                                    "cert_file": f"/etc/ssl/certs/{domain_name}.crt",
-                                    "key_file": f"/etc/ssl/private/{domain_name}.key"
-                                }
-                                traefik_response = requests.post(traefik_url, 
-                                                            params=traefik_params, 
-                                                            verify=False)
-                                
-                                if traefik_response.ok and traefik_response.json().get('success'):
-                                    print("Traefik configuration updated successfully")
+                                if cert_list_result.returncode == 0:
+                                    cert_list_data = json.loads(cert_list_result.stdout)
+                                    
+                                    # Delete existing tailscale certificate if found
+                                    deleted_cert = False
+                                    for cert in cert_list_data.get('data', []):
+                                        if cert.get('comment') == 'tailscale':
+                                            print(f"Deleting existing tailscale certificate: {cert['uuid']}")
+                                            delete_cmd = ['omv-rpc', '-u', 'admin', 'CertificateMgmt', 'delete', 
+                                                        f'{{"uuid":"{cert["uuid"]}"}}']  
+                                            subprocess.run(delete_cmd, check=True)
+                                            deleted_cert = True
+                                    
+                                    if deleted_cert:
+                                        print("Applying certificate changes...")
+                                        subprocess.run(['omv-salt', 'deploy', 'run', 'certificates'], check=True)
+                                    
+                                    # Install new certificate
+                                    print("Installing new tailscale certificate")
+                                    new_uuid = get_environment_variable_uuid()
+                                    if not new_uuid:
+                                        error_exit("Failed to generate UUID for certificate")
+                                    
+                                    cert_data = {
+                                        "uuid": new_uuid,
+                                        "certificate": cert_content,
+                                        "privatekey": key_content,
+                                        "comment": "tailscale"
+                                    }
+                                    
+                                    install_cmd = ['omv-rpc', '-u', 'admin', 'CertificateMgmt', 'set', 
+                                                 json.dumps(cert_data)]
+                                    install_result = subprocess.run(install_cmd, capture_output=True, text=True)
+                                    
+                                    if install_result.returncode == 0:
+                                        print("Applying certificate changes...")
+                                        subprocess.run(['omv-salt', 'deploy', 'run', 'certificates'], check=True)
+                                        # Verify certificate installation
+                                        verify_result = subprocess.run(cert_list_cmd, capture_output=True, text=True)
+                                        if verify_result.returncode == 0:
+                                            verify_data = json.loads(verify_result.stdout)
+                                            new_cert_uuid = None
+                                            
+                                            for cert in verify_data.get('data', []):
+                                                if cert.get('comment') == 'tailscale':
+                                                    new_cert_uuid = cert['uuid']
+                                                    break
+                                            
+                                            if new_cert_uuid:
+                                                print(f"Certificate installed successfully with UUID: {new_cert_uuid}")
+                                                
+                                                # Update Traefik configuration with OMV certificate paths
+                                                cert_file = f"/etc/ssl/certs/openmediavault-{new_cert_uuid}.crt"
+                                                key_file = f"/etc/ssl/private/openmediavault-{new_cert_uuid}.key"
+                                                
+                                                try:
+                                                    traefik_url = "https://127.0.0.1:5000/update_traefik_config"
+                                                    traefik_params = {
+                                                        "cert_file": cert_file,
+                                                        "key_file": key_file
+                                                    }
+                                                    traefik_response = requests.post(traefik_url, 
+                                                                                params=traefik_params, 
+                                                                                verify=False,
+                                                                                timeout=10)
+                                                    
+                                                    if traefik_response.ok and traefik_response.json().get('success'):
+                                                        print("Traefik configuration updated successfully")
+                                                    else:
+                                                        print(f"Warning: Failed to update Traefik configuration: {traefik_response.text}")
+                                                        print("Certificate installation completed, but Traefik update failed")
+                                                except Exception as e:
+                                                    print(f"Warning: Could not update Traefik configuration: {str(e)}")
+                                                    print("Certificate installation completed, but Traefik update failed")
+                                            else:
+                                                print("Failed to verify certificate installation")
+                                        else:
+                                            print("Failed to verify certificate installation")
+                                    else:
+                                        print(f"Failed to install certificate: {install_result.stderr}")
                                 else:
-                                    print(f"Failed to update Traefik configuration: {traefik_response.text}") 
+                                    print(f"Failed to get certificate list: {cert_list_result.stderr}")
+                                
+                                # Clean up temporary certificate files
+                                try:
+                                    os.remove(f"{domain_name}.crt")
+                                    os.remove(f"{domain_name}.key")
+                                except:
+                                    pass
+                                
                             except Exception as e:
-                                error_exit(f"Failed to move certificates: {str(e)}")
+                                error_exit(f"Failed to manage certificates: {str(e)}")
                         else:
                             print("Failed to generate certificates")
                     else:

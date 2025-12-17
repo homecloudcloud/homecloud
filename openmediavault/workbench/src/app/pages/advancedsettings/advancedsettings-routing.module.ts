@@ -9,6 +9,7 @@ import { FirewallRuleInetDatatablePageComponent } from '~/app/pages/advancedsett
 import { FirewallRuleInet6DatatablePageComponent } from '~/app/pages/advancedsettings/firewall/rules/firewall-rule-inet6-datatable-page.component';
 import { FirewallRuleTabsPageComponent } from '~/app/pages/advancedsettings/firewall/rules/firewall-rule-tabs-page.component';
 import { SshFormPageComponent } from '~/app/pages/advancedsettings/ssh/ssh-form-page.component';
+import { ResetComponent } from '~/app/pages/advancedsettings/reset/reset-page.component';
 import { IsDirtyGuardService } from '~/app/shared/services/is-dirty-guard.service';
 import { AdvancedsettingsMainPageComponent } from './advancedsettings-main-page.component';
 
@@ -81,6 +82,16 @@ const routes: Routes = [
       title: gettext('SSH'),
       editing: true,
       notificationTitle: gettext('Updated SSH settings.')
+    }
+  },
+  {
+    path: 'reset',
+    component: ResetComponent,
+    canDeactivate: [IsDirtyGuardService],
+    data: {
+      title: gettext('Reset'),
+      editing: true,
+      notificationTitle: gettext('Homecloud reset.')
     }
   }
 ];

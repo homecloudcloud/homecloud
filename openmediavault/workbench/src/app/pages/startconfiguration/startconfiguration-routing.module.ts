@@ -30,6 +30,7 @@ import { AppsDrivemacOSComponent } from '~/app/pages/startconfiguration/apps/dri
 import { AppsDriveandroidComponent } from '~/app/pages/startconfiguration/apps/drive/android/drive-access-form-page.component';
 import {AppsDriveBackupComponent} from '~/app/pages/startconfiguration/apps/drive/backup/drive-backup-page.component';
 import {AppsDriveRestoreComponent} from '~/app/pages/startconfiguration/apps/drive/restore/drive-restore-page.component';
+import {AppsDriveResetComponent} from '~/app/pages/startconfiguration/apps/drive/reset/drive_reset-page.component';
 import {UserDatatablePageComponent} from '~/app/pages/startconfiguration/apps/drive/users/user-datatable-page.component';
 import {UserFormPageComponent} from '~/app/pages/startconfiguration/apps/drive/users/user-form-page.component';
 import {UserImportFormPageComponent} from '~/app/pages/startconfiguration/apps/drive/users/user-import-form-page.component';
@@ -471,7 +472,15 @@ const routes: Routes = [
                   }
                 }
               ]
+          },
+          {
+            path: 'reset',
+            component: AppsDriveResetComponent,
+            data: {
+              title: gettext('Reset'),
+              editing: true
             }
+          }
         ]
       },
       {

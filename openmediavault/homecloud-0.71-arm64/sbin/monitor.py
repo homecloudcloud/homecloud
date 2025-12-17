@@ -796,50 +796,85 @@ def manage_certificates() -> str:
     if check_service_status("tailscaled.service") == "Up":
         hostname = get_tailscale_hostname()
         if hostname:
-            # Remove trailing dot if present
             hostname = hostname.rstrip('.')
-            cert_path = f"/etc/ssl/certs/{hostname}.crt"
-            key_path = f"/etc/ssl/private/{hostname}.key"
             
-            # Check if both certificate and key exist
-            if os.path.exists(cert_path) and os.path.exists(key_path):
-                try:
-                    # Check certificate expiration using OpenSSL
-                    cmd = f"openssl x509 -enddate -noout -in {cert_path}"
-                    result = subprocess.check_output(cmd, shell=True, text=True)
-                    expiry_str = result.strip().split('=')[1]
-                    expiry_date = datetime.strptime(expiry_str, '%b %d %H:%M:%S %Y %Z')
-                    
-                    if expiry_date > datetime.now():
-                        # Certificate is valid, update Traefik config
-                        return update_traefik_config(cert_path, key_path)
-                except Exception as e:
-                    print(f"Error checking Tailscale certificate: {str(e)}")
+            # Get OMV certificates and look for tailscale certificate
+            try:
+                cmd = ["omv-rpc", "-u", "admin", "CertificateMgmt", "getList", 
+                       '{"start":0,"limit":-1,"sortdir":"ASC"}']
+                result = subprocess.check_output(cmd, text=True)
+                cert_data = json.loads(result)
+                
+                # Look for tailscale certificate that matches hostname
+                for cert in cert_data.get("data", []):
+                    if (cert.get("comment") == "tailscale" and 
+                        hostname in cert.get("name", "")):
+                        uuid = cert["uuid"]
+                        cert_path = f"/etc/ssl/certs/openmediavault-{uuid}.crt"
+                        key_path = f"/etc/ssl/private/openmediavault-{uuid}.key"
+                        
+                        if os.path.exists(cert_path) and os.path.exists(key_path):
+                            return update_traefik_config(cert_path, key_path)
+                        
+            except Exception as e:
+                print(f"Error checking OMV tailscale certificate: {str(e)}")
     
-    # If we reach here, either Tailscale is down or certificate is invalid/missing
-    # Try OMV certificates
+    # If we reach here, either Tailscale is down or tailscale certificate not found
+    # Try other OMV certificates
     try:
         cmd = ["omv-rpc", "-u", "admin", "CertificateMgmt", "getList", 
-               '{"start":0,"limit":100,"sortfield":"name","sortdir":"asc"}']
+               '{"start":0,"limit":-1,"sortfield":"name","sortdir":"asc"}']
         result = subprocess.check_output(cmd, text=True)
         cert_data = json.loads(result)
         
         if cert_data["total"] == 0:
             return "Error: No certificates found in OMV"
         
-        # Check each certificate in the data array
+        # Filter valid certificates
+        valid_certs = []
         for cert in cert_data["data"]:
             valid_to = int(cert["validto"])
             current_time = int(time.time())
             
             if valid_to > current_time:
-                # Found a valid certificate
                 uuid = cert["uuid"]
                 omv_cert_path = f"/etc/ssl/certs/openmediavault-{uuid}.crt"
                 omv_key_path = f"/etc/ssl/private/openmediavault-{uuid}.key"
                 
                 if os.path.exists(omv_cert_path) and os.path.exists(omv_key_path):
-                    return update_traefik_config(omv_cert_path, omv_key_path)
+                    valid_certs.append(cert)
+        
+        if not valid_certs:
+            return "Error: No valid certificates found"
+        
+        # Select certificate based on priority: BYOC > Libernest > first available
+        selected_cert = None
+        
+        # First priority: Look for BYOC certificate
+        for cert in valid_certs:
+            if "BYOC" in cert.get("comment", ""):
+                selected_cert = cert
+                break
+        
+        if not selected_cert:
+            if len(valid_certs) == 1:
+                selected_cert = valid_certs[0]
+            else:
+                # Look for Libernest certificate
+                for cert in valid_certs:
+                    if "Libernest" in cert.get("name", ""):
+                        selected_cert = cert
+                        break
+                
+                # If no Libernest cert found, use first one
+                if not selected_cert:
+                    selected_cert = valid_certs[0]
+        
+        # Use selected certificate
+        uuid = selected_cert["uuid"]
+        omv_cert_path = f"/etc/ssl/certs/openmediavault-{uuid}.crt"
+        omv_key_path = f"/etc/ssl/private/openmediavault-{uuid}.key"
+        return update_traefik_config(omv_cert_path, omv_key_path)
         
         return "Error: No valid certificates found"
         

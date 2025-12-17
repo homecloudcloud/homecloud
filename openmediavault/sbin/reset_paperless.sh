@@ -62,13 +62,13 @@ for volume in "${VOLUMES[@]}"; do
 done
 
 # Start the service
-echo "Starting paperless service..."
-systemctl start paperless.service
-if [ $? -ne 0 ]; then
-    echo "{\"message\": \"Error starting paperless service\"}"
-    exit 1
-fi
+#echo "Starting paperless service..."
+#systemctl start paperless.service
+#if [ $? -ne 0 ]; then
+#    echo "{\"message\": \"Error starting paperless service\"}"
+#    exit 1
+#fi
 
 # Success message
-echo "{\"message\": \"Paperless reset completed successfully\"}"
+echo "{\"message\": \"Paperless reset completed successfully. Go to Status page to start Paperless service.\"}"
 exit 0

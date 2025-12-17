@@ -170,6 +170,8 @@ class Homecloud extends \OMV\Rpc\ServiceAbstract {
         $this->registerMethod("setDuplicatiPassword");
         $this->registerMethod("duplicati_remove");
         $this->registerMethod("systemAutoUpdates");
+        $this->registerMethod("reset_drive");
+        $this->registerMethod("reset_homecloud");
     }
 
 
@@ -3048,6 +3050,171 @@ public function getHotspotStatus($params, $context) {
         return json_decode($output[0], true);
     }
 
+    public function reset_homecloud($params, $context) {
+        // Validate the RPC caller context.
+        $this->validateMethodContext($context, [
+            "role" => OMV_ROLE_ADMINISTRATOR
+        ]);
+
+        return $this->execBgProc(function($bgStatusFilename, $bgOutputFilename) use ($params, $context) {
+            $output = [];
+            
+            // Reset Immich
+            $cmd = new \OMV\System\Process("echo", ["Resetting Immich..."]);
+            $this->exec($cmd, $output, $bgOutputFilename);
+            try { 
+                $this->reset_immich($params, $context); 
+                $cmd = new \OMV\System\Process("echo", ["✓ Immich reset completed"]);
+                $this->exec($cmd, $output, $bgOutputFilename);
+            } catch (\Exception $e) { 
+                $cmd = new \OMV\System\Process("echo", ["✗ Immich reset failed: " . $e->getMessage()]);
+                $this->exec($cmd, $output, $bgOutputFilename);
+            }
+            
+            // Reset Jellyfin
+            $cmd = new \OMV\System\Process("echo", ["Resetting Jellyfin..."]);
+            $this->exec($cmd, $output, $bgOutputFilename);
+            try { 
+                $this->reset_jellyfin($params, $context); 
+                $cmd = new \OMV\System\Process("echo", ["✓ Jellyfin reset completed"]);
+                $this->exec($cmd, $output, $bgOutputFilename);
+            } catch (\Exception $e) { 
+                $cmd = new \OMV\System\Process("echo", ["✗ Jellyfin reset failed: " . $e->getMessage()]);
+                $this->exec($cmd, $output, $bgOutputFilename);
+            }
+            
+            // Reset Paperless
+            $cmd = new \OMV\System\Process("echo", ["Resetting Paperless..."]);
+            $this->exec($cmd, $output, $bgOutputFilename);
+            try { 
+                $this->reset_paperless($params, $context); 
+                $cmd = new \OMV\System\Process("echo", ["✓ Paperless reset completed"]);
+                $this->exec($cmd, $output, $bgOutputFilename);
+            } catch (\Exception $e) { 
+                $cmd = new \OMV\System\Process("echo", ["✗ Paperless reset failed: " . $e->getMessage()]);
+                $this->exec($cmd, $output, $bgOutputFilename);
+            }
+            
+            // Reset Vaultwarden
+            $cmd = new \OMV\System\Process("echo", ["Resetting Vaultwarden..."]);
+            $this->exec($cmd, $output, $bgOutputFilename);
+            try { 
+                $this->reset_vaultwarden($params, $context); 
+                $cmd = new \OMV\System\Process("echo", ["✓ Vaultwarden reset completed"]);
+                $this->exec($cmd, $output, $bgOutputFilename);
+            } catch (\Exception $e) { 
+                $cmd = new \OMV\System\Process("echo", ["✗ Vaultwarden reset failed: " . $e->getMessage()]);
+                $this->exec($cmd, $output, $bgOutputFilename);
+            }
+            
+            // Reset Joplin
+            $cmd = new \OMV\System\Process("echo", ["Resetting Joplin..."]);
+            $this->exec($cmd, $output, $bgOutputFilename);
+            try { 
+                $this->reset_joplin($params, $context); 
+                $cmd = new \OMV\System\Process("echo", ["✓ Joplin reset completed"]);
+                $this->exec($cmd, $output, $bgOutputFilename);
+            } catch (\Exception $e) { 
+                $cmd = new \OMV\System\Process("echo", ["✗ Joplin reset failed: " . $e->getMessage()]);
+                $this->exec($cmd, $output, $bgOutputFilename);
+            }
+            
+            // Reset Drive
+            $cmd = new \OMV\System\Process("echo", ["Resetting Drive..."]);
+            $this->exec($cmd, $output, $bgOutputFilename);
+            try { 
+                $this->reset_drive($params, $context); 
+                $cmd = new \OMV\System\Process("echo", ["✓ Drive reset completed"]);
+                $this->exec($cmd, $output, $bgOutputFilename);
+            } catch (\Exception $e) { 
+                $cmd = new \OMV\System\Process("echo", ["✗ Drive reset failed: " . $e->getMessage()]);
+                $this->exec($cmd, $output, $bgOutputFilename);
+            }
+
+            // Logout VPN
+            $cmd = new \OMV\System\Process("echo", ["Logging out VPN..."]);
+            $this->exec($cmd, $output, $bgOutputFilename);
+            try {
+                $rpcServiceMngr = &\OMV\Rpc\ServiceManager::getInstance();
+                $rpcService = $rpcServiceMngr->getService("tailscaleconfig");
+                $rpcService->LogoutVPN([], $context);
+                $cmd = new \OMV\System\Process("echo", ["✓ VPN logout completed"]);
+                $this->exec($cmd, $output, $bgOutputFilename);
+            } catch (\Exception $e) { 
+                $cmd = new \OMV\System\Process("echo", ["✗ VPN logout failed: " . $e->getMessage()]);
+                $this->exec($cmd, $output, $bgOutputFilename);
+            }
+
+            // Delete tailscale certificates
+            $cmd = new \OMV\System\Process("echo", ["Deleting Tailscale certificates..."]);
+            $this->exec($cmd, $output, $bgOutputFilename);
+            try {
+                $rpcServiceMngr = &\OMV\Rpc\ServiceManager::getInstance();
+                $certService = $rpcServiceMngr->getService("CertificateMgmt");
+                $listParams = ['start' => 0, 'limit' => null, 'sortfield' => null, 'sortdir' => null];
+                $result = $certService->getList($listParams, $context);
+                $deletedCount = 0;
+                foreach ($result['data'] as $cert) {
+                    if (isset($cert['comment']) && strpos($cert['comment'], 'tailscale') !== false) {
+                        $certService->delete(['uuid' => $cert['uuid']], $context);
+                        $deletedCount++;
+                    }
+                }
+                $cmd = new \OMV\System\Process("echo", ["✓ Deleted {$deletedCount} Tailscale certificates"]);
+                $this->exec($cmd, $output, $bgOutputFilename);
+            } catch (\Exception $e) { 
+                $cmd = new \OMV\System\Process("echo", ["✗ Certificate deletion failed: " . $e->getMessage()]);
+                $this->exec($cmd, $output, $bgOutputFilename);
+            }
+
+            // Clear notification settings
+            $cmd = new \OMV\System\Process("echo", ["Clearing notification settings..."]);
+            $this->exec($cmd, $output, $bgOutputFilename);
+            try {
+                $rpcServiceMngr = &\OMV\Rpc\ServiceManager::getInstance();
+                $rpcService = $rpcServiceMngr->getService("EmailNotification");
+                $emailParams = [
+                    "enable" => false,
+                    "server" => "",
+                    "port" => 587,
+                    "tls" => "auto",
+                    "sender" => "",
+                    "primaryemail" => "",
+                    "secondaryemail" => "",
+                    "authenable" => true,
+                    "username" => "",
+                    "password" => ""
+                ];
+                $rpcService->set($emailParams, $context);
+                $cmd = new \OMV\System\Process("echo", ["✓ Notification settings cleared"]);
+                $this->exec($cmd, $output, $bgOutputFilename);
+            } catch (\Exception $e) { 
+                $cmd = new \OMV\System\Process("echo", ["✗ Notification settings clear failed: " . $e->getMessage()]);
+                $this->exec($cmd, $output, $bgOutputFilename);
+            }
+
+            // Delete /root/.tsinfo file
+            $cmd = new \OMV\System\Process("echo", ["Cleaning up system files..."]);
+            $this->exec($cmd, $output, $bgOutputFilename);
+            if (@unlink("/root/.tsinfo")) {
+                $cmd = new \OMV\System\Process("echo", ["✓ System files cleaned"]);
+                $this->exec($cmd, $output, $bgOutputFilename);
+            } else {
+                $cmd = new \OMV\System\Process("echo", ["✓ System files already clean"]);
+                $this->exec($cmd, $output, $bgOutputFilename);
+            }
+
+            $cmd = new \OMV\System\Process("echo", [""]);
+            $this->exec($cmd, $output, $bgOutputFilename);
+            $cmd = new \OMV\System\Process("echo", ["🎉 Homecloud reset completed successfully!"]);
+            $this->exec($cmd, $output, $bgOutputFilename);
+            $cmd = new \OMV\System\Process("echo", ["All application data has been deleted."]);
+            $this->exec($cmd, $output, $bgOutputFilename);
+            
+            return $output;
+        });
+    }
+
 
 	/**
 	 * Helper function to get details of the given network interface device.
@@ -5705,6 +5872,26 @@ public function joplin_backup_execute($params, $context) {
         // Get the output from the tailscale status script
         
         $cmd = new \OMV\System\Process("/sbin/reset_joplin.sh");
+        $cmd->setEnv("SHELL", "/bin/sh");
+        //$cmd->setRedirect2to1();
+        $cmd->execute($output);
+        // Since the script outputs JSON directly, just return the first line
+        return json_decode($output[0], true);
+    }
+
+    public function reset_drive($params, $context) {
+        
+	    $output_err="";
+		$cmdArgs = [];
+
+        // Validate the RPC caller context.
+		$this->validateMethodContext($context, [
+			"role" => OMV_ROLE_ADMINISTRATOR
+		]);
+
+        // Get the output from the tailscale status script
+        
+        $cmd = new \OMV\System\Process("/sbin/reset_drive.sh");
         $cmd->setEnv("SHELL", "/bin/sh");
         //$cmd->setRedirect2to1();
         $cmd->execute($output);

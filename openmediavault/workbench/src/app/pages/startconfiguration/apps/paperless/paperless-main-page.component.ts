@@ -173,7 +173,10 @@ export class AppsPaperlessMainComponent extends BaseFormPageComponent {
                     hidden: true
                   },
                   stop: {
-                    hidden: true
+                    hidden: true,
+                    disabled: true,
+                    autofocus: false,
+                    dialogResult: true
                   },
                   close:{
                     hidden: false,

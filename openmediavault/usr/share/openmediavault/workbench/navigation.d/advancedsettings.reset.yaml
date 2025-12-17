@@ -1,0 +1,8 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "advancedsettings.reset"
+  position: 40
+  text: _("Reset Homecloud")
+  icon: reset
+  url: "/advancedsettings/reset"

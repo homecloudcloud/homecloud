@@ -7,6 +7,7 @@ import { MaterialModule } from '~/app/material.module';
 import { SharedModule } from '~/app/shared/shared.module';
 import { FirewallRuleFormPageComponent } from '~/app/pages/advancedsettings/firewall/rules/firewall-rule-form-page.component';
 import { SshFormPageComponent } from '~/app/pages/advancedsettings/ssh/ssh-form-page.component';
+import { ResetComponent } from '~/app/pages/advancedsettings/reset/reset-page.component';
 import { FirewallRuleInetDatatablePageComponent } from '~/app/pages/advancedsettings/firewall/rules/firewall-rule-inet-datatable-page.component';
 import { FirewallRuleInet6DatatablePageComponent } from '~/app/pages/advancedsettings/firewall/rules/firewall-rule-inet6-datatable-page.component';
 import { FirewallRuleTabsPageComponent } from '~/app/pages/advancedsettings/firewall/rules/firewall-rule-tabs-page.component';
@@ -21,7 +22,8 @@ import { AdvancedsettingsMainPageComponent } from './advancedsettings-main-page.
     FirewallRuleInetDatatablePageComponent,
     FirewallRuleInet6DatatablePageComponent,
     SshFormPageComponent,
-    AdvancedsettingsMainPageComponent
+    AdvancedsettingsMainPageComponent,
+    ResetComponent
   ],
   imports: [
     CommonModule,

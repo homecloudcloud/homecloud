@@ -3885,32 +3885,31 @@ def get_index_schedule():
         return error_response(str(e), 500)
 
 def get_ssl_paths():
-    """Get SSL certificate and key file paths from /etc/environment"""
+    """Get SSL certificate and key file paths from OMV Libernest certificate"""
     try:
-        cert_file = None
-        key_file = None
+        # Get list of certificates using omv-rpc
+        cmd = ['omv-rpc', '-u', 'admin', 'CertificateMgmt', 'getList', 
+               '{"start":0,"limit":-1,"sortdir":"ASC"}']
+        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+        cert_data = json.loads(result.stdout)
         
-        with open('/etc/environment', 'r') as f:
-            for line in f:
-                line = line.strip()
-                if line.startswith('SSL_CERT_FILE='):
-                    cert_file = line.split('=')[1].strip('"')
-                elif line.startswith('SSL_KEY_FILE='):
-                    key_file = line.split('=')[1].strip('"')
-                    
-        if not cert_file or not key_file:
-            raise ValueError("SSL certificate or key file path not found in /etc/environment")
-            
-        # Verify files exist
-        if not os.path.isfile(cert_file):
-            raise FileNotFoundError(f"SSL certificate file not found: {cert_file}")
-        if not os.path.isfile(key_file):
-            raise FileNotFoundError(f"SSL key file not found: {key_file}")
-            
-        return cert_file, key_file
+        # Look for Libernest certificate
+        for cert in cert_data.get('data', []):
+            cert_name = cert.get('name', '')
+            if 'Libernest' in cert_name:
+                uuid = cert['uuid']
+                cert_file = f"/etc/ssl/certs/openmediavault-{uuid}.crt"
+                key_file = f"/etc/ssl/private/openmediavault-{uuid}.key"
+                
+                # Verify files exist
+                if os.path.isfile(cert_file) and os.path.isfile(key_file):
+                    return cert_file, key_file
+        
+        print("Libernest certificate not found in OMV")
+        return None, None
         
     except Exception as e:
-        print(f"Error reading SSL paths: {str(e)}")
+        print(f"Error reading SSL paths from OMV: {str(e)}")
         return None, None
 
 def setup_paperless_firewall():

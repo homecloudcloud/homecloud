@@ -254,7 +254,7 @@ export class TailscaleConfigFormPageComponent extends BaseFormPageComponent {
             taskDialog: {
               config: {
                 title: gettext('Message'),
-                autoScroll: false,
+                autoScroll: true,
                 startOnInit: true,
                 buttons: {
                   start: {
