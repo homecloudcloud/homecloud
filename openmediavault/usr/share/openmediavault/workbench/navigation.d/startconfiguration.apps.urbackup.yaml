@@ -1,0 +1,8 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "startconfiguration.apps.urbackup"
+  position: 70
+  text: _("UrBackup")
+  icon: "mdi:content-copy"
+  url: "/startconfiguration/apps/urbackup"

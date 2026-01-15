@@ -1,0 +1,304 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the openmediavault-zfs package.
+# 
+# Translators:
+# dsafsadf <heneral@gmail.com>, 2019
+# zubr139, 2016
+msgid ""
+msgstr ""
+"Project-Id-Version: openmediavault-zfs\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-07-07 07:55-0500\n"
+"PO-Revision-Date: 2014-10-16 11:20+0000\n"
+"Last-Translator: dsafsadf <heneral@gmail.com>, 2019\n"
+"Language-Team: Ukrainian (http://app.transifex.com/openmediavault-plugin-developers/openmediavault-zfs/language/uk/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: uk\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+
+msgid "Add"
+msgstr ""
+
+msgid "Add filesystem|snap|volume"
+msgstr ""
+
+msgid "Add pool"
+msgstr ""
+
+msgid "Are you sure you want to delete to this snapshot?"
+msgstr ""
+
+msgid "Are you sure you want to delete?"
+msgstr ""
+
+msgid "Are you sure you want to export?"
+msgstr ""
+
+msgid "Are you sure you want to rollback to this snapshot?"
+msgstr ""
+
+msgid "Ashift value"
+msgstr ""
+
+msgid "Available"
+msgstr ""
+
+msgid "Basic"
+msgstr ""
+
+msgid "By ID"
+msgstr ""
+
+msgid "By Path"
+msgstr ""
+
+msgid "Clone"
+msgstr ""
+
+msgid "Compression"
+msgstr ""
+
+msgid "Compression type"
+msgstr ""
+
+msgid "Create"
+msgstr ""
+
+msgid "Created pool."
+msgstr ""
+
+msgid "Delete"
+msgstr "Видалити"
+
+msgid "Deleting object ..."
+msgstr ""
+
+msgid "Deleting snapshot ..."
+msgstr ""
+
+msgid "Details"
+msgstr ""
+
+msgid "Device alias"
+msgstr ""
+
+msgid "Devices"
+msgstr "Пристрої"
+
+msgid "Discover"
+msgstr ""
+
+msgid "Discover complete."
+msgstr ""
+
+msgid "Discovering new pools ..."
+msgstr ""
+
+msgid "Edit property"
+msgstr ""
+
+msgid "Expand"
+msgstr ""
+
+msgid "Expand pool"
+msgstr ""
+
+msgid "Expanded pool."
+msgstr ""
+
+msgid "Filesystem"
+msgstr ""
+
+msgid "Force"
+msgstr ""
+
+msgid "Force creation"
+msgstr ""
+
+msgid "Forces import, even if the pool appears to be potentially active."
+msgstr ""
+
+msgid ""
+"Forces the creation of the Vded even if errors are reported. Use with "
+"extreme caution!"
+msgstr ""
+
+msgid ""
+"Forces the creation of the pool even if errors are reported. Use with "
+"extreme caution!"
+msgstr ""
+
+msgid "Hits"
+msgstr ""
+
+msgid "Import all"
+msgstr ""
+
+msgid "Import all missing pools."
+msgstr ""
+
+msgid "Mirror"
+msgstr ""
+
+msgid "Misses"
+msgstr ""
+
+msgid "Modified"
+msgstr ""
+
+msgid "Mountpoint"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "New Property"
+msgstr ""
+
+msgid "New property"
+msgstr ""
+
+msgid "None"
+msgstr ""
+
+msgid "Object deleted."
+msgstr ""
+
+msgid "Optional mountpoint for the pool. Default is to use the pool name."
+msgstr ""
+
+msgid "Optional mountpoint. Default is to use the name."
+msgstr ""
+
+msgid "Parent"
+msgstr ""
+
+msgid "Path"
+msgstr ""
+
+msgid "Pool"
+msgstr ""
+
+msgid "Pool name"
+msgstr ""
+
+msgid "Pool type"
+msgstr ""
+
+msgid "Pools"
+msgstr ""
+
+msgid "Prefix"
+msgstr ""
+
+msgid "Properties"
+msgstr ""
+
+msgid "Properties saved."
+msgstr ""
+
+msgid "Property"
+msgstr ""
+
+msgid "RAID-Z1"
+msgstr ""
+
+msgid "RAID-Z2"
+msgstr ""
+
+msgid "RAID-Z3"
+msgstr ""
+
+msgid "Refer"
+msgstr ""
+
+msgid "Rollback"
+msgstr ""
+
+msgid "Scrub"
+msgstr ""
+
+msgid "Set ashift"
+msgstr ""
+
+msgid "Size"
+msgstr ""
+
+msgid "Snap clone name"
+msgstr ""
+
+msgid "Snapshot"
+msgstr ""
+
+msgid "Snapshot deleted."
+msgstr ""
+
+msgid "Snapshots"
+msgstr ""
+
+msgid "Source"
+msgstr ""
+
+msgid "Source name"
+msgstr ""
+
+msgid "Source path"
+msgstr ""
+
+msgid "Source pool"
+msgstr ""
+
+msgid ""
+"Specifies which device alias should be used. Don't change unless needed."
+msgstr ""
+
+msgid "Specify ashift value. Only use if you are sure you need it."
+msgstr ""
+
+msgid "State"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "Thin provisioning"
+msgstr ""
+
+msgid "Tools"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "Used"
+msgstr ""
+
+msgid "Value"
+msgstr ""
+
+msgid "Vdev type"
+msgstr ""
+
+msgid "Volume"
+msgstr ""
+
+msgid "ZFS Hits/Misses"
+msgstr ""
+
+msgid "ZFS ZED"
+msgstr ""
+
+msgid "Zvol %s [%s, %s]"
+msgstr ""
+
+msgid "zfs"
+msgstr ""
+
+msgid "zpool export"
+msgstr ""
+
+msgid "zpool import"
+msgstr ""

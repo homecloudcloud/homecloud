@@ -108,11 +108,7 @@ def remove_paperless() -> None:
             print("Removing Docker images...")
             remove_docker_images(images)
         
-        # 6. Remove Paperless directory
-        print("Cleaning up configuration files...")
-        remove_paperless_directory()
-
-        # 7. Update firewall rules via API
+        # 6. Update firewall rules via API
         print("Updating firewall rules...")
         try:
             response = requests.post(
@@ -124,6 +120,10 @@ def remove_paperless() -> None:
                 print("Warning: Failed to update firewall rules")
         except Exception as e:
             print(f"Warning: Failed to update firewall rules: {str(e)}")
+        
+        # 7. Remove Paperless directory
+        print("Cleaning up configuration files...")
+        remove_paperless_directory()
         
         print("Paperless-ngx has been successfully removed. User data is not deleted.")
         

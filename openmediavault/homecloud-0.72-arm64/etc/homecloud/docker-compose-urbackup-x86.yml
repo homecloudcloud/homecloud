@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  urbackup:
+    image: uroni/urbackup-server:2.5.x-zfs
+    container_name: urbackup
+    restart: unless-stopped
+    network_mode: host
+
+    volumes:
+      - /var/lib/urbackup/urbackup:/var/urbackup
+      - /var/lib/urbackup/backups:/backups
+    devices:
+      - /dev/zfs:/dev/zfs
+      
+    # ⚠️ DO NOT expose backup ports via Traefik
+    ports:
+      - "55414:55414"        # web interface 
+      - "55413:55413"        # CGI interface
+      - "55415:55415"    # Internet backups UDP
+      - "35623:35623/udp"    # LAN discovery
+
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.urbackup.rule=Host(`homecloud-3.tail1f689.ts.net`)
+      - traefik.http.routers.urbackup.entrypoints=urbackup
+      - traefik.http.routers.urbackup.tls=true
+      - traefik.http.services.urbackup.loadbalancer.server.port=55414
+      - traefik.http.services.urbackup.loadbalancer.passhostheader=true
+
+      # Security headers (recommended)
+      - "traefik.http.middlewares.urbackup-headers.headers.stsSeconds=31536000"
+      - "traefik.http.routers.urbackup.middlewares=urbackup-headers"
+
+    environment:
+      - TZ=Asia/Kolkata

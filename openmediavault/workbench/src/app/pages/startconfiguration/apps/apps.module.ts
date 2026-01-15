@@ -13,6 +13,7 @@ import { PaperlessModule } from './paperless/paperless.module';
 import { JoplinModule } from './notes/joplin.module';
 import { JellyfinModule } from './media/jellyfin.module';
 import { CloudbackupModule } from './cloudbackup/cloudbackup.module';
+import { UrbackupModule } from './urbackup/urbackup.module';
 import { PagesModule } from '~/app/core/pages/pages.module';
 import { CoreModule } from '~/app/core/core.module';
 import { AppsMainComponent } from './apps-main-page.component';
@@ -37,6 +38,7 @@ import { AppsMainComponent } from './apps-main-page.component';
     JoplinModule,
     JellyfinModule,
     CloudbackupModule,
+    UrbackupModule,
     PagesModule,
     CoreModule
     
@@ -49,7 +51,8 @@ import { AppsMainComponent } from './apps-main-page.component';
     PaperlessModule,
     JoplinModule,
     JellyfinModule,
-    CloudbackupModule
+    CloudbackupModule,
+    UrbackupModule
   ],
 })
 export class AppsModule { }

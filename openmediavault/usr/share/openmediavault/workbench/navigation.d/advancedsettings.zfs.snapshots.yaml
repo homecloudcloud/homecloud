@@ -1,0 +1,8 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "advancedsettings.zfs.snapshots"
+  text: _("Snapshots")
+  position: 40
+  icon: mdi:content-copy
+  url: "/storage/zfs/snapshots"

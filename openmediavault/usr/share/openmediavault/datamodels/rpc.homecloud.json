@@ -663,5 +663,65 @@
 			}
         }
     }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.urbackup_get_latest_version",
+    "params": {
+        "type": "object",
+        "properties": {
+            "version": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.getUrbackupServiceStatus",
+    "params": {
+        "type": "object",
+        "properties": {
+            "status": {
+				"type": "string",
+				"required": true
+			},
+            "hostname": {
+				"type": "string",
+				"required": true
+			},
+            "api_endpoint": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.urbackup_update_version",
+    "params": {
+        "type": "object",
+        "properties": {
+            "version": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.urbackup_reset_password",
+    "params": {
+        "type": "object",
+        "properties": {
+            "user": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
 }
 ]

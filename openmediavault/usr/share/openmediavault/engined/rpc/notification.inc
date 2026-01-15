@@ -321,7 +321,8 @@ class OMVRpcServiceEmailNotification extends \OMV\Rpc\ServiceAbstract {
 			"/sbin/update-paperless-smtp.sh",
 			"/sbin/update-joplin-smtp.sh",
 			"/sbin/update-pass-reset-smtp.sh",
-			"/sbin/update-duplicati-smtp.py", 
+			"/sbin/update-duplicati-smtp.py",
+			"/sbin/update-urbackup-smtp.py",
     	];
 
 		foreach ($scripts as $script) {

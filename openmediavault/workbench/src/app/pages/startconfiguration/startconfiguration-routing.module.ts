@@ -103,6 +103,12 @@ import { AppsCloudbackupRestartComponent } from './apps/cloudbackup/restart/clou
 import { AppsCloudbackupPasswordResetComponent } from './apps/cloudbackup/password/cloudbackup-password-page.component';
 import { AppsCloudbackupPasswordResetDisplayComponent } from './apps/cloudbackup/password/cloudbackup-password-display-page.component';
 import { AppsCloudbackupUpdateFormPageComponent } from './apps/cloudbackup/update/cloudbackup-update-form-page.component';
+import { AppsUrbackupMainComponent } from './apps/urbackup/urbackup-form-main-page.component';
+import { AppsUrbackupAccessComponent } from './apps/urbackup/access/urbackup-access-form-page.component';
+import { AppsUrbackupRestartComponent } from './apps/urbackup/restart/urbackup-restart-page.component';
+import { AppsUrbackupPasswordResetComponent } from './apps/urbackup/password/urbackup-password-page.component';
+import { AppsUrbackupPasswordResetDisplayComponent } from './apps/urbackup/password/urbackup-password-display-page.component';
+import { AppsUrbackupUpdateFormPageComponent } from './apps/urbackup/update/urbackup-update-form-page.component';
 
 const routes: Routes = [
   {
@@ -928,6 +934,68 @@ const routes: Routes = [
           {
             path: 'update',
             component: AppsCloudbackupUpdateFormPageComponent,
+            data:{
+              title: gettext('Update'),
+              editing: true
+
+            }
+          }
+        ]
+      },
+      {
+        path: 'urbackup',
+        data: { title: gettext('Urbackup') },
+  //    component: ,
+        children: [
+          {
+            path: '',
+            component: AppsUrbackupMainComponent,
+            data: {
+              editing: true
+            }
+          },
+          {
+            path: 'access',
+            component: AppsUrbackupAccessComponent,
+            data: {
+              title: gettext('Access'),
+              editing: true
+            }
+          },
+          {
+            path: 'restart',
+            component: AppsUrbackupRestartComponent,
+            data: {
+              title: gettext('Restart'),
+              editing: true
+            }
+          },
+          {
+            path: 'password',
+            data: { title: gettext('Password') },
+            //component: AppsPhotosPasswordResetComponent,
+            children: [
+              {
+                path: '',
+                component: AppsUrbackupPasswordResetComponent,
+                data: {
+                 // title: gettext('Password'),
+                  editing: true
+                },
+              },
+              {
+                path: 'display',
+                component: AppsUrbackupPasswordResetDisplayComponent,
+                data: {
+                  title: gettext('Display'),
+                  editing: true
+                }
+              }
+            ]
+          },
+          {
+            path: 'update',
+            component: AppsUrbackupUpdateFormPageComponent,
             data:{
               title: gettext('Update'),
               editing: true

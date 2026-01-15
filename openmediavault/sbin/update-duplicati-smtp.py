@@ -9,7 +9,7 @@ from pathlib import Path
 
 def update_env_var(compose_data, key, value):
     """Update or add environment variable in docker-compose data"""
-    env_list = compose_data['services']['duplicati']['environment']
+    env_list = compose_data['services']['urbackup']['environment']
     
     # Find and update existing key
     for i, env_var in enumerate(env_list):
@@ -22,8 +22,8 @@ def update_env_var(compose_data, key, value):
 
 def remove_env_var(compose_data, key):
     """Remove environment variable from docker-compose data"""
-    env_list = compose_data['services']['duplicati']['environment']
-    compose_data['services']['duplicati']['environment'] = [
+    env_list = compose_data['services']['urbackup']['environment']
+    compose_data['services']['urbackup']['environment'] = [
         env for env in env_list if not env.startswith(f'{key}=')
     ]
 
@@ -45,7 +45,7 @@ def safe_write_yaml(file_path, data):
         raise e
 
 def main():
-    parser = argparse.ArgumentParser(description='Update Duplicati SMTP configuration', add_help=False)
+    parser = argparse.ArgumentParser(description='Update Urbackup SMTP configuration', add_help=False)
     parser.add_argument('-s', '--state', help='Set to "disabled" to remove SMTP config')
     parser.add_argument('-f', '--from-email', help='From email address')
     parser.add_argument('-r', '--admin-email', help='Admin email address')
@@ -58,7 +58,7 @@ def main():
             
     args = parser.parse_args()
     
-    env_file = "/etc/duplicati/docker-compose-duplicati.yaml"
+    env_file = "/etc/urbackup/docker-compose.yaml"
     
     if not os.path.exists(env_file):
         print(f"Error: {env_file} does not exist")
@@ -70,11 +70,13 @@ def main():
     
     if args.state == "disabled":
         # Remove SMTP variables
-        remove_env_var(compose_data, "DUPLICATI__SEND_MAIL_URL")
-        remove_env_var(compose_data, "DUPLICATI__SEND_MAIL_FROM")
-        remove_env_var(compose_data, "DUPLICATI__SEND_MAIL_TO")
-        remove_env_var(compose_data, "DUPLICATI__SEND_MAIL_SUBJECT")
-        remove_env_var(compose_data, "DUPLICATI__SEND_MAIL_LEVEL")
+        remove_env_var(compose_data, "MAIL_SERVER")
+        remove_env_var(compose_data, "MAIL_FROM")
+        remove_env_var(compose_data, "MAIL_TO")
+        remove_env_var(compose_data, "MAIL_USERNAME")
+        remove_env_var(compose_data, "MAIL_PASSWORD")
+        remove_env_var(compose_data, "MAIL_PORT")
+
         print("Successfully removed email configuration")
     else:
         # Validate required parameters
@@ -86,12 +88,12 @@ def main():
             sys.exit(1)
         
         # Update SMTP variables
-        update_env_var(compose_data, "DUPLICATI__SEND_MAIL_FROM", args.from_email)
-        update_env_var(compose_data, "DUPLICATI__SEND_MAIL_TO", args.admin_email)
-        update_env_var(compose_data, "DUPLICATI__SEND_MAIL_URL", 
-                      f"smtps:/{args.from_email}:{args.smtp_password}@{args.smtp_host}:{args.smtp_port}")
-        update_env_var(compose_data, "DUPLICATI__SEND_MAIL_SUBJECT", "Homecloud Backup Report")
-        update_env_var(compose_data, "DUPLICATI__SEND_MAIL_LEVEL", "Success,Warning,Error")
+        update_env_var(compose_data, "MAIL_FROM", args.from_email)
+        update_env_var(compose_data, "MAIL_TO", args.admin_email)
+        update_env_var(compose_data, "MAIL_USERNAME", args.smtp_user)
+        update_env_var(compose_data, "MAIL_PASSWORD", args.smtp_password)
+        update_env_var(compose_data, "MAIL_SERVER", args.smtp_host)
+        update_env_var(compose_data, "MAIL_PORT", args.smtp_port)
         print("Successfully updated email configuration")
     
     # Save changes

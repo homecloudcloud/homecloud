@@ -76,8 +76,6 @@ def main():
         if images:
             remove_docker_images(images)
         
-        # Remove Jellyfin directory
-        remove_jellyfin_directory()
         response = requests.post(
             "https://localhost:5000/setup_firewall?service=jellyfin",
             verify=False,
@@ -87,6 +85,8 @@ def main():
             print("Firewall rules updated successfully")
         else:
             print(f"Warning: Failed to update firewall rules - HTTP {response.status_code}")
+        # Remove Jellyfin directory
+        remove_jellyfin_directory()
         
         print("Jellyfin removal completed successfully")
         

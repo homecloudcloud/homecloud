@@ -1,0 +1,131 @@
+version: "1.0"
+type: component
+data:
+  name: omv-storage-zfs-pools-expand-form-page
+  type: formPage
+  config:
+    request:
+      service: Zfs
+      post:
+        method: expandPool
+        confirmationDialogConfig:
+          template: confirmation
+          message: _('Do you really want to expand the ZFS pool?')
+    fields:
+      - type: textInput
+        name: name
+        label: _("Pool")
+        value: "{{ _routeParams.pool }}"
+        readonly: true
+      - type: select
+        name: vdevtype
+        label: _("Vdev type")
+        value: "raidz1"
+        store:
+          data:
+            - ["basic", _("Basic")]
+            - ["mirror", _("Mirror")]
+            - ["raidz1", _("RAID-Z1")]
+            - ["raidz2", _("RAID-Z2")]
+            - ["raidz3", _("RAID-Z3")]
+      - type: select
+        name: devices
+        label: _("Devices")
+        multiple: true
+        valueField: devicefile
+        textField: devicefile
+        store:
+          proxy:
+            service: Zfs
+            get:
+              method: getEmptyCandidates
+          sorters:
+            dir: asc
+            prop: devicefile
+        validators:
+          required: true
+          custom:
+            - constraint:
+                operator: if
+                arg0:
+                  operator: eq
+                  arg0:
+                    prop: vdevtype
+                  arg1: 'mirror'
+                arg1:
+                  operator: '>='
+                  arg0:
+                    operator: length
+                    arg0:
+                      prop: devices
+                  arg1: 2
+              errorData: _('At least two devices are required.')
+            - constraint:
+                operator: if
+                arg0:
+                  operator: eq
+                  arg0:
+                    prop: vdevtype
+                  arg1: 'raidz1'
+                arg1:
+                  operator: '>='
+                  arg0:
+                    operator: length
+                    arg0:
+                      prop: devices
+                  arg1: 3
+              errorData: _('At least three devices are required.')
+            - constraint:
+                operator: if
+                arg0:
+                  operator: eq
+                  arg0:
+                    prop: vdevtype
+                  arg1: 'raidz2'
+                arg1:
+                  operator: '>='
+                  arg0:
+                    operator: length
+                    arg0:
+                      prop: devices
+                  arg1: 4
+              errorData: _('At least four devices are required.')
+            - constraint:
+                operator: if
+                arg0:
+                  operator: eq
+                  arg0:
+                    prop: vdevtype
+                  arg1: 'raidz3'
+                arg1:
+                  operator: '>='
+                  arg0:
+                    operator: length
+                    arg0:
+                      prop: devices
+                  arg1: 5
+              errorData: _('At least five devices are required.')
+      - type: select
+        name: devalias
+        label: _("Device alias")
+        value: "id"
+        store:
+          data:
+            - ["id", _("By ID")]
+            - ["path", _("By Path")]
+            - ["dev", _("None")]
+        hint: _("Specifies which device alias should be used. Don't change unless needed.")
+      - type: checkbox
+        name: force
+        label: _("Force creation")
+        value: false
+        hint: _("Forces the creation of the Vded even if errors are reported. Use with extreme caution!")
+    buttons:
+      - template: submit
+        execute:
+          type: url
+          url: "/storage/zfs/pools"
+      - template: cancel
+        execute:
+          type: url
+          url: "/storage/zfs/pools"
