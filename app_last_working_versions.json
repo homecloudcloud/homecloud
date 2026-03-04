@@ -7,5 +7,6 @@
     "traefik": "v3.5.0-rc1",
     "duplicati": "v2.2.0.103",
     "urbackup": "v2.5.x",
-    "linshare": "v6.5.0"
+    "linshare": "v6.5.0",
+    "juicefs": "v1.3.1"
 }
