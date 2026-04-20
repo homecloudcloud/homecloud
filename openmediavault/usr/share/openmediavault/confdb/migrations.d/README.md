@@ -1,7 +1,9 @@
+# ConfDB Migration Scripts
+
 Put your configuration database migration shell scripts here. The files must
 look like:
 
-<DATAMODELID>_<VERSION>[.<EXT>]
+`<DATAMODELID>_<VERSION>[.<EXT>]`
 
 Example:
 conf.service.clamav_0.5.3

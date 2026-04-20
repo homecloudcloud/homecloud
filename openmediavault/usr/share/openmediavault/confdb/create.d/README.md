@@ -1,7 +1,9 @@
+# ConfDB Create Scripts
+
 Put your configuration database creation shell scripts here. The files must
 look like:
 
-<DATAMODELID>[.<EXT>]
+`<DATAMODELID>[.<EXT>]`
 
 Example:
 conf.service.clamav

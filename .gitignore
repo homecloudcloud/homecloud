@@ -5,3 +5,4 @@ __pycache__/
 ../testphp.php
 ../testphpfile.php
 deb/sudoers
+node_modules/
