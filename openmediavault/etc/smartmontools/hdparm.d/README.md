@@ -1,3 +1,5 @@
+# hdparm.d
+
 Insert your executable shell scripts here, which are to be executed by the
 `smartctl-hdparm` systemd service at startup or after waking up from sleep
 mode.

@@ -1,0 +1,17 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Markdown: Lint All",
+      "type": "shell",
+      "command": "npx",
+      "args": [
+        "--yes",
+        "markdownlint-cli",
+        "**/*.md"
+      ],
+      "group": "test",
+      "problemMatcher": []
+    }
+  ]
+}
