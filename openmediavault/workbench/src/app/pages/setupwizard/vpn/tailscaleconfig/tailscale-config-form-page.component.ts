@@ -131,7 +131,7 @@ export class TailscaleConfigFormPageComponent extends BaseFormPageComponent {
     
           {
             type: 'paragraph',
-            title: gettext('Step 2. After login to Tailscale follow navigation >> Skip Introduction >> Settings >> On left navigation bar >> OAuth Clients >> Generate OAuth client >> Description. Set Description to Homecloud >> Select All scope for Read and Write >> Scroll down and press Generate client. Copy/Paste generated values to below fields.')
+            title: gettext('Step 2. After login to Tailscale follow navigation >> Skip Introduction >> Settings >> Trust Credentials >> + Credential >> OAuth >> >> Description. Set Description to Homecloud >> Select All scope for Read and Write >> Scroll down and press Generate Credential. Copy/Paste generated values to below fields.')
           },
           {
             type: 'paragraph',

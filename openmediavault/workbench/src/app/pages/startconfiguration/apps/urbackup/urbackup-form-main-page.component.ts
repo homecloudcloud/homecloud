@@ -40,7 +40,7 @@ import { RpcService } from '~/app/shared/services/rpc.service';
   styleUrls: ['./urbackup-form-main-page.component.scss'],
   encapsulation: ViewEncapsulation.None,
 
-  
+
 })
 
 export class AppsUrbackupMainComponent extends BaseFormPageComponent {

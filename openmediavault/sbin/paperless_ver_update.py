@@ -12,10 +12,48 @@ import time
 from typing import Dict, Optional
 from datetime import datetime
 import urllib3
-
+import secrets
 
 # Disable SSL warnings
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+
+def ensure_secret_key() -> bool:
+    """Ensure PAPERLESS_SECRET_KEY exists in docker-compose.env."""
+    try:
+        env_file = "/etc/paperless/docker-compose.env"
+
+        if os.path.exists(env_file):
+            with open(env_file, "r") as f:
+                lines = f.readlines()
+        else:
+            lines = []
+
+        # Keep existing non-default key
+        for line in lines:
+            if line.startswith("PAPERLESS_SECRET_KEY="):
+                value = line.split("=", 1)[1].strip()
+                if value and value != "change-me":
+                    return True
+
+        # Remove any old/default entry
+        lines = [
+            line for line in lines
+            if not line.startswith("PAPERLESS_SECRET_KEY=")
+        ]
+
+        # Generate and persist a new key
+        secret = secrets.token_urlsafe(64)
+        lines.append(f"PAPERLESS_SECRET_KEY={secret}\n")
+
+        with open(env_file, "w") as f:
+            f.writelines(lines)
+
+        return True
+
+    except Exception as e:
+        print(f"Warning: Failed to ensure secret key: {e}")
+        return False
 
 
 def wait_for_service_ready(timeout=300, interval=10) -> bool:
@@ -291,6 +329,19 @@ def deploy_paperless(version: str, user: str = None, password: str = None) -> st
 
             if not update_compose_image('/etc/paperless/docker-compose.yml', version):
                 return "error: Failed to update compose file"
+            
+            # Set PostgreSQL image to postgres:16 as postgres:18 directory structure won't work
+            try:
+                with open('/etc/paperless/docker-compose.yml', 'r') as f:
+                    compose_data = yaml.safe_load(f)
+                
+                if 'services' in compose_data and 'db' in compose_data['services']:
+                    compose_data['services']['db']['image'] = 'docker.io/library/postgres:16'
+                    
+                    with open('/etc/paperless/docker-compose.yml', 'w') as f:
+                        yaml.dump(compose_data, f)
+            except Exception as e:
+                print(f"Warning: Failed to update PostgreSQL image: {str(e)}")
 
             if user or password:
                 password =  datetime.now().strftime('%b-%d-%Y') 
@@ -318,6 +369,9 @@ def deploy_paperless(version: str, user: str = None, password: str = None) -> st
         if not update_yaml_config():
             return "error: Failed to update YAML config"
 
+        if not ensure_secret_key():
+            return "error: Failed to create PAPERLESS_SECRET_KEY"
+        
         if not pull_docker_images():
             return "error: Failed to pull Docker images"
 

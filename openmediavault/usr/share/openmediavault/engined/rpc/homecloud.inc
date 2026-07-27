@@ -178,10 +178,119 @@ class Homecloud extends \OMV\Rpc\ServiceAbstract {
         $this->registerMethod("urbackup_update_version");
         $this->registerMethod("urbackup_reset_password");
         $this->registerMethod("urbackup_remove");
-
+        $this->registerMethod("restart_urbackup");
+        $this->registerMethod("urbackup_cleanup");
+        $this->registerMethod("reset_urbackup");
+        $this->registerMethod("linshare_get_latest_version");
+        $this->registerMethod("getLinshareServiceStatus");
+        $this->registerMethod("linshare_check_version");
+        $this->registerMethod("linshare_update_version");
+        $this->registerMethod("linshare_remove");
+        $this->registerMethod("restart_linshare");
+        $this->registerMethod("reset_linshare");
+        $this->registerMethod("juicefs_get_latest_version");
+        $this->registerMethod("getJuicefsServiceStatus");
+        $this->registerMethod("juicefs_check_version");
+        $this->registerMethod("juicefs_update_version");
+        $this->registerMethod("juicefs_remove");
+        $this->registerMethod("restart_juicefs");
+        $this->registerMethod("reset_juicefs");
+        $this->registerMethod("juicefs_update_s3_credentials");
+        $this->registerMethod("juicefs_validate_s3_credentials");
+        $this->registerMethod("juicefs_deploy_and_configure");
     }
 
 
+public function juicefs_deploy_and_configure($params, $context) {
+    // Validate the RPC caller context.
+    $this->validateMethodContext($context, [
+        "role" => OMV_ROLE_ADMINISTRATOR
+    ]);
+    $this->validateMethodParams($params, "rpc.homecloud.juicefs_update_s3_credentials");
+
+    return $this->execBgProc(function($bgStatusFilename, $bgOutputFilename)
+            use ($params) {
+
+    $output_err="";
+    $cmdArgs = [];
+    
+    try {
+        // Always remove existing JuiceFS first
+        $cmdArgs[]='echo "Removing existing JuiceFS configuration...";';
+        $cmdArgs[]='/sbin/juicefs_remove.py';
+        $cmd = new \OMV\System\Process("sudo", $cmdArgs);
+        $cmd->setEnv("SHELL", "/bin/sh");
+        $cmd->setRedirect2to1();
+        if (0 !== ($exitStatus = $this->exec($cmd, $output, $bgOutputFilename))) {
+            // Log the error but continue - removal might fail if nothing is installed
+            $cmdArgs = [];
+            $cmdArgs[]='echo "Warning: JuiceFS removal failed or nothing to remove, continuing...";';
+            $cmd = new \OMV\System\Process("echo", $cmdArgs);
+            $this->exec($cmd, $output, $bgOutputFilename);
+        } else {
+            $cmdArgs = [];
+            $cmdArgs[]='echo "JuiceFS removal completed";';
+            $cmd = new \OMV\System\Process("echo", $cmdArgs);
+            $this->exec($cmd, $output, $bgOutputFilename);
+        }
+        
+        $cmdArgs = [];
+        
+        // Get latest version
+        $cmdArgs[]='echo "Getting latest JuiceFS version...";';
+        $versionResult = $this->juicefs_get_latest_version([], $this->getAdminContext());
+        if (empty($versionResult["version"])) {
+            throw new \OMV\Exception("Failed to get latest version");
+        }
+        $version = $versionResult["version"];
+        $cmdArgs[]='echo "Latest version: '.$version.'";';
+        
+        // Check if already deployed
+        $cmdArgs[]='echo "Checking deployment status...";';
+        $checkResult = $this->juicefs_check_version([], $this->getAdminContext());
+        
+        // Deploy if not already deployed
+        if (empty($checkResult["deployed_version"])) {
+            $cmdArgs[]='echo "Deploying JuiceFS version '.$version.'...";';
+            $cmdArgs[]='export NEW_VERSON_ID='.escapeshellarg($version).';';
+            $cmdArgs[]='/sbin/juicefs_ver_update.py $NEW_VERSON_ID';
+            $cmd = new \OMV\System\Process("sudo", $cmdArgs);
+            $cmd->setEnv("SHELL", "/bin/sh");
+            $cmd->setRedirect2to1();
+            if (0 !== ($exitStatus = $this->exec($cmd, $output, $bgOutputFilename))) {
+                throw new \OMV\ExecException($cmd, $output, $exitStatus);
+            }
+            $cmdArgs = [];
+            $cmdArgs[]='echo "Deployment completed";';
+        } else {
+            $cmdArgs[]='echo "JuiceFS already deployed, skipping deployment";';
+        }
+        
+        // Update S3 credentials
+        $cmdArgs[]='echo "Updating S3 credentials...";';
+        $cmdArgs[]='/sbin/juicefs_update_s3_config.py --access-key '.escapeshellarg(trim($params["access_key"])).' --secret-key '.escapeshellarg(trim($params["secret_key"])).' --s3-url '.escapeshellarg(trim($params["s3_url"]));
+        $cmd = new \OMV\System\Process("sudo", $cmdArgs);
+        $cmd->setEnv("SHELL", "/bin/sh");
+        $cmd->setRedirect2to1();
+        if (0 !== ($exitStatus = $this->exec($cmd, $output, $bgOutputFilename))) {
+            throw new \OMV\ExecException($cmd, $output, $exitStatus);
+        }
+        
+        $cmdArgs = [];
+        $cmdArgs[]='echo \'{"status":"success","message":"JuiceFS deployed and configured successfully"}\';';
+        $cmd = new \OMV\System\Process("echo", $cmdArgs);
+        $this->exec($cmd, $output, $bgOutputFilename);
+        
+    } catch (\Exception $e) {
+        $cmdArgs = [];
+        $cmdArgs[]='echo \'{"status":"failure","message":"'.addslashes($e->getMessage()).'"}\';';
+        $cmd = new \OMV\System\Process("echo", $cmdArgs);
+        $this->exec($cmd, $output, $bgOutputFilename);
+    }
+    
+    return $output;
+    });
+}
 
 public function jellyfin_backup_execute($params, $context) {
     $output_err = "";
@@ -3138,6 +3247,43 @@ public function getHotspotStatus($params, $context) {
                 $this->exec($cmd, $output, $bgOutputFilename);
             }
 
+
+            // Reset UrBackup
+            $cmd = new \OMV\System\Process("echo", ["Resetting UrBackup..."]);
+            $this->exec($cmd, $output, $bgOutputFilename);
+            try { 
+                $this->reset_urbackup($params, $context); 
+                $cmd = new \OMV\System\Process("echo", ["✓ UrBackup reset completed"]);
+                $this->exec($cmd, $output, $bgOutputFilename);
+            } catch (\Exception $e) { 
+                $cmd = new \OMV\System\Process("echo", ["✗ UrBackup reset failed: " . $e->getMessage()]);
+                $this->exec($cmd, $output, $bgOutputFilename);
+            }
+
+            // Reset Linshare
+            $cmd = new \OMV\System\Process("echo", ["Resetting Linshare..."]);
+            $this->exec($cmd, $output, $bgOutputFilename);
+            try { 
+                $this->reset_linshare($params, $context); 
+                $cmd = new \OMV\System\Process("echo", ["✓ Linshare reset completed"]);
+                $this->exec($cmd, $output, $bgOutputFilename);
+            } catch (\Exception $e) { 
+                $cmd = new \OMV\System\Process("echo", ["✗ Linshare reset failed: " . $e->getMessage()]);
+                $this->exec($cmd, $output, $bgOutputFilename);
+            }
+
+            // Reset JuiceFS
+            $cmd = new \OMV\System\Process("echo", ["Resetting JuiceFS..."]);
+            $this->exec($cmd, $output, $bgOutputFilename);
+            try { 
+                $this->reset_juicefs($params, $context); 
+                $cmd = new \OMV\System\Process("echo", ["✓ JuiceFS reset completed"]);
+                $this->exec($cmd, $output, $bgOutputFilename);
+            } catch (\Exception $e) { 
+                $cmd = new \OMV\System\Process("echo", ["✗ JuiceFS reset failed: " . $e->getMessage()]);
+                $this->exec($cmd, $output, $bgOutputFilename);
+            }
+
             // Logout VPN
             $cmd = new \OMV\System\Process("echo", ["Logging out VPN..."]);
             $this->exec($cmd, $output, $bgOutputFilename);
@@ -4217,6 +4363,57 @@ function enumerateConfiguredDevicesWithStatus($params, $context) {
     });
     }
 
+    public function linshare_remove($params, $context) {
+         // Validate the RPC caller context.
+		$this->validateMethodContext($context, [
+			"role" => OMV_ROLE_ADMINISTRATOR
+		]);
+
+        return $this->execBgProc(function($bgStatusFilename, $bgOutputFilename)
+				use ($params) {
+
+        
+	    $output_err="";
+		$cmdArgs = [];
+        $cmdArgs[]='echo "Removing Linshare";';
+        $cmdArgs[]='/sbin/linshare_remove.py';
+        $cmd = new \OMV\System\Process("sudo", $cmdArgs);
+			$cmd->setEnv("SHELL", "/bin/sh");
+			$cmd->setRedirect2to1();
+			if (0 !== ($exitStatus = $this->exec($cmd, $output,
+					$bgOutputFilename))) {
+				throw new \OMV\ExecException($cmd,$output, $exitStatus);
+			}
+
+		return $output;
+    });
+    }
+
+    public function juicefs_remove($params, $context) {
+         // Validate the RPC caller context.
+		$this->validateMethodContext($context, [
+			"role" => OMV_ROLE_ADMINISTRATOR
+		]);
+
+        return $this->execBgProc(function($bgStatusFilename, $bgOutputFilename)
+				use ($params) {
+
+        
+	    $output_err="";
+		$cmdArgs = [];
+        $cmdArgs[]='echo "Removing JuiceFS";';
+        $cmdArgs[]='/sbin/juicefs_remove.py';
+        $cmd = new \OMV\System\Process("sudo", $cmdArgs);
+			$cmd->setEnv("SHELL", "/bin/sh");
+			$cmd->setRedirect2to1();
+			if (0 !== ($exitStatus = $this->exec($cmd, $output,
+					$bgOutputFilename))) {
+				throw new \OMV\ExecException($cmd,$output, $exitStatus);
+			}
+		return $output;
+    });
+    }
+
     public function getTailscaleStatus($params, $context) {
         
 	    $output_err="";
@@ -4291,6 +4488,46 @@ function enumerateConfiguredDevicesWithStatus($params, $context) {
         // Get the output from the tailscale status script
         
         $cmd = new \OMV\System\Process("/sbin/check_latest_urbackup_version.py");
+        $cmd->setEnv("SHELL", "/bin/sh");
+        //$cmd->setRedirect2to1();
+        $cmd->execute($output);
+        // Since the script outputs JSON directly, just return the first line
+        return json_decode($output[0], true);
+    }
+
+    public function linshare_get_latest_version($params, $context) {
+        
+	    $output_err="";
+		$cmdArgs = [];
+
+        // Validate the RPC caller context.
+		$this->validateMethodContext($context, [
+			"role" => OMV_ROLE_ADMINISTRATOR
+		]);
+
+        // Get the output from the tailscale status script
+        
+        $cmd = new \OMV\System\Process("/sbin/check_latest_linshare_version.py");
+        $cmd->setEnv("SHELL", "/bin/sh");
+        //$cmd->setRedirect2to1();
+        $cmd->execute($output);
+        // Since the script outputs JSON directly, just return the first line
+        return json_decode($output[0], true);
+    }
+
+    public function juicefs_get_latest_version($params, $context) {
+        
+	    $output_err="";
+		$cmdArgs = [];
+
+        // Validate the RPC caller context.
+		$this->validateMethodContext($context, [
+			"role" => OMV_ROLE_ADMINISTRATOR
+		]);
+
+        // Get the output from the tailscale status script
+        
+        $cmd = new \OMV\System\Process("/sbin/check_latest_juicefs_version.py");
         $cmd->setEnv("SHELL", "/bin/sh");
         //$cmd->setRedirect2to1();
         $cmd->execute($output);
@@ -4455,6 +4692,44 @@ function enumerateConfiguredDevicesWithStatus($params, $context) {
         return json_decode($output[0], true);
     }
 
+    public function linshare_check_version($params, $context) {
+	    $output_err="";
+		$cmdArgs = [];
+
+        // Validate the RPC caller context.
+		$this->validateMethodContext($context, [
+			"role" => OMV_ROLE_ADMINISTRATOR
+		]);
+
+        // Get the output from the tailscale status script
+        
+        $cmd = new \OMV\System\Process("/sbin/check_linshare_version.py");
+        $cmd->setEnv("SHELL", "/bin/sh");
+        //$cmd->setRedirect2to1();
+        $cmd->execute($output);
+        // Since the script outputs JSON directly, just return the first line
+        return json_decode($output[0], true);
+    }
+
+    public function juicefs_check_version($params, $context) {
+	    $output_err="";
+		$cmdArgs = [];
+
+        // Validate the RPC caller context.
+		$this->validateMethodContext($context, [
+			"role" => OMV_ROLE_ADMINISTRATOR
+		]);
+
+        // Get the output from the tailscale status script
+        
+        $cmd = new \OMV\System\Process("/sbin/check_juicefs_version.py");
+        $cmd->setEnv("SHELL", "/bin/sh");
+        //$cmd->setRedirect2to1();
+        $cmd->execute($output);
+        // Since the script outputs JSON directly, just return the first line
+        return json_decode($output[0], true);
+    }
+
     public function paperless_check_version($params, $context) {
 	    $output_err="";
 		$cmdArgs = [];
@@ -4534,6 +4809,33 @@ function enumerateConfiguredDevicesWithStatus($params, $context) {
         // Since the script outputs JSON directly, just return the first line
         return json_decode($output[0], true);
     }
+
+
+   public function juicefs_validate_s3_credentials($params, $context) {
+        // Validate the RPC caller context.
+        $this->validateMethodContext($context, [
+            "role" => OMV_ROLE_ADMINISTRATOR
+        ]);
+        $this->validateMethodParams($params, "rpc.homecloud.juicefs_update_s3_credentials");
+
+        return $this->execBgProc(function($bgStatusFilename, $bgOutputFilename)
+                use ($params) {
+
+        $output_err="";
+        $cmdArgs = [];
+        $cmdArgs[]='echo "Validating S3 credentials...";';
+        $cmdArgs[]='/sbin/juicefs_validate_s3_config.py --access-key '.escapeshellarg(trim($params["access_key"])).' --secret-key '.escapeshellarg(trim($params["secret_key"])).' --s3-url '.escapeshellarg(trim($params["s3_url"]));
+        $cmd = new \OMV\System\Process("sudo", $cmdArgs);
+        $cmd->setEnv("SHELL", "/bin/sh");
+        $cmd->setRedirect2to1();
+        if (0 !== ($exitStatus = $this->exec($cmd, $output, $bgOutputFilename))) {
+            throw new \OMV\ExecException($cmd, $output, $exitStatus);
+        }
+
+        return $output;
+    });
+    }
+
 
     public function vaultwarden_check_version($params, $context) {
         
@@ -4642,6 +4944,91 @@ function enumerateConfiguredDevicesWithStatus($params, $context) {
 			return $output;
     });
     }
+
+    public function linshare_update_version($params, $context) {
+         // Validate the RPC caller context.
+		$this->validateMethodContext($context, [
+			"role" => OMV_ROLE_ADMINISTRATOR
+		]);
+        $this->validateMethodParams($params, "rpc.homecloud.linshare_update_version");
+
+        return $this->execBgProc(function($bgStatusFilename, $bgOutputFilename)
+				use ($params) {
+
+        
+	    $output_err="";
+		$cmdArgs = [];
+        $cmdArgs[]='echo "starting Linshare Update";';
+		$cmdArgs[]='export NEW_VERSON_ID='.escapeshellarg(trim($params["version"])).';';
+        $cmdArgs[]='/sbin/linshare_ver_update.py $NEW_VERSON_ID';
+        $cmd = new \OMV\System\Process("sudo", $cmdArgs);
+		$cmd->setEnv("SHELL", "/bin/sh");
+		$cmd->setRedirect2to1();
+		if (0 !== ($exitStatus = $this->exec($cmd, $output,
+			$bgOutputFilename))) {
+			//throw new \OMV\ExecException($cmd, $output, $exitStatus);
+			throw new \OMV\ExecException($cmd,$output, $exitStatus);
+		    }
+
+			return $output;
+    });
+    }
+
+    public function juicefs_update_version($params, $context) {
+         // Validate the RPC caller context.
+		$this->validateMethodContext($context, [
+			"role" => OMV_ROLE_ADMINISTRATOR
+		]);
+        $this->validateMethodParams($params, "rpc.homecloud.juicefs_update_version");
+
+        return $this->execBgProc(function($bgStatusFilename, $bgOutputFilename)
+				use ($params) {
+
+        
+	    $output_err="";
+		$cmdArgs = [];
+        $cmdArgs[]='echo "starting Juicefs Update";';
+		$cmdArgs[]='export NEW_VERSON_ID='.escapeshellarg(trim($params["version"])).';';
+        $cmdArgs[]='/sbin/juicefs_ver_update.py $NEW_VERSON_ID';
+        $cmd = new \OMV\System\Process("sudo", $cmdArgs);
+		$cmd->setEnv("SHELL", "/bin/sh");
+		$cmd->setRedirect2to1();
+		if (0 !== ($exitStatus = $this->exec($cmd, $output,
+			$bgOutputFilename))) {
+			//throw new \OMV\ExecException($cmd, $output, $exitStatus);
+			throw new \OMV\ExecException($cmd,$output, $exitStatus);
+		    }
+
+			return $output;
+    });
+    }
+
+    public function juicefs_update_s3_credentials($params, $context) {
+    // Validate the RPC caller context.
+        $this->validateMethodContext($context, [
+            "role" => OMV_ROLE_ADMINISTRATOR
+        ]);
+        $this->validateMethodParams($params, "rpc.homecloud.juicefs_update_s3_credentials");
+
+        return $this->execBgProc(function($bgStatusFilename, $bgOutputFilename)
+                use ($params) {
+
+        $output_err="";
+        $cmdArgs = [];
+        $cmdArgs[]='echo "Updating S3 credentials";';
+        $cmdArgs[]='/sbin/juicefs_update_s3_config.py --access-key '.escapeshellarg(trim($params["access_key"])).' --secret-key '.escapeshellarg(trim($params["secret_key"])).' --s3-url '.escapeshellarg(trim($params["s3_url"]));
+        $cmd = new \OMV\System\Process("sudo", $cmdArgs);
+        $cmd->setEnv("SHELL", "/bin/sh");
+        $cmd->setRedirect2to1();
+        if (0 !== ($exitStatus = $this->exec($cmd, $output,
+            $bgOutputFilename))) {
+            throw new \OMV\ExecException($cmd,$output, $exitStatus);
+            }
+            return $output;
+        });
+    }
+
+    
 
     public function vaultwarden_update_version($params, $context) {
          // Validate the RPC caller context.
@@ -5590,6 +5977,61 @@ public function joplin_backup_execute($params, $context) {
 
     }
 
+    public function getLinshareServiceStatus($params, $context) {
+        
+	    $output_err="";
+		$cmdArgs = [];
+
+        // Validate the RPC caller context.
+		$this->validateMethodContext($context, [
+			"role" => OMV_ROLE_ADMINISTRATOR
+		]);
+
+        // Validate the parameters of the RPC service method.
+		//$this->validateMethodParams($params, "rpc.homecloud.getImmichServiceStatus");
+
+        // Get the output from the tatus script
+        
+        $cmd = new \OMV\System\Process("/sbin/check_linshare.py");
+        $cmd->setEnv("SHELL", "/bin/sh");
+        //$cmd->setRedirect2to1();
+        $cmd->execute($output);
+        // Since the script outputs JSON directly, just return the first line
+        return json_decode($output[0], true);
+    }
+
+    public function getJuicefsServiceStatus($params, $context) {
+        
+	    $output_err="";
+		$cmdArgs = [];
+
+        // Validate the RPC caller context.
+		$this->validateMethodContext($context, [
+			"role" => OMV_ROLE_ADMINISTRATOR
+		]);
+
+        // Validate the parameters of the RPC service method.
+		//$this->validateMethodParams($params, "rpc.homecloud.getImmichServiceStatus");
+
+        // Get the output from the tatus script
+        
+        $cmd = new \OMV\System\Process("/sbin/check_juicefs.py");
+        $cmd->setEnv("SHELL", "/bin/sh");
+        //$cmd->setRedirect2to1();
+        $cmd->execute($output);
+        // Since the script outputs JSON directly, just return the first line
+        $result = json_decode($output[0], true);
+        
+        // Add formatted connection_status field
+        if ($result['status'] === 'Running' && isset($result['storage_connected']) && $result['storage_connected']) {
+            $result['connection_status'] = 'Cloud Storage Connected';
+        } else {
+            $result['connection_status'] = 'Not Connected';
+        }
+        
+        return $result;
+    }
+
     public function get_backup_size_immich($params, $context) {
         
 	    $output_err="";
@@ -5820,6 +6262,94 @@ public function joplin_backup_execute($params, $context) {
         return json_decode($output[0], true);
 
     }
+    
+    public function restart_urbackup($params, $context) {
+        
+	    $output_err="";
+		$cmdArgs = [];
+
+        // Validate the RPC caller context.
+		$this->validateMethodContext($context, [
+			"role" => OMV_ROLE_ADMINISTRATOR
+		]);
+
+        // Get the output from the tailscale status script
+        
+        $cmd = new \OMV\System\Process("/sbin/restart_urbackup.sh");
+        $cmd->setEnv("SHELL", "/bin/sh");
+        //$cmd->setRedirect2to1();
+        $cmd->execute($output);
+        // Since the script outputs JSON directly, just return the first line
+        return json_decode($output[0], true);
+
+    }
+
+    public function restart_linshare($params, $context) {
+        
+	    $output_err="";
+		$cmdArgs = [];
+
+        // Validate the RPC caller context.
+		$this->validateMethodContext($context, [
+			"role" => OMV_ROLE_ADMINISTRATOR
+		]);
+
+        // Get the output from the tailscale status script
+        
+        $cmd = new \OMV\System\Process("/sbin/restart_linshare.sh");
+        $cmd->setEnv("SHELL", "/bin/sh");
+        //$cmd->setRedirect2to1();
+        $cmd->execute($output);
+        // Since the script outputs JSON directly, just return the first line
+        return json_decode($output[0], true);
+    }
+
+    public function restart_juicefs($params, $context) {
+        
+	    $output_err="";
+		$cmdArgs = [];
+
+        // Validate the RPC caller context.
+		$this->validateMethodContext($context, [
+			"role" => OMV_ROLE_ADMINISTRATOR
+		]);
+
+        // Get the output from the tailscale status script
+        
+        $cmd = new \OMV\System\Process("/sbin/restart_juicefs.sh");
+        $cmd->setEnv("SHELL", "/bin/sh");
+        //$cmd->setRedirect2to1();
+        $cmd->execute($output);
+        // Since the script outputs JSON directly, just return the first line
+        return json_decode($output[0], true);
+    }
+
+    public function urbackup_cleanup($params, $context) {
+         // Validate the RPC caller context.
+		$this->validateMethodContext($context, [
+			"role" => OMV_ROLE_ADMINISTRATOR
+		]);
+
+        return $this->execBgProc(function($bgStatusFilename, $bgOutputFilename)
+				use ($params) {
+
+        
+	    $output_err="";
+		$cmdArgs = [];
+        $cmdArgs[]='echo "Initiating cleanup";';
+        $cmdArgs[]='/sbin/urbackup_cleanup.sh';
+        $cmd = new \OMV\System\Process("sudo", $cmdArgs);
+			$cmd->setEnv("SHELL", "/bin/sh");
+			$cmd->setRedirect2to1();
+			if (0 !== ($exitStatus = $this->exec($cmd, $output,
+					$bgOutputFilename))) {
+				throw new \OMV\ExecException($cmd,$output, $exitStatus);
+			}
+
+		return $output;
+        });
+    }
+
 
     public function restart_jellyfin($params, $context) {
         
@@ -5919,6 +6449,67 @@ public function joplin_backup_execute($params, $context) {
         // Get the output from the tailscale status script
         
         $cmd = new \OMV\System\Process("/sbin/reset_immich.sh");
+        $cmd->setEnv("SHELL", "/bin/sh");
+        //$cmd->setRedirect2to1();
+        $cmd->execute($output);
+        // Since the script outputs JSON directly, just return the first line
+        return json_decode($output[0], true);
+    }
+
+
+    public function reset_urbackup($params, $context) {
+        
+	    $output_err="";
+		$cmdArgs = [];
+
+        // Validate the RPC caller context.
+		$this->validateMethodContext($context, [
+			"role" => OMV_ROLE_ADMINISTRATOR
+		]);
+
+        // Get the output from the tailscale status script
+        
+        $cmd = new \OMV\System\Process("/sbin/reset_urbackup.sh");
+        $cmd->setEnv("SHELL", "/bin/sh");
+        //$cmd->setRedirect2to1();
+        $cmd->execute($output);
+        // Since the script outputs JSON directly, just return the first line
+        return json_decode($output[0], true);
+    }
+
+    public function reset_linshare($params, $context) {
+        
+	    $output_err="";
+		$cmdArgs = [];
+
+        // Validate the RPC caller context.
+		$this->validateMethodContext($context, [
+			"role" => OMV_ROLE_ADMINISTRATOR
+		]);
+
+        // Get the output from the tailscale status script
+        
+        $cmd = new \OMV\System\Process("/sbin/reset_linshare.sh");
+        $cmd->setEnv("SHELL", "/bin/sh");
+        //$cmd->setRedirect2to1();
+        $cmd->execute($output);
+        // Since the script outputs JSON directly, just return the first line
+        return json_decode($output[0], true);
+    }
+
+    public function reset_juicefs($params, $context) {
+        
+	    $output_err="";
+		$cmdArgs = [];
+
+        // Validate the RPC caller context.
+		$this->validateMethodContext($context, [
+			"role" => OMV_ROLE_ADMINISTRATOR
+		]);
+
+        // Get the output from the tailscale status script
+        
+        $cmd = new \OMV\System\Process("/sbin/reset_juicefs.sh");
         $cmd->setEnv("SHELL", "/bin/sh");
         //$cmd->setRedirect2to1();
         $cmd->execute($output);

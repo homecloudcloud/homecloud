@@ -21,8 +21,18 @@
  */
 namespace Engined\Module;
 
+// Only define the class if ZFS is available.
+if (is_executable('/sbin/zpool') ||
+    is_executable('/usr/sbin/zpool') ||
+    is_executable('/bin/zpool') ||
+    is_executable('/usr/bin/zpool')) {
+
 class ZfsZed extends \OMV\Engine\Module\ServiceAbstract
   implements \OMV\Engine\Notify\IListener, \OMV\Engine\Module\INotification {
+
+    public function isEnabled() : bool {
+        return true; // Already gated at class load level
+    }
 
     public function getName() {
         return "zfszed";
@@ -36,7 +46,7 @@ class ZfsZed extends \OMV\Engine\Module\ServiceAbstract
         return [
             [
                 "id" => "zfs",
-                "type" => getText("Storage"),
+                "type" => gettext("Storage"),
                 "title" => gettext("ZFS ZED")
             ]
         ];
@@ -52,4 +62,6 @@ class ZfsZed extends \OMV\Engine\Module\ServiceAbstract
             "org.openmediavault.conf.system.notification.notification",
             [ $this, "setDirty" ]);
     }
+}
+
 }

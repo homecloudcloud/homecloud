@@ -6,13 +6,15 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from '~/app/shared/shared.module';
 import { AppsUrbackupMainComponent } from './urbackup-form-main-page.component';
 import { AppsUrbackupAccessComponent} from '~/app/pages/startconfiguration/apps/urbackup/access/urbackup-access-form-page.component';
+import { AppsUrbackupCleanupComponent} from '~/app/pages/startconfiguration/apps/urbackup/cleanup/urbackup-cleanup-form-page.component';
 import { AppsUrbackupRestartComponent } from './restart/urbackup-restart-page.component'
 import { PagesModule } from '~/app/core/pages/pages.module';
 import { CoreModule } from '~/app/core/core.module';
 import { AppsUrbackupPasswordResetComponent } from './password/urbackup-password-page.component';
 import {AppsUrbackupPasswordResetDisplayComponent} from './password/urbackup-password-display-page.component';
 import {AppsUrbackupUpdateFormPageComponent} from './update/urbackup-update-form-page.component';
-
+import {AppsUrBackupDBResetComponent} from './reset/urbackup-db_reset-page.component';
+import {AppsUrbackupCloudstorageDisplayComponent} from './cloudstorage/urbackup-cloudstorage-display-page.component';
 
 
 /*const routes: Routes = [
@@ -24,10 +26,13 @@ import {AppsUrbackupUpdateFormPageComponent} from './update/urbackup-update-form
   declarations: [
     AppsUrbackupMainComponent,
     AppsUrbackupAccessComponent,
+    AppsUrbackupCleanupComponent,
     AppsUrbackupRestartComponent,
     AppsUrbackupPasswordResetComponent,
     AppsUrbackupPasswordResetDisplayComponent,
-    AppsUrbackupUpdateFormPageComponent
+    AppsUrbackupUpdateFormPageComponent,
+    AppsUrBackupDBResetComponent,
+    AppsUrbackupCloudstorageDisplayComponent
   ],
   imports: [
     CommonModule,
@@ -39,10 +44,13 @@ import {AppsUrbackupUpdateFormPageComponent} from './update/urbackup-update-form
   exports:[
     AppsUrbackupMainComponent,
     AppsUrbackupAccessComponent,
+    AppsUrbackupCleanupComponent,
     AppsUrbackupRestartComponent,
     AppsUrbackupPasswordResetComponent,
     AppsUrbackupPasswordResetDisplayComponent,
-    AppsUrbackupUpdateFormPageComponent
+    AppsUrbackupUpdateFormPageComponent,
+    AppsUrBackupDBResetComponent,
+    AppsUrbackupCloudstorageDisplayComponent
   ],
 })
 export class UrbackupModule { }

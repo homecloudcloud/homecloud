@@ -10,6 +10,7 @@ import requests
 from packaging import version
 from typing import Dict, Tuple, Optional
 import urllib3
+import platform
 
 
 # Disable SSL warnings
@@ -120,6 +121,14 @@ WantedBy=multi-user.target
         print(f"Error managing systemd service: {e}")
         sys.exit(1)
 
+def get_platform_compose_file():
+    """Get the appropriate docker-compose file based on platform architecture"""
+    arch = platform.machine().lower()
+    if arch in ['x86_64', 'amd64', 'x86']:
+        return '/etc/homecloud/docker-compose-joplin-x86.yml'
+    else:
+        return '/etc/homecloud/docker-compose-joplin.yml'
+    
 def update_yaml_configuration(target_version: str) -> None:
     """Update YAML configuration"""
     try:
@@ -188,7 +197,8 @@ def main():
         check_and_create_systemd_service()
         
         # Copy configuration files
-        shutil.copy("/etc/homecloud/docker-compose-joplin.yml", "/etc/joplin/docker-compose.yml")
+        source_file = get_platform_compose_file()
+        shutil.copy(source_file, "/etc/joplin/docker-compose.yml")
         shutil.copy("/etc/homecloud/joplin.env", "/etc/joplin/.env")
         
         update_yaml_configuration(target_version)

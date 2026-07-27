@@ -19,6 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+// Do not register ZFS module if ZFS userspace tools are not available.
+if (!is_executable('/sbin/zpool') &&
+    !is_executable('/usr/sbin/zpool') &&
+    !is_executable('/bin/zpool') &&
+    !is_executable('/usr/bin/zpool')) {
+    return;
+}
  class OMVModuleZFS extends \OMV\Engine\Module\ServiceAbstract
     implements \OMV\Engine\Notify\IListener {
     /**

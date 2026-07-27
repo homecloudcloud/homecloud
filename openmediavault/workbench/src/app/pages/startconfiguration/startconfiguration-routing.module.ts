@@ -105,10 +105,19 @@ import { AppsCloudbackupPasswordResetDisplayComponent } from './apps/cloudbackup
 import { AppsCloudbackupUpdateFormPageComponent } from './apps/cloudbackup/update/cloudbackup-update-form-page.component';
 import { AppsUrbackupMainComponent } from './apps/urbackup/urbackup-form-main-page.component';
 import { AppsUrbackupAccessComponent } from './apps/urbackup/access/urbackup-access-form-page.component';
+import { AppsUrbackupCleanupComponent } from './apps/urbackup/cleanup/urbackup-cleanup-form-page.component';
 import { AppsUrbackupRestartComponent } from './apps/urbackup/restart/urbackup-restart-page.component';
 import { AppsUrbackupPasswordResetComponent } from './apps/urbackup/password/urbackup-password-page.component';
 import { AppsUrbackupPasswordResetDisplayComponent } from './apps/urbackup/password/urbackup-password-display-page.component';
 import { AppsUrbackupUpdateFormPageComponent } from './apps/urbackup/update/urbackup-update-form-page.component';
+import { AppsUrBackupDBResetComponent } from './apps/urbackup/reset/urbackup-db_reset-page.component';
+import { AppsLinshareMainComponent } from './apps/filesharing/linshare-main-page.component';
+import {AppsLinshareAccessComponent} from './apps/filesharing/access/linshare-access-form-page.component'
+import {AppsLinshareRestartComponent} from './apps/filesharing/restart/linshare-restart-page.component'
+import { AppsLinshareResetComponent } from './apps/filesharing/reset/linshare_reset-page.component';
+import { AppsUrbackupCloudstorageDisplayComponent } from './apps/urbackup/cloudstorage/urbackup-cloudstorage-display-page.component';
+
+
 
 const routes: Routes = [
   {
@@ -937,7 +946,6 @@ const routes: Routes = [
             data:{
               title: gettext('Update'),
               editing: true
-
             }
           }
         ]
@@ -994,12 +1002,73 @@ const routes: Routes = [
             ]
           },
           {
+            path: 'cleanup',
+            component: AppsUrbackupCleanupComponent,
+            data: {
+              title: gettext('Cleanup'),
+              editing: true
+            }
+          },
+          {
             path: 'update',
             component: AppsUrbackupUpdateFormPageComponent,
             data:{
               title: gettext('Update'),
               editing: true
-
+            }
+          },
+          {
+            path: 'reset',
+            component: AppsUrBackupDBResetComponent,
+            data:{
+              title: gettext('Reset'),
+              editing: true
+            }
+          },
+          {
+            path: 'cloudstorage',
+            component: AppsUrbackupCloudstorageDisplayComponent,
+            data:{
+              title: gettext('CloudStorage'),
+              editing: true
+            }
+          }
+        ]
+      },
+      {
+        path: 'filesharing',
+        data: { title: gettext('Filesharing') },
+  //    component: ,
+        children: [
+          {
+            path: '',
+            component: AppsLinshareMainComponent,
+            data: {
+              editing: true
+            }
+          },
+          {
+            path: 'access',
+            component: AppsLinshareAccessComponent,
+            data: {
+              title: gettext('Access'),
+              editing: true
+            }
+          },
+          {
+            path: 'restart',
+            component: AppsLinshareRestartComponent,
+            data: {
+              title: gettext('Restart'),
+              editing: true
+            }
+          },
+          {
+            path: 'reset',
+            component: AppsLinshareResetComponent,
+            data:{
+              title: gettext('Reset'),
+              editing: true
             }
           }
         ]

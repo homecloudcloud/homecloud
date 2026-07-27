@@ -525,6 +525,11 @@ case "$1" in
 		fi
 
 		########################################################################
+		# Activate package triggers
+		########################################################################
+		dpkg-trigger update-workbench || :
+
+		########################################################################
 		# Trigger the restart of the omv-engined daemon to load and use the
 		# latest configuration database.
 		########################################################################
@@ -547,7 +552,7 @@ case "$1" in
 		for trigger in $2; do
 			case "${trigger}" in
 				update-workbench)
-					echo "Updating workbench configuration files ..."
+					echo "Updating workbench configuration files ..."				
 					omv-mkworkbench all || :
 				;;
 

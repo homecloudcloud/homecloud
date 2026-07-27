@@ -1,0 +1,8 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "startconfiguration.apps.urbackup.cleanup"
+  position: 80
+  text: _("Cleanup")
+  icon: "mdi:delete-forever"
+  url: "/startconfiguration/apps/urbackup/cleanup"

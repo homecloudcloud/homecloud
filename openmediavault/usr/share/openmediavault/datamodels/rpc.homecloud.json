@@ -723,5 +723,133 @@
 			}
         }
     }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.linshare_get_latest_version",
+    "params": {
+        "type": "object",
+        "properties": {
+            "version": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.getLinshareServiceStatus",
+    "params": {
+        "type": "object",
+        "properties": {
+            "status": {
+				"type": "string",
+				"required": true
+			},
+            "hostname": {
+				"type": "string",
+				"required": true
+			},
+            "api_endpoint": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.linshare_update_version",
+    "params": {
+        "type": "object",
+        "properties": {
+            "version": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.linshare_reset_password",
+    "params": {
+        "type": "object",
+        "properties": {
+            "user": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.juicefs_get_latest_version",
+    "params": {
+        "type": "object",
+        "properties": {
+            "version": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.getJuicefsServiceStatus",
+    "params": {
+        "type": "object",
+        "properties": {
+            "status": {
+				"type": "string",
+				"required": true
+			},
+            "hostname": {
+				"type": "string",
+				"required": true
+			},
+            "api_endpoint": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.juicefs_update_version",
+    "params": {
+        "type": "object",
+        "properties": {
+            "version": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
+},
+{
+    "type": "rpc",
+    "id": "rpc.homecloud.juicefs_update_s3_credentials",
+    "params": {
+        "type": "object",
+        "properties": {
+            "access_key": {
+				"type": "string",
+				"required": true
+			},
+            "secret_key": {
+				"type": "string",
+				"required": true
+			},
+            "s3_url": {
+				"type": "string",
+				"required": true
+			}
+        }
+    }
 }
 ]

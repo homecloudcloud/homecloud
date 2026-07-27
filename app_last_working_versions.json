@@ -1,9 +1,12 @@
 {
-    "immich": "v2.3.1",
+    "immich": "v3.0.1",
     "joplin": "v3.4.2",
-    "paperless-ngx": "v2.18.3",
+    "paperless-ngx": "v2.20.13",
     "jellyfin": "v10.11.0-rc5",
-    "vaultwarden": "1.34.3",
+    "vaultwarden": "1.37.0",
     "traefik": "v3.5.0-rc1",
-    "duplicati": "v2.1.0.5"
+    "duplicati": "v2.3.0.4",
+    "urbackup": "v2.5.x",
+    "linshare": "v6.5.0",
+    "juicefs": "v1.3.1"
 }

@@ -112,7 +112,7 @@ export class VPNMainComponent extends BaseFormPageComponent implements AfterView
         confirmationDialogConfig:{
           template: 'confirmation',
           title: '',
-          message: 'If VPN is not configured, You will not be able to access Homecloud from outside your local network. Some applications like Password manager will also not work without VPN. Do you still want to skip?<b>Note:</b> You can also configure VPN later from Homecloud Dashboard.'
+          message: 'If VPN is not configured, You will not be able to access Homecloud from outside your local network. Some applications like Password manager require certificates generated using VPN. Do you still want to skip?<b>Note:</b> You can also configure VPN later from Homecloud Dashboard.'
         },
         
         execute: {

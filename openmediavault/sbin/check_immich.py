@@ -4,6 +4,8 @@ import json
 import subprocess
 import os
 import requests
+import platform
+import socket
 from urllib3.exceptions import InsecureRequestWarning
 
 # Disable SSL warnings
@@ -56,6 +58,10 @@ def check_directories():
 def get_local_ip():
     """Get local IP address"""
     try:
+        arch = platform.machine().lower()    
+        if arch in ['x86_64', 'amd64', 'x86']:
+            hostname = socket.gethostname()
+            return hostname
         # Try using ip route
         cmd = "ip route get 1 2>/dev/null | awk '{print $7; exit}' | grep -E '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$'"
         result = subprocess.run(cmd, shell=True, capture_output=True, text=True)

@@ -1,0 +1,8 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "startconfiguration.apps.filesharing"
+  position: 70
+  text: _("Filesharing")
+  icon: "mdi:note-multiple-outline"
+  url: "/startconfiguration/apps/filesharing"

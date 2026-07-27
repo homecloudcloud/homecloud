@@ -193,10 +193,52 @@ def check_internet_connectivity():
 def get_platform_compose_file():
     """Get the appropriate docker-compose file based on platform architecture"""
     arch = platform.machine().lower()
-    if arch in ['x86_64', 'amd64']:
-        return '/etc/homecloud/docker-compose-urbackup-x86.yml'
+    if arch in ['x86_64', 'amd64', 'x86']:
+        return '/etc/homecloud/docker-compose-urbackup.yml'
+        #return '/etc/homecloud/docker-compose-urbackup-x86.yml' Let's use ZFS only in custom deployments
     else:
         return '/etc/homecloud/docker-compose-urbackup.yml'
+
+def create_duplicati_backup_template():
+    """Create backup template for Duplicati"""
+    try:
+        if (os.path.exists('/etc/systemd/system/duplicati.service') and
+            os.path.exists('/var/lib/duplicati/config/Duplicati/Duplicati-server.sqlite') and
+            os.path.exists('/etc/homecloud/UrBackup-Duplicati-Template.json') and
+            os.path.exists('/sbin/duplicati-import.py')):
+            subprocess.run(['systemctl', 'stop', 'duplicati.service'], check=True)
+            subprocess.run(['/sbin/duplicati-import.py', '--db', 
+                          '/var/lib/duplicati/config/Duplicati/Duplicati-server.sqlite',
+                          '--json', '/etc/homecloud/UrBackup-Duplicati-Template.json'],
+                         check=True)
+            
+            # Import snapshot template if it exists
+            if os.path.exists('/etc/homecloud/UrBackup-Duplicati-Snapshot-Template.json'):
+                subprocess.run(['/sbin/duplicati-import.py', '--db', 
+                              '/var/lib/duplicati/config/Duplicati/Duplicati-server.sqlite',
+                              '--json', '/etc/homecloud/UrBackup-Duplicati-Snapshot-Template.json'],
+                             check=True)
+            
+            subprocess.run(['systemctl', 'start', 'duplicati.service'], check=True)
+    except Exception:
+        pass
+
+def copy_hook_files():
+    """Check and copy hook files to shared directory"""
+    hook_files = [
+        '/etc/duplicati/duplicati_backup_hook_urbackup_pre.sh',
+        '/etc/duplicati/duplicati_backup_hook_urbackup_post.sh'
+    ]
+    
+    # Check if both hook files exist
+    if all(os.path.exists(file) for file in hook_files):
+        shared_dir = '/var/lib/duplicati/shared'
+        if os.path.exists(shared_dir):
+            for hook_file in hook_files:
+                dest_file = os.path.join(shared_dir, os.path.basename(hook_file))
+                shutil.copy2(hook_file, dest_file)
+                os.chmod(dest_file, 0o755)
+                print_status(f"Copied and made executable: {hook_file} -> {dest_file}")
 
 def run_docker_pull():
     """Run docker compose pull with live output"""
@@ -293,6 +335,7 @@ def main():
 
             update_compose_version(target_version)
 
+
         else:
             print_status("Starting version update...")
             print_status("Checking currently deployed version...")
@@ -356,6 +399,9 @@ def main():
             print_status("Failed to update YAML configuration", error=True)
             sys.exit(1)
 
+        
+        # Copy hook files if they exist
+        copy_hook_files()
         
         # Pull latest images
         print_status("Pulling latest Docker images...")

@@ -1,0 +1,6 @@
+Package: homecloud
+Version: 0.78
+Maintainer: Libernest Technologies Pvt Ltd
+Architecture: all
+Depends: expect, openmediavault (>=7.1.0-21), python3-boto3
+Description: Essential files for homecloud

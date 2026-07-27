@@ -159,7 +159,7 @@ export class TailscaleConfigFormPageComponent extends BaseFormPageComponent {
 
       {
         type: 'paragraph',
-        title: gettext('Step 2. Configure Homecloud to connect to Tailscale VPN: Post login to Tailscale >> Skip Introduction >> Settings >> On left navigation bar >> OAuth Clients >> Generate OAuth client >> Description = Homecloud >> Select All scope for Read and Write >> Scroll down and press Generate client.')
+        title: gettext('Step 2. Configure Homecloud to connect to Tailscale VPN: Post login to Tailscale >> Skip Introduction >> Settings >>  Trust Credentials >> + Credential >> OAuth >> Description = Homecloud >> Scopes -> Select All scope for Read and Write >> Scroll down and press Generate Credential.')
       },
       {
         type: 'divider',

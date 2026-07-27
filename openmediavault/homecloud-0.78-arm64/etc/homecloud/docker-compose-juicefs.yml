@@ -1,0 +1,40 @@
+services:
+   juicefs:
+    cap_add:
+    - SYS_ADMIN
+    container_name: juicefs
+    devices:
+    - /dev/fuse:/dev/fuse
+    entrypoint:
+    - sh
+    - -c
+    - "juicefs mount --cache-dir /var/lib/juicefs --cache-size 40000 --open-cache\
+      \ 300 --attr-cache 300 --entry-cache 300 -o allow_other \"sqlite3:///var/lib/juicefs/meta.db\"\
+      \ /mnt/jfs & \nuntil mountpoint -q /mnt/jfs; do sleep 1; done\nchown 994:100\
+      \ /mnt/jfs\necho \"JuiceFS is ready\"\nwait\n"
+    environment:
+    - TZ=Europe/London
+    - ACCESS_KEY=
+    - SECRET_KEY=
+    - JFS_NAME=urbackupfs
+    - JFS_META=sqlite3:///var/lib/juicefs/meta.db
+    - JFS_STORAGE=s3
+    - JFS_BUCKET=
+    - JFS_MOUNT=/mnt/jfs
+    healthcheck:
+      interval: 5s
+      retries: 3
+      test:
+      - CMD
+      - sh
+      - -c
+      - mountpoint -q /mnt/jfs
+      timeout: 10s
+    image: juicedata/mount:ce-v1.2.1
+    network_mode: host
+    privileged: true
+    restart: unless-stopped
+    volumes:
+    - /var/lib/juicefs:/var/lib/juicefs
+    - /var/lib/jfsdata:/mnt/jfs:shared
+    - /dev:/dev

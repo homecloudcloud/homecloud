@@ -14,6 +14,7 @@ import { JoplinModule } from './notes/joplin.module';
 import { JellyfinModule } from './media/jellyfin.module';
 import { CloudbackupModule } from './cloudbackup/cloudbackup.module';
 import { UrbackupModule } from './urbackup/urbackup.module';
+import { LinshareModule } from './filesharing/linshare.module';
 import { PagesModule } from '~/app/core/pages/pages.module';
 import { CoreModule } from '~/app/core/core.module';
 import { AppsMainComponent } from './apps-main-page.component';
@@ -39,6 +40,7 @@ import { AppsMainComponent } from './apps-main-page.component';
     JellyfinModule,
     CloudbackupModule,
     UrbackupModule,
+    LinshareModule,
     PagesModule,
     CoreModule
     
@@ -52,7 +54,8 @@ import { AppsMainComponent } from './apps-main-page.component';
     JoplinModule,
     JellyfinModule,
     CloudbackupModule,
-    UrbackupModule
+    UrbackupModule,
+    LinshareModule
   ],
 })
 export class AppsModule { }

@@ -1,0 +1,61 @@
+{
+  "CreatedByVersion": "2.2.0.103",
+  "Schedule": null,
+  "Backup": {
+    "ID": "7",
+    "ExternalID": null,
+    "Name": "Template for 'UrBackup-Snapshot based'",
+    "Description": "This template is configured to take backup of UrBackup app using snapshot (if supported by system).\n Snapshot enable keeping UrBackup service running while taking backup \n. \n**Imp: When restoring the restore path need to be changed manually to /appsbackup/urbackup as snapshot path is readonly. \nThis enables to keep an additional copy of UrBackup app and all the devices that are being backed up by it.\nTo use, go to Configuration and edit:\n\n1. Encryption Passphrase (IMP: Keep it safe as it protects data on cloud and is REQUIRED for recovery)\n2. Backup destination (Select cloud of choice OR external USB disk that appears under external-storage folder, if plugged in to Homecloud)\n3. Schedule of automatic backups and how long to keep backups.\n\nNOTE: When backup process is running, app will not be  accessible. So schedule backup during nights or during non use hours.",
+    "Tags": [],
+    "TargetURL": "s3://UrBackup-archival?s3-disable-chunk-encoding=true\u0026use-ssl=true",
+    "DBPath": "/data/Duplicati/JJTCJYGMEA.sqlite",
+    "Sources": [
+      "/appsbackup/urbackup-snapshot/urbackup/",
+      "/appsbackup/config/urbackup/",
+      "/appsbackup/config/systemd/system/urbackup.service"
+    ],
+    "Settings": [
+      {
+        "Filter": "",
+        "Name": "--no-encryption",
+        "Value": "True",
+        "Argument": null
+      },
+      {
+        "Filter": "",
+        "Name": "dblock-size",
+        "Value": "50MB",
+        "Argument": null
+      },
+      {
+        "Filter": "",
+        "Name": "retention-policy",
+        "Value": "1W:1D,4W:1W,12M:1M",
+        "Argument": null
+      },
+      {
+        "Filter": "",
+        "Name": "--run-script-before",
+        "Value": "/shared/duplicati_backup_hook_urbackup_snapshot_pre.sh",
+        "Argument": null
+      },
+      {
+        "Filter": "",
+        "Name": "--run-script-after",
+        "Value": "/shared/duplicati_backup_hook_urbackup_post.sh",
+        "Argument": null
+      }
+    ],
+    "Filters": [],
+    "Metadata": {
+      "LastErrorDate": "20260127T094224Z",
+      "LastErrorMessage": "No source folders specified for backup"
+    },
+    "IsTemporary": false
+  },
+  "DisplayNames": {
+    "/appsbackup/urbackup-snapshot/urbackup/": "urbackup",
+    "/appsbackup/config/urbackup/": "urbackup",
+    "/appsbackup/config/systemd/system/urbackup.service": "urbackup.service"
+  }
+}

@@ -1,0 +1,142 @@
+services:
+  backend:
+    container_name: linshare_backend
+    restart: on-failure
+    image: linagora/linshare-backend:6.5.0
+    links:
+      - database:linshare_database
+      - mongodb:linshare_mongodb
+      - thumbnail-server:linshare_thumbnail-server
+    depends_on:
+      - database
+      - mongodb
+      - thumbnail-server
+    volumes:
+      - /var/lib/linshare/data/linshare_data/lib:/var/lib/linshare
+      - /var/lib/linshare/conf/catalina.properties:/usr/local/tomcat/conf/catalina.properties
+      - /var/lib/linshare/conf/log4j.properties:/etc/linshare/log4j.properties
+    healthcheck:
+        test: ["CMD", "curl", "-k", "-s", "-f", "https://localhost:8301/linshare/"]
+        interval: 30s
+        timeout: 10s
+        retries: 3
+        start_period: 40s
+    environment:
+       # These variables are mandatory
+       - JAVA_OPTS=-XX:-UseContainerSupport
+       - SMTP_HOST=linshare_mail
+       - SMTP_PORT=25
+       - CLAMAV_HOST=linshare_clamav
+       - POSTGRES_HOST=linshare_database
+       - POSTGRES_PORT=5432
+       - POSTGRES_USER=linshare
+       - POSTGRES_PASSWORD=linshare
+       - CLAMAV_PORT=3310
+       - MONGODB_DATA_REPLICA_SET=linshare_mongodb:27017
+       - MONGODB_SMALLFILES_REPLICA_SET=linshare_mongodb:27017
+       - MONGODB_USER=linshare
+       - MONGODB_PASSWORD=linshare
+       - THUMBNAIL_ENABLE=true 
+  clamav:
+    container_name: linshare_clamav
+    image: mkodockx/docker-clamav
+    restart: unless-stopped
+  database:
+    container_name: linshare_database
+    environment:
+    - PGDATA=/var/lib/postgresql/data/pgdata
+    - POSTGRES_USER=linshare
+    - POSTGRES_PASSWORD=linshare
+    image: linagora/linshare-database:6.5.0
+    restart: on-failure
+    volumes:
+    - /var/lib/linshare/data/postgres:/var/lib/postgresql/data
+  init:
+    container_name: linshare_init
+    depends_on:
+    - backend
+    environment:
+      - LS_SERVER_HOST=backend
+      - LS_SERVER_PORT=8080
+      - LS_LDAP_NAME=ldap
+      - LS_LDAP_URL=ldap://ldap:1389
+      - LS_LDAP_BASE_DN=ou=People,dc=linshare,dc=org
+      - LS_LDAP_DN=cn=linshare,dc=linshare,dc=org
+      - LS_LDAP_PW=linshare
+      - LS_DOMAIN_PATTERN_NAME=pattern-demo
+      - LS_DOMAIN_PATTERN_MODEL=a4620dfc-dc46-11e8-a098-2355f9d6585a
+    image: linagora/linshare-init:6.5.0
+    restart: on-failure
+  mongodb:
+    container_name: linshare_mongodb
+    environment:
+    - MONGO_INITDB_ROOT_USERNAME=linshare
+    - MONGO_INITDB_ROOT_PASSWORD=linshare
+    image: mongo:4.2
+    restart: on-failure
+    volumes:
+    - /var/lib/linshare/data/mongodb:/data/db
+  thumbnail-server:
+    container_name: linshare_thumbnail
+    image: linagora/linshare-thumbnail-server:2.1.1
+    restart: unless-stopped
+  ui-admin:
+    container_name: linshare_ui_admin
+    depends_on:
+    - backend
+    environment:
+    - EXTERNAL_URL=https://demo.homecloud.cloud:8301
+    - TOMCAT_URL=backend
+    - TOMCAT_PORT=8080
+    image: linagora/linshare-ui-admin:6.5.0
+    labels:
+    - traefik.enable=true
+    - traefik.http.routers.linshare-admin.entrypoints=linshare
+    - traefik.http.routers.linshare-admin.rule=PathPrefix(`/admin`) || PathPrefix(`/new`)
+    - traefik.http.routers.linshare-admin.tls=true
+    - traefik.http.services.linshare-admin.loadbalancer.server.port=80
+    - traefik.http.routers.linshare-admin.middlewares=linshare-admin-strip
+    - traefik.http.middlewares.linshare-admin-strip.stripprefix.prefixes=/admin
+    - traefik.http.routers.linshare-admin.priority=100
+    restart: unless-stopped
+  ui-user:
+    container_name: linshare_ui_user
+    depends_on:
+    - backend
+    environment:
+    - EXTERNAL_URL=https://demo.homecloud.cloud:8301
+    - TOMCAT_URL=backend
+    - TOMCAT_PORT=8080
+    image: linagora/linshare-ui-user:6.5.0
+    labels:
+    - traefik.enable=true
+    - traefik.http.routers.linshare.entrypoints=linshare
+    - traefik.http.routers.linshare.rule=PathPrefix(`/`)
+    - traefik.http.routers.linshare.tls=true
+    - traefik.http.routers.linshare.priority=1
+    - traefik.http.services.linshare.loadbalancer.server.port=80
+    restart: unless-stopped
+  ldap:
+        image: linagora/linshare-ldap-for-tests:2.0
+        container_name: linshare_ldap
+        ports:
+          - "1389:1389"
+  ui-upload-request:
+    container_name: linshare_ui-upload-request
+    image: linagora/linshare-ui-upload-request:6.5.0
+    depends_on:
+    - backend
+    environment:
+    - EXTERNAL_URL=https://demo.homecloud.cloud:8301
+    - TOMCAT_URL=backend
+    - TOMCAT_PORT=8080
+    labels:
+    - traefik.enable=true
+    - traefik.http.routers.uploadrequest.entrypoints=linshare
+    - traefik.http.routers.uploadrequest.rule=PathPrefix(`/upload-request`)
+    - traefik.http.routers.uploadrequest.tls=true
+    - traefik.http.routers.uploadrequest.priority=100
+    - traefik.http.services.uploadrequest.loadbalancer.server.port=80
+    - traefik.http.routers.uploadrequest.middlewares=uploadrequest-strip
+    - traefik.http.middlewares.uploadrequest-strip.stripprefix.prefixes=/upload-request
+version: '3.9'
