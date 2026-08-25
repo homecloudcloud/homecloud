@@ -28,7 +28,7 @@ fi
 cp -f /opt/homecloud/docker-compose.yml /etc/password-reset/docker-compose.yml 
 cp -f /opt/homecloud/docker-compose-duplicati.yaml /etc/duplicati/docker-compose-duplicati.yaml
 cp -f /opt/homecloud/docker-compose-duplicati.yaml /etc/homecloud/docker-compose-duplicati.yaml
-cp -f /etc/dnsmasq.conf.orig /etc/dnsmasq.conf
+cp -f /etc/dnsmasq.conf.orig /etc/dnsmasq.conf || true
 cp -f /etc/homecloud/logrotate.conf /etc/logrotate.conf
 cp -f /etc/homecloud/journald.conf /etc/systemd/journald.conf
 cp -f /etc/homecloud/95openmediavault-unattended-upgrades /etc/apt/apt.conf.d/95openmediavault-unattended-upgrades
@@ -83,64 +83,72 @@ chmod a-x /etc/apt/update-pre-invoke.d/README 2>/dev/null || true
 chmod a-x /etc/apt/update-post-invoke.d/README 2>/dev/null || true
 chmod a-x /etc/apt/update-post-invoke-success.d/README 2>/dev/null || true
 
-# Delete all existing firewall rules first
-EXISTING_RULES=$(omv-rpc -u admin 'Iptables' 'getRules')
-echo "$EXISTING_RULES" | jq -r '.[].uuid' | while read uuid; do
-    omv-rpc -u admin 'Iptables' 'deleteRule' "{\"uuid\":\"$uuid\"}"
-done
+FIREWALL_JSON="/opt/homecloud/firewall/firewall_rules_full.json"
+FIREWALL_VERSION_FILE="/etc/homecloud/firewall.version"
+CURRENT_FIREWALL_VERSION=1
 
-# Read the JSON file and create firewall rules
-JSON_FILE="/opt/homecloud/firewall/firewall_rules_full.json"
+###############################################################################
+# Firewall initialization and migrations
+###############################################################################
 
-# Build the rules array
-RULES_JSON="["
-FIRST_RULE=true
+mkdir -p /etc/homecloud
 
-while IFS= read -r line; do
-    # Extract rule data from JSON
-    RULENUM=$(echo "$line" | jq -r '.rulenum')
-    CHAIN=$(echo "$line" | jq -r '.chain')
-    ACTION=$(echo "$line" | jq -r '.action')
-    SOURCE=$(echo "$line" | jq -r '.source')
-    SPORT=$(echo "$line" | jq -r '.sport')
-    DESTINATION=$(echo "$line" | jq -r '.destination')
-    DPORT=$(echo "$line" | jq -r '.dport')
-    PROTOCOL=$(echo "$line" | jq -r '.protocol')
-    EXTRAOPTIONS=$(echo "$line" | jq -r '.extraoptions')
-    COMMENT=$(echo "$line" | jq -r '.comment')
-    
-    # Generate new UUID for each rule
-    OMV_FIREWALL_UUID=$(/usr/sbin/omv-env get OMV_CONFIGOBJECT_NEW_UUID | cut -d= -f2)
-    
-    # Add comma separator for subsequent rules
-    if [ "$FIRST_RULE" = false ]; then
-        RULES_JSON="$RULES_JSON,"
-    fi
-    FIRST_RULE=false
-    
-    # Build rule JSON
-    RULES_JSON="$RULES_JSON{
-  \"uuid\": \"$OMV_FIREWALL_UUID\",
-  \"family\": \"inet\",
-  \"rulenum\": $RULENUM,
-  \"chain\": \"$CHAIN\",
-  \"action\": \"$ACTION\",
-  \"source\": \"$SOURCE\",
-  \"sport\": \"$SPORT\",
-  \"destination\": \"$DESTINATION\",
-  \"dport\": \"$DPORT\",
-  \"protocol\": \"$PROTOCOL\",
-  \"extraoptions\": \"$EXTRAOPTIONS\",
-  \"comment\": \"$COMMENT\"
+if [ ! -f "$FIREWALL_VERSION_FILE" ]; then
+
+    echo "Initializing HomeCloud firewall..."
+
+    RULES_JSON="["
+    FIRST_RULE=true
+
+    while IFS= read -r line; do
+
+        RULENUM=$(echo "$line" | jq -r '.rulenum')
+        CHAIN=$(echo "$line" | jq -r '.chain')
+        ACTION=$(echo "$line" | jq -r '.action')
+        SOURCE=$(echo "$line" | jq -r '.source')
+        SPORT=$(echo "$line" | jq -r '.sport')
+        DESTINATION=$(echo "$line" | jq -r '.destination')
+        DPORT=$(echo "$line" | jq -r '.dport')
+        PROTOCOL=$(echo "$line" | jq -r '.protocol')
+        EXTRAOPTIONS=$(echo "$line" | jq -r '.extraoptions')
+        COMMENT=$(echo "$line" | jq -r '.comment')
+
+        UUID=$(/usr/sbin/omv-env get OMV_CONFIGOBJECT_NEW_UUID | cut -d= -f2)
+
+        if [ "$FIRST_RULE" = false ]; then
+            RULES_JSON="$RULES_JSON,"
+        fi
+        FIRST_RULE=false
+
+        RULES_JSON="$RULES_JSON{
+  \"uuid\":\"$UUID\",
+  \"family\":\"inet\",
+  \"rulenum\":$RULENUM,
+  \"chain\":\"$CHAIN\",
+  \"action\":\"$ACTION\",
+  \"source\":\"$SOURCE\",
+  \"sport\":\"$SPORT\",
+  \"destination\":\"$DESTINATION\",
+  \"dport\":\"$DPORT\",
+  \"protocol\":\"$PROTOCOL\",
+  \"extraoptions\":\"$EXTRAOPTIONS\",
+  \"comment\":\"$COMMENT\"
 }"
 
-done < <(jq -c '.[]' "$JSON_FILE")
+    done < <(jq -c '.[]' "$FIREWALL_JSON")
 
-RULES_JSON="$RULES_JSON]"
+    RULES_JSON="$RULES_JSON]"
 
-# Apply all rules at once
-omv-rpc -u admin 'Iptables' 'setRules' "$RULES_JSON"
-omv-salt deploy run iptables
+    omv-rpc -u admin Iptables setRules "$RULES_JSON"
+    omv-salt deploy run iptables
+
+    echo "$CURRENT_FIREWALL_VERSION" > "$FIREWALL_VERSION_FILE"
+
+    echo "Firewall initialized."
+
+else
+    echo "Firewall already initialized. Preserving existing rules."
+fi
 
 # since this version has license agreement update 
 # check if /tmp/license.json.tobecopied exists and copy it 

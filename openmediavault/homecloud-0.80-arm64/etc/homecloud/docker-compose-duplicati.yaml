@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   duplicati:
-    image: duplicati/duplicati:2.2.0.103
+    image: duplicati/duplicati:2.3.0.4
     container_name: duplicati
     restart: unless-stopped
     security_opt:

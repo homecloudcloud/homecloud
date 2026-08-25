@@ -1,3 +1,11 @@
+homecloud (0.80) stable; urgency=medium
+
+  * Duplicati yaml file update.
+
+homecloud (0.79) stable; urgency=medium
+
+  * postinst change for firewall rules versioning. Auto-repair.sh fixes.
+
 homecloud (0.78) stable; urgency=medium
 
   * Apticron fix.
